@@ -9,6 +9,7 @@ const CodeBlock = ({ code, language }) => {
       background: 'transparent',
       fontFamily: "'JetBrains Mono', 'SF Mono', Monaco, 'Courier New', monospace",
       fontSize: '14px',
+      fontWeight: '700',
       lineHeight: '1.6',
       direction: 'ltr',
       textAlign: 'left',
@@ -28,6 +29,7 @@ const CodeBlock = ({ code, language }) => {
       background: 'transparent',
       fontFamily: "'JetBrains Mono', 'SF Mono', Monaco, 'Courier New', monospace",
       fontSize: '14px',
+      fontWeight: '700',
       lineHeight: '1.6',
       direction: 'ltr',
       textAlign: 'left',
@@ -95,78 +97,100 @@ const CodeBlock = ({ code, language }) => {
     },
     // Strings (tout entre quotes)
     'string': {
-      color: '#088201'
+      color: '#088201',
+      fontWeight: '700'
     },
     'char': {
-      color: '#088201'
+      color: '#088201',
+      fontWeight: '700'
     },
     'template-string': {
-      color: '#088201'
+      color: '#088201',
+      fontWeight: '700'
     },
     'string-interpolation': {
-      color: '#088201'
+      color: '#088201',
+      fontWeight: '700'
     },
     'triple-quoted-string': {
-      color: '#088201'
+      color: '#088201',
+      fontWeight: '700'
     },
 
     // Numbers
     'number': {
-      color: '#B401A5'
+      color: '#B401A5',
+      fontWeight: '700'
     },
     'float': {
-      color: '#B401A5'
+      color: '#B401A5',
+      fontWeight: '700'
     },
     'integer': {
-      color: '#B401A5'
+      color: '#B401A5',
+      fontWeight: '700'
     },
 
     // Variables et identifiers
     'variable': {
-      color: '#9CDCFE'
+      color: '#9CDCFE',
+      fontWeight: '700'
     },
     'parameter': {
-      color: '#9CDCFE'
+      color: '#9CDCFE',
+      fontWeight: '700'
     },
     'property': {
-      color: '#9CDCFE'
+      color: '#9CDCFE',
+      fontWeight: '700'
     },
     'attr-name': {
-      color: '#9CDCFE'
+      color: '#9CDCFE',
+      fontWeight: '700'
     },
     'identifier': {
-      color: '#9CDCFE'
+      color: '#9CDCFE',
+      fontWeight: '700'
     },
 
     // Operators
     'operator': {
-      color: '#D4D4D4'
+      color: '#D4D4D4',
+      fontWeight: '700'
     },
     'assignment': {
-      color: '#D4D4D4'
+      color: '#D4D4D4',
+      fontWeight: '700'
     },
     'arithmetic': {
-      color: '#D4D4D4'
+      color: '#D4D4D4',
+      fontWeight: '700'
     },
     'comparison': {
-      color: '#D4D4D4'
+      color: '#D4D4D4',
+      fontWeight: '700'
     },
 
     // Punctuation
     'punctuation': {
-      color: '#D4D4D4'
+      color: '#D4D4D4',
+      fontWeight: '700'
     },
     'delimiter': {
-      color: '#D4D4D4'
+      color: '#D4D4D4',
+      fontWeight: '700'
     },
     'bracket': {
-      color: '#D4D4D4'
+      color: '#D4D4D4',
+      fontWeight: '700'
     },
     'brace': {
-      color: '#D4D4D4'
+      color: '#D4D4D4',
+      fontWeight: '700'
     },
     'parenthesis': {
-      color: '#D4D4D4'
+      color: '#D4D4D4',
+      fontWeight: '700'
     },
 
     // Comments
@@ -252,13 +276,17 @@ const CodeBlock = ({ code, language }) => {
           padding: 0,
           margin: 0,
           fontSize: '14px',
-          lineHeight: '1.6'
+          fontWeight: '700',
+          lineHeight: '1.6',
+          textAlign: 'left'
         }}
         codeTagProps={{
           style: {
             fontFamily: "'JetBrains Mono', 'SF Mono', Monaco, 'Courier New', monospace",
             fontSize: '14px',
-            lineHeight: '1.6'
+            fontWeight: '700',
+            lineHeight: '1.6',
+            textAlign: 'left'
           }
         }}
       >
@@ -274,6 +302,9 @@ const CodeBlock = ({ code, language }) => {
           padding: 16px;
           margin-bottom: 24px;
           overflow-x: auto;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
         .code-container pre {
@@ -281,23 +312,45 @@ const CodeBlock = ({ code, language }) => {
           background: transparent !important;
           padding: 0 !important;
           font-size: 14px !important;
-          font-family: 'SF Mono', Monaco, 'Courier New', monospace !important;
+          font-family: 'JetBrains Mono', 'SF Mono', Monaco, 'Courier New', monospace !important;
+          font-weight: 700 !important;
           line-height: 1.6 !important;
+          text-align: left !important;
+          width: 100%;
         }
 
         .code-container code {
-          font-family: 'SF Mono', Monaco, 'Courier New', monospace !important;
+          font-family: 'JetBrains Mono', 'SF Mono', Monaco, 'Courier New', monospace !important;
           font-size: 14px !important;
+          font-weight: 700 !important;
           line-height: 1.6 !important;
+          text-align: left !important;
         }
 
         /* Responsive */
         @media (max-width: 375px) {
+          .code-container {
+            padding: 14px;
+            min-height: 500px;
+          }
           .code-container pre {
             font-size: 13px !important;
           }
           .code-container code {
             font-size: 13px !important;
+          }
+        }
+
+        @media (max-width: 320px) {
+          .code-container {
+            padding: 12px;
+            min-height: 450px;
+          }
+          .code-container pre {
+            font-size: 12px !important;
+          }
+          .code-container code {
+            font-size: 12px !important;
           }
         }
       `}</style>
