@@ -296,15 +296,15 @@ const CodeBlock = ({ code, language }) => {
       <style>{`
         /* Code Block */
         .code-container {
-          min-height: 550px;
           background: #030303ff;
           border-radius: 12px;
           padding: 16px;
-          margin-bottom: 24px;
+          margin-bottom: 16px;
           overflow-x: auto;
           display: flex;
           align-items: center;
           justify-content: center;
+          /* Hauteur adaptative définie dans App.jsx */
         }
 
         .code-container pre {
@@ -327,12 +327,8 @@ const CodeBlock = ({ code, language }) => {
           text-align: left !important;
         }
 
-        /* Responsive */
+        /* Responsive - hauteurs gérées par App.jsx */
         @media (max-width: 375px) {
-          .code-container {
-            padding: 14px;
-            min-height: 500px;
-          }
           .code-container pre {
             font-size: 13px !important;
           }
@@ -342,10 +338,6 @@ const CodeBlock = ({ code, language }) => {
         }
 
         @media (max-width: 320px) {
-          .code-container {
-            padding: 12px;
-            min-height: 450px;
-          }
           .code-container pre {
             font-size: 12px !important;
           }

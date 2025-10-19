@@ -35,7 +35,7 @@ const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain }) => {
           background: #FFFFFF;
           border-radius: 16px;
           padding: 16px;
-          margin-bottom: 20px;
+          margin-bottom: 16px;
         }
 
         .question-text {
