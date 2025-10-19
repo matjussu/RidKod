@@ -14,8 +14,8 @@ const Header = ({ onQuit, currentExercise, totalExercises }) => {
         /* Header */
         .header {
           position: fixed;
-          top: 0;
-          left: 50%;
+          top: 20px;
+          left: 10.5%;
           transform: translateX(-50%);
           width: 100%;
           max-width: 428px;
@@ -27,7 +27,7 @@ const Header = ({ onQuit, currentExercise, totalExercises }) => {
         .close-button {
           position: absolute;
           top: max(env(safe-area-inset-top), 12px);
-          left: 20px;
+          left: 15px;
           background: none;
           border: none;
           cursor: pointer;
