@@ -19,7 +19,7 @@ const ReadCodExercise = () => {
 
   // Exercise data (will be moved to external JSON later)
   const exercise = {
-    question: "{Que renvoie ce programme ?}",
+    question: "Que renvoie ce programme ?",
     code: `nb_notes = int(input("Combien?"))
 somme = 0
 

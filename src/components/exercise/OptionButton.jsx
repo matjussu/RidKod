@@ -71,7 +71,7 @@ const OptionButton = ({ value, isSelected, isCorrect, isSubmitted, onClick }) =>
         /* Option States - Submitted */
         .option-button.correct {
           background: #088201;
-          color: #000000;
+          color: #FFFFFF;
         }
 
         .option-button.incorrect {

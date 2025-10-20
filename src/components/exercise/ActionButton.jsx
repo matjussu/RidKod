@@ -53,7 +53,7 @@ const ActionButton = ({ isSubmitted, isCorrect, isDisabled, onClick }) => {
 
         .action-button.enabled {
           background: #088201;
-          color: #000000;
+          color: #FFFFFF;
         }
 
         .action-button.incorrect-state {

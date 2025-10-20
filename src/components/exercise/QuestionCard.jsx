@@ -3,8 +3,14 @@ import React from "react";
 const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain }) => {
   const renderContent = () => {
     if (!isSubmitted) {
-      // Affiche la question normale
-      return <p className="question-text">{question}</p>;
+      // Affiche la question normale avec accolades orange
+      return (
+        <p className="question-text">
+          <span className="question-brace">{"{"}</span>
+          {question}
+          <span className="question-brace">{"}"}</span>
+        </p>
+      );
     }
 
     if (isCorrect) {
@@ -32,7 +38,7 @@ const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain }) => {
       <style>{`
         /* Question Card */
         .question-card {
-          background: #FFFFFF;
+          background: #ffffffff;
           border-radius: 14px;
           padding: 12px;
           margin-bottom: 12px;
@@ -42,7 +48,7 @@ const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain }) => {
           color: #000000;
           font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
           font-size: 15px;
-          font-weight: 500;
+          font-weight: 700 ;
           line-height: 1.3;
           margin: 0;
         }
@@ -68,6 +74,12 @@ const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain }) => {
           font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
           font-size: 15px;
           font-weight: 600;
+        }
+
+        .question-brace {
+          color: #FF9500;
+          font-weight: 800;
+          font-size: 16px;
         }
 
         @keyframes contentChange {
