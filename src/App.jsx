@@ -138,12 +138,12 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
 
         .close-button {
           position: absolute;
-          top: max(env(safe-area-inset-top), 8px);
-          left: max(16px, env(safe-area-inset-left));
+          top: max(env(safe-area-inset-top), 4px);
+          left: 0px;
           background: none;
           border: none;
           cursor: pointer;
-          padding: 4px;
+          padding: 20px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -172,16 +172,16 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
         }
 
         .progress-bar {
-          height: 3px;
+          height: 10px;
           background: #3A3A3C;
-          border-radius: 2px;
+          border-radius: 10px;
           overflow: hidden;
           width: 100%;
         }
 
         .progress-fill {
           height: 100%;
-          background: #30D158;
+          background: #088201;
           transition: width 0.3s ease;
         }
 
@@ -219,7 +219,7 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
           margin-bottom: 12px;
         }
 
-        /* Code Block optimisé */
+        /* Code Block - RÈGLE UNIQUE SANS OVERRIDE */
         .code-container {
           background: #030303ff;
           border-radius: 10px;
@@ -227,11 +227,11 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
           margin-bottom: 12px;
           overflow-x: auto;
           overflow-y: auto;
-          max-height: 50vh;
-          min-height: 280px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          /* TAILLE CONTRÔLABLE ICI */
+          height: 370px !important;
+          max-height: none !important;
+          min-height: none !important;
+          /* ^^^^^^^^^^^^^^^^^^^^^^^ */
           width: 100%;
           box-sizing: border-box;
         }
@@ -298,10 +298,7 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
             padding-right: max(16px, env(safe-area-inset-right));
           }
 
-          .code-container {
-            max-height: 48vh;
-            min-height: 270px;
-          }
+          /* .code-container SUPPRIMÉ - règle unique ligne 231 */
         }
 
         /* iPhone SE, iPhone 12/13 mini - 375px */
@@ -326,11 +323,7 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
             padding-right: max(14px, env(safe-area-inset-right));
           }
 
-          .code-container {
-            max-height: 45vh;
-            min-height: 250px;
-            padding: 10px;
-          }
+          /* .code-container SUPPRIMÉ - règle unique ligne 231 */
         }
 
         /* Très petits écrans - iPhone SE 1ère gen */
@@ -355,11 +348,7 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
             padding-right: max(12px, env(safe-area-inset-right));
           }
 
-          .code-container {
-            max-height: 42vh;
-            min-height: 220px;
-            padding: 8px;
-          }
+          /* .code-container SUPPRIMÉ - règle unique ligne 231 */
 
           .code-container pre {
             font-size: 13px !important;
@@ -373,26 +362,17 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
 
         /* Écrans hauts - iPhone 14/15 Pro Max */
         @media (min-height: 850px) {
-          .code-container {
-            max-height: 60vh;
-            min-height: 380px;
-          }
+          /* .code-container SUPPRIMÉ - règle unique ligne 231 */
         }
 
         /* Écrans moyens - iPhone 14/15 Pro */
         @media (min-height: 700px) and (max-height: 849px) {
-          .code-container {
-            max-height: 55vh;
-            min-height: 320px;
-          }
+          /* .code-container SUPPRIMÉ - règle unique ligne 231 */
         }
 
         /* Écrans compacts - iPhone SE */
         @media (max-height: 667px) {
-          .code-container {
-            max-height: 42vh;
-            min-height: 200px;
-          }
+          /* .code-container SUPPRIMÉ - règle unique ligne 231 */
 
           .code-container pre {
             font-size: 13px !important;
@@ -432,11 +412,7 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
             margin-bottom: 8px;
           }
 
-          .code-container {
-            max-height: 50vh;
-            min-height: 180px;
-            padding: 8px;
-          }
+          /* .code-container SUPPRIMÉ - règle unique ligne 231 */
 
           .options-grid {
             gap: 8px;

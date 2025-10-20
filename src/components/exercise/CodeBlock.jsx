@@ -293,59 +293,7 @@ const CodeBlock = ({ code, language }) => {
         {code}
       </SyntaxHighlighter>
 
-      <style>{`
-        /* Code Block */
-        .code-container {
-          background: #030303ff;
-          border-radius: 12px;
-          padding: 16px;
-          margin-bottom: 16px;
-          overflow-x: auto;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          /* Hauteur adaptative définie dans App.jsx */
-        }
-
-        .code-container pre {
-          margin: 0 !important;
-          background: transparent !important;
-          padding: 0 !important;
-          font-size: 14px !important;
-          font-family: 'JetBrains Mono', 'SF Mono', Monaco, 'Courier New', monospace !important;
-          font-weight: 700 !important;
-          line-height: 1.6 !important;
-          text-align: left !important;
-          width: 100%;
-        }
-
-        .code-container code {
-          font-family: 'JetBrains Mono', 'SF Mono', Monaco, 'Courier New', monospace !important;
-          font-size: 14px !important;
-          font-weight: 700 !important;
-          line-height: 1.6 !important;
-          text-align: left !important;
-        }
-
-        /* Responsive - hauteurs gérées par App.jsx */
-        @media (max-width: 375px) {
-          .code-container pre {
-            font-size: 13px !important;
-          }
-          .code-container code {
-            font-size: 13px !important;
-          }
-        }
-
-        @media (max-width: 320px) {
-          .code-container pre {
-            font-size: 12px !important;
-          }
-          .code-container code {
-            font-size: 12px !important;
-          }
-        }
-      `}</style>
+      {/* PAS DE CSS ICI - TOUT EST DANS APP.JSX */}
     </div>
   );
 };
