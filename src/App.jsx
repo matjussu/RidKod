@@ -132,18 +132,18 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
           right: 0;
           z-index: 100;
           background: #1A1919;
-          padding-top: max(env(safe-area-inset-top), 12px);
-          padding-bottom: 12px;
+          padding-top: max(env(safe-area-inset-top), 8px);
+          padding-bottom: 8px;
         }
 
         .close-button {
           position: absolute;
-          top: max(env(safe-area-inset-top), 12px);
-          left: max(20px, env(safe-area-inset-left));
+          top: max(env(safe-area-inset-top), 8px);
+          left: max(16px, env(safe-area-inset-left));
           background: none;
           border: none;
           cursor: pointer;
-          padding: 8px;
+          padding: 4px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -154,22 +154,25 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
 
         .close-button svg {
           color: #FF453A;
-          width: 24px;
-          height: 24px;
+          width: 20px;
+          height: 20px;
         }
 
         /* Progress Bar dans header */
         .progress-container {
-          padding: 8px max(56px, calc(env(safe-area-inset-left) + 56px)) 0 max(56px, calc(env(safe-area-inset-right) + 56px));
+          padding: 4px max(48px, calc(env(safe-area-inset-left) + 48px)) 0 max(48px, calc(env(safe-area-inset-right) + 48px));
           margin: 0;
           max-width: min(428px, 100vw);
           margin-left: auto;
           margin-right: auto;
           box-sizing: border-box;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
         .progress-bar {
-          height: 4px;
+          height: 3px;
           background: #3A3A3C;
           border-radius: 2px;
           overflow: hidden;
@@ -188,10 +191,10 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
           overflow-y: auto;
           overflow-x: hidden;
           -webkit-overflow-scrolling: touch;
-          padding-top: calc(max(env(safe-area-inset-top), 12px) + 60px);
-          padding-left: max(20px, env(safe-area-inset-left));
-          padding-right: max(20px, env(safe-area-inset-right));
-          padding-bottom: max(env(safe-area-inset-bottom), 20px);
+          padding-top: calc(max(env(safe-area-inset-top), 8px) + 35px);
+          padding-left: max(16px, env(safe-area-inset-left));
+          padding-right: max(16px, env(safe-area-inset-right));
+          padding-bottom: max(env(safe-area-inset-bottom), 16px);
           max-width: min(428px, 100vw);
           margin: 0 auto;
           width: 100%;
@@ -211,20 +214,21 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
         /* Question Card */
         .question-card {
           background: #FFFFFF;
-          border-radius: 16px;
-          padding: 16px;
-          margin-bottom: 16px;
+          border-radius: 14px;
+          padding: 12px;
+          margin-bottom: 12px;
         }
 
         /* Code Block optimisé */
         .code-container {
           background: #030303ff;
-          border-radius: 12px;
-          padding: 16px;
-          margin-bottom: 16px;
+          border-radius: 10px;
+          padding: 12px;
+          margin-bottom: 12px;
           overflow-x: auto;
-          max-height: min(40vh, 350px);
-          min-height: min(200px, 30vh);
+          overflow-y: auto;
+          max-height: 50vh;
+          min-height: 280px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -236,8 +240,8 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
         .options-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 12px;
-          margin-bottom: 16px;
+          gap: 10px;
+          margin-bottom: 12px;
           width: 100%;
           box-sizing: border-box;
         }
@@ -245,63 +249,87 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
         /* Action Button */
         .action-button {
           width: 100%;
-          height: 56px;
-          border-radius: 12px;
-          margin-bottom: max(16px, env(safe-area-inset-bottom));
+          height: 52px;
+          border-radius: 10px;
+          margin-bottom: max(12px, env(safe-area-inset-bottom));
           box-sizing: border-box;
           touch-action: manipulation;
           -webkit-tap-highlight-color: transparent;
         }
 
+        /* Scrollbar custom pour le code */
+        .code-container::-webkit-scrollbar {
+          width: 4px;
+          height: 4px;
+        }
+
+        .code-container::-webkit-scrollbar-track {
+          background: transparent;
+        }
+
+        .code-container::-webkit-scrollbar-thumb {
+          background: #3A3A3C;
+          border-radius: 2px;
+        }
+
+        /* Code pre optimisations */
+        .code-container pre {
+          margin: 0 !important;
+          font-size: 14px !important;
+          line-height: 1.5 !important;
+        }
+
         /* iPhone 14/15 Pro Max - 430px */
         @media (max-width: 430px) and (min-width: 415px) {
           .content-scrollable {
-            padding-left: max(24px, env(safe-area-inset-left));
-            padding-right: max(24px, env(safe-area-inset-right));
+            padding-left: max(18px, env(safe-area-inset-left));
+            padding-right: max(18px, env(safe-area-inset-right));
           }
 
           .progress-container {
-            padding: 8px max(60px, calc(env(safe-area-inset-left) + 60px)) 0 max(60px, calc(env(safe-area-inset-right) + 60px));
+            padding: 4px max(50px, calc(env(safe-area-inset-left) + 50px)) 0 max(50px, calc(env(safe-area-inset-right) + 50px));
           }
         }
 
         /* iPhone 14/15 Pro - 393px */
         @media (max-width: 414px) and (min-width: 376px) {
           .content-scrollable {
-            padding-left: max(20px, env(safe-area-inset-left));
-            padding-right: max(20px, env(safe-area-inset-right));
+            padding-left: max(16px, env(safe-area-inset-left));
+            padding-right: max(16px, env(safe-area-inset-right));
           }
 
           .code-container {
-            max-height: min(38vh, 320px);
+            max-height: 48vh;
+            min-height: 270px;
           }
         }
 
         /* iPhone SE, iPhone 12/13 mini - 375px */
         @media (max-width: 375px) {
           .close-button {
-            left: max(16px, env(safe-area-inset-left));
-            padding: 6px;
+            left: max(14px, env(safe-area-inset-left));
+            padding: 4px;
           }
 
           .close-button svg {
-            width: 22px;
-            height: 22px;
+            width: 18px;
+            height: 18px;
           }
 
           .progress-container {
-            padding: 8px max(48px, calc(env(safe-area-inset-left) + 48px)) 0 max(48px, calc(env(safe-area-inset-right) + 48px));
+            padding: 4px max(44px, calc(env(safe-area-inset-left) + 44px)) 0 max(44px, calc(env(safe-area-inset-right) + 44px));
           }
 
           .content-scrollable {
-            padding-top: calc(max(env(safe-area-inset-top), 12px) + 55px);
-            padding-left: max(16px, env(safe-area-inset-left));
-            padding-right: max(16px, env(safe-area-inset-right));
+            padding-top: calc(max(env(safe-area-inset-top), 8px) + 32px);
+            padding-left: max(14px, env(safe-area-inset-left));
+            padding-right: max(14px, env(safe-area-inset-right));
           }
 
           .code-container {
-            max-height: min(35vh, 280px);
-            padding: 14px;
+            max-height: 45vh;
+            min-height: 250px;
+            padding: 10px;
           }
         }
 
@@ -309,27 +337,33 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
         @media (max-width: 320px) {
           .close-button {
             left: max(12px, env(safe-area-inset-left));
-            padding: 4px;
+            padding: 3px;
           }
 
           .close-button svg {
-            width: 20px;
-            height: 20px;
+            width: 16px;
+            height: 16px;
           }
 
           .progress-container {
-            padding: 8px max(44px, calc(env(safe-area-inset-left) + 44px)) 0 max(44px, calc(env(safe-area-inset-right) + 44px));
+            padding: 3px max(40px, calc(env(safe-area-inset-left) + 40px)) 0 max(40px, calc(env(safe-area-inset-right) + 40px));
           }
 
           .content-scrollable {
-            padding-top: calc(max(env(safe-area-inset-top), 12px) + 50px);
+            padding-top: calc(max(env(safe-area-inset-top), 8px) + 28px);
             padding-left: max(12px, env(safe-area-inset-left));
             padding-right: max(12px, env(safe-area-inset-right));
           }
 
           .code-container {
-            max-height: min(30vh, 220px);
-            padding: 12px;
+            max-height: 42vh;
+            min-height: 220px;
+            padding: 8px;
+          }
+
+          .code-container pre {
+            font-size: 13px !important;
+            line-height: 1.4 !important;
           }
 
           .options-grid {
@@ -340,26 +374,73 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
         /* Écrans hauts - iPhone 14/15 Pro Max */
         @media (min-height: 850px) {
           .code-container {
-            max-height: min(45vh, 400px);
+            max-height: 60vh;
+            min-height: 380px;
           }
         }
 
         /* Écrans moyens - iPhone 14/15 Pro */
         @media (min-height: 700px) and (max-height: 849px) {
           .code-container {
-            max-height: min(42vh, 350px);
+            max-height: 55vh;
+            min-height: 320px;
+          }
+        }
+
+        /* Écrans compacts - iPhone SE */
+        @media (max-height: 667px) {
+          .code-container {
+            max-height: 42vh;
+            min-height: 200px;
+          }
+
+          .code-container pre {
+            font-size: 13px !important;
+            line-height: 1.4 !important;
           }
         }
 
         /* Mode paysage */
         @media (orientation: landscape) {
-          .code-container {
-            max-height: min(50vh, 250px);
-            min-height: min(150px, 25vh);
+          .header-fixed {
+            padding-top: max(env(safe-area-inset-top), 6px);
+            padding-bottom: 6px;
+          }
+
+          .close-button {
+            top: max(env(safe-area-inset-top), 6px);
+            padding: 3px;
+          }
+
+          .close-button svg {
+            width: 16px;
+            height: 16px;
+          }
+
+          .progress-container {
+            padding: 3px max(40px, calc(env(safe-area-inset-left) + 40px)) 0 max(40px, calc(env(safe-area-inset-right) + 40px));
           }
 
           .content-scrollable {
-            padding-top: calc(max(env(safe-area-inset-top), 8px) + 50px);
+            padding-top: calc(max(env(safe-area-inset-top), 6px) + 28px);
+            padding-left: max(12px, env(safe-area-inset-left));
+            padding-right: max(12px, env(safe-area-inset-right));
+          }
+
+          .question-card {
+            padding: 8px;
+            margin-bottom: 8px;
+          }
+
+          .code-container {
+            max-height: 50vh;
+            min-height: 180px;
+            padding: 8px;
+          }
+
+          .options-grid {
+            gap: 8px;
+            margin-bottom: 8px;
           }
         }
 

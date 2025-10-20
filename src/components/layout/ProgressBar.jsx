@@ -15,7 +15,7 @@ const ProgressBar = ({ current, total }) => {
         }
 
         .progress-bar {
-          height: 15px;
+          height: 20px;
           background: #D9D9D9;
           border-radius: 10px;
           overflow: hidden;

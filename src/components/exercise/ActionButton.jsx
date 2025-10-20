@@ -23,19 +23,19 @@ const ActionButton = ({ isSubmitted, isCorrect, isDisabled, onClick }) => {
         /* Validate/Continue Button */
         .action-button {
           width: 100%;
-          height: 56px;
+          height: 52px;
           border: none;
-          border-radius: 12px;
-          font-size: 18px;
+          border-radius: 10px;
+          font-size: 17px;
           cursor: pointer;
           transition: all 0.2s ease;
           font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
-          font-weight: 800;
+          font-weight: 600;
           box-sizing: border-box;
           touch-action: manipulation;
           -webkit-tap-highlight-color: transparent;
-          min-height: 56px;
-          padding: 0 16px;
+          min-height: 52px;
+          padding: 0 12px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -68,42 +68,42 @@ const ActionButton = ({ isSubmitted, isCorrect, isDisabled, onClick }) => {
         /* Responsive pour iPhone */
         @media (max-width: 430px) and (min-width: 415px) {
           .action-button {
-            height: 58px;
-            min-height: 58px;
-            font-size: 19px;
+            height: 50px;
+            min-height: 50px;
+            font-size: 16px;
           }
         }
 
         @media (max-width: 414px) and (min-width: 376px) {
           .action-button {
-            height: 56px;
-            font-size: 18px;
+            height: 50px;
+            font-size: 16px;
           }
         }
 
         @media (max-width: 375px) {
           .action-button {
-            height: 54px;
-            min-height: 54px;
-            font-size: 17px;
+            height: 48px;
+            min-height: 48px;
+            font-size: 15px;
           }
         }
 
         @media (max-width: 320px) {
           .action-button {
-            height: 52px;
-            min-height: 52px;
-            font-size: 16px;
-            padding: 0 12px;
+            height: 46px;
+            min-height: 46px;
+            font-size: 14px;
+            padding: 0 10px;
           }
         }
 
         /* Mode paysage */
         @media (orientation: landscape) {
           .action-button {
-            height: 48px;
-            min-height: 48px;
-            font-size: 16px;
+            height: 44px;
+            min-height: 44px;
+            font-size: 14px;
           }
         }
       `}</style>

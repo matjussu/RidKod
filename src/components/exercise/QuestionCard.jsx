@@ -33,17 +33,17 @@ const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain }) => {
         /* Question Card */
         .question-card {
           background: #FFFFFF;
-          border-radius: 16px;
-          padding: 16px;
-          margin-bottom: 16px;
+          border-radius: 14px;
+          padding: 12px;
+          margin-bottom: 12px;
         }
 
         .question-text {
           color: #000000;
           font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
-          font-size: 14px;
-          font-weight: bold;
-          line-height: 1.4;
+          font-size: 15px;
+          font-weight: 500;
+          line-height: 1.3;
           margin: 0;
         }
 
@@ -52,21 +52,22 @@ const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain }) => {
           justify-content: space-between;
           align-items: center;
           animation: contentChange 0.3s ease;
+          padding: 0;
+          min-height: 0;
         }
 
         .feedback-text {
           color: #FF9500;
           font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
-          font-size: 16px;
-          font-weight: 800;
-
+          font-size: 15px;
+          font-weight: 600;
         }
 
         .feedback-xp {
           color: #FF9500;
           font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
-          font-size: 16px;
-          font-weight: 800;
+          font-size: 15px;
+          font-weight: 600;
         }
 
         @keyframes contentChange {
