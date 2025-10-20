@@ -31,6 +31,14 @@ const ActionButton = ({ isSubmitted, isCorrect, isDisabled, onClick }) => {
           transition: all 0.2s ease;
           font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
           font-weight: 800;
+          box-sizing: border-box;
+          touch-action: manipulation;
+          -webkit-tap-highlight-color: transparent;
+          min-height: 56px;
+          padding: 0 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
         .action-button:active:not(:disabled) {
@@ -55,6 +63,48 @@ const ActionButton = ({ isSubmitted, isCorrect, isDisabled, onClick }) => {
 
         .action-button:hover:not(:disabled) {
           filter: brightness(1.1);
+        }
+
+        /* Responsive pour iPhone */
+        @media (max-width: 430px) and (min-width: 415px) {
+          .action-button {
+            height: 58px;
+            min-height: 58px;
+            font-size: 19px;
+          }
+        }
+
+        @media (max-width: 414px) and (min-width: 376px) {
+          .action-button {
+            height: 56px;
+            font-size: 18px;
+          }
+        }
+
+        @media (max-width: 375px) {
+          .action-button {
+            height: 54px;
+            min-height: 54px;
+            font-size: 17px;
+          }
+        }
+
+        @media (max-width: 320px) {
+          .action-button {
+            height: 52px;
+            min-height: 52px;
+            font-size: 16px;
+            padding: 0 12px;
+          }
+        }
+
+        /* Mode paysage */
+        @media (orientation: landscape) {
+          .action-button {
+            height: 48px;
+            min-height: 48px;
+            font-size: 16px;
+          }
         }
       `}</style>
     </button>

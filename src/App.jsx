@@ -102,6 +102,9 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
           font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
           font-weight: 800;
           -webkit-font-smoothing: antialiased;
+          -webkit-text-size-adjust: 100%;
+          -ms-text-size-adjust: 100%;
+          touch-action: manipulation;
         }
 
         #root {
@@ -110,12 +113,15 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
 
         .app {
           height: 100vh;
+          height: -webkit-fill-available;
           background: #1A1919;
           color: #FFFFFF;
           display: flex;
           flex-direction: column;
           overflow: hidden;
           position: relative;
+          max-width: 100vw;
+          margin: 0 auto;
         }
 
         /* Header fixe */
@@ -133,7 +139,7 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
         .close-button {
           position: absolute;
           top: max(env(safe-area-inset-top), 12px);
-          left: 20px;
+          left: max(20px, env(safe-area-inset-left));
           background: none;
           border: none;
           cursor: pointer;
@@ -142,6 +148,8 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
           align-items: center;
           justify-content: center;
           z-index: 101;
+          touch-action: manipulation;
+          -webkit-tap-highlight-color: transparent;
         }
 
         .close-button svg {
@@ -152,8 +160,12 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
 
         /* Progress Bar dans header */
         .progress-container {
-          padding: 8px 56px 0 56px;
+          padding: 8px max(56px, calc(env(safe-area-inset-left) + 56px)) 0 max(56px, calc(env(safe-area-inset-right) + 56px));
           margin: 0;
+          max-width: min(428px, 100vw);
+          margin-left: auto;
+          margin-right: auto;
+          box-sizing: border-box;
         }
 
         .progress-bar {
@@ -177,12 +189,13 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
           overflow-x: hidden;
           -webkit-overflow-scrolling: touch;
           padding-top: calc(max(env(safe-area-inset-top), 12px) + 60px);
-          padding-left: 20px;
-          padding-right: 20px;
+          padding-left: max(20px, env(safe-area-inset-left));
+          padding-right: max(20px, env(safe-area-inset-right));
           padding-bottom: max(env(safe-area-inset-bottom), 20px);
-          max-width: 428px;
+          max-width: min(428px, 100vw);
           margin: 0 auto;
           width: 100%;
+          box-sizing: border-box;
         }
 
         /* Hide scrollbar */
@@ -210,11 +223,13 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
           padding: 16px;
           margin-bottom: 16px;
           overflow-x: auto;
-          max-height: 40vh;
-          min-height: 200px;
+          max-height: min(40vh, 350px);
+          min-height: min(200px, 30vh);
           display: flex;
           align-items: center;
           justify-content: center;
+          width: 100%;
+          box-sizing: border-box;
         }
 
         /* Options Grid */
@@ -223,6 +238,8 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
           grid-template-columns: 1fr 1fr;
           gap: 12px;
           margin-bottom: 16px;
+          width: 100%;
+          box-sizing: border-box;
         }
 
         /* Action Button */
@@ -230,13 +247,40 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
           width: 100%;
           height: 56px;
           border-radius: 12px;
-          margin-bottom: 16px;
+          margin-bottom: max(16px, env(safe-area-inset-bottom));
+          box-sizing: border-box;
+          touch-action: manipulation;
+          -webkit-tap-highlight-color: transparent;
         }
 
-        /* Responsive */
+        /* iPhone 14/15 Pro Max - 430px */
+        @media (max-width: 430px) and (min-width: 415px) {
+          .content-scrollable {
+            padding-left: max(24px, env(safe-area-inset-left));
+            padding-right: max(24px, env(safe-area-inset-right));
+          }
+
+          .progress-container {
+            padding: 8px max(60px, calc(env(safe-area-inset-left) + 60px)) 0 max(60px, calc(env(safe-area-inset-right) + 60px));
+          }
+        }
+
+        /* iPhone 14/15 Pro - 393px */
+        @media (max-width: 414px) and (min-width: 376px) {
+          .content-scrollable {
+            padding-left: max(20px, env(safe-area-inset-left));
+            padding-right: max(20px, env(safe-area-inset-right));
+          }
+
+          .code-container {
+            max-height: min(38vh, 320px);
+          }
+        }
+
+        /* iPhone SE, iPhone 12/13 mini - 375px */
         @media (max-width: 375px) {
           .close-button {
-            left: 16px;
+            left: max(16px, env(safe-area-inset-left));
             padding: 6px;
           }
 
@@ -246,24 +290,25 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
           }
 
           .progress-container {
-            padding: 8px 48px 0 48px;
+            padding: 8px max(48px, calc(env(safe-area-inset-left) + 48px)) 0 max(48px, calc(env(safe-area-inset-right) + 48px));
           }
 
           .content-scrollable {
             padding-top: calc(max(env(safe-area-inset-top), 12px) + 55px);
-            padding-left: 16px;
-            padding-right: 16px;
+            padding-left: max(16px, env(safe-area-inset-left));
+            padding-right: max(16px, env(safe-area-inset-right));
           }
 
           .code-container {
-            max-height: 35vh;
+            max-height: min(35vh, 280px);
             padding: 14px;
           }
         }
 
+        /* Très petits écrans - iPhone SE 1ère gen */
         @media (max-width: 320px) {
           .close-button {
-            left: 12px;
+            left: max(12px, env(safe-area-inset-left));
             padding: 4px;
           }
 
@@ -273,32 +318,83 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
           }
 
           .progress-container {
-            padding: 8px 44px 0 44px;
+            padding: 8px max(44px, calc(env(safe-area-inset-left) + 44px)) 0 max(44px, calc(env(safe-area-inset-right) + 44px));
           }
 
           .content-scrollable {
             padding-top: calc(max(env(safe-area-inset-top), 12px) + 50px);
-            padding-left: 16px;
-            padding-right: 16px;
+            padding-left: max(12px, env(safe-area-inset-left));
+            padding-right: max(12px, env(safe-area-inset-right));
           }
 
           .code-container {
-            max-height: 30vh;
+            max-height: min(30vh, 220px);
             padding: 12px;
           }
-        }
 
-        @media (min-height: 700px) {
-          .code-container {
-            max-height: 45vh;
+          .options-grid {
+            gap: 8px;
           }
         }
 
-        /* Fix Safari iOS */
+        /* Écrans hauts - iPhone 14/15 Pro Max */
+        @media (min-height: 850px) {
+          .code-container {
+            max-height: min(45vh, 400px);
+          }
+        }
+
+        /* Écrans moyens - iPhone 14/15 Pro */
+        @media (min-height: 700px) and (max-height: 849px) {
+          .code-container {
+            max-height: min(42vh, 350px);
+          }
+        }
+
+        /* Mode paysage */
+        @media (orientation: landscape) {
+          .code-container {
+            max-height: min(50vh, 250px);
+            min-height: min(150px, 25vh);
+          }
+
+          .content-scrollable {
+            padding-top: calc(max(env(safe-area-inset-top), 8px) + 50px);
+          }
+        }
+
+        /* Fix Safari iOS et WebKit */
         @supports (-webkit-touch-callout: none) {
           .app {
             height: -webkit-fill-available;
+            min-height: -webkit-fill-available;
           }
+
+          body {
+            height: -webkit-fill-available;
+          }
+        }
+
+        /* Optimisations touch iOS */
+        * {
+          -webkit-touch-callout: none;
+          -webkit-user-select: none;
+          -webkit-tap-highlight-color: transparent;
+        }
+
+        button, input, textarea {
+          -webkit-user-select: text;
+        }
+
+        /* Fix zoom iOS */
+        input, textarea, select {
+          font-size: 16px;
+        }
+
+        /* Prevent overscroll bounce */
+        body {
+          overscroll-behavior-y: none;
+          -webkit-overflow-scrolling: touch;
         }
       `}</style>
 
