@@ -1,7 +1,7 @@
 import React from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 
-const CodeBlock = ({ code, language }) => {
+const CodeBlock = ({ code, language, highlightedLines = [], isHighlightActive = false }) => {
   // Custom Python theme with exact color specifications
   const customPythonTheme = {
     'code[class*="language-"]': {
@@ -266,34 +266,227 @@ const CodeBlock = ({ code, language }) => {
     }
   };
 
+  // Split code into lines for highlighting
+  const lines = code.split('\n');
+
   return (
     <div className="code-container">
-      <SyntaxHighlighter
-        language={language}
-        style={customPythonTheme}
-        customStyle={{
-          background: 'transparent',
-          padding: 0,
-          margin: 0,
-          fontSize: '14px',
-          fontWeight: '700',
-          lineHeight: '1.6',
-          textAlign: 'left'
-        }}
-        codeTagProps={{
-          style: {
-            fontFamily: "'JetBrains Mono', 'SF Mono', Monaco, 'Courier New', monospace",
-            fontSize: '14px',
-            fontWeight: '700',
-            lineHeight: '1.6',
-            textAlign: 'left'
-          }
-        }}
-      >
-        {code}
-      </SyntaxHighlighter>
+      <div className="code-wrapper">
+        {lines.map((line, index) => {
+          const lineNumber = index + 1;
+          const isHighlighted = isHighlightActive && highlightedLines.includes(lineNumber);
 
-      {/* PAS DE CSS ICI - TOUT EST DANS APP.JSX */}
+          return (
+            <div
+              key={index}
+              className={`code-line ${isHighlighted ? 'highlighted' : ''}`}
+              style={{
+                animationDelay: isHighlighted ? `${highlightedLines.indexOf(lineNumber) * 0.3}s` : '0s'
+              }}
+            >
+              <span className="line-number">{lineNumber}</span>
+              <SyntaxHighlighter
+                language={language}
+                style={customPythonTheme}
+                customStyle={{
+                  background: 'transparent',
+                  padding: 0,
+                  margin: 0,
+                  fontSize: '14px',
+                  fontWeight: '700',
+                  lineHeight: '1.6',
+                  textAlign: 'left',
+                  display: 'inline'
+                }}
+                codeTagProps={{
+                  style: {
+                    fontFamily: "'JetBrains Mono', 'SF Mono', Monaco, 'Courier New', monospace",
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    lineHeight: '1.6',
+                    textAlign: 'left'
+                  }
+                }}
+              >
+                {line || ' '}
+              </SyntaxHighlighter>
+            </div>
+          );
+        })}
+      </div>
+
+      <style>{`
+        .code-wrapper {
+          position: relative;
+        }
+
+        .code-line {
+          padding: 2px 8px 2px 40px;
+          margin: 0;
+          border-radius: 4px;
+          transition: all 0.3s ease;
+          position: relative;
+          display: flex;
+          align-items: center;
+          min-height: 24px;
+        }
+
+        .line-number {
+          position: absolute;
+          left: 8px;
+          color: #6A9955;
+          font-size: 12px;
+          font-weight: 500;
+          width: 24px;
+          text-align: right;
+          user-select: none;
+          font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+        }
+
+        .code-line.highlighted {
+          background: rgba(48, 209, 88, 0.15);
+          box-shadow:
+            0 0 0 2px rgba(48, 209, 88, 0.3),
+            0 0 8px 0 rgba(48, 209, 88, 0.2);
+          animation: highlightPulse 0.6s ease-out;
+          position: relative;
+        }
+
+        .code-line.highlighted::before {
+          content: '▸';
+          position: absolute;
+          left: -12px;
+          color: #30D158;
+          font-size: 16px;
+          animation: arrowSlide 0.4s ease-out;
+          z-index: 1;
+        }
+
+        .code-line.highlighted::after {
+          content: '';
+          position: absolute;
+          left: -4px;
+          top: 0;
+          width: 4px;
+          height: 100%;
+          background: linear-gradient(to bottom,
+            transparent,
+            #30D158,
+            transparent
+          );
+          animation: lineGlow 1s ease-in-out infinite;
+          border-radius: 2px;
+        }
+
+        @keyframes highlightPulse {
+          0% {
+            background: rgba(48, 209, 88, 0);
+            box-shadow: 0 0 0 0 rgba(48, 209, 88, 0);
+          }
+          50% {
+            background: rgba(48, 209, 88, 0.25);
+            box-shadow:
+              0 0 0 3px rgba(48, 209, 88, 0.5),
+              0 0 12px 0 rgba(48, 209, 88, 0.3);
+          }
+          100% {
+            background: rgba(48, 209, 88, 0.15);
+            box-shadow:
+              0 0 0 2px rgba(48, 209, 88, 0.3),
+              0 0 8px 0 rgba(48, 209, 88, 0.2);
+          }
+        }
+
+        @keyframes arrowSlide {
+          from {
+            opacity: 0;
+            transform: translateX(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        @keyframes lineGlow {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 0.8; }
+        }
+
+        /* Animation séquentielle pour plusieurs lignes */
+        .code-line.highlighted:nth-child(1) {
+          animation-delay: 0s;
+        }
+        .code-line.highlighted:nth-child(2) {
+          animation-delay: 0.3s;
+        }
+        .code-line.highlighted:nth-child(3) {
+          animation-delay: 0.6s;
+        }
+        .code-line.highlighted:nth-child(4) {
+          animation-delay: 0.9s;
+        }
+        .code-line.highlighted:nth-child(5) {
+          animation-delay: 1.2s;
+        }
+
+        /* Responsive */
+        @media (max-width: 375px) {
+          .code-line {
+            padding: 2px 6px 2px 36px;
+            min-height: 22px;
+          }
+
+          .line-number {
+            left: 6px;
+            font-size: 11px;
+            width: 20px;
+          }
+
+          .code-line.highlighted::before {
+            left: -10px;
+            font-size: 14px;
+          }
+        }
+
+        @media (max-width: 320px) {
+          .code-line {
+            padding: 1px 4px 1px 32px;
+            min-height: 20px;
+          }
+
+          .line-number {
+            left: 4px;
+            font-size: 10px;
+            width: 18px;
+          }
+
+          .code-line.highlighted::before {
+            left: -8px;
+            font-size: 12px;
+          }
+
+          .code-line.highlighted::after {
+            width: 3px;
+          }
+        }
+
+        /* Mode paysage */
+        @media (orientation: landscape) {
+          .code-line {
+            padding: 1px 6px 1px 34px;
+            min-height: 20px;
+          }
+
+          .line-number {
+            font-size: 11px;
+          }
+
+          .code-line.highlighted::before {
+            font-size: 13px;
+          }
+        }
+      `}</style>
     </div>
   );
 };

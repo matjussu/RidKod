@@ -8,7 +8,8 @@
     "code": "shopping_cart = ['pain', 'lait', 'œufs']\nshopping_cart.append('fromage')\ntotal_items = len(shopping_cart)\nprint(total_items)",
     "options": ["3", "4", "5", "Error"],
     "correctAnswer": 1,
-    "explanation": "La liste commence avec 3 items. append('fromage') ajoute un 4ème item. len() retourne donc 4.",
+    "explanation": " Ligne 1 : On crée une liste shopping_cart avec 3 items initiaux\n\n Ligne 2 : append('fromage') ajoute un nouvel élément → maintenant 4 items au total\n\n Ligne 3 : len(shopping_cart) compte tous les éléments → retourne 4\n\n Ligne 4 : print() affiche le résultat : 4",
+    "highlightedLines": [2, 3],
     "xpGain": 10,
     "tags": ["lists", "methods", "len"]
   },
@@ -21,7 +22,8 @@
     "code": "user_score = 0\nfor level in range(3):\n    user_score += 10\nprint(user_score)",
     "options": ["10", "30", "3", "0"],
     "correctAnswer": 1,
-    "explanation": "La boucle range(3) itère 3 fois (0, 1, 2). À chaque itération, on ajoute 10 points : 3 × 10 = 30.",
+    "explanation": " Ligne 1 : user_score démarre à 0\n\n Ligne 2 : range(3) génère [0, 1, 2] → la boucle s'exécute 3 fois\n\n Ligne 3 : À chaque itération, on ajoute 10 au score\n• 1ère fois : 0 + 10 = 10\n• 2ème fois : 10 + 10 = 20\n• 3ème fois : 20 + 10 = 30\n\n Ligne 4 : print() affiche le score final : 30",
+    "highlightedLines": [2, 3],
     "xpGain": 10,
     "tags": ["loops", "range", "arithmetic"]
   },
@@ -34,7 +36,8 @@
     "code": "employee_name = 'Alice'\nwelcome_message = 'Bonjour ' + employee_name\nprint(len(welcome_message))",
     "options": ["5", "8", "13", "14"],
     "correctAnswer": 2,
-    "explanation": "'Bonjour ' (8 caractères avec l'espace) + 'Alice' (5 caractères) = 13 caractères au total.",
+    "explanation": " Ligne 1 : employee_name stocke 'Alice' (5 caractères)\n\n Ligne 2 : Concaténation de chaînes\n• 'Bonjour ' = 8 caractères (avec l'espace)\n• + 'Alice' = 5 caractères\n• Résultat : 'Bonjour Alice' = 13 caractères total\n\n Ligne 3 : len() compte tous les caractères → retourne 13",
+    "highlightedLines": [2, 3],
     "xpGain": 10,
     "tags": ["strings", "concatenation", "len"]
   },
@@ -47,7 +50,8 @@
     "code": "temperature = 15\nif temperature > 20:\n    comfort_level = 'chaud'\nelse:\n    comfort_level = 'froid'\nprint(comfort_level)",
     "options": ["chaud", "froid", "15", "True"],
     "correctAnswer": 1,
-    "explanation": "15 n'est pas supérieur à 20, donc la condition est False. Le code exécute le bloc else et assigne 'froid'.",
+    "explanation": " Ligne 1 : temperature = 15\n\n Ligne 2 : Test de condition : 15 > 20 ?\n• 15 n'est PAS supérieur à 20\n• La condition est False\n\n Ligne 4-5 : Comme la condition est False, on exécute le bloc else\n• comfort_level = 'froid'\n\n Ligne 6 : print() affiche 'froid'",
+    "highlightedLines": [2, 5],
     "xpGain": 10,
     "tags": ["conditions", "if_else", "comparison"]
   },
@@ -60,7 +64,8 @@
     "code": "product_info = {'name': 'Laptop', 'price': 999, 'stock': 5}\nproduct_info['stock'] = product_info['stock'] - 2\nprint(product_info['stock'])",
     "options": ["5", "3", "2", "7"],
     "correctAnswer": 1,
-    "explanation": "Le stock initial est 5. On soustrait 2, donc stock devient 5 - 2 = 3.",
+    "explanation": " Ligne 1 : Création d'un dictionnaire avec stock = 5\n\n Ligne 2 : Modification du stock\n• product_info['stock'] lit la valeur actuelle (5)\n• 5 - 2 = 3\n• On réassigne cette nouvelle valeur au stock\n\n Ligne 3 : print() affiche la nouvelle valeur : 3",
+    "highlightedLines": [2, 3],
     "xpGain": 10,
     "tags": ["dictionaries", "arithmetic", "assignment"]
   },
@@ -73,7 +78,8 @@
     "code": "def calculate_discount(price, discount_percent):\n    discount_amount = price * (discount_percent / 100)\n    return price - discount_amount\n\nfinal_price = calculate_discount(100, 20)\nprint(final_price)",
     "options": ["80", "20", "100", "80.0"],
     "correctAnswer": 3,
-    "explanation": "20% de 100 = 20. Prix final = 100 - 20 = 80. Python retourne 80.0 (float) car il y a une division.",
+    "explanation": " Ligne 2 : Calcul du montant de remise\n• discount_percent / 100 = 20 / 100 = 0.2\n• price * 0.2 = 100 * 0.2 = 20.0\n\n Ligne 3 : Calcul du prix final\n• price - discount_amount = 100 - 20.0 = 80.0\n• return retourne 80.0 (float)\n\n Ligne 6 : print() affiche 80.0 (pas 80, car division = float)",
+    "highlightedLines": [2, 3],
     "xpGain": 10,
     "tags": ["functions", "return", "arithmetic", "types"]
   },
@@ -86,7 +92,8 @@
     "code": "email_list = ['alice@test.com', 'bob@test.com', 'charlie@test.com']\nremoved_email = email_list.pop(1)\nprint(len(email_list))",
     "options": ["3", "2", "1", "bob@test.com"],
     "correctAnswer": 1,
-    "explanation": "pop(1) retire l'élément à l'index 1 ('bob@test.com'). Il reste 2 éléments dans la liste.",
+    "explanation": " Ligne 1 : Liste initiale avec 3 emails (index 0, 1, 2)\n\n Ligne 2 : pop(1) retire l'élément à l'index 1\n• Index 1 = 'bob@test.com'\n• Après suppression : ['alice@test.com', 'charlie@test.com']\n• Il reste 2 éléments\n\n Ligne 3 : len() compte les éléments restants → retourne 2",
+    "highlightedLines": [2, 3],
     "xpGain": 10,
     "tags": ["lists", "methods", "indexing", "len"]
   },
@@ -99,7 +106,8 @@
     "code": "numbers = [1, 2, 3, 4, 5]\nsquared_numbers = [x * x for x in numbers if x % 2 == 0]\nprint(len(squared_numbers))",
     "options": ["5", "2", "3", "4"],
     "correctAnswer": 1,
-    "explanation": "Les nombres pairs sont 2 et 4. La compréhension crée [4, 16]. La longueur est donc 2.",
+    "explanation": " Ligne 1 : Liste initiale [1, 2, 3, 4, 5]\n\n Ligne 2 : Compréhension de liste avec filtre\n• if x % 2 == 0 : garde seulement les nombres pairs\n• Nombres pairs : 2 et 4\n• x * x : calcule le carré\n• 2 * 2 = 4, 4 * 4 = 16\n• Résultat : [4, 16]\n\n Ligne 3 : len([4, 16]) = 2",
+    "highlightedLines": [2, 3],
     "xpGain": 10,
     "tags": ["list_comprehension", "filtering", "len", "modulo"]
   },
@@ -112,7 +120,8 @@
     "code": "counter = 0\npasswords = ['123', 'abc', '456789', 'xyz']\nfor pwd in passwords:\n    if len(pwd) >= 6:\n        counter += 1\nprint(counter)",
     "options": ["4", "1", "2", "0"],
     "correctAnswer": 1,
-    "explanation": "Seul '456789' a une longueur ≥ 6 caractères. Le compteur s'incrémente une seule fois.",
+    "explanation": " Ligne 1 : counter démarre à 0\n\n Ligne 3-5 : Boucle qui teste chaque mot de passe\n• '123' : len = 3 < 6 → pas d'incrémentation\n• 'abc' : len = 3 < 6 → pas d'incrémentation\n• '456789' : len = 6 ≥ 6 → counter += 1 (counter = 1)\n• 'xyz' : len = 3 < 6 → pas d'incrémentation\n\n Ligne 6 : print() affiche 1",
+    "highlightedLines": [4, 5],
     "xpGain": 10,
     "tags": ["loops", "conditions", "len", "counter"]
   },
@@ -125,7 +134,8 @@
     "code": "sales_data = [150, 200, 175, 300, 250]\ntotal_sales = 0\nfor sale in sales_data:\n    total_sales += sale\naverage_sales = total_sales / len(sales_data)\nprint(int(average_sales))",
     "options": ["215", "216", "1075", "200"],
     "correctAnswer": 0,
-    "explanation": "Total = 150+200+175+300+250 = 1075. Moyenne = 1075/5 = 215.0. int(215.0) = 215.",
+    "explanation": " Ligne 2-4 : Calcul du total des ventes\n• 150 + 200 + 175 + 300 + 250 = 1075\n\n Ligne 5 : Calcul de la moyenne\n• total_sales / len(sales_data) = 1075 / 5 = 215.0\n\n Ligne 6 : Conversion en entier\n• int(215.0) = 215\n• print() affiche 215",
+    "highlightedLines": [5, 6],
     "xpGain": 10,
     "tags": ["loops", "arithmetic", "average", "type_conversion"]
   }

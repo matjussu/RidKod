@@ -15,6 +15,10 @@ const ReadCodExercise = () => {
   const [showGlow, setShowGlow] = useState(false);
   const [glowType, setGlowType] = useState(null);
 
+  // Explanation system state
+  const [isExplanationExpanded, setIsExplanationExpanded] = useState(false);
+  const [highlightedLines, setHighlightedLines] = useState([]);
+
   // Haptic feedback hook
   const { triggerSuccess, triggerError, triggerLight } = useHaptic();
 
@@ -55,6 +59,10 @@ const ReadCodExercise = () => {
   };
 
   const handleContinue = () => {
+    // Reset explanation state
+    setIsExplanationExpanded(false);
+    setHighlightedLines([]);
+
     if (currentExerciseIndex < exercises.length - 1) {
       setCurrentExerciseIndex(prev => prev + 1);
       setSelectedOption(null);
@@ -72,6 +80,31 @@ const ReadCodExercise = () => {
   const handleQuit = () => {
     if (window.confirm("Voulez-vous vraiment quitter ?")) {
       window.location.href = '/';
+    }
+  };
+
+  // Handle explanation toggle with smooth scrolling
+  const handleExplanationToggle = () => {
+    const newState = !isExplanationExpanded;
+    setIsExplanationExpanded(newState);
+
+    if (newState) {
+      // Active le highlight quand on expand
+      setHighlightedLines(exercise.highlightedLines || []);
+
+      // Scroll smooth vers le code après un court délai
+      setTimeout(() => {
+        const codeContainer = document.querySelector('.code-container');
+        if (codeContainer) {
+          codeContainer.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+          });
+        }
+      }, 150);
+    } else {
+      // Désactive le highlight quand on collapse
+      setHighlightedLines([]);
     }
   };
 
@@ -231,12 +264,30 @@ const ReadCodExercise = () => {
           box-sizing: border-box;
         }
 
+        /* Options Container with Animation */
+        .options-container {
+          transition: all 0.3s ease;
+          overflow: hidden;
+        }
+
+        .options-container.visible {
+          opacity: 1;
+          max-height: 200px;
+          margin-bottom: 12px;
+        }
+
+        .options-container.hidden {
+          opacity: 0;
+          max-height: 0;
+          margin-bottom: 0;
+          transform: translateY(-10px);
+        }
+
         /* Options Grid */
         .options-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 10px;
-          margin-bottom: 12px;
           width: 100%;
           box-sizing: border-box;
         }
@@ -473,26 +524,33 @@ const ReadCodExercise = () => {
           isSubmitted={isSubmitted}
           isCorrect={isCorrect}
           xpGain={exercise.xpGain}
+          explanation={exercise.explanation}
+          onExplanationToggle={handleExplanationToggle}
+          isExplanationExpanded={isExplanationExpanded}
         />
 
         {/* Code Block */}
         <CodeBlock
           code={exercise.code}
           language={exercise.language}
+          highlightedLines={highlightedLines}
+          isHighlightActive={isExplanationExpanded}
         />
 
-        {/* Options Grid */}
-        <div className="options-grid">
-          {exercise.options.map((option, index) => (
-            <OptionButton
-              key={index}
-              value={option}
-              isSelected={selectedOption === index}
-              isCorrect={index === exercise.correctAnswer}
-              isSubmitted={isSubmitted}
-              onClick={() => handleOptionClick(index)}
-            />
-          ))}
+        {/* Options Grid (masqué quand explication expanded) */}
+        <div className={`options-container ${isExplanationExpanded ? 'hidden' : 'visible'}`}>
+          <div className="options-grid">
+            {exercise.options.map((option, index) => (
+              <OptionButton
+                key={index}
+                value={option}
+                isSelected={selectedOption === index}
+                isCorrect={index === exercise.correctAnswer}
+                isSubmitted={isSubmitted}
+                onClick={() => handleOptionClick(index)}
+              />
+            ))}
+          </div>
         </div>
 
         {/* Validate/Continue Button */}
