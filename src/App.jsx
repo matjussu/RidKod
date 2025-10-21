@@ -5,37 +5,23 @@ import OptionButton from "./components/exercise/OptionButton";
 import ActionButton from "./components/exercise/ActionButton";
 import FeedbackGlow from "./components/common/FeedbackGlow";
 import useHaptic from "./hooks/useHaptic";
+import exercisesData from "./data/exercises.json";
 
 const ReadCodExercise = () => {
   // State management
   const [selectedOption, setSelectedOption] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [currentExercise, setCurrentExercise] = useState(0);
+  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
   const [showGlow, setShowGlow] = useState(false);
   const [glowType, setGlowType] = useState(null);
 
   // Haptic feedback hook
   const { triggerSuccess, triggerError, triggerLight } = useHaptic();
 
-  // Exercise data (will be moved to external JSON later)
-  const exercise = {
-    question: "Que renvoie ce programme ?",
-    code: `nb_notes = int(input("Combien?"))
-somme = 0
-
-for i in range(nb_notes):
-    note = float(input("Entrez la note n°{i+1} : "))
-    somme += note
-
-moyenne = somme / nb_notes
-
-print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
-    options: ["12", "14", "16", "20"],
-    correctAnswer: 1,
-    xpGain: 10
-  };
-
-  const totalExercises = 10;
+  // Load exercises from JSON
+  const exercises = exercisesData;
+  const exercise = exercises[currentExerciseIndex];
+  const totalExercises = exercises.length;
 
   // Event handlers
   const handleOptionClick = (index) => {
@@ -69,9 +55,18 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
   };
 
   const handleContinue = () => {
-    setSelectedOption(null);
-    setIsSubmitted(false);
-    setCurrentExercise(prev => prev + 1);
+    if (currentExerciseIndex < exercises.length - 1) {
+      setCurrentExerciseIndex(prev => prev + 1);
+      setSelectedOption(null);
+      setIsSubmitted(false);
+    } else {
+      // Fin des exercices
+      alert('🎉 Bravo ! Tous les exercices terminés !\n\nTu as complété tous les exercices ReadCod !');
+      // Optionnel : reset au premier exercice
+      setCurrentExerciseIndex(0);
+      setSelectedOption(null);
+      setIsSubmitted(false);
+    }
   };
 
   const handleQuit = () => {
@@ -465,7 +460,7 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
         </button>
         <div className="progress-container">
           <div className="progress-bar">
-            <div className="progress-fill" style={{ width: `${((currentExercise + 1) / totalExercises) * 100}%` }} />
+            <div className="progress-fill" style={{ width: `${((currentExerciseIndex + 1) / totalExercises) * 100}%` }} />
           </div>
         </div>
       </header>
@@ -483,7 +478,7 @@ print(f"La moyenne des {nb_notes} notes est : {moyenne: .2}")`,
         {/* Code Block */}
         <CodeBlock
           code={exercise.code}
-          language="python"
+          language={exercise.language}
         />
 
         {/* Options Grid */}
