@@ -76,7 +76,18 @@ const Exercise = () => {
 
   const handleQuit = () => {
     if (window.confirm("Voulez-vous vraiment quitter ?")) {
-      navigate('/');
+      // Animation de sortie élégante
+      const exerciseApp = document.querySelector('.exercise-app');
+      if (exerciseApp) {
+        exerciseApp.style.transform = 'scale(0.95)';
+        exerciseApp.style.opacity = '0';
+
+        setTimeout(() => {
+          navigate('/');
+        }, 200);
+      } else {
+        navigate('/');
+      }
     }
   };
 
@@ -141,6 +152,21 @@ const Exercise = () => {
           width: 100vw;
           margin: 0 auto;
           overflow-x: hidden;
+          opacity: 0;
+          transform: scale(1.05);
+          animation: fadeInScale 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+          transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes fadeInScale {
+          0% {
+            opacity: 0;
+            transform: scale(1.05);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1);
+          }
         }
 
         /* Header sticky */

@@ -5,7 +5,18 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleNavigation = (path) => {
-    navigate(path);
+    // Animation de sortie élégante
+    const homeContainer = document.querySelector('.home-container');
+    if (homeContainer) {
+      homeContainer.style.transform = 'scale(0.95)';
+      homeContainer.style.opacity = '0';
+
+      setTimeout(() => {
+        navigate(path);
+      }, 200);
+    } else {
+      navigate(path);
+    }
   };
 
   return (
@@ -48,6 +59,32 @@ const Home = () => {
           width: 100%;
           box-sizing: border-box;
           overflow-x: hidden;
+          opacity: 0;
+          transform: scale(1.05);
+          animation: fadeInScale 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+          transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes fadeInScale {
+          0% {
+            opacity: 0;
+            transform: scale(1.05);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        @keyframes fadeOutScale {
+          0% {
+            opacity: 1;
+            transform: scale(1);
+          }
+          100% {
+            opacity: 0;
+            transform: scale(0.95);
+          }
         }
 
         /* Logo container */
@@ -56,6 +93,9 @@ const Home = () => {
           height: auto;
           margin-bottom: 32px;
           margin-top: 16px;
+          opacity: 0;
+          transform: translateY(20px);
+          animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
         }
 
         .logo-container img {
@@ -72,19 +112,22 @@ const Home = () => {
           width: 100%;
           max-width: 100%;
           margin-bottom: 16px;
+          opacity: 0;
+          transform: translateY(30px);
+          animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
         }
 
         /* Menu cards */
         .menu-card {
-          background: #393B3C;
-          border-radius: 16px;
+          background: linear-gradient(135deg, #3A3A3C 0%, #2C2C2E 100%);
+          border-radius: 20px;
           aspect-ratio: 1;
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           border: none;
           font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
           font-weight: 800;
@@ -95,15 +138,47 @@ const Home = () => {
           position: relative;
           padding: 20px 12px;
           text-align: center;
+          box-shadow:
+            0 4px 20px rgba(0, 0, 0, 0.15),
+            0 1px 3px rgba(0, 0, 0, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 0.5px solid rgba(255, 255, 255, 0.1);
+          overflow: hidden;
+        }
+
+        .menu-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          border-radius: 20px;
+        }
+
+        .menu-card:hover::before {
+          opacity: 1;
         }
 
         .menu-card:active {
-          transform: scale(0.95);
-          background: #3A3A3C;
+          transform: scale(0.96);
+          box-shadow:
+            0 2px 10px rgba(0, 0, 0, 0.2),
+            0 1px 3px rgba(0, 0, 0, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
         .menu-card:hover {
-          background: #3A3A3C;
+          transform: translateY(-2px);
+          box-shadow:
+            0 8px 30px rgba(0, 0, 0, 0.25),
+            0 3px 8px rgba(0, 0, 0, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15);
         }
 
         .menu-card-icon {
@@ -129,15 +204,15 @@ const Home = () => {
 
         /* Contact button */
         .contact-button {
-          background: #FF9500;
-          border-radius: 16px;
+          background: linear-gradient(135deg, #FF9500 0%, #FF8800 100%);
+          border-radius: 20px;
           width: 100%;
           height: 56px;
           display: flex;
           align-items: center;
           justify-content: center;
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           border: none;
           font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
           font-weight: 800;
@@ -148,15 +223,48 @@ const Home = () => {
           margin-bottom: 24px;
           text-transform: uppercase;
           letter-spacing: 0.5px;
+          box-shadow:
+            0 4px 20px rgba(255, 149, 0, 0.3),
+            0 2px 8px rgba(255, 149, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+          position: relative;
+          overflow: hidden;
+          opacity: 0;
+          transform: translateY(30px);
+          animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s forwards;
+        }
+
+        .contact-button::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          border-radius: 20px;
+        }
+
+        .contact-button:hover::before {
+          opacity: 1;
         }
 
         .contact-button:active {
-          transform: scale(0.98);
-          background: #3A3A3C;
+          transform: scale(0.96);
+          box-shadow:
+            0 2px 10px rgba(255, 149, 0, 0.4),
+            0 1px 4px rgba(255, 149, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
         .contact-button:hover {
-          background: #3A3A3C;
+          transform: translateY(-2px);
+          box-shadow:
+            0 8px 30px rgba(255, 149, 0, 0.4),
+            0 4px 12px rgba(255, 149, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.25);
         }
 
         /* Footer */
@@ -168,6 +276,20 @@ const Home = () => {
           font-weight: 400;
           text-align: center;
           font-family: "Jersey 25", cursive;
+          opacity: 0;
+          transform: translateY(20px);
+          animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.8s forwards;
+        }
+
+        @keyframes slideInUp {
+          0% {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
 
         /* iPhone 14/15 Pro Max - 430px */
