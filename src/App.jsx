@@ -126,7 +126,6 @@ const ReadCodExercise = () => {
           margin: 0;
           padding: 0;
           height: 100%;
-          overflow: hidden;
           font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
           font-weight: 800;
           -webkit-font-smoothing: antialiased;
@@ -140,28 +139,27 @@ const ReadCodExercise = () => {
         }
 
         .app {
-          height: 100vh;
-          height: -webkit-fill-available;
+          min-height: 100vh;
+          min-height: -webkit-fill-available;
           background: #1A1919;
           color: #FFFFFF;
           display: flex;
           flex-direction: column;
-          overflow: hidden;
           position: relative;
-          max-width: 100vw;
+          width: 100vw;
           margin: 0 auto;
+          overflow-x: hidden;
         }
 
-        /* Header fixe */
+        /* Header sticky */
         .header-fixed {
-          position: fixed;
+          position: sticky;
           top: 0;
-          left: 0;
-          right: 0;
           z-index: 100;
           background: #1A1919;
           padding-top: max(env(safe-area-inset-top), 8px);
           padding-bottom: 8px;
+          margin-bottom: 0;
         }
 
         .close-button {
@@ -215,11 +213,7 @@ const ReadCodExercise = () => {
 
         /* Content scrollable */
         .content-scrollable {
-          flex: 1;
-          overflow-y: auto;
-          overflow-x: hidden;
-          -webkit-overflow-scrolling: touch;
-          padding-top: calc(max(env(safe-area-inset-top), 8px) + 35px);
+          padding-top: 16px;
           padding-left: max(16px, env(safe-area-inset-left));
           padding-right: max(16px, env(safe-area-inset-right));
           padding-bottom: max(env(safe-area-inset-bottom), 16px);
@@ -227,6 +221,7 @@ const ReadCodExercise = () => {
           margin: 0 auto;
           width: 100%;
           box-sizing: border-box;
+          overflow-x: hidden;
         }
 
         /* Hide scrollbar */
@@ -259,9 +254,19 @@ const ReadCodExercise = () => {
           height: 370px !important;
           max-height: none !important;
           min-height: none !important;
-          /* ^^^^^^^^^^^^^^^^^^^^^^^ */
+          /* LARGEUR FIXE POUR ÉVITER RÉTRÉCISSEMENT */
           width: 100%;
+          min-width: 0;
+          max-width: 100%;
           box-sizing: border-box;
+          transition: height 0.3s ease;
+        }
+
+        /* Code Block en mode compact (ajusté au contenu) */
+        .code-container.compact {
+          height: auto !important;
+          max-height: 600px !important;
+          min-height: auto !important;
         }
 
         /* Options Container with Animation */
@@ -364,7 +369,6 @@ const ReadCodExercise = () => {
           }
 
           .content-scrollable {
-            padding-top: calc(max(env(safe-area-inset-top), 8px) + 32px);
             padding-left: max(14px, env(safe-area-inset-left));
             padding-right: max(14px, env(safe-area-inset-right));
           }
@@ -389,7 +393,6 @@ const ReadCodExercise = () => {
           }
 
           .content-scrollable {
-            padding-top: calc(max(env(safe-area-inset-top), 8px) + 28px);
             padding-left: max(12px, env(safe-area-inset-left));
             padding-right: max(12px, env(safe-area-inset-right));
           }
@@ -448,7 +451,6 @@ const ReadCodExercise = () => {
           }
 
           .content-scrollable {
-            padding-top: calc(max(env(safe-area-inset-top), 6px) + 28px);
             padding-left: max(12px, env(safe-area-inset-left));
             padding-right: max(12px, env(safe-area-inset-right));
           }
@@ -535,6 +537,7 @@ const ReadCodExercise = () => {
           language={exercise.language}
           highlightedLines={highlightedLines}
           isHighlightActive={isExplanationExpanded}
+          isCompact={isExplanationExpanded}
         />
 
         {/* Options Grid (masqué quand explication expanded) */}

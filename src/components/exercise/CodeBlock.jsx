@@ -1,11 +1,11 @@
 import React from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 
-const CodeBlock = ({ code, language, highlightedLines = [], isHighlightActive = false }) => {
+const CodeBlock = ({ code, language, highlightedLines = [], isHighlightActive = false, isCompact = false }) => {
   // Custom Python theme with exact color specifications
   const customPythonTheme = {
     'code[class*="language-"]': {
-      color: '#D4D4D4',
+      color: '#FFFFFF',
       background: 'transparent',
       fontFamily: "'JetBrains Mono', 'SF Mono', Monaco, 'Courier New', monospace",
       fontSize: '14px',
@@ -25,7 +25,7 @@ const CodeBlock = ({ code, language, highlightedLines = [], isHighlightActive = 
       hyphens: 'none'
     },
     'pre[class*="language-"]': {
-      color: '#D4D4D4',
+      color: '#FFFFFF',
       background: 'transparent',
       fontFamily: "'JetBrains Mono', 'SF Mono', Monaco, 'Courier New', monospace",
       fontSize: '14px',
@@ -270,7 +270,7 @@ const CodeBlock = ({ code, language, highlightedLines = [], isHighlightActive = 
   const lines = code.split('\n');
 
   return (
-    <div className="code-container">
+    <div className={`code-container ${isCompact ? 'compact' : ''}`}>
       <div className="code-wrapper">
         {lines.map((line, index) => {
           const lineNumber = index + 1;
@@ -318,6 +318,10 @@ const CodeBlock = ({ code, language, highlightedLines = [], isHighlightActive = 
       <style>{`
         .code-wrapper {
           position: relative;
+          width: 100%;
+          min-width: 0;
+          max-width: 100%;
+          overflow: hidden;
         }
 
         .code-line {
@@ -329,6 +333,13 @@ const CodeBlock = ({ code, language, highlightedLines = [], isHighlightActive = 
           display: flex;
           align-items: center;
           min-height: 24px;
+          width: 100%;
+          min-width: 0;
+          max-width: 100%;
+          box-sizing: border-box;
+          overflow: hidden;
+          word-wrap: break-word;
+          white-space: pre-wrap;
         }
 
         .line-number {
