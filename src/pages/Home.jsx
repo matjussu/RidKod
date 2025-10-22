@@ -439,7 +439,7 @@ const Home = () => {
 
         <button
           className="menu-card"
-          onClick={() => handleNavigation('/exercise')}
+          onClick={() => handleNavigation('/language')}
         >
           <div className="menu-card-text">
             <span className="menu-card-bracket">{"<"}</span>

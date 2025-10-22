@@ -118,7 +118,7 @@ const ExitConfirmModal = ({ isVisible, onContinue, onExit }) => {
         .modal-title {
           color: #000000;
           font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
-          font-size: 18px;
+          font-size: 17px;
           font-weight: 800;
           text-align: center;
           margin: 0 0 12px 0;
