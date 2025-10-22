@@ -5,6 +5,7 @@ import CodeBlock from "../components/exercise/CodeBlock";
 import OptionButton from "../components/exercise/OptionButton";
 import ActionButton from "../components/exercise/ActionButton";
 import FeedbackGlow from "../components/common/FeedbackGlow";
+import ExitConfirmModal from "../components/common/ExitConfirmModal";
 import useHaptic from "../hooks/useHaptic";
 import exercisesData from "../data/exercises.json";
 
@@ -21,6 +22,9 @@ const Exercise = () => {
   // Explanation system state
   const [isExplanationExpanded, setIsExplanationExpanded] = useState(false);
   const [highlightedLines, setHighlightedLines] = useState([]);
+
+  // Exit modal state
+  const [showExitModal, setShowExitModal] = useState(false);
 
   // Haptic feedback hook
   const { triggerSuccess, triggerError, triggerLight } = useHaptic();
@@ -75,19 +79,28 @@ const Exercise = () => {
   };
 
   const handleQuit = () => {
-    if (window.confirm("Voulez-vous vraiment quitter ?")) {
-      // Animation de sortie élégante
-      const exerciseApp = document.querySelector('.exercise-app');
-      if (exerciseApp) {
-        exerciseApp.style.transform = 'scale(0.95)';
-        exerciseApp.style.opacity = '0';
+    setShowExitModal(true);
+  };
 
-        setTimeout(() => {
-          navigate('/');
-        }, 200);
-      } else {
+  const handleModalContinue = () => {
+    setShowExitModal(false);
+    triggerLight();
+  };
+
+  const handleModalExit = () => {
+    setShowExitModal(false);
+
+    // Animation de sortie élégante
+    const exerciseApp = document.querySelector('.exercise-app');
+    if (exerciseApp) {
+      exerciseApp.style.transform = 'scale(0.95)';
+      exerciseApp.style.opacity = '0';
+
+      setTimeout(() => {
         navigate('/');
-      }
+      }, 200);
+    } else {
+      navigate('/');
     }
   };
 
@@ -149,8 +162,9 @@ const Exercise = () => {
           display: flex;
           flex-direction: column;
           position: relative;
-          width: 100vw;
+          max-width: min(428px, 100vw);
           margin: 0 auto;
+          width: 100%;
           overflow-x: hidden;
           opacity: 0;
           transform: scale(1.05);
@@ -206,9 +220,7 @@ const Exercise = () => {
         .progress-container {
           padding: 4px max(48px, calc(env(safe-area-inset-left) + 48px)) 0 max(48px, calc(env(safe-area-inset-right) + 48px));
           margin: 0;
-          max-width: min(428px, 100vw);
-          margin-left: auto;
-          margin-right: auto;
+          width: 100%;
           box-sizing: border-box;
           display: flex;
           align-items: center;
@@ -235,8 +247,6 @@ const Exercise = () => {
           padding-left: max(16px, env(safe-area-inset-left));
           padding-right: max(16px, env(safe-area-inset-right));
           padding-bottom: max(env(safe-area-inset-bottom), 16px);
-          max-width: min(428px, 100vw);
-          margin: 0 auto;
           width: 100%;
           box-sizing: border-box;
           overflow-x: hidden;
@@ -345,8 +355,8 @@ const Exercise = () => {
           line-height: 1.5 !important;
         }
 
-        /* Responsive styles */
-        @media (max-width: 430px) and (min-width: 415px) {
+        /* Responsive styles - iPhone 14/15 Pro Max */
+        @media (max-width: 430px) {
           .content-scrollable {
             padding-left: max(18px, env(safe-area-inset-left));
             padding-right: max(18px, env(safe-area-inset-right));
@@ -357,7 +367,8 @@ const Exercise = () => {
           }
         }
 
-        @media (max-width: 414px) and (min-width: 376px) {
+        /* iPhone 14/15 Pro */
+        @media (max-width: 393px) {
           .content-scrollable {
             padding-left: max(16px, env(safe-area-inset-left));
             padding-right: max(16px, env(safe-area-inset-right));
@@ -558,6 +569,13 @@ const Exercise = () => {
 
       {/* Feedback Glow Effects */}
       <FeedbackGlow isVisible={showGlow} type={glowType} />
+
+      {/* Exit Confirmation Modal */}
+      <ExitConfirmModal
+        isVisible={showExitModal}
+        onContinue={handleModalContinue}
+        onExit={handleModalExit}
+      />
     </div>
   );
 };

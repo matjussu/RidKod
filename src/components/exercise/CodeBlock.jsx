@@ -441,7 +441,7 @@ const CodeBlock = ({ code, language, highlightedLines = [], isHighlightActive = 
           animation-delay: 1.2s;
         }
 
-        /* Responsive */
+        /* iPhone SE, iPhone 12/13 mini */
         @media (max-width: 375px) {
           .code-line {
             padding: 2px 6px 2px 36px;
@@ -460,6 +460,7 @@ const CodeBlock = ({ code, language, highlightedLines = [], isHighlightActive = 
           }
         }
 
+        /* iPhone SE 1ère génération */
         @media (max-width: 320px) {
           .code-line {
             padding: 1px 4px 1px 32px;

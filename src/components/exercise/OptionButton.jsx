@@ -90,8 +90,8 @@ const OptionButton = ({ value, isSelected, isCorrect, isSubmitted, onClick }) =>
           cursor: not-allowed;
         }
 
-        /* Responsive pour iPhone */
-        @media (max-width: 430px) and (min-width: 415px) {
+        /* iPhone 14/15 Pro Max */
+        @media (max-width: 430px) {
           .option-button {
             font-size: 18px;
             height: 50px;
@@ -99,7 +99,8 @@ const OptionButton = ({ value, isSelected, isCorrect, isSubmitted, onClick }) =>
           }
         }
 
-        @media (max-width: 414px) and (min-width: 376px) {
+        /* iPhone 14/15 Pro */
+        @media (max-width: 393px) {
           .option-button {
             font-size: 18px;
             height: 50px;

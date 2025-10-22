@@ -292,16 +292,16 @@ const Home = () => {
           }
         }
 
-        /* iPhone 14/15 Pro Max - 430px */
-        @media (max-width: 430px) and (min-width: 415px) {
+        /* iPhone 14/15 Pro Max */
+        @media (max-width: 430px) {
           .home-container {
             padding-left: max(18px, env(safe-area-inset-left));
             padding-right: max(18px, env(safe-area-inset-right));
           }
         }
 
-        /* iPhone 14/15 Pro - 393px */
-        @media (max-width: 414px) and (min-width: 376px) {
+        /* iPhone 14/15 Pro */
+        @media (max-width: 393px) {
           .home-container {
             padding-left: max(16px, env(safe-area-inset-left));
             padding-right: max(16px, env(safe-area-inset-right));

@@ -65,8 +65,8 @@ const ActionButton = ({ isSubmitted, isCorrect, isDisabled, onClick }) => {
           filter: brightness(1.1);
         }
 
-        /* Responsive pour iPhone */
-        @media (max-width: 430px) and (min-width: 415px) {
+        /* iPhone 14/15 Pro Max */
+        @media (max-width: 430px) {
           .action-button {
             height: 50px;
             min-height: 50px;
@@ -74,7 +74,8 @@ const ActionButton = ({ isSubmitted, isCorrect, isDisabled, onClick }) => {
           }
         }
 
-        @media (max-width: 414px) and (min-width: 376px) {
+        /* iPhone 14/15 Pro */
+        @media (max-width: 393px) {
           .action-button {
             height: 50px;
             font-size: 16px;

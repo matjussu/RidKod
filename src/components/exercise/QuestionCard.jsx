@@ -19,7 +19,9 @@ const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain, explanation, o
         {/* Feedback principal */}
         <div className="feedback-content">
           <span className="feedback-text">
+            <span className="feedback-brace">{"{"}</span>
             {isCorrect ? 'Bravo !' : 'Bien essayé !'}
+            <span className="feedback-brace">{"}"}</span>
           </span>
           {isCorrect && (
             <span className="feedback-xp">+{xpGain} EXP</span>
@@ -98,17 +100,23 @@ const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain, explanation, o
         }
 
         .feedback-text {
-          color: #FF9500;
+          color: #000000ff;
           font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
           font-size: 15px;
           font-weight: 800;
+        }
+
+        .feedback-brace {
+          color: #FF9500;
+          font-weight: 800;
+          font-size: 16px;
         }
 
         .feedback-xp {
           color: #FF9500;
           font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
           font-size: 15px;
-          font-weight: 600;
+          font-weight: 800;
         }
 
         /* Explanation Toggle Button */
