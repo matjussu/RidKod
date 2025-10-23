@@ -64,26 +64,20 @@ const Difficulty = () => {
   const difficulties = [
     {
       id: 'easy',
-      difficulty: 'FACILE',
-      icon: '🌱',
-      description: 'Parfait pour débuter et comprendre les bases',
-      xpInfo: '+10 XP par exercice',
+      difficulty: 'EASY',
+      xpInfo: '+10 XP',
       backgroundColor: 'linear-gradient(135deg, #088201 0%, #0AB305 50%, #30D158 100%)'
     },
     {
       id: 'medium',
-      difficulty: 'MOYEN',
-      icon: '🔥',
-      description: 'Challenge équilibré pour progresser rapidement',
-      xpInfo: '+20 XP par exercice',
+      difficulty: 'MIDD',
+      xpInfo: '+20 XP',
       backgroundColor: 'linear-gradient(135deg, #FF6B00 0%, #FF8500 50%, #FF9500 100%)'
     },
     {
       id: 'hard',
-      difficulty: 'DIFFICILE',
-      icon: '💎',
-      description: 'Pour experts cherchant un défi intense',
-      xpInfo: '+30 XP par exercice',
+      difficulty: 'HARD',
+      xpInfo: '+30 XP',
       backgroundColor: 'linear-gradient(135deg, #C41E3A 0%, #FF383C 50%, #FF453A 100%)'
     }
   ];
@@ -184,7 +178,7 @@ const Difficulty = () => {
         /* Header Section */
         .header-section {
           text-align: center;
-          margin-bottom: 40px;
+          margin-bottom: 32px;
           opacity: 0;
           transform: translateY(20px);
           animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
@@ -192,7 +186,7 @@ const Difficulty = () => {
 
         .page-title {
           font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
-          font-size: 24px;
+          font-size: 22px;
           font-weight: 800;
           color: #FFFFFF;
           margin: 0;
@@ -202,22 +196,22 @@ const Difficulty = () => {
         .title-bracket {
           color: #FF9500;
           font-weight: 800;
-          font-size: 26px;
+          font-size: 24px;
         }
 
         .page-subtitle {
           font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
-          font-size: 18px;
+          font-size: 16px;
           font-weight: 800;
           color: #FFFFFF;
-          margin: 8px 0 0 0;
+          margin: 6px 0 0 0;
           line-height: 1.2;
         }
 
         .subtitle-bracket {
           color: #088201;
           font-weight: 800;
-          font-size: 20px;
+          font-size: 18px;
         }
 
 
@@ -225,7 +219,7 @@ const Difficulty = () => {
         .difficulties-grid {
           display: flex;
           flex-direction: column;
-          gap: 24px;
+          gap: 16px;
           width: 100%;
           opacity: 0;
           transform: translateY(30px);
@@ -249,9 +243,9 @@ const Difficulty = () => {
         /* Footer */
         .footer {
           position: absolute;
-          bottom: max(env(safe-area-inset-bottom), 20px);
+          bottom: max(env(safe-area-inset-bottom), 16px);
           color: #8E8E93;
-          font-size: 22px;
+          font-size: 20px;
           font-weight: 400;
           text-align: center;
           font-family: "Jersey 25", cursive;
@@ -314,24 +308,33 @@ const Difficulty = () => {
             height: 22px;
           }
 
+          .header-section {
+            margin-bottom: 28px;
+          }
+
           .page-title {
-            font-size: 22px;
+            font-size: 20px;
           }
 
           .title-bracket {
-            font-size: 24px;
+            font-size: 22px;
           }
 
           .page-subtitle {
-            font-size: 16px;
+            font-size: 15px;
           }
 
           .subtitle-bracket {
-            font-size: 18px;
+            font-size: 17px;
           }
 
           .difficulties-grid {
-            gap: 18px;
+            gap: 14px;
+          }
+
+          .footer {
+            font-size: 18px;
+            bottom: max(env(safe-area-inset-bottom), 14px);
           }
         }
 
@@ -354,24 +357,33 @@ const Difficulty = () => {
             height: 20px;
           }
 
+          .header-section {
+            margin-bottom: 24px;
+          }
+
           .page-title {
-            font-size: 20px;
+            font-size: 18px;
           }
 
           .title-bracket {
-            font-size: 22px;
+            font-size: 20px;
           }
 
           .page-subtitle {
-            font-size: 15px;
+            font-size: 14px;
           }
 
           .subtitle-bracket {
-            font-size: 17px;
+            font-size: 16px;
           }
 
           .difficulties-grid {
-            gap: 16px;
+            gap: 12px;
+          }
+
+          .footer {
+            font-size: 16px;
+            bottom: max(env(safe-area-inset-bottom), 12px);
           }
         }
 
@@ -387,24 +399,33 @@ const Difficulty = () => {
             height: 20px;
           }
 
+          .header-section {
+            margin-bottom: 20px;
+          }
+
           .page-title {
-            font-size: 20px;
+            font-size: 18px;
           }
 
           .title-bracket {
-            font-size: 22px;
+            font-size: 20px;
           }
 
           .page-subtitle {
-            font-size: 15px;
+            font-size: 14px;
           }
 
           .subtitle-bracket {
-            font-size: 17px;
+            font-size: 16px;
           }
 
           .difficulties-grid {
-            gap: 16px;
+            gap: 12px;
+          }
+
+          .footer {
+            font-size: 16px;
+            bottom: max(env(safe-area-inset-bottom), 10px);
           }
         }
 
@@ -470,8 +491,6 @@ const Difficulty = () => {
           <DifficultyCard
             key={diff.id}
             difficulty={diff.difficulty}
-            icon={diff.icon}
-            description={diff.description}
             xpInfo={diff.xpInfo}
             backgroundColor={diff.backgroundColor}
             onClick={() => handleDifficultySelect(diff.id)}
