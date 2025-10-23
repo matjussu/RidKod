@@ -120,13 +120,7 @@ const LanguageCard = ({
           z-index: 2;
         }
 
-        .coming-soon-text {
-          color: #FFFFFF;
-          font-size: 10px;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 0.3px;
-        }
+
 
         /* Responsive adjustments */
         @media (max-width: 375px) {
@@ -167,7 +161,7 @@ const LanguageCard = ({
           }
 
           .language-text {
-            font-size: 80px;
+            font-size: 100px;
           }
 
           .coming-soon-overlay {
@@ -176,10 +170,7 @@ const LanguageCard = ({
             padding: 3px 6px;
           }
 
-          .coming-soon-text {
-            font-size: 8px;
-          }
-        }
+
 
         /* Mode paysage */
         @media (orientation: landscape) {

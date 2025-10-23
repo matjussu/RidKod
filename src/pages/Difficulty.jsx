@@ -1,42 +1,45 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import LanguageCard from '../components/language/LanguageCard';
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import DifficultyCard from '../components/difficulty/DifficultyCard';
 import useHaptic from '../hooks/useHaptic';
 
-// Import des icônes
-import pythonIcon from '../assets/python_5968350.png';
-import htmlIcon from '../assets/html-5_5968267.png';
-import cssIcon from '../assets/css-3_5968242.png';
-import javaIcon from '../assets/java_5968282.png';
-import cppIcon from '../assets/c_6132222.png';
-
-const Language = () => {
+const Difficulty = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { triggerLight, triggerSuccess } = useHaptic();
+  const [selectedLanguage, setSelectedLanguage] = useState('PYTHON');
 
-  const handleLanguageSelect = (language) => {
+  // Récupérer le langage sélectionné depuis la navigation
+  useEffect(() => {
+    if (location.state?.language) {
+      setSelectedLanguage(location.state.language);
+    }
+  }, [location.state]);
+
+  const handleDifficultySelect = (difficulty) => {
     triggerSuccess();
 
     // Animation de sortie élégante
-    const languageContainer = document.querySelector('.language-container');
-    if (languageContainer) {
-      languageContainer.style.transform = 'scale(0.95)';
-      languageContainer.style.opacity = '0';
+    const difficultyContainer = document.querySelector('.difficulty-container');
+    if (difficultyContainer) {
+      difficultyContainer.style.transform = 'scale(0.95)';
+      difficultyContainer.style.opacity = '0';
 
       setTimeout(() => {
-        if (language === 'PYTHON') {
-          navigate('/difficulty', { state: { language: language } });
-        } else {
-          // Pour les autres langages pas encore implémentés
-          alert(`${language} sera bientôt disponible !`);
-          languageContainer.style.transform = 'scale(1)';
-          languageContainer.style.opacity = '1';
-        }
-      }, 200);
+        navigate('/exercise', {
+          state: {
+            language: selectedLanguage,
+            difficulty: difficulty
+          }
+        });
+      }, 300);
     } else {
-      if (language === 'PYTHON') {
-        navigate('/difficulty', { state: { language: language } });
-      }
+      navigate('/exercise', {
+        state: {
+          language: selectedLanguage,
+          difficulty: difficulty
+        }
+      });
     }
   };
 
@@ -44,53 +47,49 @@ const Language = () => {
     triggerLight();
 
     // Animation de sortie élégante
-    const languageContainer = document.querySelector('.language-container');
-    if (languageContainer) {
-      languageContainer.style.transform = 'scale(0.95)';
-      languageContainer.style.opacity = '0';
+    const difficultyContainer = document.querySelector('.difficulty-container');
+    if (difficultyContainer) {
+      difficultyContainer.style.transform = 'scale(0.95)';
+      difficultyContainer.style.opacity = '0';
 
       setTimeout(() => {
-        navigate('/');
+        navigate('/language');
       }, 200);
     } else {
-      navigate('/');
+      navigate('/language');
     }
   };
 
-  // Configuration des langages
-  const languages = [
+  // Configuration des niveaux de difficulté
+  const difficulties = [
     {
-      id: 'python',
-      name: 'PYTHON',
-      icon: pythonIcon,
-      backgroundColor: 'linear-gradient(135deg, #0A3860 30%, #FFD43B 100%)',
-      isComingSoon: false
+      id: 'easy',
+      difficulty: 'FACILE',
+      icon: '🌱',
+      description: 'Parfait pour débuter et comprendre les bases',
+      xpInfo: '+10 XP par exercice',
+      backgroundColor: 'linear-gradient(135deg, #088201 0%, #0AB305 50%, #30D158 100%)'
     },
     {
-      id: 'web',
-      name: 'WEB',
-      icon: htmlIcon,
-      backgroundColor: 'linear-gradient(135deg, #E34F26 0%, #F16529 50%, #FF9500 100%)',
-      isComingSoon: true
+      id: 'medium',
+      difficulty: 'MOYEN',
+      icon: '🔥',
+      description: 'Challenge équilibré pour progresser rapidement',
+      xpInfo: '+20 XP par exercice',
+      backgroundColor: 'linear-gradient(135deg, #FF6B00 0%, #FF8500 50%, #FF9500 100%)'
     },
     {
-      id: 'java',
-      name: 'JAVA',
-      icon: javaIcon,
-      backgroundColor: 'linear-gradient(135deg, #4B2200 70%, #5382A1 100%)',
-      isComingSoon: true
-    },
-    {
-      id: 'cpp',
-      name: 'C++',
-      icon: cppIcon,
-      backgroundColor: 'linear-gradient(135deg, #00599C 0%, #004482 100%)',
-      isComingSoon: true
+      id: 'hard',
+      difficulty: 'DIFFICILE',
+      icon: '💎',
+      description: 'Pour experts cherchant un défi intense',
+      xpInfo: '+30 XP par exercice',
+      backgroundColor: 'linear-gradient(135deg, #C41E3A 0%, #FF383C 50%, #FF453A 100%)'
     }
   ];
 
   return (
-    <div className="language-container">
+    <div className="difficulty-container">
       <style>{`
         /* Reset global */
         * {
@@ -112,23 +111,24 @@ const Language = () => {
           touch-action: manipulation;
         }
 
-        .language-container {
-          min-height: 100vh;
-          min-height: -webkit-fill-available;
+        .difficulty-container {
+          height: 100vh;
+          height: -webkit-fill-available;
           background: #1A1919;
           color: #FFFFFF;
           display: flex;
           flex-direction: column;
           align-items: center;
+          justify-content: center;
           padding-top: max(env(safe-area-inset-top), 20px);
-          padding-left: max(16px, env(safe-area-inset-left));
-          padding-right: max(16px, env(safe-area-inset-right));
-          padding-bottom: max(env(safe-area-inset-bottom), 125px);
+          padding-left: max(20px, env(safe-area-inset-left));
+          padding-right: max(20px, env(safe-area-inset-right));
+          padding-bottom: max(env(safe-area-inset-bottom), 40px);
           max-width: min(428px, 100vw);
           margin: 0 auto;
           width: 100%;
           box-sizing: border-box;
-          overflow-x: hidden;
+          overflow: hidden;
           opacity: 0;
           transform: scale(1.05);
           animation: fadeInScale 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
@@ -151,7 +151,7 @@ const Language = () => {
         .back-button {
           position: absolute;
           top: max(env(safe-area-inset-top), 8px);
-          left: max(16px, env(safe-area-inset-left));
+          left: max(20px, env(safe-area-inset-left));
           background: none;
           border: none;
           cursor: pointer;
@@ -184,7 +184,6 @@ const Language = () => {
         /* Header Section */
         .header-section {
           text-align: center;
-          margin-top: 60px;
           margin-bottom: 40px;
           opacity: 0;
           transform: translateY(20px);
@@ -221,23 +220,36 @@ const Language = () => {
           font-size: 20px;
         }
 
-        /* Languages Grid */
-        .languages-grid {
+
+        /* Difficulties Grid */
+        .difficulties-grid {
           display: flex;
           flex-direction: column;
-          gap: 20px;
-          width: 150%;
-          max-width: 105%;
-          margin-bottom: 20px;
+          gap: 24px;
+          width: 100%;
           opacity: 0;
           transform: translateY(30px);
           animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
         }
 
+        /* Staggered animation for cards */
+        .difficulties-grid > *:nth-child(1) {
+          animation-delay: 0.5s;
+        }
+
+        .difficulties-grid > *:nth-child(2) {
+          animation-delay: 0.6s;
+        }
+
+        .difficulties-grid > *:nth-child(3) {
+          animation-delay: 0.7s;
+        }
+
+
         /* Footer */
         .footer {
-          margin-top: auto;
-          padding-top: 20px;
+          position: absolute;
+          bottom: max(env(safe-area-inset-bottom), 20px);
           color: #8E8E93;
           font-size: 22px;
           font-weight: 400;
@@ -245,7 +257,7 @@ const Language = () => {
           font-family: "Jersey 25", cursive;
           opacity: 0;
           transform: translateY(20px);
-          animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s forwards;
+          animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.9s forwards;
         }
 
         @keyframes slideInUp {
@@ -261,7 +273,7 @@ const Language = () => {
 
         /* iPhone 14/15 Pro Max */
         @media (max-width: 430px) {
-          .language-container {
+          .difficulty-container {
             padding-left: max(18px, env(safe-area-inset-left));
             padding-right: max(18px, env(safe-area-inset-right));
           }
@@ -273,7 +285,7 @@ const Language = () => {
 
         /* iPhone 14/15 Pro */
         @media (max-width: 393px) {
-          .language-container {
+          .difficulty-container {
             padding-left: max(16px, env(safe-area-inset-left));
             padding-right: max(16px, env(safe-area-inset-right));
           }
@@ -285,7 +297,7 @@ const Language = () => {
 
         /* iPhone SE, iPhone 12/13 mini - 375px */
         @media (max-width: 375px) {
-          .language-container {
+          .difficulty-container {
             padding-left: max(14px, env(safe-area-inset-left));
             padding-right: max(14px, env(safe-area-inset-right));
             padding-top: max(env(safe-area-inset-top), 16px);
@@ -300,11 +312,6 @@ const Language = () => {
           .back-button svg {
             width: 22px;
             height: 22px;
-          }
-
-          .header-section {
-            margin-top: 55px;
-            margin-bottom: 35px;
           }
 
           .page-title {
@@ -323,14 +330,14 @@ const Language = () => {
             font-size: 18px;
           }
 
-          .languages-grid {
-            gap: 14px;
+          .difficulties-grid {
+            gap: 18px;
           }
         }
 
         /* Très petits écrans - iPhone SE 1ère gen */
         @media (max-width: 320px) {
-          .language-container {
+          .difficulty-container {
             padding-left: max(12px, env(safe-area-inset-left));
             padding-right: max(12px, env(safe-area-inset-right));
             padding-top: max(env(safe-area-inset-top), 14px);
@@ -345,11 +352,6 @@ const Language = () => {
           .back-button svg {
             width: 20px;
             height: 20px;
-          }
-
-          .header-section {
-            margin-top: 50px;
-            margin-bottom: 30px;
           }
 
           .page-title {
@@ -368,18 +370,13 @@ const Language = () => {
             font-size: 17px;
           }
 
-          .languages-grid {
-            gap: 12px;
+          .difficulties-grid {
+            gap: 16px;
           }
         }
 
         /* Mode paysage */
         @media (orientation: landscape) {
-          .header-section {
-            margin-top: 40px;
-            margin-bottom: 25px;
-          }
-
           .back-button {
             top: max(env(safe-area-inset-top), 6px);
             padding: 8px;
@@ -406,15 +403,14 @@ const Language = () => {
             font-size: 17px;
           }
 
-          .languages-grid {
-            gap: 12px;
-            margin-bottom: 15px;
+          .difficulties-grid {
+            gap: 16px;
           }
         }
 
         /* Fix Safari iOS et WebKit */
         @supports (-webkit-touch-callout: none) {
-          .language-container {
+          .difficulty-container {
             height: -webkit-fill-available;
             min-height: -webkit-fill-available;
           }
@@ -458,26 +454,27 @@ const Language = () => {
       <div className="header-section">
         <h1 className="page-title">
           <span className="title-bracket">{"<"}</span>
-          Choisi
+          Choisis
           <span className="title-bracket">{"/"}</span>
         </h1>
         <h2 className="page-subtitle">
           <span className="subtitle-bracket">{"/"}</span>
-          Un langage
+          Ta difficulté
           <span className="subtitle-bracket">{">"}</span>
         </h2>
       </div>
 
-      {/* Languages Grid */}
-      <div className="languages-grid">
-        {languages.map((lang) => (
-          <LanguageCard
-            key={lang.id}
-            language={lang.name}
-            icon={lang.icon}
-            backgroundColor={lang.backgroundColor}
-            isComingSoon={lang.isComingSoon}
-            onClick={() => handleLanguageSelect(lang.name)}
+      {/* Difficulties Grid */}
+      <div className="difficulties-grid">
+        {difficulties.map((diff) => (
+          <DifficultyCard
+            key={diff.id}
+            difficulty={diff.difficulty}
+            icon={diff.icon}
+            description={diff.description}
+            xpInfo={diff.xpInfo}
+            backgroundColor={diff.backgroundColor}
+            onClick={() => handleDifficultySelect(diff.id)}
           />
         ))}
       </div>
@@ -490,4 +487,4 @@ const Language = () => {
   );
 };
 
-export default Language;
+export default Difficulty;
