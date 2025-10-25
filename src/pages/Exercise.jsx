@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useProgress } from '../context/ProgressContext';
 import QuestionCard from "../components/exercise/QuestionCard";
 import CodeBlock from "../components/exercise/CodeBlock";
 import OptionButton from "../components/exercise/OptionButton";
@@ -11,6 +12,12 @@ import exercisesData from "../data/exercises.json";
 
 const Exercise = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { completeExercise } = useProgress();
+
+  // Récupérer le langage et la difficulté depuis la navigation
+  const language = location.state?.language || 'PYTHON';
+  const difficulty = location.state?.difficulty || 1;
 
   // State management
   const [selectedOption, setSelectedOption] = useState(null);
@@ -42,7 +49,7 @@ const Exercise = () => {
     }
   };
 
-  const handleValidate = () => {
+  const handleValidate = async () => {
     setIsSubmitted(true);
 
     const correct = selectedOption === exercise.correctAnswer;
@@ -56,6 +63,20 @@ const Exercise = () => {
     }
 
     setShowGlow(true);
+
+    // Sauvegarder la progression
+    try {
+      await completeExercise({
+        exerciseId: exercise.id,
+        language: language,
+        difficulty: difficulty,
+        xpGained: exercise.xpGain || 10,
+        isCorrect: correct,
+        attempts: 1
+      });
+    } catch (error) {
+      console.error('Erreur lors de la sauvegarde de la progression:', error);
+    }
 
     setTimeout(() => {
       setShowGlow(false);

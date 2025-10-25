@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { ProgressProvider } from './context/ProgressContext';
 import Welcome from './pages/Welcome';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -7,6 +8,7 @@ import Home from './pages/Home';
 import Exercise from './pages/Exercise';
 import Language from './pages/Language';
 import Difficulty from './pages/Difficulty';
+import Profile from './pages/Profile';
 
 // Composant pour gérer la route principale "/"
 const RootRoute = () => {
@@ -21,9 +23,10 @@ const App = () => {
   return (
     <Router>
       <AuthProvider>
-        <Routes>
-          {/* Route principale avec redirection intelligente */}
-          <Route path="/" element={<RootRoute />} />
+        <ProgressProvider>
+          <Routes>
+            {/* Route principale avec redirection intelligente */}
+            <Route path="/" element={<RootRoute />} />
 
           {/* Routes d'authentification */}
           <Route path="/login" element={<Login />} />
@@ -31,6 +34,7 @@ const App = () => {
 
           {/* Routes de l'application */}
           <Route path="/home" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/language" element={<Language />} />
           <Route path="/difficulty" element={<Difficulty />} />
           <Route path="/exercise" element={<Exercise />} />
@@ -41,6 +45,7 @@ const App = () => {
           <Route path="/ai-understanding" element={<div style={{color: 'white', padding: '20px', textAlign: 'center'}}>Comprendre l'IA - En cours de développement</div>} />
           <Route path="/contact" element={<div style={{color: 'white', padding: '20px', textAlign: 'center'}}>Contact - En cours de développement</div>} />
         </Routes>
+        </ProgressProvider>
       </AuthProvider>
     </Router>
   );

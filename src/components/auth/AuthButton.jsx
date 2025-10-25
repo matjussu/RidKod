@@ -5,16 +5,12 @@ const AuthButton = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated, logout } = useAuth();
 
-  const handleLoginClick = () => {
-    navigate('/login');
+  const handleProfileClick = () => {
+    navigate('/profile');
   };
 
-  const handleLogout = async () => {
-    const result = await logout();
-    if (result.success) {
-      // Recharger la page pour réinitialiser l'état
-      window.location.reload();
-    }
+  const handleLoginClick = () => {
+    navigate('/login');
   };
 
   return (
@@ -34,6 +30,19 @@ const AuthButton = () => {
           align-items: center;
           gap: 12px;
           flex: 1;
+          cursor: pointer;
+          padding: 8px;
+          margin-left: -8px;
+          border-radius: 12px;
+          transition: all 0.2s ease;
+        }
+
+        .auth-user-info:hover {
+          background: rgba(255, 255, 255, 0.05);
+        }
+
+        .auth-user-info:active {
+          transform: scale(0.98);
         }
 
         .auth-user-avatar {
@@ -81,6 +90,19 @@ const AuthButton = () => {
           align-items: center;
           gap: 12px;
           flex: 1;
+          cursor: pointer;
+          padding: 8px;
+          margin-left: -8px;
+          border-radius: 12px;
+          transition: all 0.2s ease;
+        }
+
+        .auth-guest-info:hover {
+          background: rgba(255, 255, 255, 0.05);
+        }
+
+        .auth-guest-info:active {
+          transform: scale(0.98);
         }
 
         .auth-guest-avatar {
@@ -171,7 +193,7 @@ const AuthButton = () => {
       {isAuthenticated ? (
         <>
           {/* Utilisateur connecté */}
-          <div className="auth-user-info">
+          <div className="auth-user-info" onClick={handleProfileClick}>
             <div className="auth-user-avatar">
               {user?.email ? user.email[0].toUpperCase() : '?'}
             </div>
@@ -179,19 +201,16 @@ const AuthButton = () => {
               <div className="auth-user-email">
                 {user?.email?.split('@')[0] || 'Utilisateur'}
               </div>
-              <div className="auth-user-status">Connecté</div>
+              <div className="auth-user-status">Voir profil →</div>
             </div>
           </div>
-          <button className="auth-button auth-logout-button" onClick={handleLogout}>
-            Déconnexion
-          </button>
         </>
       ) : (
         <>
           {/* Mode invité */}
-          <div className="auth-guest-info">
+          <div className="auth-guest-info" onClick={handleProfileClick}>
             <div className="auth-guest-avatar">👤</div>
-            <div className="auth-guest-text">Mode invité</div>
+            <div className="auth-guest-text">Voir profil →</div>
           </div>
           <button className="auth-button" onClick={handleLoginClick}>
             Se connecter
