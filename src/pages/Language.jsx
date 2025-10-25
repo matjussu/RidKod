@@ -68,7 +68,7 @@ const Language = () => {
     },
     {
       id: 'web',
-      name: 'WEB',
+      name: 'WEB ',
       icon: htmlIcon,
       backgroundColor: 'linear-gradient(135deg, #E34F26 0%, #F16529 50%, #FF9500 100%)',
       isComingSoon: true

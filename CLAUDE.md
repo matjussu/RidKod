@@ -26,6 +26,7 @@ ReadCod est la première application mobile pour apprendre à **LIRE du code** (
 - **React Router DOM 7.9** - Navigation (mis à jour)
 - **React Syntax Highlighter 15.6** - Code display (mis à jour)
 - **Lucide React 0.546** - Icons (mis à jour)
+- **Firebase 12.4** - Authentification et base de données ✅ NOUVEAU
 
 ### Styling
 - **CSS pur** (pas de Tailwind/styled-components)
@@ -34,14 +35,15 @@ ReadCod est la première application mobile pour apprendre à **LIRE du code** (
 - **Mobile-first** design
 
 ### State Management
-- **React Context API** (pas encore implémenté - TODO)
+- **React Context API** ✅ IMPLÉMENTÉ - AuthContext pour authentification
 - Local state avec useState/useReducer
 - Pas de state management externe pour MVP
 
 ### Data
 - **JSON local** pour exercices (10 exercices Python implémentés)
-- localStorage pour progression utilisateur (pas encore implémenté)
-- Pas de base de données externe
+- **localStorage** pour progression utilisateur + état authentification ✅ IMPLÉMENTÉ
+- **Firebase Authentication** pour comptes utilisateurs ✅ NOUVEAU
+- **Firestore Database** prêt pour stockage progression (à implémenter)
 
 ---
 
@@ -150,10 +152,17 @@ readcod-app/
 │   │   │   ├── CodeBlock.jsx       ✅ FAIT - Syntax highlighting Python + ligne highlighting
 │   │   │   ├── OptionButton.jsx    ✅ FAIT - États default/selected/correct/incorrect
 │   │   │   └── ActionButton.jsx    ✅ FAIT - Bouton Valider/Continuer avec états
-│   │   └── common/
-│   │       └── FeedbackGlow.jsx    ✅ FAIT - Effets visuels bordures écran
+│   │   ├── common/
+│   │   │   └── FeedbackGlow.jsx    ✅ FAIT - Effets visuels bordures écran
+│   │   └── auth/                   ✅ NOUVEAU - Composants authentification
+│   │       └── AuthButton.jsx      ✅ FAIT - Bouton auth dans header
 │   ├── pages/
-│   │   ├── Home.jsx                ✅ FAIT - Page d'accueil avec menu iOS-style
+│   │   ├── Welcome.jsx             ✅ NOUVEAU - Page onboarding
+│   │   ├── Login.jsx               ✅ NOUVEAU - Page connexion
+│   │   ├── Signup.jsx              ✅ NOUVEAU - Page inscription
+│   │   ├── Home.jsx                ✅ FAIT - Page d'accueil avec menu iOS-style + auth
+│   │   ├── Language.jsx            ✅ FAIT - Sélection langage
+│   │   ├── Difficulty.jsx          ✅ FAIT - Sélection difficulté
 │   │   └── Exercise.jsx            ✅ FAIT - Page exercice complète avec navigation
 │   ├── assets/                     ✅ FAIT - Logos et images
 │   │   ├── long_logo.png
@@ -163,7 +172,10 @@ readcod-app/
 │   │   └── useHaptic.js            ✅ FAIT - Hook vibration mobile
 │   ├── data/
 │   │   └── exercises.json          ✅ FAIT - 10 exercices Python avec explications
-│   ├── context/                    ❌ TODO - AppContext pour state global
+│   ├── context/                    ✅ FAIT - AuthContext pour authentification
+│   │   └── AuthContext.jsx
+│   ├── config/                     ✅ NOUVEAU - Configuration Firebase
+│   │   └── firebase.js
 │   ├── utils/                      ❌ TODO - Storage et scoring
 │   ├── styles/                     ❌ TODO - CSS modules (actuellement inline)
 │   ├── App.jsx                     ✅ FAIT - Router avec routes principales
@@ -171,10 +183,15 @@ readcod-app/
 │   ├── index.css                   ✅ FAIT - Reset CSS global
 │   └── main.jsx                    ✅ FAIT - Entry point React
 ├── index.html                      ✅ FAIT - Google Fonts JetBrains Mono + Jersey 25
-├── package.json                    ✅ FAIT - Dépendances à jour
+├── .env                            ✅ NOUVEAU - Variables Firebase (gitignored)
+├── .env.example                    ✅ NOUVEAU - Template variables
+├── package.json                    ✅ FAIT - Dépendances à jour (+ Firebase)
 ├── vite.config.js                  ✅ FAIT
 ├── eslint.config.js                ✅ FAIT - Configuration ESLint
-└── CLAUDE.md                       ✅ FAIT - Ce fichier (mis à jour)
+├── CLAUDE.md                       ✅ FAIT - Ce fichier (mis à jour)
+├── FIREBASE_SETUP.md               ✅ NOUVEAU - Guide configuration Firebase
+├── AUTH_IMPLEMENTATION.md          ✅ NOUVEAU - Documentation technique auth
+└── QUICKSTART_AUTH.md              ✅ NOUVEAU - Démarrage rapide 5 minutes
 ```
 
 ---
@@ -238,10 +255,10 @@ readcod-app/
 ## 🎯 FEATURES MVP (Priorités)
 
 ### ✅ FAIT (MVP Fonctionnel)
-1. **Page Home** - Menu iOS-style avec navigation
+1. **Page Home** - Menu iOS-style avec navigation + auth status
 2. **Page Exercise** - Interface complète d'exercice
-3. **Composants modulaires** - 7 composants React réutilisables
-4. **Système de routing** - React Router avec 6 routes
+3. **Composants modulaires** - 11 composants React réutilisables
+4. **Système de routing** - React Router avec 9 routes (+ auth)
 5. **10 exercices Python** - Chargés depuis JSON avec explications
 6. **Syntax highlighting** - Python custom avec coloration précise
 7. **États interactifs** - Initial, sélection, validation, feedback
@@ -252,24 +269,30 @@ readcod-app/
 12. **Animations fluides** - Transitions et effets visuels
 13. **Système d'explication** - Bouton toggle avec highlighting code
 14. **Navigation exercices** - Suivant/Précédent avec reset auto
+15. **🔥 Authentification Firebase** - Email/Password + mode invité ✅ NOUVEAU
+16. **Context API** - AuthContext pour state global auth ✅ NOUVEAU
+17. **localStorage** - Sauvegarde état auth + progression ✅ NOUVEAU
+18. **Pages auth** - Welcome, Login, Signup (iOS-style) ✅ NOUVEAU
 
 ### 🔄 EN COURS (Prochaines priorités)
-15. **Context API** - State management global
-16. **localStorage** - Sauvegarde progression utilisateur
-17. **Pages manquantes** - Leçons, Challenges, AI Understanding, Contact
-18. **Système de scoring** - Points, niveaux, statistiques
-19. **CSS modules** - Externalisation styles inline
+19. **Firestore sync** - Sauvegarder progression utilisateur dans DB
+20. **Pages manquantes** - Leçons, Challenges, AI Understanding, Contact
+21. **Système de scoring** - Points, niveaux, statistiques
+22. **CSS modules** - Externalisation styles inline
 
 ### ❌ TODO (Post-MVP)
-20. **Multiple langages** - JavaScript, Java, C++
-21. **PWA** - Mode offline, installation
-22. **Mode sombre/clair** - Toggle thème
-23. **Streak system** - Séries quotidiennes
-24. **Badges/achievements** - Système de récompenses
-25. **Sound effects** - Feedback audio
-26. **Leaderboard** - Classement utilisateurs
-27. **Tests unitaires** - Jest + Testing Library
-28. **Backend API** - Base de données utilisateurs
+23. **OAuth** - Connexion Google/GitHub
+24. **Reset password** - Mot de passe oublié
+25. **Email verification** - Validation email obligatoire
+26. **Multiple langages** - JavaScript, Java, C++
+27. **PWA** - Mode offline, installation
+28. **Mode sombre/clair** - Toggle thème
+29. **Streak system** - Séries quotidiennes
+30. **Badges/achievements** - Système de récompenses
+31. **Sound effects** - Feedback audio
+32. **Leaderboard** - Classement utilisateurs
+33. **Tests unitaires** - Jest + Testing Library
+34. **2FA** - Authentification à deux facteurs
 
 ---
 
@@ -322,15 +345,27 @@ export default MyComponent;
 
 ## 🚀 PROCHAINES ÉTAPES (Roadmap)
 
-### Phase 1 : State Management ✅ PRÊT
+### Phase 1 : State Management ✅ TERMINÉ
 - [x] ✅ Séparer App.jsx en composants
 - [x] ✅ Créer structure dossiers
 - [x] ✅ Setup React Router complet
 - [x] ✅ Créer exercises.json avec 10 exercices
 - [x] ✅ Système de navigation next/previous
-- [ ] 🔄 Implémenter Context API
-- [ ] 🔄 localStorage pour progression
+- [x] ✅ Implémenter Context API (AuthContext)
+- [x] ✅ localStorage pour progression + auth
 - [ ] 🔄 Externaliser styles en CSS modules
+
+### Phase 1.5 : Authentification ✅ TERMINÉ
+- [x] ✅ Installation Firebase SDK
+- [x] ✅ Configuration Firebase (firebase.js)
+- [x] ✅ AuthContext avec login/signup/logout
+- [x] ✅ Page Welcome (onboarding)
+- [x] ✅ Page Login (connexion)
+- [x] ✅ Page Signup (inscription)
+- [x] ✅ Composant AuthButton (header)
+- [x] ✅ Intégration dans Home.jsx
+- [x] ✅ Mode invité fonctionnel
+- [x] ✅ Documentation complète (3 fichiers MD)
 
 ### Phase 2 : Pages manquantes
 - [x] ✅ Page Home avec menu iOS
@@ -341,6 +376,7 @@ export default MyComponent;
 - [ ] ❌ Page Contact (route existe, contenu à créer)
 
 ### Phase 3 : Fonctionnalités avancées
+- [ ] 🔄 Firestore - Sauvegarder progression dans DB
 - [ ] ❌ Système de scoring/niveaux
 - [ ] ❌ Profil utilisateur avec stats
 - [ ] ❌ 20 exercices supplémentaires Python
@@ -362,6 +398,8 @@ export default MyComponent;
 - Vite : https://vitejs.dev
 - React Router : https://reactrouter.com
 - React Syntax Highlighter : https://github.com/react-syntax-highlighter
+- Firebase : https://firebase.google.com/docs
+- Firebase Auth : https://firebase.google.com/docs/auth
 
 ### Design Inspiration
 - iOS Human Interface Guidelines
@@ -375,18 +413,20 @@ export default MyComponent;
 ---
 
 ## 🐛 BUGS CONNUS
-- ⚠️ **Logo missing** sur Home.jsx (import long_logo.png manquant)
 - ⚠️ **Header component** inutilisé dans Exercise.jsx (code dupliqué inline)
 - ⚠️ **CSS répétitif** dans tous les composants (styles inline)
 - ⚠️ **Routes manquantes** affichent "En cours de développement"
+- ⚠️ **Firebase non configuré** : Il faut configurer les clés dans `.env` (voir FIREBASE_SETUP.md)
 
 ## 💡 NOTES TECHNIQUES
-- **MVP fonctionnel** : App prête pour testing utilisateur
+- **MVP fonctionnel avec auth** : App prête pour testing utilisateur
+- **Firebase Authentication** : Email/Password + mode invité implémenté
 - **Performance optimisée** : 60fps sur mobile, animations fluides
-- **Code quality** : Composants modulaires, hooks personnalisés
+- **Code quality** : Composants modulaires, hooks personnalisés, Context API
 - **Mobile-first** : Responsive iPhone SE à Pro Max
 - **Accessibility** : Touch targets 44px+, navigation clavier
 - **10 exercices Python** : Suffisant pour validation concept
+- **Sécurité** : Variables d'environnement, validation formulaires, messages erreur français
 
 ## 🔧 COMMANDES UTILES
 ```bash
@@ -413,10 +453,20 @@ find src -name "*.jsx"  # Lister composants
 - ✅ Mise à jour documentation
 - ✅ Review code et bonnes pratiques
 
-**Prochaine étape recommandée :** Implémenter Context API pour gérer l'état global
+**Prochaine étape recommandée :** Configurer Firebase (voir QUICKSTART_AUTH.md) puis implémenter sauvegarde progression dans Firestore
 
 ---
 
-**Dernière mise à jour :** 22 octobre 2025
-**Version :** 0.2.0 (MVP fonctionnel)
-**Status :** 🟢 MVP terminé - Prêt pour expansion
+## 📖 DOCUMENTATION AUTHENTIFICATION
+
+Pour l'authentification Firebase, consulter :
+
+1. **[QUICKSTART_AUTH.md](QUICKSTART_AUTH.md)** - ⚡ Démarrage rapide en 5 minutes
+2. **[FIREBASE_SETUP.md](FIREBASE_SETUP.md)** - 📝 Guide complet configuration Firebase
+3. **[AUTH_IMPLEMENTATION.md](AUTH_IMPLEMENTATION.md)** - 🔧 Documentation technique détaillée
+
+---
+
+**Dernière mise à jour :** 25 octobre 2025
+**Version :** 0.3.0 (MVP + Authentification Firebase)
+**Status :** 🟢 MVP avec auth terminé - Prêt pour testing

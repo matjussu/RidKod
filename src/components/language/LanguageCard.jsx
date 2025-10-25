@@ -35,7 +35,7 @@ const LanguageCard = ({
           border: none;
           cursor: pointer;
           transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-          font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+         font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
           touch-action: manipulation;
           -webkit-tap-highlight-color: transparent;
           position: relative;
@@ -98,13 +98,16 @@ const LanguageCard = ({
         .language-text {
           color: #FFFFFF;
           font-size: 100px;
-          font-weight: 800;
+          font-weight: 900;
+          font-style: italic;
           text-transform: uppercase;
-          letter-spacing: 0.5px;
-          text-align: left;
-          line-height: 1.2;
-          text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-          flex: 1;
+          letter-spacing: -3px;
+          line-height: 1;
+          text-shadow:
+            0 4px 8px rgba(0, 0, 0, 0.4),
+            0 2px 4px rgba(0, 0, 0, 0.3);
+          transform: skewX(-5deg);
+          transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         /* Coming Soon Overlay */

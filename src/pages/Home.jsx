@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import logoImage from '../assets/long_logo.png';
+import AuthButton from '../components/auth/AuthButton';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -422,6 +423,9 @@ const Home = () => {
       <div className="logo-container">
         <img src={logoImage} alt="ReadCod Logo" />
       </div>
+
+      {/* Auth Button */}
+      <AuthButton />
 
       {/* Menu Grid */}
       <div className="menu-grid">
