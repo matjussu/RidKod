@@ -137,4 +137,4 @@ const OptionButton = ({ value, isSelected, isCorrect, isSubmitted, onClick }) =>
   );
 };
 
-export default OptionButton;
+export default React.memo(OptionButton);

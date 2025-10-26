@@ -1,4 +1,5 @@
 import React from "react";
+import { Lightbulb, BookOpen, ChevronDown } from 'lucide-react';
 
 const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain, explanation, onExplanationToggle, isExplanationExpanded }) => {
   const renderContent = () => {
@@ -33,19 +34,24 @@ const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain, explanation, o
           className="explanation-toggle"
           onClick={onExplanationToggle}
         >
-          <span className="explanation-icon">💡</span>
+          <Lightbulb className="explanation-icon" size={18} strokeWidth={2.5} />
           <span className="explanation-text">
             {isExplanationExpanded ? 'Masquer l\'explication' : 'Voir l\'explication'}
           </span>
-          <span className={`chevron ${isExplanationExpanded ? 'expanded' : ''}`}>
-            {isExplanationExpanded ? '▲' : '▼'}
-          </span>
+          <ChevronDown
+            className={`chevron ${isExplanationExpanded ? 'expanded' : ''}`}
+            size={16}
+            strokeWidth={2.5}
+          />
         </button>
 
         {/* Contenu de l'explication (expandable) */}
         {isExplanationExpanded && (
           <div className="explanation-content">
-            <h4>📖 Comment ça marche :</h4>
+            <div className="explanation-header">
+              <BookOpen size={16} strokeWidth={2.5} />
+              <h4>Comment ça marche :</h4>
+            </div>
             <div className="explanation-text-content">
               {explanation}
             </div>
@@ -151,9 +157,9 @@ const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain, explanation, o
         }
 
         .explanation-icon {
-          font-size: 18px;
           margin-right: 8px;
           flex-shrink: 0;
+          color: #FFFFFF;
         }
 
         .explanation-text {
@@ -162,7 +168,6 @@ const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain, explanation, o
         }
 
         .chevron {
-          font-size: 11px;
           color: #FFFFFF;
           transition: transform 0.3s ease;
           margin-left: 8px;
@@ -172,6 +177,18 @@ const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain, explanation, o
 
         .chevron.expanded {
           transform: rotate(180deg);
+        }
+
+        .explanation-header {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 8px;
+        }
+
+        .explanation-header svg {
+          color: #1871BE;
+          flex-shrink: 0;
         }
 
         /* Explanation Content */
@@ -199,7 +216,7 @@ const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain, explanation, o
           color: #000000ff;
           font-size: 15px;
           font-weight: 600;
-          margin: 0 0 8px 0;
+          margin: 0;
           font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
         }
 
@@ -232,8 +249,12 @@ const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain, explanation, o
           }
 
           .explanation-icon {
-            font-size: 16px;
             margin-right: 6px;
+          }
+
+          .explanation-header svg {
+            width: 14px;
+            height: 14px;
           }
 
           .explanation-text-content {
@@ -258,8 +279,12 @@ const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain, explanation, o
           }
 
           .explanation-icon {
-            font-size: 14px;
             margin-right: 4px;
+          }
+
+          .explanation-header svg {
+            width: 12px;
+            height: 12px;
           }
 
           .explanation-text-content {
@@ -301,4 +326,4 @@ const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain, explanation, o
   );
 };
 
-export default QuestionCard;
+export default React.memo(QuestionCard);

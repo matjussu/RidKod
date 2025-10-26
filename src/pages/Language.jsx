@@ -226,8 +226,8 @@ const Language = () => {
           display: flex;
           flex-direction: column;
           gap: 20px;
-          width: 150%;
-          max-width: 105%;
+          width: 100%;
+          max-width: 100%;
           margin-bottom: 20px;
           opacity: 0;
           transform: translateY(30px);

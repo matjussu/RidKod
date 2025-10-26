@@ -132,7 +132,7 @@ const Home = () => {
           border: none;
           font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
           font-weight: 800;
-          font-size: 14px;
+          font-size:12px;
           color: #FFFFFF;
           touch-action: manipulation;
           -webkit-tap-highlight-color: transparent;
@@ -189,7 +189,7 @@ const Home = () => {
         }
 
         .menu-card-text {
-          font-size: 13px;
+          font-size: 20px;
           font-weight: 700;
           line-height: 1.2;
           text-transform: uppercase;
@@ -200,7 +200,7 @@ const Home = () => {
         .menu-card-bracket {
           color: #FF9500;
           font-weight: 800;
-          font-size: 14px;
+          font-size: 15px;
         }
 
         /* Contact button */
@@ -337,7 +337,7 @@ const Home = () => {
           }
 
           .menu-card-text {
-            font-size: 12px;
+            font-size: 16px;
           }
 
           .contact-button {

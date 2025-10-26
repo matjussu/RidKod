@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useProgress } from '../context/ProgressContext';
 import QuestionCard from "../components/exercise/QuestionCard";
@@ -9,11 +9,16 @@ import FeedbackGlow from "../components/common/FeedbackGlow";
 import ExitConfirmModal from "../components/common/ExitConfirmModal";
 import useHaptic from "../hooks/useHaptic";
 import exercisesData from "../data/exercises.json";
+import { isBlockComplete } from '../constants/exerciseLayout';
+import '../styles/Exercise.css';
+
+// Lazy load LevelComplete component (only loaded when needed)
+const LevelComplete = lazy(() => import("../components/exercise/LevelComplete"));
 
 const Exercise = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { completeExercise } = useProgress();
+  const { completeExercise, getStats } = useProgress();
 
   // Récupérer le langage et la difficulté depuis la navigation
   const language = location.state?.language || 'PYTHON';
@@ -32,6 +37,20 @@ const Exercise = () => {
 
   // Exit modal state
   const [showExitModal, setShowExitModal] = useState(false);
+
+  // Level complete state
+  const [showLevelComplete, setShowLevelComplete] = useState(false);
+  const [blockStats, setBlockStats] = useState(() => {
+    const stats = getStats();
+    return {
+      correctAnswers: 0,
+      incorrectAnswers: 0,
+      xpGained: 0,
+      currentLevel: stats.level,
+      streak: stats.streak?.current || 0,
+      totalAnswered: 0
+    };
+  });
 
   // Haptic feedback hook
   const { triggerSuccess, triggerError, triggerLight } = useHaptic();
@@ -53,6 +72,7 @@ const Exercise = () => {
     setIsSubmitted(true);
 
     const correct = selectedOption === exercise.correctAnswer;
+    const xpGain = exercise.xpGain || 10;
 
     if (correct) {
       setGlowType('success');
@@ -64,13 +84,23 @@ const Exercise = () => {
 
     setShowGlow(true);
 
+    // Mettre à jour les stats du bloc
+    setBlockStats(prev => ({
+      correctAnswers: prev.correctAnswers + (correct ? 1 : 0),
+      incorrectAnswers: prev.incorrectAnswers + (correct ? 0 : 1),
+      xpGained: prev.xpGained + xpGain,
+      totalAnswered: prev.totalAnswered + 1,
+      currentLevel: prev.currentLevel,
+      streak: prev.streak
+    }));
+
     // Sauvegarder la progression
     try {
       await completeExercise({
         exerciseId: exercise.id,
         language: language,
         difficulty: difficulty,
-        xpGained: exercise.xpGain || 10,
+        xpGained: xpGain,
         isCorrect: correct,
         attempts: 1
       });
@@ -87,15 +117,57 @@ const Exercise = () => {
     setIsExplanationExpanded(false);
     setHighlightedLines([]);
 
+    // Vérifier si on a complété un bloc (utilise la constante EXERCISES_PER_LEVEL = 10)
+    const blockComplete = isBlockComplete(currentExerciseIndex);
+
+    if (blockComplete) {
+      // Afficher l'écran de feedback
+      const stats = getStats();
+      setBlockStats(prev => ({
+        ...prev,
+        currentLevel: stats.level,
+        streak: stats.streak?.current || 0
+      }));
+      setShowLevelComplete(true);
+    } else if (currentExerciseIndex < exercises.length - 1) {
+      // Continuer normalement
+      setCurrentExerciseIndex(prev => prev + 1);
+      setSelectedOption(null);
+      setIsSubmitted(false);
+    } else {
+      // Fin de tous les exercices
+      const stats = getStats();
+      setBlockStats(prev => ({
+        ...prev,
+        currentLevel: stats.level,
+        streak: stats.streak?.current || 0
+      }));
+      setShowLevelComplete(true);
+    }
+  };
+
+  const handleLevelContinue = () => {
+    setShowLevelComplete(false);
+
+    // Réinitialiser les stats du bloc
+    const stats = getStats();
+    setBlockStats({
+      correctAnswers: 0,
+      incorrectAnswers: 0,
+      xpGained: 0,
+      totalAnswered: 0,
+      currentLevel: stats.level,
+      streak: stats.streak?.current || 0
+    });
+
+    // Continuer au prochain exercice ou retourner à l'accueil
     if (currentExerciseIndex < exercises.length - 1) {
       setCurrentExerciseIndex(prev => prev + 1);
       setSelectedOption(null);
       setIsSubmitted(false);
     } else {
-      alert('🎉 Bravo ! Tous les exercices terminés !\\n\\nTu as complété tous les exercices ReadCod !');
-      setCurrentExerciseIndex(0);
-      setSelectedOption(null);
-      setIsSubmitted(false);
+      // Tous les exercices terminés - retour à l'accueil
+      navigate('/home');
     }
   };
 
@@ -148,383 +220,28 @@ const Exercise = () => {
 
   const isCorrect = selectedOption === exercise.correctAnswer;
 
+  // Afficher l'écran de feedback si le bloc est complété
+  if (showLevelComplete) {
+    return (
+      <Suspense fallback={<div style={{
+        minHeight: '100vh',
+        background: '#1A1919',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: '#FFFFFF',
+        fontFamily: 'JetBrains Mono, monospace'
+      }}>Chargement...</div>}>
+        <LevelComplete
+          stats={blockStats}
+          onContinue={handleLevelContinue}
+        />
+      </Suspense>
+    );
+  }
+
   return (
     <div className="exercise-app">
-      <style>{`
-        /* Reset global */
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-          -webkit-tap-highlight-color: transparent;
-        }
-
-        html, body {
-          margin: 0;
-          padding: 0;
-          height: 100%;
-          font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
-          font-weight: 800;
-          -webkit-font-smoothing: antialiased;
-          -webkit-text-size-adjust: 100%;
-          -ms-text-size-adjust: 100%;
-          touch-action: manipulation;
-        }
-
-        #root {
-          height: 100%;
-        }
-
-        .exercise-app {
-          min-height: 100vh;
-          min-height: -webkit-fill-available;
-          background: #1A1919;
-          color: #FFFFFF;
-          display: flex;
-          flex-direction: column;
-          position: relative;
-          max-width: min(428px, 100vw);
-          margin: 0 auto;
-          width: 100%;
-          overflow-x: hidden;
-          opacity: 0;
-          transform: scale(1.05);
-          animation: fadeInScale 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-          transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        @keyframes fadeInScale {
-          0% {
-            opacity: 0;
-            transform: scale(1.05);
-          }
-          100% {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-
-        /* Header sticky */
-        .header-fixed {
-          position: sticky;
-          top: 0;
-          z-index: 100;
-          background: #1A1919;
-          padding-top: max(env(safe-area-inset-top), 8px);
-          padding-bottom: 8px;
-          margin-bottom: 0;
-        }
-
-        .close-button {
-          position: absolute;
-          top: max(env(safe-area-inset-top), 4px);
-          left: 0px;
-          background: none;
-          border: none;
-          cursor: pointer;
-          padding: 20px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 101;
-          touch-action: manipulation;
-          -webkit-tap-highlight-color: transparent;
-        }
-
-        .close-button svg {
-          color: #FF453A;
-          width: 20px;
-          height: 20px;
-        }
-
-        /* Progress Bar dans header */
-        .progress-container {
-          padding: 4px max(48px, calc(env(safe-area-inset-left) + 48px)) 0 max(48px, calc(env(safe-area-inset-right) + 48px));
-          margin: 0;
-          width: 100%;
-          box-sizing: border-box;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .progress-bar {
-          height: 10px;
-          background: #3A3A3C;
-          border-radius: 10px;
-          overflow: hidden;
-          width: 100%;
-        }
-
-        .progress-fill {
-          height: 100%;
-          background: #088201;
-          transition: width 0.3s ease;
-        }
-
-        /* Content scrollable */
-        .content-scrollable {
-          padding-top: 16px;
-          padding-left: max(16px, env(safe-area-inset-left));
-          padding-right: max(16px, env(safe-area-inset-right));
-          padding-bottom: max(env(safe-area-inset-bottom), 16px);
-          width: 100%;
-          box-sizing: border-box;
-          overflow-x: hidden;
-        }
-
-        /* Hide scrollbar */
-        .content-scrollable::-webkit-scrollbar {
-          display: none;
-        }
-
-        .content-scrollable {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-
-        /* Question Card */
-        .question-card {
-          background: #FFFFFF;
-          border-radius: 14px;
-          padding: 12px;
-          margin-bottom: 12px;
-        }
-
-        /* Code Block */
-        .code-container {
-          background: #030303ff;
-          border-radius: 10px;
-          padding: 12px;
-          margin-bottom: 12px;
-          overflow-x: auto;
-          overflow-y: auto;
-          height: 370px !important;
-          max-height: none !important;
-          min-height: none !important;
-          width: 100%;
-          min-width: 0;
-          max-width: 100%;
-          box-sizing: border-box;
-          transition: height 0.3s ease;
-        }
-
-        .code-container.compact {
-          height: auto !important;
-          max-height: 600px !important;
-          min-height: auto !important;
-        }
-
-        /* Options Container with Animation */
-        .options-container {
-          transition: all 0.3s ease;
-          overflow: hidden;
-        }
-
-        .options-container.visible {
-          opacity: 1;
-          max-height: 200px;
-          margin-bottom: 12px;
-        }
-
-        .options-container.hidden {
-          opacity: 0;
-          max-height: 0;
-          margin-bottom: 0;
-          transform: translateY(-10px);
-        }
-
-        /* Options Grid */
-        .options-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 10px;
-          width: 100%;
-          box-sizing: border-box;
-        }
-
-        /* Action Button */
-        .action-button {
-          width: 100%;
-          height: 52px;
-          border-radius: 10px;
-          margin-bottom: max(12px, env(safe-area-inset-bottom));
-          box-sizing: border-box;
-          touch-action: manipulation;
-          -webkit-tap-highlight-color: transparent;
-        }
-
-        /* Scrollbar custom pour le code */
-        .code-container::-webkit-scrollbar {
-          width: 4px;
-          height: 4px;
-        }
-
-        .code-container::-webkit-scrollbar-track {
-          background: transparent;
-        }
-
-        .code-container::-webkit-scrollbar-thumb {
-          background: #3A3A3C;
-          border-radius: 2px;
-        }
-
-        /* Code pre optimisations */
-        .code-container pre {
-          margin: 0 !important;
-          font-size: 14px !important;
-          line-height: 1.5 !important;
-        }
-
-        /* Responsive styles - iPhone 14/15 Pro Max */
-        @media (max-width: 430px) {
-          .content-scrollable {
-            padding-left: max(18px, env(safe-area-inset-left));
-            padding-right: max(18px, env(safe-area-inset-right));
-          }
-
-          .progress-container {
-            padding: 4px max(50px, calc(env(safe-area-inset-left) + 50px)) 0 max(50px, calc(env(safe-area-inset-right) + 50px));
-          }
-        }
-
-        /* iPhone 14/15 Pro */
-        @media (max-width: 393px) {
-          .content-scrollable {
-            padding-left: max(16px, env(safe-area-inset-left));
-            padding-right: max(16px, env(safe-area-inset-right));
-          }
-        }
-
-        @media (max-width: 375px) {
-          .close-button {
-            left: max(14px, env(safe-area-inset-left));
-            padding: 4px;
-          }
-
-          .close-button svg {
-            width: 18px;
-            height: 18px;
-          }
-
-          .progress-container {
-            padding: 4px max(44px, calc(env(safe-area-inset-left) + 44px)) 0 max(44px, calc(env(safe-area-inset-right) + 44px));
-          }
-
-          .content-scrollable {
-            padding-left: max(14px, env(safe-area-inset-left));
-            padding-right: max(14px, env(safe-area-inset-right));
-          }
-        }
-
-        @media (max-width: 320px) {
-          .close-button {
-            left: max(12px, env(safe-area-inset-left));
-            padding: 3px;
-          }
-
-          .close-button svg {
-            width: 16px;
-            height: 16px;
-          }
-
-          .progress-container {
-            padding: 3px max(40px, calc(env(safe-area-inset-left) + 40px)) 0 max(40px, calc(env(safe-area-inset-right) + 40px));
-          }
-
-          .content-scrollable {
-            padding-left: max(12px, env(safe-area-inset-left));
-            padding-right: max(12px, env(safe-area-inset-right));
-          }
-
-          .code-container pre {
-            font-size: 13px !important;
-            line-height: 1.4 !important;
-          }
-
-          .options-grid {
-            gap: 8px;
-          }
-        }
-
-        @media (max-height: 667px) {
-          .code-container pre {
-            font-size: 13px !important;
-            line-height: 1.4 !important;
-          }
-        }
-
-        /* Mode paysage */
-        @media (orientation: landscape) {
-          .header-fixed {
-            padding-top: max(env(safe-area-inset-top), 6px);
-            padding-bottom: 6px;
-          }
-
-          .close-button {
-            top: max(env(safe-area-inset-top), 6px);
-            padding: 3px;
-          }
-
-          .close-button svg {
-            width: 16px;
-            height: 16px;
-          }
-
-          .progress-container {
-            padding: 3px max(40px, calc(env(safe-area-inset-left) + 40px)) 0 max(40px, calc(env(safe-area-inset-right) + 40px));
-          }
-
-          .content-scrollable {
-            padding-left: max(12px, env(safe-area-inset-left));
-            padding-right: max(12px, env(safe-area-inset-right));
-          }
-
-          .question-card {
-            padding: 8px;
-            margin-bottom: 8px;
-          }
-
-          .options-grid {
-            gap: 8px;
-            margin-bottom: 8px;
-          }
-        }
-
-        /* Fix Safari iOS et WebKit */
-        @supports (-webkit-touch-callout: none) {
-          .exercise-app {
-            height: -webkit-fill-available;
-            min-height: -webkit-fill-available;
-          }
-
-          body {
-            height: -webkit-fill-available;
-          }
-        }
-
-        /* Optimisations touch iOS */
-        * {
-          -webkit-touch-callout: none;
-          -webkit-user-select: none;
-          -webkit-tap-highlight-color: transparent;
-        }
-
-        button, input, textarea {
-          -webkit-user-select: text;
-        }
-
-        /* Fix zoom iOS */
-        input, textarea, select {
-          font-size: 16px;
-        }
-
-        /* Prevent overscroll bounce */
-        body {
-          overscroll-behavior-y: none;
-          -webkit-overflow-scrolling: touch;
-        }
-      `}</style>
 
       {/* Header Fixed */}
       <header className="header-fixed">

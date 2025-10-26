@@ -75,18 +75,19 @@ const LanguageCard = ({
           display: flex;
           flex-direction: row;
           align-items: center;
-          justify-content: space-between;
+          justify-content: flex-start;
           height: 100%;
-          padding: 0 20px;
+          padding: 0 20px 0 0;
           position: relative;
           z-index: 1;
+          gap: 12px;
         }
 
         .language-icon {
           width: 56px;
           height: 56px;
           object-fit: contain;
-          margin: -2px;
+          margin: 0;
           transition: transform 0.3s ease;
           flex-shrink: 0;
         }
@@ -108,6 +109,8 @@ const LanguageCard = ({
             0 2px 4px rgba(0, 0, 0, 0.3);
           transform: skewX(-5deg);
           transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+          flex: 1;
+          text-align: left;
         }
 
         /* Coming Soon Overlay */
@@ -132,7 +135,8 @@ const LanguageCard = ({
           }
 
           .language-card-content {
-            padding: 0 16px;
+            padding: 0 16px 0 0;
+            gap: 10px;
           }
 
           .language-icon {
@@ -155,7 +159,8 @@ const LanguageCard = ({
           }
 
           .language-card-content {
-            padding: 0 14px;
+            padding: 0 12px 0 0;
+            gap: 8px;
           }
 
           .language-icon {
@@ -182,7 +187,8 @@ const LanguageCard = ({
           }
 
           .language-card-content {
-            padding: 0 16px;
+            padding: 0 16px 0 0;
+            gap: 10px;
           }
 
           .language-icon {

@@ -503,4 +503,4 @@ const CodeBlock = ({ code, language, highlightedLines = [], isHighlightActive = 
   );
 };
 
-export default CodeBlock;
+export default React.memo(CodeBlock);

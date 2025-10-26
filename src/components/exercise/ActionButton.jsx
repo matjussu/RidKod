@@ -112,4 +112,4 @@ const ActionButton = ({ isSubmitted, isCorrect, isDisabled, onClick }) => {
   );
 };
 
-export default ActionButton;
+export default React.memo(ActionButton);
