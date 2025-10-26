@@ -207,7 +207,7 @@ html, body {
 .code-container {
   background: var(--bg-code);
   border-radius: var(--radius-sm);
-  padding: var(--space-md);
+  padding: 8px 4px;
   margin-bottom: var(--space-md);
   overflow-x: auto;
   overflow-y: auto;
@@ -219,6 +219,8 @@ html, body {
   max-width: 100%;
   box-sizing: border-box;
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
 }
 
 .code-container.compact {

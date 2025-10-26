@@ -45,7 +45,7 @@ const CodeBlock = ({ code, language, highlightedLines = [], isHighlightActive = 
       hyphens: 'none',
       padding: '0',
       margin: '0',
-      overflow: 'auto'
+      overflow: 'visible'
     },
 
     // Keywords (for, in, def, return, if, else, while, import, from, etc.)
@@ -320,12 +320,12 @@ const CodeBlock = ({ code, language, highlightedLines = [], isHighlightActive = 
           position: relative;
           width: 100%;
           min-width: 0;
-          max-width: 100%;
-          overflow: hidden;
+          overflow-x: auto;
+          overflow-y: visible;
         }
 
         .code-line {
-          padding: 2px 8px 2px 40px;
+          padding: 2px 4px 2px 28px;
           margin: 0;
           border-radius: 4px;
           transition: all 0.3s ease;
@@ -333,25 +333,41 @@ const CodeBlock = ({ code, language, highlightedLines = [], isHighlightActive = 
           display: flex;
           align-items: center;
           min-height: 24px;
-          width: 100%;
-          min-width: 0;
-          max-width: 100%;
+          width: auto;
+          min-width: 100%;
           box-sizing: border-box;
-          overflow: hidden;
-          word-wrap: break-word;
-          white-space: pre-wrap;
+          white-space: pre;
+          overflow: visible;
         }
 
         .line-number {
           position: absolute;
-          left: 8px;
+          left: 2px;
           color: #6A9955;
           font-size: 12px;
           font-weight: 500;
-          width: 24px;
+          width: 22px;
           text-align: right;
           user-select: none;
           font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+        }
+
+        /* Scrollbar horizontal pour code-wrapper */
+        .code-wrapper::-webkit-scrollbar {
+          height: 4px;
+        }
+
+        .code-wrapper::-webkit-scrollbar-track {
+          background: transparent;
+        }
+
+        .code-wrapper::-webkit-scrollbar-thumb {
+          background: #3A3A3C;
+          border-radius: 2px;
+        }
+
+        .code-wrapper::-webkit-scrollbar-thumb:hover {
+          background: #4A4A4C;
         }
 
         .code-line.highlighted {
@@ -444,12 +460,12 @@ const CodeBlock = ({ code, language, highlightedLines = [], isHighlightActive = 
         /* iPhone SE, iPhone 12/13 mini */
         @media (max-width: 375px) {
           .code-line {
-            padding: 2px 6px 2px 36px;
+            padding: 2px 3px 2px 26px;
             min-height: 22px;
           }
 
           .line-number {
-            left: 6px;
+            left: 2px;
             font-size: 11px;
             width: 20px;
           }
@@ -463,12 +479,12 @@ const CodeBlock = ({ code, language, highlightedLines = [], isHighlightActive = 
         /* iPhone SE 1ère génération */
         @media (max-width: 320px) {
           .code-line {
-            padding: 1px 4px 1px 32px;
+            padding: 1px 2px 1px 24px;
             min-height: 20px;
           }
 
           .line-number {
-            left: 4px;
+            left: 1px;
             font-size: 10px;
             width: 18px;
           }
@@ -486,7 +502,7 @@ const CodeBlock = ({ code, language, highlightedLines = [], isHighlightActive = 
         /* Mode paysage */
         @media (orientation: landscape) {
           .code-line {
-            padding: 1px 6px 1px 34px;
+            padding: 1px 3px 1px 25px;
             min-height: 20px;
           }
 
