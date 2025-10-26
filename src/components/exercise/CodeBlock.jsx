@@ -1,7 +1,16 @@
 import React from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 
-const CodeBlock = ({ code, language, highlightedLines = [], isHighlightActive = false, isCompact = false }) => {
+const CodeBlock = ({
+  code,
+  language,
+  highlightedLines = [],
+  isHighlightActive = false,
+  isCompact = false,
+  clickableLines = [],
+  selectedLine = null,
+  onLineClick = null
+}) => {
   // Custom Python theme with exact color specifications
   const customPythonTheme = {
     'code[class*="language-"]': {
@@ -275,14 +284,17 @@ const CodeBlock = ({ code, language, highlightedLines = [], isHighlightActive = 
         {lines.map((line, index) => {
           const lineNumber = index + 1;
           const isHighlighted = isHighlightActive && highlightedLines.includes(lineNumber);
+          const isClickable = clickableLines.includes(lineNumber);
+          const isSelected = selectedLine === lineNumber;
 
           return (
             <div
               key={index}
-              className={`code-line ${isHighlighted ? 'highlighted' : ''}`}
+              className={`code-line ${isHighlighted ? 'highlighted' : ''} ${isClickable ? 'clickable' : ''} ${isSelected ? 'selected' : ''}`}
               style={{
                 animationDelay: isHighlighted ? `${highlightedLines.indexOf(lineNumber) * 0.3}s` : '0s'
               }}
+              onClick={isClickable && onLineClick ? () => onLineClick(lineNumber) : undefined}
             >
               <span className="line-number">{lineNumber}</span>
               <SyntaxHighlighter
@@ -403,6 +415,26 @@ const CodeBlock = ({ code, language, highlightedLines = [], isHighlightActive = 
           );
           animation: lineGlow 1s ease-in-out infinite;
           border-radius: 2px;
+        }
+
+        /* Clickable Lines (for find_error type) */
+        .code-line.clickable {
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .code-line.clickable:hover {
+          background: rgba(255, 149, 0, 0.1);
+          border-left: 3px solid #FF9500;
+          padding-left: calc(28px - 3px);
+        }
+
+        /* Selected Line (orange when clicked) */
+        .code-line.selected {
+          background: rgba(255, 149, 0, 0.25);
+          border-left: 3px solid #FF9500;
+          padding-left: calc(28px - 3px);
+          box-shadow: 0 0 0 2px rgba(255, 149, 0, 0.4);
         }
 
         @keyframes highlightPulse {

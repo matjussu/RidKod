@@ -13,6 +13,12 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID || "YOUR_APP_ID"
 };
 
+// Debug: Vérifier que les variables sont chargées
+console.log('🔥 Firebase Config:', {
+  apiKey: firebaseConfig.apiKey.substring(0, 10) + '...',
+  projectId: firebaseConfig.projectId
+});
+
 // Initialisation Firebase
 const app = initializeApp(firebaseConfig);
 

@@ -189,7 +189,7 @@ const Home = () => {
         }
 
         .menu-card-text {
-          font-size: 20px;
+          font-size: 15px;
           font-weight: 700;
           line-height: 1.2;
           text-transform: uppercase;
