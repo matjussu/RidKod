@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useHaptic from '../../hooks/useHaptic';
 
-const LevelComplete = ({ stats, onContinue }) => {
+const LevelComplete = ({ stats, level = 1, onContinue }) => {
+  const navigate = useNavigate();
   const { triggerSuccess } = useHaptic();
 
   useEffect(() => {
@@ -255,11 +257,20 @@ const LevelComplete = ({ stats, onContinue }) => {
           letter-spacing: 0.5px;
         }
 
-        /* Continue Button */
-        .continue-button {
+        /* Buttons Container */
+        .buttons-container {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          opacity: 0;
+          animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.9s forwards;
+        }
+
+        .continue-button,
+        .home-button {
           width: 100%;
           height: 56px;
-          background: linear-gradient(135deg, #30D158 0%, #088201 100%);
           border: none;
           border-radius: 16px;
           font-family: "JetBrains Mono", monospace;
@@ -270,9 +281,11 @@ const LevelComplete = ({ stats, onContinue }) => {
           letter-spacing: 0.5px;
           cursor: pointer;
           transition: all 0.3s ease;
+        }
+
+        .continue-button {
+          background: linear-gradient(135deg, #30D158 0%, #088201 100%);
           box-shadow: 0 6px 24px rgba(48, 209, 88, 0.3);
-          opacity: 0;
-          animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.9s forwards;
         }
 
         .continue-button:hover {
@@ -281,6 +294,21 @@ const LevelComplete = ({ stats, onContinue }) => {
         }
 
         .continue-button:active {
+          transform: scale(0.98);
+        }
+
+        .home-button {
+          background: linear-gradient(135deg, #3A3A3C 0%, #2C2C2E 100%);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .home-button:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        .home-button:active {
           transform: scale(0.98);
         }
 
@@ -309,7 +337,7 @@ const LevelComplete = ({ stats, onContinue }) => {
 
       {/* Header */}
       <div className="level-complete-header">
-        <div className="level-complete-title">Niveau terminé</div>
+        <div className="level-complete-title">Niveau {level} complété</div>
         <div className="level-complete-subtitle">{getPerformanceMessage()}</div>
       </div>
 
@@ -332,7 +360,7 @@ const LevelComplete = ({ stats, onContinue }) => {
 
         <div className="stat-card">
           <div className="stat-label">Niveau</div>
-          <div className="stat-value level">{stats.currentLevel}</div>
+          <div className="stat-value level">{stats.currentUserLevel}</div>
         </div>
       </div>
 
@@ -372,10 +400,15 @@ const LevelComplete = ({ stats, onContinue }) => {
         </div>
       )}
 
-      {/* Continue Button */}
-      <button className="continue-button" onClick={onContinue}>
-        Continuer
-      </button>
+      {/* Buttons */}
+      <div className="buttons-container">
+        <button className="continue-button" onClick={onContinue}>
+          Continuer
+        </button>
+        <button className="home-button" onClick={() => navigate('/home')}>
+          Retour au menu
+        </button>
+      </div>
     </div>
   );
 };

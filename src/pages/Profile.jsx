@@ -391,7 +391,7 @@ const Profile = () => {
       {/* Level Card */}
       <div className="level-card">
         <div className="level-title">Niveau actuel</div>
-        <div className="level-number">Niveau {stats.level}</div>
+        <div className="level-number">Niveau {stats.userLevel}</div>
         <div className="level-xp">{stats.totalXP} XP total</div>
         <div className="level-progress-bar">
           <div
@@ -400,7 +400,7 @@ const Profile = () => {
           ></div>
         </div>
         <div className="level-progress-text">
-          {progressToNext.current} / {progressToNext.required} XP vers niveau {stats.level + 1}
+          {progressToNext.current} / {progressToNext.required} XP vers niveau {stats.userLevel + 1}
         </div>
       </div>
 

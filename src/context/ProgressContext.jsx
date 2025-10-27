@@ -3,11 +3,13 @@ import { useAuth } from './AuthContext';
 import {
   getUserProgress,
   saveExerciseCompletion,
+  completeLevelBlock,
   migrateFromLocalStorage,
   saveProgressLocally,
   getLocalProgress,
   calculateLevel,
-  getXPForNextLevel
+  getXPForNextLevel,
+  EXERCISES_PER_LEVEL
 } from '../services/progressService';
 
 // Création du contexte
@@ -67,7 +69,7 @@ export const ProgressProvider = ({ children }) => {
     loadProgress();
   }, [user, isAuthenticated]);
 
-  // Sauvegarder la complétion d'un exercice
+  // Sauvegarder la complétion d'un exercice (NOUVELLE LOGIQUE)
   const completeExercise = async (exerciseData) => {
     try {
       if (isAuthenticated && user) {
@@ -80,50 +82,53 @@ export const ProgressProvider = ({ children }) => {
 
         return result;
       } else {
-        // Mode invité - sauvegarder localement
+        // Mode invité - sauvegarder localement (NOUVELLE LOGIQUE)
         const currentProgress = progress || getLocalProgress();
+        const { exerciseLevel, isCorrect, xpGained } = exerciseData;
 
-        // Vérifier si l'exercice a déjà été complété
-        const existingExerciseIndex = currentProgress.completedExercises.findIndex(
-          ex => ex.exerciseId === exerciseData.exerciseId
-        );
-
-        let updatedExercises;
-        let xpToAdd = exerciseData.xpGained;
-
-        if (existingExerciseIndex >= 0) {
-          // Exercice déjà fait - ne pas donner d'XP
-          updatedExercises = [...currentProgress.completedExercises];
-          updatedExercises[existingExerciseIndex] = {
-            ...exerciseData,
-            completedAt: new Date().toISOString()
+        // Vérifier si le niveau est déjà complété
+        if (currentProgress.completedLevels?.includes(exerciseLevel)) {
+          console.warn(`Niveau ${exerciseLevel} déjà complété - pas de XP gagné`);
+          return {
+            totalXP: currentProgress.totalXP,
+            userLevel: currentProgress.userLevel,
+            xpGained: 0,
+            leveledUp: false,
+            alreadyCompleted: true
           };
-          xpToAdd = 0;
-        } else {
-          // Nouvel exercice
-          updatedExercises = [
-            ...currentProgress.completedExercises,
-            {
-              ...exerciseData,
-              completedAt: new Date().toISOString()
-            }
-          ];
         }
 
-        const newTotalXP = currentProgress.totalXP + xpToAdd;
-        const newLevel = calculateLevel(newTotalXP);
+        // Récupérer les stats du niveau actuel
+        const levelStats = currentProgress.levelStats?.[exerciseLevel] || {
+          correct: 0,
+          incorrect: 0,
+          xp: 0
+        };
+
+        // Mettre à jour les stats du niveau
+        const updatedLevelStats = {
+          ...currentProgress.levelStats,
+          [exerciseLevel]: {
+            correct: levelStats.correct + (isCorrect ? 1 : 0),
+            incorrect: levelStats.incorrect + (isCorrect ? 0 : 1),
+            xp: levelStats.xp + xpGained
+          }
+        };
+
+        const newTotalXP = currentProgress.totalXP + xpGained;
+        const newUserLevel = calculateLevel(newTotalXP);
 
         const updatedStats = {
-          totalExercises: currentProgress.stats.totalExercises + (existingExerciseIndex >= 0 ? 0 : 1),
-          correctAnswers: currentProgress.stats.correctAnswers + (exerciseData.isCorrect ? 1 : 0),
-          incorrectAnswers: currentProgress.stats.incorrectAnswers + (exerciseData.isCorrect ? 0 : 1)
+          totalExercises: currentProgress.stats.totalExercises + 1,
+          correctAnswers: currentProgress.stats.correctAnswers + (isCorrect ? 1 : 0),
+          incorrectAnswers: currentProgress.stats.incorrectAnswers + (isCorrect ? 0 : 1)
         };
 
         const updatedProgress = {
           ...currentProgress,
           totalXP: newTotalXP,
-          level: newLevel,
-          completedExercises: updatedExercises,
+          userLevel: newUserLevel,
+          levelStats: updatedLevelStats,
           stats: updatedStats
         };
 
@@ -132,9 +137,10 @@ export const ProgressProvider = ({ children }) => {
 
         return {
           totalXP: newTotalXP,
-          level: newLevel,
-          xpGained: xpToAdd,
-          leveledUp: newLevel > currentProgress.level
+          userLevel: newUserLevel,
+          xpGained: xpGained,
+          leveledUp: newUserLevel > currentProgress.userLevel,
+          alreadyCompleted: false
         };
       }
     } catch (err) {
@@ -144,10 +150,58 @@ export const ProgressProvider = ({ children }) => {
     }
   };
 
-  // Vérifier si un exercice a été complété
-  const isExerciseCompleted = (exerciseId) => {
-    if (!progress || !progress.completedExercises) return false;
-    return progress.completedExercises.some(ex => ex.exerciseId === exerciseId);
+  // Compléter un niveau (appelé après 10 exercices)
+  const completeLevel = async (exerciseLevel) => {
+    try {
+      if (isAuthenticated && user) {
+        // Mode connecté - sauvegarder dans Firestore
+        const updatedProgress = await completeLevelBlock(user.uid, exerciseLevel);
+        setProgress(updatedProgress);
+        return updatedProgress;
+      } else {
+        // Mode invité - sauvegarder localement
+        const currentProgress = progress || getLocalProgress();
+
+        // Vérifier si déjà complété
+        if (currentProgress.completedLevels?.includes(exerciseLevel)) {
+          console.warn(`Niveau ${exerciseLevel} déjà complété`);
+          return currentProgress;
+        }
+
+        const updatedCompletedLevels = [...(currentProgress.completedLevels || []), exerciseLevel];
+        const nextLevel = exerciseLevel + 1;
+
+        const updatedLevelStats = {
+          ...currentProgress.levelStats,
+          [exerciseLevel]: {
+            ...currentProgress.levelStats[exerciseLevel],
+            completedAt: new Date().toISOString()
+          }
+        };
+
+        const updatedProgress = {
+          ...currentProgress,
+          completedLevels: updatedCompletedLevels,
+          currentLevel: nextLevel,
+          levelStats: updatedLevelStats
+        };
+
+        saveProgressLocally(updatedProgress);
+        setProgress(updatedProgress);
+
+        return updatedProgress;
+      }
+    } catch (err) {
+      console.error('Erreur lors de la complétion du niveau:', err);
+      setError(err.message);
+      throw err;
+    }
+  };
+
+  // Vérifier si un niveau a été complété
+  const isLevelCompleted = (exerciseLevel) => {
+    if (!progress || !progress.completedLevels) return false;
+    return progress.completedLevels.includes(exerciseLevel);
   };
 
   // Obtenir les statistiques actuelles
@@ -155,7 +209,8 @@ export const ProgressProvider = ({ children }) => {
     if (!progress) {
       return {
         totalXP: 0,
-        level: 1,
+        userLevel: 1,
+        currentLevel: 1,
         totalExercises: 0,
         correctAnswers: 0,
         incorrectAnswers: 0,
@@ -165,7 +220,8 @@ export const ProgressProvider = ({ children }) => {
 
     return {
       totalXP: progress.totalXP || 0,
-      level: progress.level || 1,
+      userLevel: progress.userLevel || 1,
+      currentLevel: progress.currentLevel || 1,
       totalExercises: progress.stats?.totalExercises || 0,
       correctAnswers: progress.stats?.correctAnswers || 0,
       incorrectAnswers: progress.stats?.incorrectAnswers || 0,
@@ -173,14 +229,22 @@ export const ProgressProvider = ({ children }) => {
     };
   };
 
-  // Calculer la progression vers le niveau suivant
+  // Obtenir les stats d'un niveau spécifique
+  const getLevelStats = (exerciseLevel) => {
+    if (!progress || !progress.levelStats || !progress.levelStats[exerciseLevel]) {
+      return { correct: 0, incorrect: 0, xp: 0 };
+    }
+    return progress.levelStats[exerciseLevel];
+  };
+
+  // Calculer la progression vers le niveau utilisateur suivant
   const getProgressToNextLevel = () => {
-    const currentLevel = progress?.level || 1;
+    const currentUserLevel = progress?.userLevel || 1;
     const currentXP = progress?.totalXP || 0;
-    const xpForNextLevel = getXPForNextLevel(currentLevel);
+    const xpForNextLevel = getXPForNextLevel(currentUserLevel);
 
     // XP du niveau précédent
-    const previousLevelXP = currentLevel === 1 ? 0 : getXPForNextLevel(currentLevel - 1);
+    const previousLevelXP = currentUserLevel === 1 ? 0 : getXPForNextLevel(currentUserLevel - 1);
 
     const xpInCurrentLevel = currentXP - previousLevelXP;
     const xpNeededForLevel = xpForNextLevel - previousLevelXP;
@@ -197,7 +261,9 @@ export const ProgressProvider = ({ children }) => {
     loading,
     error,
     completeExercise,
-    isExerciseCompleted,
+    completeLevel,
+    isLevelCompleted,
+    getLevelStats,
     getStats,
     getProgressToNextLevel
   };

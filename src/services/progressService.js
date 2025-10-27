@@ -7,23 +7,19 @@ import { db } from '../config/firebase';
  * {
  *   userId: string,
  *   totalXP: number,
- *   level: number,
- *   completedExercises: [
- *     {
- *       exerciseId: string,
- *       language: string,
- *       difficulty: number,
- *       xpGained: number,
- *       completedAt: timestamp,
- *       attempts: number
- *     }
- *   ],
+ *   userLevel: number,                    // Niveau global utilisateur (basé sur XP)
+ *   currentLevel: number,                 // Dernier niveau d'exercice EN COURS
+ *   completedLevels: [1, 2, 3],          // Niveaux d'exercices terminés (verrouillés)
+ *   levelStats: {                         // Stats par niveau d'exercice
+ *     1: { correct: 8, incorrect: 2, xp: 80, completedAt: timestamp },
+ *     2: { correct: 10, incorrect: 0, xp: 100, completedAt: timestamp }
+ *   },
  *   streak: {
  *     current: number,
  *     longest: number,
  *     lastActivityDate: timestamp
  *   },
- *   stats: {
+ *   stats: {                              // Stats globales
  *     totalExercises: number,
  *     correctAnswers: number,
  *     incorrectAnswers: number
@@ -33,7 +29,7 @@ import { db } from '../config/firebase';
  * }
  */
 
-// Calculer le niveau basé sur l'XP total
+// Calculer le niveau utilisateur basé sur l'XP total (niveau global, pas niveau d'exercice)
 export const calculateLevel = (totalXP) => {
   if (totalXP < 100) return 1;
   if (totalXP < 250) return 2;
@@ -46,6 +42,9 @@ export const calculateLevel = (totalXP) => {
   if (totalXP < 11000) return 9;
   return 10;
 };
+
+// Nombre d'exercices par niveau
+export const EXERCISES_PER_LEVEL = 10;
 
 // XP requis pour passer au niveau suivant
 export const getXPForNextLevel = (currentLevel) => {
@@ -78,8 +77,10 @@ export const initializeProgress = async (userId) => {
     const initialProgress = {
       userId,
       totalXP: 0,
-      level: 1,
-      completedExercises: [],
+      userLevel: 1,                  // Niveau global utilisateur
+      currentLevel: 1,               // Commence au niveau 1 d'exercices
+      completedLevels: [],           // Aucun niveau complété
+      levelStats: {},                // Pas de stats de niveau encore
       streak: {
         current: 0,
         longest: 0,
@@ -120,7 +121,7 @@ export const getUserProgress = async (userId) => {
   }
 };
 
-// Sauvegarder la complétion d'un exercice
+// Sauvegarder la complétion d'un exercice (NOUVELLE LOGIQUE - par niveau)
 export const saveExerciseCompletion = async (userId, exerciseData) => {
   try {
     const progressRef = doc(db, 'progress', userId);
@@ -133,36 +134,40 @@ export const saveExerciseCompletion = async (userId, exerciseData) => {
       currentProgress = await initializeProgress(userId);
     }
 
-    // Vérifier si l'exercice a déjà été complété
-    const existingExerciseIndex = currentProgress.completedExercises.findIndex(
-      ex => ex.exerciseId === exerciseData.exerciseId
-    );
+    const { exerciseLevel, isCorrect, xpGained } = exerciseData;
 
-    let updatedExercises;
-    let xpToAdd = exerciseData.xpGained;
-
-    if (existingExerciseIndex >= 0) {
-      // Exercice déjà fait - ne pas donner d'XP supplémentaire, juste mettre à jour
-      updatedExercises = [...currentProgress.completedExercises];
-      updatedExercises[existingExerciseIndex] = {
-        ...exerciseData,
-        completedAt: serverTimestamp()
+    // Vérifier si le niveau est déjà complété (verrouillé)
+    if (currentProgress.completedLevels?.includes(exerciseLevel)) {
+      console.warn(`Niveau ${exerciseLevel} déjà complété - pas de XP gagné`);
+      return {
+        totalXP: currentProgress.totalXP,
+        userLevel: currentProgress.userLevel,
+        xpGained: 0,
+        leveledUp: false,
+        alreadyCompleted: true
       };
-      xpToAdd = 0; // Pas d'XP pour refaire un exercice
-    } else {
-      // Nouvel exercice complété
-      updatedExercises = [
-        ...currentProgress.completedExercises,
-        {
-          ...exerciseData,
-          completedAt: serverTimestamp()
-        }
-      ];
     }
 
-    // Calculer nouveau total XP et niveau
-    const newTotalXP = currentProgress.totalXP + xpToAdd;
-    const newLevel = calculateLevel(newTotalXP);
+    // Récupérer les stats du niveau actuel
+    const levelStats = currentProgress.levelStats?.[exerciseLevel] || {
+      correct: 0,
+      incorrect: 0,
+      xp: 0
+    };
+
+    // Mettre à jour les stats du niveau
+    const updatedLevelStats = {
+      ...currentProgress.levelStats,
+      [exerciseLevel]: {
+        correct: levelStats.correct + (isCorrect ? 1 : 0),
+        incorrect: levelStats.incorrect + (isCorrect ? 0 : 1),
+        xp: levelStats.xp + xpGained
+      }
+    };
+
+    // Calculer nouveau total XP et niveau utilisateur
+    const newTotalXP = currentProgress.totalXP + xpGained;
+    const newUserLevel = calculateLevel(newTotalXP);
 
     // Mettre à jour le streak
     const daysSinceLastActivity = currentProgress.streak.lastActivityDate
@@ -193,18 +198,18 @@ export const saveExerciseCompletion = async (userId, exerciseData) => {
       };
     }
 
-    // Mettre à jour les stats
+    // Mettre à jour les stats globales
     const updatedStats = {
-      totalExercises: currentProgress.stats.totalExercises + (existingExerciseIndex >= 0 ? 0 : 1),
-      correctAnswers: currentProgress.stats.correctAnswers + (exerciseData.isCorrect ? 1 : 0),
-      incorrectAnswers: currentProgress.stats.incorrectAnswers + (exerciseData.isCorrect ? 0 : 1)
+      totalExercises: currentProgress.stats.totalExercises + 1,
+      correctAnswers: currentProgress.stats.correctAnswers + (isCorrect ? 1 : 0),
+      incorrectAnswers: currentProgress.stats.incorrectAnswers + (isCorrect ? 0 : 1)
     };
 
     // Mettre à jour dans Firestore
     await updateDoc(progressRef, {
       totalXP: newTotalXP,
-      level: newLevel,
-      completedExercises: updatedExercises,
+      userLevel: newUserLevel,
+      levelStats: updatedLevelStats,
       streak: newStreak,
       stats: updatedStats,
       updatedAt: serverTimestamp()
@@ -212,9 +217,10 @@ export const saveExerciseCompletion = async (userId, exerciseData) => {
 
     return {
       totalXP: newTotalXP,
-      level: newLevel,
-      xpGained: xpToAdd,
-      leveledUp: newLevel > currentProgress.level
+      userLevel: newUserLevel,
+      xpGained: xpGained,
+      leveledUp: newUserLevel > currentProgress.userLevel,
+      alreadyCompleted: false
     };
   } catch (error) {
     console.error('Erreur lors de la sauvegarde de la progression:', error);
@@ -222,7 +228,60 @@ export const saveExerciseCompletion = async (userId, exerciseData) => {
   }
 };
 
-// Migrer la progression depuis localStorage vers Firestore
+// Marquer un niveau comme complété (appelé après les 10 exercices)
+export const completeLevelBlock = async (userId, exerciseLevel) => {
+  try {
+    const progressRef = doc(db, 'progress', userId);
+    const progressSnap = await getDoc(progressRef);
+
+    if (!progressSnap.exists()) {
+      throw new Error('Progression utilisateur introuvable');
+    }
+
+    const currentProgress = progressSnap.data();
+
+    // Vérifier si déjà complété
+    if (currentProgress.completedLevels?.includes(exerciseLevel)) {
+      console.warn(`Niveau ${exerciseLevel} déjà complété`);
+      return currentProgress;
+    }
+
+    // Ajouter le niveau aux niveaux complétés
+    const updatedCompletedLevels = [...(currentProgress.completedLevels || []), exerciseLevel];
+
+    // Marquer la date de complétion dans levelStats
+    const updatedLevelStats = {
+      ...currentProgress.levelStats,
+      [exerciseLevel]: {
+        ...currentProgress.levelStats[exerciseLevel],
+        completedAt: serverTimestamp()
+      }
+    };
+
+    // Passer au niveau suivant
+    const nextLevel = exerciseLevel + 1;
+
+    // Mettre à jour dans Firestore
+    await updateDoc(progressRef, {
+      completedLevels: updatedCompletedLevels,
+      currentLevel: nextLevel,
+      levelStats: updatedLevelStats,
+      updatedAt: serverTimestamp()
+    });
+
+    return {
+      ...currentProgress,
+      completedLevels: updatedCompletedLevels,
+      currentLevel: nextLevel,
+      levelStats: updatedLevelStats
+    };
+  } catch (error) {
+    console.error('Erreur lors de la complétion du niveau:', error);
+    throw error;
+  }
+};
+
+// Migrer la progression depuis localStorage vers Firestore (NOUVELLE STRUCTURE)
 export const migrateFromLocalStorage = async (userId) => {
   try {
     // Récupérer les données de localStorage
@@ -244,12 +303,14 @@ export const migrateFromLocalStorage = async (userId) => {
       return null;
     }
 
-    // Créer la progression dans Firestore à partir de localStorage
+    // Créer la progression dans Firestore à partir de localStorage (NOUVELLE STRUCTURE)
     const migratedProgress = {
       userId,
       totalXP: parsedProgress.totalXP || 0,
-      level: parsedProgress.level || 1,
-      completedExercises: parsedProgress.completedExercises || [],
+      userLevel: parsedProgress.level || 1,
+      currentLevel: parsedProgress.currentLevel || 1,
+      completedLevels: parsedProgress.completedLevels || [],
+      levelStats: parsedProgress.levelStats || {},
       streak: parsedProgress.streak || {
         current: 0,
         longest: 0,
@@ -296,15 +357,17 @@ export const saveProgressLocally = (progressData) => {
   }
 };
 
-// Récupérer la progression locale (mode invité)
+// Récupérer la progression locale (mode invité) - NOUVELLE STRUCTURE
 export const getLocalProgress = () => {
   try {
     const progress = localStorage.getItem('userProgress');
     if (!progress) {
       return {
         totalXP: 0,
-        level: 1,
-        completedExercises: [],
+        userLevel: 1,
+        currentLevel: 1,
+        completedLevels: [],
+        levelStats: {},
         streak: { current: 0, longest: 0 },
         stats: { totalExercises: 0, correctAnswers: 0, incorrectAnswers: 0 }
       };
@@ -314,8 +377,10 @@ export const getLocalProgress = () => {
     console.error('Erreur lors de la récupération locale:', error);
     return {
       totalXP: 0,
-      level: 1,
-      completedExercises: [],
+      userLevel: 1,
+      currentLevel: 1,
+      completedLevels: [],
+      levelStats: {},
       streak: { current: 0, longest: 0 },
       stats: { totalExercises: 0, correctAnswers: 0, incorrectAnswers: 0 }
     };

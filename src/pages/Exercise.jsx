@@ -7,9 +7,10 @@ import OptionButton from "../components/exercise/OptionButton";
 import ActionButton from "../components/exercise/ActionButton";
 import FeedbackGlow from "../components/common/FeedbackGlow";
 import ExitConfirmModal from "../components/common/ExitConfirmModal";
+import CustomKeyboard from "../components/exercise/CustomKeyboard";
 import useHaptic from "../hooks/useHaptic";
 import exercisesData from "../data/exercises.json";
-import { isBlockComplete } from '../constants/exerciseLayout';
+import { isBlockComplete, EXERCISES_PER_LEVEL } from '../constants/exerciseLayout';
 import '../styles/Exercise.css';
 
 // Lazy load LevelComplete component (only loaded when needed)
@@ -18,18 +19,31 @@ const LevelComplete = lazy(() => import("../components/exercise/LevelComplete"))
 const Exercise = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { completeExercise, getStats } = useProgress();
+  const { completeExercise, completeLevel, getStats, isLevelCompleted } = useProgress();
 
   // Récupérer le langage et la difficulté depuis la navigation
   const language = location.state?.language || 'PYTHON';
   const difficulty = location.state?.difficulty || 1;
 
+  // Charger la progression pour déterminer le niveau de départ
+  const stats = getStats();
+  const startingLevel = stats.currentLevel || 1; // Niveau d'exercice actuel
+
   // State management
   const [selectedOption, setSelectedOption] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
+
+  // Calculer l'index de départ basé sur currentLevel
+  // Niveau 1 → exercices 0-9, Niveau 2 → 10-19, Niveau 3 → 20-29
+  const startingExerciseIndex = (startingLevel - 1) * EXERCISES_PER_LEVEL;
+  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(startingExerciseIndex);
+
   const [showGlow, setShowGlow] = useState(false);
   const [glowType, setGlowType] = useState(null);
+
+  // New states for different input types
+  const [userInput, setUserInput] = useState(''); // For free_input type
+  const [selectedLine, setSelectedLine] = useState(null); // For clickable_lines type
 
   // Explanation system state
   const [isExplanationExpanded, setIsExplanationExpanded] = useState(false);
@@ -41,12 +55,11 @@ const Exercise = () => {
   // Level complete state
   const [showLevelComplete, setShowLevelComplete] = useState(false);
   const [blockStats, setBlockStats] = useState(() => {
-    const stats = getStats();
     return {
       correctAnswers: 0,
       incorrectAnswers: 0,
       xpGained: 0,
-      currentLevel: stats.level,
+      currentUserLevel: stats.userLevel,
       streak: stats.streak?.current || 0,
       totalAnswered: 0
     };
@@ -58,7 +71,17 @@ const Exercise = () => {
   // Load exercises from JSON
   const exercises = exercisesData;
   const exercise = exercises[currentExerciseIndex];
-  const totalExercises = exercises.length;
+
+  // Calculate current exercise level (1-based, increments every 10 exercises)
+  const currentExerciseLevel = Math.floor(currentExerciseIndex / EXERCISES_PER_LEVEL) + 1;
+
+  // Vérifier si on essaie d'accéder à un niveau déjà complété
+  if (isLevelCompleted(currentExerciseLevel)) {
+    // Rediriger vers home si niveau déjà fait
+    console.warn(`Tentative d'accès au niveau ${currentExerciseLevel} déjà complété`);
+    navigate('/home');
+    return null;
+  }
 
   // Event handlers
   const handleOptionClick = (index) => {
@@ -68,11 +91,47 @@ const Exercise = () => {
     }
   };
 
+  const handleLineClick = (lineNumber) => {
+    if (!isSubmitted) {
+      setSelectedLine(lineNumber);
+      triggerLight();
+    }
+  };
+
+  const handleKeyPress = (key) => {
+    if (key === '⌫') {
+      setUserInput(prev => prev.slice(0, -1));
+    } else if (key === 'CLEAR') {
+      setUserInput('');
+    } else {
+      setUserInput(prev => prev + key);
+    }
+  };
+
+  // Validation function for flexible answer checking
+  const checkAnswer = () => {
+    const inputType = exercise.inputType || 'options';
+
+    if (inputType === 'options') {
+      return selectedOption === exercise.correctAnswer;
+    } else if (inputType === 'free_input') {
+      const acceptedAnswers = exercise.acceptedAnswers || [];
+      return acceptedAnswers.some(answer =>
+        answer.toLowerCase().trim() === userInput.toLowerCase().trim()
+      );
+    } else if (inputType === 'clickable_lines') {
+      return selectedLine === exercise.correctAnswer;
+    }
+    return false;
+  };
+
   const handleValidate = async () => {
     setIsSubmitted(true);
 
-    const correct = selectedOption === exercise.correctAnswer;
-    const xpGain = exercise.xpGain || 10;
+    const correct = checkAnswer();
+    const baseXP = exercise.xpGain || 10;
+    // XP gagné UNIQUEMENT si réponse correcte
+    const xpGain = correct ? baseXP : 0;
 
     if (correct) {
       setGlowType('success');
@@ -84,62 +143,73 @@ const Exercise = () => {
 
     setShowGlow(true);
 
+    // Sauvegarder la progression avec le niveau d'exercice actuel
+    let actualXpGained = 0;
+    try {
+      const result = await completeExercise({
+        exerciseLevel: currentExerciseLevel,
+        isCorrect: correct,
+        xpGained: xpGain  // 0 si incorrect, baseXP si correct
+      });
+      actualXpGained = result?.xpGained || 0;
+    } catch (error) {
+      console.error('Erreur lors de la sauvegarde de la progression:', error);
+    }
+
     // Mettre à jour les stats du bloc
     setBlockStats(prev => ({
       correctAnswers: prev.correctAnswers + (correct ? 1 : 0),
       incorrectAnswers: prev.incorrectAnswers + (correct ? 0 : 1),
-      xpGained: prev.xpGained + xpGain,
+      xpGained: prev.xpGained + actualXpGained,
       totalAnswered: prev.totalAnswered + 1,
-      currentLevel: prev.currentLevel,
+      currentUserLevel: prev.currentUserLevel,
       streak: prev.streak
     }));
-
-    // Sauvegarder la progression
-    try {
-      await completeExercise({
-        exerciseId: exercise.id,
-        language: language,
-        difficulty: difficulty,
-        xpGained: xpGain,
-        isCorrect: correct,
-        attempts: 1
-      });
-    } catch (error) {
-      console.error('Erreur lors de la sauvegarde de la progression:', error);
-    }
 
     setTimeout(() => {
       setShowGlow(false);
     }, correct ? 600 : 800);
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     setIsExplanationExpanded(false);
     setHighlightedLines([]);
 
-    // Vérifier si on a complété un bloc (utilise la constante EXERCISES_PER_LEVEL = 10)
+    // Vérifier si on vient de terminer le dernier exercice d'un bloc
+    // Index commence à 0, donc exercice 9 (10ème) = fin du niveau 1
+    const nextExerciseIndex = currentExerciseIndex + 1;
     const blockComplete = isBlockComplete(currentExerciseIndex);
 
     if (blockComplete) {
+      // Marquer le niveau comme complété dans Firebase
+      try {
+        await completeLevel(currentExerciseLevel);
+        console.log(`✅ Niveau ${currentExerciseLevel} complété !`);
+      } catch (error) {
+        console.error('Erreur lors de la complétion du niveau:', error);
+      }
+
       // Afficher l'écran de feedback
       const stats = getStats();
       setBlockStats(prev => ({
         ...prev,
-        currentLevel: stats.level,
+        currentUserLevel: stats.userLevel,
         streak: stats.streak?.current || 0
       }));
       setShowLevelComplete(true);
     } else if (currentExerciseIndex < exercises.length - 1) {
-      // Continuer normalement
-      setCurrentExerciseIndex(prev => prev + 1);
+      // Continuer normalement au prochain exercice
+      setCurrentExerciseIndex(nextExerciseIndex);
       setSelectedOption(null);
+      setUserInput('');
+      setSelectedLine(null);
       setIsSubmitted(false);
     } else {
-      // Fin de tous les exercices
+      // Fin de tous les exercices disponibles
       const stats = getStats();
       setBlockStats(prev => ({
         ...prev,
-        currentLevel: stats.level,
+        currentUserLevel: stats.userLevel,
         streak: stats.streak?.current || 0
       }));
       setShowLevelComplete(true);
@@ -156,18 +226,25 @@ const Exercise = () => {
       incorrectAnswers: 0,
       xpGained: 0,
       totalAnswered: 0,
-      currentLevel: stats.level,
+      currentUserLevel: stats.userLevel,
       streak: stats.streak?.current || 0
     });
 
-    // Continuer au prochain exercice ou retourner à l'accueil
-    if (currentExerciseIndex < exercises.length - 1) {
-      setCurrentExerciseIndex(prev => prev + 1);
-      setSelectedOption(null);
-      setIsSubmitted(false);
-    } else {
-      // Tous les exercices terminés - retour à l'accueil
+    // Vérifier s'il reste des exercices disponibles
+    const nextExerciseIndex = currentExerciseIndex + 1;
+    const nextExerciseLevel = Math.floor(nextExerciseIndex / EXERCISES_PER_LEVEL) + 1;
+
+    // Si on dépasse le dernier exercice disponible OU si le prochain niveau est déjà complété
+    if (nextExerciseIndex >= exercises.length || isLevelCompleted(nextExerciseLevel)) {
+      // Retour à l'accueil
       navigate('/home');
+    } else {
+      // Continuer au prochain exercice
+      setCurrentExerciseIndex(nextExerciseIndex);
+      setSelectedOption(null);
+      setUserInput('');
+      setSelectedLine(null);
+      setIsSubmitted(false);
     }
   };
 
@@ -183,6 +260,10 @@ const Exercise = () => {
   const handleModalExit = () => {
     setShowExitModal(false);
 
+    // Si on quitte pendant un niveau, on perd la progression du niveau actuel
+    // mais on garde les niveaux complétés précédents
+    console.log(`Sortie pendant le niveau ${currentExerciseLevel} - progression du niveau perdue`);
+
     // Animation de sortie élégante
     const exerciseApp = document.querySelector('.exercise-app');
     if (exerciseApp) {
@@ -190,10 +271,10 @@ const Exercise = () => {
       exerciseApp.style.opacity = '0';
 
       setTimeout(() => {
-        navigate('/');
+        navigate('/home');
       }, 200);
     } else {
-      navigate('/');
+      navigate('/home');
     }
   };
 
@@ -218,7 +299,7 @@ const Exercise = () => {
     }
   };
 
-  const isCorrect = selectedOption === exercise.correctAnswer;
+  const isCorrect = checkAnswer();
 
   // Afficher l'écran de feedback si le bloc est complété
   if (showLevelComplete) {
@@ -234,6 +315,7 @@ const Exercise = () => {
       }}>Chargement...</div>}>
         <LevelComplete
           stats={blockStats}
+          level={currentExerciseLevel}
           onContinue={handleLevelContinue}
         />
       </Suspense>
@@ -253,7 +335,9 @@ const Exercise = () => {
         </button>
         <div className="progress-container">
           <div className="progress-bar">
-            <div className="progress-fill" style={{ width: `${((currentExerciseIndex + 1) / totalExercises) * 100}%` }} />
+            <div className="progress-fill" style={{
+              width: `${((currentExerciseIndex % EXERCISES_PER_LEVEL) + 1) / EXERCISES_PER_LEVEL * 100}%`
+            }} />
           </div>
         </div>
       </header>
@@ -278,29 +362,59 @@ const Exercise = () => {
           highlightedLines={highlightedLines}
           isHighlightActive={isExplanationExpanded}
           isCompact={isExplanationExpanded}
+          clickableLines={exercise.clickableLines || []}
+          selectedLine={selectedLine}
+          onLineClick={handleLineClick}
         />
 
-        {/* Options Grid */}
-        <div className={`options-container ${isExplanationExpanded ? 'hidden' : 'visible'}`}>
-          <div className="options-grid">
-            {exercise.options.map((option, index) => (
-              <OptionButton
-                key={index}
-                value={option}
-                isSelected={selectedOption === index}
-                isCorrect={index === exercise.correctAnswer}
-                isSubmitted={isSubmitted}
-                onClick={() => handleOptionClick(index)}
-              />
-            ))}
+        {/* Options Grid - Only for inputType 'options' */}
+        {exercise.inputType === 'options' && (
+          <div className={`options-container ${isExplanationExpanded ? 'hidden' : 'visible'}`}>
+            <div className="options-grid">
+              {exercise.options.map((option, index) => (
+                <OptionButton
+                  key={index}
+                  value={option}
+                  isSelected={selectedOption === index}
+                  isCorrect={index === exercise.correctAnswer}
+                  isSubmitted={isSubmitted}
+                  onClick={() => handleOptionClick(index)}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* Custom Keyboard - Only for inputType 'free_input' AND not submitted */}
+        {exercise.inputType === 'free_input' && !isExplanationExpanded && !isSubmitted && (
+          <CustomKeyboard
+            type={exercise.keyboardType || 'numeric'}
+            value={userInput}
+            onKeyPress={handleKeyPress}
+          />
+        )}
+
+        {/* User Answer Display - Only for free_input after submission */}
+        {exercise.inputType === 'free_input' && isSubmitted && !isExplanationExpanded && (
+          <div className="user-answer-display">
+            <div className="answer-label">Ta réponse :</div>
+            <div className={`answer-value ${isCorrect ? 'correct' : 'incorrect'}`}>
+              {userInput}
+            </div>
+          </div>
+        )}
 
         {/* Validate/Continue Button */}
         <ActionButton
           isSubmitted={isSubmitted}
           isCorrect={isCorrect}
-          isDisabled={!isSubmitted && selectedOption === null}
+          isDisabled={
+            !isSubmitted &&
+            (exercise.inputType === 'options' ? selectedOption === null :
+             exercise.inputType === 'free_input' ? userInput.trim() === '' :
+             exercise.inputType === 'clickable_lines' ? selectedLine === null :
+             true)
+          }
           onClick={isSubmitted ? handleContinue : handleValidate}
         />
       </main>
