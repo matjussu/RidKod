@@ -28,23 +28,28 @@ const OptionButton = ({ value, isSelected, isCorrect, isSubmitted, onClick }) =>
       <style>{`
         /* Option Button */
         .option-button {
-          height: 52px;
+          min-height: 52px;
+          height: auto;
           border: none;
           border-radius: 10px;
-          font-size: 19px;
+          font-size: 16px;
+          line-height: 1.4;
           cursor: pointer;
           transition: all 0.2s ease;
           display: flex;
           align-items: center;
           justify-content: center;
+          text-align: center;
           font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
           font-weight: 600;
           width: 100%;
           box-sizing: border-box;
           touch-action: manipulation;
           -webkit-tap-highlight-color: transparent;
-          min-height: 52px;
-          padding: 6px 10px;
+          padding: 12px 8px;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          hyphens: auto;
         }
 
         .option-button:active {
@@ -93,43 +98,43 @@ const OptionButton = ({ value, isSelected, isCorrect, isSubmitted, onClick }) =>
         /* iPhone 14/15 Pro Max */
         @media (max-width: 430px) {
           .option-button {
-            font-size: 18px;
-            height: 50px;
+            font-size: 15px;
             min-height: 50px;
+            padding: 10px 8px;
           }
         }
 
         /* iPhone 14/15 Pro */
         @media (max-width: 393px) {
           .option-button {
-            font-size: 18px;
-            height: 50px;
+            font-size: 15px;
+            min-height: 50px;
+            padding: 10px 8px;
           }
         }
 
         @media (max-width: 375px) {
           .option-button {
-            font-size: 17px;
-            height: 48px;
+            font-size: 14px;
             min-height: 48px;
+            padding: 10px 6px;
           }
         }
 
         @media (max-width: 320px) {
           .option-button {
-            font-size: 15px;
-            height: 46px;
+            font-size: 13px;
             min-height: 46px;
-            padding: 4px 6px;
+            padding: 8px 6px;
           }
         }
 
         /* Mode paysage */
         @media (orientation: landscape) {
           .option-button {
-            height: 44px;
             min-height: 44px;
-            font-size: 15px;
+            font-size: 14px;
+            padding: 8px 6px;
           }
         }
       `}</style>

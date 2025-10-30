@@ -40,10 +40,10 @@ ReadCod est la première application mobile pour apprendre à **LIRE du code** (
 - Pas de state management externe pour MVP
 
 ### Data
-- **JSON local** pour exercices (10 exercices Python implémentés)
-- **localStorage** pour progression utilisateur + état authentification ✅ IMPLÉMENTÉ
-- **Firebase Authentication** pour comptes utilisateurs ✅ NOUVEAU
-- **Firestore Database** prêt pour stockage progression (à implémenter)
+- **JSON local** pour exercices (30 exercices Python implémentés) ✅
+- **localStorage** pour progression utilisateur + état authentification ✅
+- **Firebase Authentication** pour comptes utilisateurs ✅
+- **Firestore Database** sauvegarde progression cloud (mode connecté) ✅
 
 ---
 
@@ -149,9 +149,10 @@ readcod-app/
 │   │   │   └── ProgressBar.jsx     ✅ FAIT - Barre de progression avec current/total
 │   │   ├── exercise/
 │   │   │   ├── QuestionCard.jsx    ✅ FAIT - Question + feedback + SVG icons (React.memo)
-│   │   │   ├── CodeBlock.jsx       ✅ FAIT - Syntax highlighting Python (React.memo)
+│   │   │   ├── CodeBlock.jsx       ✅ FAIT - Syntax highlighting Python + clickable lines (React.memo)
 │   │   │   ├── OptionButton.jsx    ✅ FAIT - États visuels (React.memo)
 │   │   │   ├── ActionButton.jsx    ✅ FAIT - Validation/Continue (React.memo)
+│   │   │   ├── CustomKeyboard.jsx  ✅ FAIT - Clavier numérique/prédéfini pour free_input 🆕
 │   │   │   └── LevelComplete.jsx   ✅ FAIT - Feedback après 10 exercices (lazy loaded)
 │   │   ├── common/
 │   │   │   ├── FeedbackGlow.jsx    ✅ FAIT - Effets visuels bordures écran
@@ -166,16 +167,23 @@ readcod-app/
 │   │   ├── Language.jsx            ✅ FAIT - Sélection langage
 │   │   ├── Difficulty.jsx          ✅ FAIT - Sélection difficulté
 │   │   └── Exercise.jsx            ✅ FAIT - Page exercice complète avec navigation
-│   ├── assets/                     ✅ FAIT - Logos et images
-│   │   ├── long_logo.png
-│   │   ├── full_logo.png
-│   │   └── react.svg
+│   ├── assets/                     ✅ FAIT - Logos et icônes langages
+│   │   ├── long_logo.png           ✅ Logo horizontal ReadCod
+│   │   ├── full_logo.png           ✅ Logo complet ReadCod
+│   │   ├── python_5968350.png      ✅ Icône Python
+│   │   ├── java_5968282.png        ✅ Icône Java
+│   │   ├── c_6132222.png           ✅ Icône C
+│   │   ├── html-5_5968267.png      ✅ Icône HTML
+│   │   ├── css-3_5968242.png       ✅ Icône CSS
+│   │   ├── settings_694900.png     ✅ Icône Settings
+│   │   └── react.svg               ✅ Icône React
 │   ├── hooks/
 │   │   └── useHaptic.js            ✅ FAIT - Hook vibration mobile
 │   ├── data/
-│   │   └── exercises.json          ✅ FAIT - 10 exercices Python avec explications
-│   ├── context/                    ✅ FAIT - AuthContext pour authentification
-│   │   └── AuthContext.jsx
+│   │   └── exercises.json          ✅ FAIT - 30 exercices Python (4 types, 3 inputTypes) 🆕
+│   ├── context/                    ✅ FAIT - Contexts pour state global
+│   │   ├── AuthContext.jsx         ✅ Authentification (login/signup/logout)
+│   │   └── ProgressContext.jsx     ✅ Progression utilisateur (XP/niveaux/stats)
 │   ├── config/                     ✅ NOUVEAU - Configuration Firebase
 │   │   └── firebase.js
 │   ├── constants/                  ✅ NOUVEAU - Constants centralisées 🆕
@@ -190,7 +198,7 @@ readcod-app/
 │   │   └── setup.js                ✅ FAIT - Configuration Vitest
 │   ├── utils/                      ⚠️ OPTIONNEL - Helpers divers
 │   ├── styles/                     ✅ FAIT - CSS modules 🆕
-│   │   └── Exercise.css            ✅ FAIT - 430 lignes, 70+ variables CSS
+│   │   └── Exercise.css            ✅ FAIT - 466 lignes, 70+ variables CSS
 │   ├── App.jsx                     ✅ FAIT - Router avec routes principales
 │   ├── App.css                     ✅ FAIT - Styles de base
 │   ├── index.css                   ✅ FAIT - Reset CSS global
@@ -210,7 +218,11 @@ readcod-app/
 ├── TESTING.md                      ✅ NOUVEAU - Guide tests unitaires
 ├── TEST_RESULTS.md                 ✅ NOUVEAU - Résultats tests (97 tests)
 ├── HOWTO_TESTS.md                  ✅ NOUVEAU - Guide pratique tests
-└── REFACTORING_EXERCISE.md         ✅ NOUVEAU - Rapport refactoring complet 🆕
+├── REFACTORING_EXERCISE.md         ✅ NOUVEAU - Rapport refactoring complet 🆕
+├── PROGRESS_SYSTEM.md              ✅ NOUVEAU - Documentation système progression
+├── IMPLEMENTATION_SUMMARY.md       ✅ NOUVEAU - Résumé implémentation features
+├── DEBUG_FIRESTORE.md              ✅ NOUVEAU - Debug Firestore (historique)
+└── ROADMAP.md                      ✅ NOUVEAU - Roadmap détaillée prochaines tâches 🆕
 ```
 
 ---
@@ -259,59 +271,79 @@ readcod-app/
 }
 ```
 
-### Types d'exercices
-- `predict_output` : Prédire la sortie
-- `find_bug` : Trouver le bug
-- `identify_line` : Quelle ligne pose problème
+### Types d'exercices (4 types implémentés)
+- `predict_output` : Prédire la sortie du programme (15 exercices)
+- `find_error` : Trouver la ligne avec l'erreur (7 exercices)
+- `trace_execution` : Tracer la valeur d'une variable (4 exercices)
+- `concept_understanding` : Comprendre ce que fait le code (4 exercices)
+
+### Types d'input (3 modes implémentés)
+- `options` : Choix multiples (13 exercices)
+- `free_input` : Saisie libre avec clavier custom (10 exercices)
+- `clickable_lines` : Cliquer sur une ligne de code (7 exercices)
 
 ### Niveaux difficulté
-- `1` : Débutant (10 XP)
-- `2` : Intermédiaire (20 XP)
-- `3` : Avancé (30 XP)
+- `1` : Easy - Débutant (10 XP) - **30 exercices disponibles** ✅
+- `2` : Medium - Intermédiaire (20 XP) - **0 exercices** ❌
+- `3` : Hard - Avancé (30 XP) - **0 exercices** ❌
 
 ---
 
 ## 🎯 FEATURES MVP (Priorités)
 
-### ✅ FAIT (MVP Fonctionnel)
-1. **Page Home** - Menu iOS-style avec navigation + auth status
-2. **Page Exercise** - Interface complète d'exercice
-3. **Composants modulaires** - 11 composants React réutilisables
-4. **Système de routing** - React Router avec 9 routes (+ auth)
-5. **10 exercices Python** - Chargés depuis JSON avec explications
-6. **Syntax highlighting** - Python custom avec coloration précise
-7. **États interactifs** - Initial, sélection, validation, feedback
-8. **Progress bar** - Suivi progression en temps réel
-9. **Design iOS-style** - Interface native mobile
-10. **Responsive mobile** - Optimisé iPhone SE à Pro Max
-11. **Haptic feedback** - Vibrations natives iOS/Android
-12. **Animations fluides** - Transitions et effets visuels
-13. **Système d'explication** - Bouton toggle avec highlighting code
-14. **Navigation exercices** - Suivant/Précédent avec reset auto
-15. **🔥 Authentification Firebase** - Email/Password + mode invité ✅ NOUVEAU
-16. **Context API** - AuthContext pour state global auth ✅ NOUVEAU
-17. **localStorage** - Sauvegarde état auth + progression ✅ NOUVEAU
-18. **Pages auth** - Welcome, Login, Signup (iOS-style) ✅ NOUVEAU
+### ✅ FAIT (Plateforme Fonctionnelle Complète)
 
-### 🔄 EN COURS (Prochaines priorités)
-19. **Firestore sync** - Sauvegarder progression utilisateur dans DB
-20. **Pages manquantes** - Leçons, Challenges, AI Understanding, Contact
-21. **Système de scoring** - Points, niveaux, statistiques
-22. **CSS modules** - Externalisation styles inline
+**Core Features**
+1. **30 exercices Python niveau Easy** - 4 types, 3 modes d'input différents ✅
+2. **Page Home** - Menu iOS-style avec navigation + auth status ✅
+3. **Page Exercise** - Interface complète avec 3 modes d'input ✅
+4. **Page Profile** - Stats utilisateur, XP, niveaux, progression ✅
+5. **CustomKeyboard** - Clavier numérique + prédéfini pour free_input ✅
+6. **Clickable CodeBlock** - Clic sur lignes + feedback vert/rouge ✅
 
-### ❌ TODO (Post-MVP)
-23. **OAuth** - Connexion Google/GitHub
-24. **Reset password** - Mot de passe oublié
-25. **Email verification** - Validation email obligatoire
-26. **Multiple langages** - JavaScript, Java, C++
-27. **PWA** - Mode offline, installation
-28. **Mode sombre/clair** - Toggle thème
-29. **Streak system** - Séries quotidiennes
-30. **Badges/achievements** - Système de récompenses
-31. **Sound effects** - Feedback audio
-32. **Leaderboard** - Classement utilisateurs
-33. **Tests unitaires** - Jest + Testing Library
-34. **2FA** - Authentification à deux facteurs
+**Architecture & Code**
+7. **Composants modulaires** - 11 composants React réutilisables ✅
+8. **Système de routing** - React Router avec 12 routes ✅
+9. **Context API** - AuthContext + ProgressContext ✅
+10. **Performance** - React.memo, lazy loading, optimisations ✅
+11. **Tests unitaires** - 97 tests (100% réussite) Vitest + RTL ✅
+12. **CSS externalisé** - Exercise.css (466 lignes, 70+ variables) ✅
+
+**Design & UX**
+13. **Syntax highlighting** - Python custom avec coloration précise ✅
+14. **États interactifs** - Initial, sélection, validation, feedback ✅
+15. **Design iOS-style** - Interface native mobile ✅
+16. **Responsive mobile** - Optimisé iPhone SE à Pro Max ✅
+17. **Haptic feedback** - Vibrations natives iOS/Android ✅
+18. **Animations fluides** - Transitions et effets visuels ✅
+19. **Système d'explication** - Toggle avec highlighting code ✅
+20. **FeedbackGlow** - Effets visuels bordures écran ✅
+21. **ExitConfirmModal** - Confirmation sortie exercice ✅
+
+**Authentification & Data**
+22. **Firebase Authentication** - Email/Password + mode invité ✅
+23. **Firestore Database** - Sauvegarde progression cloud ✅
+24. **localStorage** - Mode invité + fallback ✅
+25. **Migration auto** - localStorage → Firestore ✅
+26. **Pages auth** - Welcome, Login, Signup (iOS-style) ✅
+27. **Système de progression** - Niveaux par blocs de 10 exercices ✅
+28. **Stats complètes** - XP, niveaux, correct/incorrect, streak ✅
+
+### 🔄 EN COURS (À finaliser)
+29. **Firestore Security Rules** - À configurer dans Firebase Console
+30. **CSS inline** - Externaliser Home.jsx, Profile.jsx, Language.jsx, Difficulty.jsx
+
+### ❌ TODO (Prochaines features)
+31. **Exercices Medium/Hard** - 60 exercices supplémentaires (30+30)
+32. **Pages manquantes** - Leçons, Challenges, AI Understanding, Contact
+33. **Graphiques progression** - Chart.js dans Profile
+34. **Streak system** - Compteur jours consécutifs
+35. **Badges/achievements** - Système de récompenses
+36. **PWA** - Mode offline, installation
+37. **Deploy production** - Vercel/Netlify
+38. **OAuth** - Connexion Google/GitHub
+39. **Reset password** - Mot de passe oublié
+40. **Multiple langages** - JavaScript, Java, C++
 
 ---
 
@@ -368,11 +400,12 @@ export default MyComponent;
 - [x] ✅ Séparer App.jsx en composants
 - [x] ✅ Créer structure dossiers
 - [x] ✅ Setup React Router complet
-- [x] ✅ Créer exercises.json avec 10 exercices
+- [x] ✅ Créer exercises.json avec 30 exercices ✅ FAIT (30 exercices)
 - [x] ✅ Système de navigation next/previous
-- [x] ✅ Implémenter Context API (AuthContext)
+- [x] ✅ Implémenter Context API (AuthContext + ProgressContext)
 - [x] ✅ localStorage pour progression + auth
-- [ ] 🔄 Externaliser styles en CSS modules
+- [x] ✅ Externaliser styles Exercise.css (466 lignes)
+- [ ] 🔄 Externaliser styles Home/Profile/Language/Difficulty
 
 ### Phase 1.5 : Authentification ✅ TERMINÉ
 - [x] ✅ Installation Firebase SDK
@@ -414,29 +447,51 @@ export default MyComponent;
 - [x] ✅ Phase 3: React.memo sur 4 composants, lazy loading LevelComplete
 - [x] ✅ Tests compilation + validation (97 tests passent)
 - [x] ✅ Documentation REFACTORING_EXERCISE.md
-- **✅ Exercise.jsx : 606 → 232 lignes (-61%), performances +50%**
+- **✅ Exercise.jsx : 606 → 428 lignes (-30%), performances +50%**
 
-### Phase 3 : Pages manquantes
+### Phase 2.6 : CustomKeyboard + Modes d'input ✅ TERMINÉ 🆕
+- [x] ✅ Composant CustomKeyboard (numérique + prédéfini)
+- [x] ✅ Support free_input avec clavier custom
+- [x] ✅ Support clickable_lines avec CodeBlock interactif
+- [x] ✅ Feedback visuel vert/rouge pour lignes cliquables
+- [x] ✅ 30 exercices avec 4 types et 3 inputTypes
+- **✅ 3 modes d'input complets : options, free_input, clickable_lines**
+
+### Phase 3 : Pages manquantes ⚠️ PARTIEL
 - [x] ✅ Page Home avec menu iOS
-- [x] ✅ Page Exercise complète
+- [x] ✅ Page Exercise complète (3 modes d'input)
 - [x] ✅ Page Profile avec stats utilisateur
+- [x] ✅ Page Language avec icônes langages
+- [x] ✅ Page Difficulty avec sélection niveau
+- [x] ✅ Pages auth (Welcome, Login, Signup)
 - [ ] ❌ Page Leçons (route existe, contenu à créer)
 - [ ] ❌ Page Challenges (route existe, contenu à créer)
 - [ ] ❌ Page AI Understanding (route existe, contenu à créer)
 - [ ] ❌ Page Contact (route existe, contenu à créer)
 
-### Phase 4 : Fonctionnalités avancées
-- [ ] ❌ Système de scoring/achievements
-- [ ] ❌ Graphiques progression (Chart.js)
-- [ ] ❌ 20 exercices supplémentaires Python
+### Phase 4 : Contenu - Plus d'exercices ⚠️ URGENT
+- [x] ✅ 30 exercices Python niveau Easy (difficulté 1)
+- [ ] ❌ 30 exercices Python niveau Medium (difficulté 2)
+- [ ] ❌ 30 exercices Python niveau Hard (difficulté 3)
 - [ ] ❌ Support JavaScript (nouveau langage)
+- **⚠️ Actuellement seulement 3 niveaux de 10 exercices Easy**
 
-### Phase 5 : Production & Deploy ✅ PRÊT
+### Phase 5 : Fonctionnalités avancées
+- [x] ✅ Système de progression XP/Niveaux
+- [ ] ❌ Graphiques progression (Chart.js dans Profile)
+- [ ] 🔄 Streak system (partiellement implémenté)
+- [ ] ❌ Badges/achievements
+- [ ] ❌ Leaderboard
+
+### Phase 6 : Production & Deploy ⚠️ PRESQUE PRÊT
 - [x] ✅ Animations avancées implémentées
 - [x] ✅ Responsive mobile optimisé
 - [x] ✅ Tests unitaires (97 tests, 100%)
+- [x] ✅ Firebase Auth + Firestore configurés
+- [ ] 🔄 Firestore Security Rules à configurer
 - [ ] ❌ PWA setup (offline, installation)
 - [ ] ❌ Deploy Vercel/Netlify
+- [ ] ❌ Custom domain
 
 ---
 
@@ -461,23 +516,57 @@ export default MyComponent;
 
 ---
 
-## 🐛 BUGS CONNUS
-- ⚠️ **Header component** inutilisé dans Exercise.jsx (code dupliqué inline)
-- ⚠️ **CSS répétitif** dans tous les composants (styles inline)
-- ⚠️ **Routes manquantes** affichent "En cours de développement"
-- ⚠️ **Firestore Security Rules** : À configurer dans Firebase Console (voir FIRESTORE_SECURITY.md)
+## 🐛 BUGS CONNUS & LIMITATIONS
+
+### ⚠️ Limitations Contenu
+- **Seulement 3 niveaux disponibles** : 30 exercices Easy (les utilisateurs finissent rapidement)
+- **Pas de niveaux Medium/Hard** : Besoin de 60 exercices supplémentaires
+
+### ⚠️ Code & Performance
+- **CSS inline massif** : 4 pages avec ~400 lignes de CSS inline chacune
+  - Home.jsx : 493 lignes (dont ~80% CSS)
+  - Profile.jsx : 446 lignes (dont ~75% CSS)
+  - Language.jsx : 492 lignes (dont ~80% CSS)
+  - Difficulty.jsx : 509 lignes (dont ~80% CSS)
+- **Header component** : Inutilisé dans Exercise.jsx (code dupliqué)
+
+### ⚠️ Configuration Production
+- **Firestore Security Rules** : À configurer dans Firebase Console (voir FIRESTORE_SECURITY.md)
+- **Routes manquantes** : 4 pages affichent "En cours de développement"
+- **Pas de PWA** : Mode offline non disponible
+- **Pas déployé** : App uniquement en local
 
 ## 💡 NOTES TECHNIQUES
-- **MVP fonctionnel avec auth + cloud** : App prête pour testing utilisateur
-- **Firebase Authentication** : Email/Password + mode invité implémenté
-- **Firestore Database** : Sauvegarde progression cloud + migration localStorage ✅ NOUVEAU
+
+### 📊 Statistiques Projet
+- **39 fichiers** JSX/JS/CSS/JSON
+- **11 composants** React réutilisables
+- **8 pages** complètes
+- **2 contexts** (Auth + Progress)
+- **1 service** (progressService)
+- **1 hook** custom (useHaptic)
+- **6 fichiers** de tests (97 tests)
+- **13 fichiers** Markdown documentation
+
+### 🎯 État Technique
+- **Plateforme fonctionnelle complète** : App prête pour testing utilisateur
+- **3 modes d'input** : options, free_input, clickable_lines
+- **4 types d'exercices** : predict_output, find_error, trace_execution, concept_understanding
+- **30 exercices Python Easy** : Couvre 3 niveaux de progression
+- **Firebase Authentication** : Email/Password + mode invité
+- **Firestore Database** : Sauvegarde cloud + migration localStorage
 - **Tests unitaires** : 97 tests (100% réussite) - Vitest + React Testing Library
-- **Performance optimisée** : 60fps sur mobile, animations fluides
+- **Performance optimisée** : 60fps mobile, React.memo, lazy loading
 - **Code quality** : Composants modulaires, hooks personnalisés, Context API
 - **Mobile-first** : Responsive iPhone SE à Pro Max
 - **Accessibility** : Touch targets 44px+, navigation clavier
-- **10 exercices Python** : Suffisant pour validation concept
-- **Sécurité** : Variables d'environnement, validation formulaires, messages erreur français
+- **Sécurité** : Variables environnement, validation formulaires, messages français
+
+### ⚠️ Limitations Actuelles
+- **Contenu limité** : Seulement exercices niveau Easy
+- **CSS inline** : ~1600 lignes CSS à externaliser (4 pages)
+- **Routes manquantes** : 4 pages placeholder
+- **Pas en production** : Local uniquement
 
 ## 🔧 COMMANDES UTILES
 ```bash
@@ -529,10 +618,14 @@ find src -name "*.jsx"  # Lister composants
 6. **[TEST_RESULTS.md](TEST_RESULTS.md)** - 📊 Résultats tests (97 tests)
 
 ### Refactoring
-7. **[REFACTORING_EXERCISE.md](REFACTORING_EXERCISE.md)** - 🔧 Rapport refactoring Exercise.jsx 🆕
+7. **[REFACTORING_EXERCISE.md](REFACTORING_EXERCISE.md)** - 🔧 Rapport refactoring Exercise.jsx
+
+### Roadmap & Planning
+8. **[ROADMAP.md](ROADMAP.md)** - 🗺️ Roadmap détaillée prochaines tâches 🆕
+9. **[PROGRESS_SYSTEM.md](PROGRESS_SYSTEM.md)** - 📊 Documentation système progression
 
 ---
 
-**Dernière mise à jour :** 26 octobre 2025
-**Version :** 0.5.5 (MVP + Auth + Firestore + Tests + Refactoring)
-**Status :** 🟢 Production ready - Code optimisé et performant
+**Dernière mise à jour :** 30 octobre 2025
+**Version :** 0.7.0 (Plateforme complète + 30 exercices + 3 modes d'input)
+**Status :** 🟢 Fonctionnel - Prêt pour ajout contenu Medium/Hard et déploiement

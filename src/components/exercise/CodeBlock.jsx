@@ -9,7 +9,9 @@ const CodeBlock = ({
   isCompact = false,
   clickableLines = [],
   selectedLine = null,
-  onLineClick = null
+  onLineClick = null,
+  isSubmitted = false,
+  correctAnswer = null
 }) => {
   // Custom Python theme with exact color specifications
   const customPythonTheme = {
@@ -286,15 +288,17 @@ const CodeBlock = ({
           const isHighlighted = isHighlightActive && highlightedLines.includes(lineNumber);
           const isClickable = clickableLines.includes(lineNumber);
           const isSelected = selectedLine === lineNumber;
+          const isCorrectLine = isSubmitted && lineNumber === correctAnswer;
+          const isIncorrectLine = isSubmitted && isSelected && lineNumber !== correctAnswer;
 
           return (
             <div
               key={index}
-              className={`code-line ${isHighlighted ? 'highlighted' : ''} ${isClickable ? 'clickable' : ''} ${isSelected ? 'selected' : ''}`}
+              className={`code-line ${isHighlighted ? 'highlighted' : ''} ${isClickable ? 'clickable' : ''} ${isSelected && !isSubmitted ? 'selected' : ''} ${isCorrectLine ? 'correct' : ''} ${isIncorrectLine ? 'incorrect' : ''}`}
               style={{
                 animationDelay: isHighlighted ? `${highlightedLines.indexOf(lineNumber) * 0.3}s` : '0s'
               }}
-              onClick={isClickable && onLineClick ? () => onLineClick(lineNumber) : undefined}
+              onClick={isClickable && onLineClick && !isSubmitted ? () => onLineClick(lineNumber) : undefined}
             >
               <span className="line-number">{lineNumber}</span>
               <SyntaxHighlighter
@@ -429,12 +433,51 @@ const CodeBlock = ({
           padding-left: calc(28px - 3px);
         }
 
-        /* Selected Line (orange when clicked) */
+        /* Selected Line (orange when clicked, before submit) */
         .code-line.selected {
           background: rgba(255, 149, 0, 0.25);
           border-left: 3px solid #FF9500;
           padding-left: calc(28px - 3px);
           box-shadow: 0 0 0 2px rgba(255, 149, 0, 0.4);
+        }
+
+        /* Correct Line (green after submit) */
+        .code-line.correct {
+          background: rgba(48, 209, 88, 0.25);
+          border-left: 3px solid #30D158;
+          padding-left: calc(28px - 3px);
+          box-shadow: 0 0 0 2px rgba(48, 209, 88, 0.5);
+          animation: correctPulse 0.6s ease-out;
+        }
+
+        /* Incorrect Line (red after submit) */
+        .code-line.incorrect {
+          background: rgba(255, 69, 58, 0.25);
+          border-left: 3px solid #FF453A;
+          padding-left: calc(28px - 3px);
+          box-shadow: 0 0 0 2px rgba(255, 69, 58, 0.5);
+          animation: incorrectShake 0.5s ease-out;
+        }
+
+        @keyframes correctPulse {
+          0% {
+            background: rgba(48, 209, 88, 0);
+            box-shadow: 0 0 0 0 rgba(48, 209, 88, 0);
+          }
+          50% {
+            background: rgba(48, 209, 88, 0.35);
+            box-shadow: 0 0 0 4px rgba(48, 209, 88, 0.6);
+          }
+          100% {
+            background: rgba(48, 209, 88, 0.25);
+            box-shadow: 0 0 0 2px rgba(48, 209, 88, 0.5);
+          }
+        }
+
+        @keyframes incorrectShake {
+          0%, 100% { transform: translateX(0); }
+          10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+          20%, 40%, 60%, 80% { transform: translateX(4px); }
         }
 
         @keyframes highlightPulse {

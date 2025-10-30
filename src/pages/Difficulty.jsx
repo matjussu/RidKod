@@ -16,7 +16,7 @@ const Difficulty = () => {
     }
   }, [location.state]);
 
-  const handleDifficultySelect = (difficulty) => {
+  const handleDifficultySelect = (difficultyValue) => {
     triggerSuccess();
 
     // Animation de sortie élégante
@@ -29,7 +29,7 @@ const Difficulty = () => {
         navigate('/exercise', {
           state: {
             language: selectedLanguage,
-            difficulty: difficulty
+            difficulty: difficultyValue // Passer la valeur numérique (1, 2, 3)
           }
         });
       }, 300);
@@ -37,7 +37,7 @@ const Difficulty = () => {
       navigate('/exercise', {
         state: {
           language: selectedLanguage,
-          difficulty: difficulty
+          difficulty: difficultyValue // Passer la valeur numérique (1, 2, 3)
         }
       });
     }
@@ -65,18 +65,21 @@ const Difficulty = () => {
     {
       id: 'easy',
       difficulty: 'EASY',
+      difficultyValue: 1, // Valeur numérique pour filtrage
       xpInfo: '+10 XP',
       backgroundColor: 'linear-gradient(135deg, #088201 0%, #0AB305 50%, #30D158 100%)'
     },
     {
       id: 'medium',
       difficulty: 'MIDD',
+      difficultyValue: 2, // Valeur numérique pour filtrage
       xpInfo: '+20 XP',
       backgroundColor: 'linear-gradient(135deg, #FF6B00 0%, #FF8500 50%, #FF9500 100%)'
     },
     {
       id: 'hard',
       difficulty: 'HARD',
+      difficultyValue: 3, // Valeur numérique pour filtrage
       xpInfo: '+30 XP',
       backgroundColor: 'linear-gradient(135deg, #C41E3A 0%, #FF383C 50%, #FF453A 100%)'
     }
@@ -493,7 +496,7 @@ const Difficulty = () => {
             difficulty={diff.difficulty}
             xpInfo={diff.xpInfo}
             backgroundColor={diff.backgroundColor}
-            onClick={() => handleDifficultySelect(diff.id)}
+            onClick={() => handleDifficultySelect(diff.difficultyValue)}
           />
         ))}
       </div>

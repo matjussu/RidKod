@@ -27,15 +27,14 @@ const Exercise = () => {
 
   // Charger la progression pour déterminer le niveau de départ
   const stats = getStats();
-  const startingLevel = stats.currentLevel || 1; // Niveau d'exercice actuel
+
+  // Pour une difficulté donnée, toujours commencer à l'exercice 0
+  // (on filtre les exercices par difficulté, donc chaque difficulté a ses propres exercices)
+  const startingExerciseIndex = 0;
 
   // State management
   const [selectedOption, setSelectedOption] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
-
-  // Calculer l'index de départ basé sur currentLevel
-  // Niveau 1 → exercices 0-9, Niveau 2 → 10-19, Niveau 3 → 20-29
-  const startingExerciseIndex = (startingLevel - 1) * EXERCISES_PER_LEVEL;
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(startingExerciseIndex);
 
   const [showGlow, setShowGlow] = useState(false);
@@ -68,20 +67,15 @@ const Exercise = () => {
   // Haptic feedback hook
   const { triggerSuccess, triggerError, triggerLight } = useHaptic();
 
-  // Load exercises from JSON
-  const exercises = exercisesData;
+  // Load exercises from JSON and filter by difficulty
+  const allExercises = exercisesData;
+  const exercises = allExercises.filter(ex => ex.difficulty === difficulty);
   const exercise = exercises[currentExerciseIndex];
 
   // Calculate current exercise level (1-based, increments every 10 exercises)
-  const currentExerciseLevel = Math.floor(currentExerciseIndex / EXERCISES_PER_LEVEL) + 1;
-
-  // Vérifier si on essaie d'accéder à un niveau déjà complété
-  if (isLevelCompleted(currentExerciseLevel)) {
-    // Rediriger vers home si niveau déjà fait
-    console.warn(`Tentative d'accès au niveau ${currentExerciseLevel} déjà complété`);
-    navigate('/home');
-    return null;
-  }
+  // Format: {difficulty}_{level} ex: "1_1", "2_1", "3_1" pour distinguer les difficultés
+  const levelNumber = Math.floor(currentExerciseIndex / EXERCISES_PER_LEVEL) + 1;
+  const currentExerciseLevel = `${difficulty}_${levelNumber}`;
 
   // Event handlers
   const handleOptionClick = (index) => {
@@ -171,7 +165,7 @@ const Exercise = () => {
     }, correct ? 600 : 800);
   };
 
-  const handleContinue = async () => {
+  const handleContinue = () => {
     setIsExplanationExpanded(false);
     setHighlightedLines([]);
 
@@ -181,15 +175,7 @@ const Exercise = () => {
     const blockComplete = isBlockComplete(currentExerciseIndex);
 
     if (blockComplete) {
-      // Marquer le niveau comme complété dans Firebase
-      try {
-        await completeLevel(currentExerciseLevel);
-        console.log(`✅ Niveau ${currentExerciseLevel} complété !`);
-      } catch (error) {
-        console.error('Erreur lors de la complétion du niveau:', error);
-      }
-
-      // Afficher l'écran de feedback
+      // Afficher l'écran de feedback (ne PAS marquer complété maintenant)
       const stats = getStats();
       setBlockStats(prev => ({
         ...prev,
@@ -216,7 +202,15 @@ const Exercise = () => {
     }
   };
 
-  const handleLevelContinue = () => {
+  const handleLevelContinue = async () => {
+    // Marquer le niveau comme complété dans Firebase MAINTENANT
+    try {
+      await completeLevel(currentExerciseLevel);
+      console.log(`✅ Niveau ${currentExerciseLevel} complété et sauvegardé !`);
+    } catch (error) {
+      console.error('Erreur lors de la complétion du niveau:', error);
+    }
+
     setShowLevelComplete(false);
 
     // Réinitialiser les stats du bloc
@@ -365,6 +359,8 @@ const Exercise = () => {
           clickableLines={exercise.clickableLines || []}
           selectedLine={selectedLine}
           onLineClick={handleLineClick}
+          isSubmitted={isSubmitted}
+          correctAnswer={exercise.correctAnswer}
         />
 
         {/* Options Grid - Only for inputType 'options' */}

@@ -42,27 +42,23 @@ const LanguageCard = ({
           overflow: hidden;
           box-shadow:
             0 4px 20px rgba(0, 0, 0, 0.15),
-            0 1px 3px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            0 1px 3px rgba(0, 0, 0, 0.1);
           backdrop-filter: blur(10px);
           -webkit-backdrop-filter: blur(10px);
-          border: 0.5px solid rgba(255, 255, 255, 0.1);
         }
 
         .language-card:not(.coming-soon):hover {
           transform: translateY(-4px) scale(1.02);
           box-shadow:
             0 12px 40px rgba(0, 0, 0, 0.25),
-            0 4px 12px rgba(0, 0, 0, 0.15),
-            inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .language-card:not(.coming-soon):active {
           transform: translateY(-2px) scale(0.98);
           box-shadow:
             0 6px 25px rgba(0, 0, 0, 0.2),
-            0 2px 8px rgba(0, 0, 0, 0.15),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            0 2px 8px rgba(0, 0, 0, 0.15);
         }
 
         .language-card.coming-soon {
