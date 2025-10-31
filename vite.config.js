@@ -77,7 +77,7 @@ export default defineConfig({
           }
         ],
         cleanupOutdatedCaches: true,
-        skipWaiting: false
+        skipWaiting: true
       },
       devOptions: {
         enabled: false,
