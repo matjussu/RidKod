@@ -205,9 +205,13 @@ readcod-app/
 │   └── main.jsx                    ✅ FAIT - Entry point React
 ├── index.html                      ✅ FAIT - Google Fonts JetBrains Mono + Jersey 25
 ├── .env                            ✅ NOUVEAU - Variables Firebase (gitignored)
-├── .env.example                    ✅ NOUVEAU - Template variables
-├── package.json                    ✅ FAIT - Dépendances à jour (+ Firebase)
-├── vite.config.js                  ✅ FAIT
+├── .env.example                    ✅ NOUVEAU - Template variables 🆕
+├── package.json                    ✅ FAIT - Dépendances (+ Firebase + PWA) 🆕
+├── vite.config.js                  ✅ FAIT - PWA plugin configuré 🆕
+├── vercel.json                     ✅ NOUVEAU - Configuration Vercel 🆕
+├── firebase.json                   ✅ NOUVEAU - Configuration Firebase Hosting 🆕
+├── firestore.rules                 ✅ NOUVEAU - Règles sécurité Firestore 🆕
+├── firestore.indexes.json          ✅ NOUVEAU - Indexes Firestore 🆕
 ├── eslint.config.js                ✅ FAIT - Configuration ESLint
 ├── vitest.config.js                ✅ FAIT - Configuration Vitest
 ├── CLAUDE.md                       ✅ FAIT - Ce fichier (mis à jour)
@@ -218,11 +222,14 @@ readcod-app/
 ├── TESTING.md                      ✅ NOUVEAU - Guide tests unitaires
 ├── TEST_RESULTS.md                 ✅ NOUVEAU - Résultats tests (97 tests)
 ├── HOWTO_TESTS.md                  ✅ NOUVEAU - Guide pratique tests
-├── REFACTORING_EXERCISE.md         ✅ NOUVEAU - Rapport refactoring complet 🆕
+├── REFACTORING_EXERCISE.md         ✅ NOUVEAU - Rapport refactoring complet
 ├── PROGRESS_SYSTEM.md              ✅ NOUVEAU - Documentation système progression
 ├── IMPLEMENTATION_SUMMARY.md       ✅ NOUVEAU - Résumé implémentation features
 ├── DEBUG_FIRESTORE.md              ✅ NOUVEAU - Debug Firestore (historique)
-└── ROADMAP.md                      ✅ NOUVEAU - Roadmap détaillée prochaines tâches 🆕
+├── ROADMAP.md                      ✅ NOUVEAU - Roadmap détaillée prochaines tâches
+├── DEPLOYMENT.md                   ✅ NOUVEAU - Guide déploiement complet 🆕
+├── PRODUCTION_CHECKLIST.md         ✅ NOUVEAU - Checklist pré/post déploiement 🆕
+└── PWA_SETUP.md                    ✅ NOUVEAU - Documentation PWA complète 🆕
 ```
 
 ---
@@ -284,8 +291,8 @@ readcod-app/
 
 ### Niveaux difficulté
 - `1` : Easy - Débutant (10 XP) - **30 exercices disponibles** ✅
-- `2` : Medium - Intermédiaire (20 XP) - **0 exercices** ❌
-- `3` : Hard - Avancé (30 XP) - **0 exercices** ❌
+- `2` : Medium - Intermédiaire (20 XP) - **10 exercices disponibles** ✅
+- `3` : Hard - Avancé (30 XP) - **10 exercices disponibles** ✅
 
 ---
 
@@ -294,7 +301,7 @@ readcod-app/
 ### ✅ FAIT (Plateforme Fonctionnelle Complète)
 
 **Core Features**
-1. **30 exercices Python niveau Easy** - 4 types, 3 modes d'input différents ✅
+1. **50 exercices Python (30 Easy, 10 Medium, 10 Hard)** - 4 types, 3 modes d'input ✅
 2. **Page Home** - Menu iOS-style avec navigation + auth status ✅
 3. **Page Exercise** - Interface complète avec 3 modes d'input ✅
 4. **Page Profile** - Stats utilisateur, XP, niveaux, progression ✅
@@ -329,21 +336,28 @@ readcod-app/
 27. **Système de progression** - Niveaux par blocs de 10 exercices ✅
 28. **Stats complètes** - XP, niveaux, correct/incorrect, streak ✅
 
+**Production Ready** 🚀
+29. **PWA configuré** - vite-plugin-pwa, Service Worker, manifest.json ✅
+30. **Firestore Rules** - firestore.rules créé (à déployer) ✅
+31. **Configuration Vercel** - vercel.json avec optimisations ✅
+32. **Documentation déploiement** - DEPLOYMENT.md, PRODUCTION_CHECKLIST.md ✅
+33. **PWA Setup** - PWA_SETUP.md guide complet ✅
+
 ### 🔄 EN COURS (À finaliser)
-29. **Firestore Security Rules** - À configurer dans Firebase Console
-30. **CSS inline** - Externaliser Home.jsx, Profile.jsx, Language.jsx, Difficulty.jsx
+34. **Icônes PWA** - 8 tailles à générer (voir public/icons/README.md)
+35. **Déployer Firestore Rules** - firebase deploy --only firestore:rules
+36. **Premier déploiement Vercel** - Configurer variables environnement
+37. **CSS inline** - Externaliser Home.jsx, Profile.jsx, Language.jsx, Difficulty.jsx
 
 ### ❌ TODO (Prochaines features)
-31. **Exercices Medium/Hard** - 60 exercices supplémentaires (30+30)
-32. **Pages manquantes** - Leçons, Challenges, AI Understanding, Contact
-33. **Graphiques progression** - Chart.js dans Profile
-34. **Streak system** - Compteur jours consécutifs
-35. **Badges/achievements** - Système de récompenses
-36. **PWA** - Mode offline, installation
-37. **Deploy production** - Vercel/Netlify
-38. **OAuth** - Connexion Google/GitHub
-39. **Reset password** - Mot de passe oublié
-40. **Multiple langages** - JavaScript, Java, C++
+38. **Pages manquantes** - Leçons, Challenges, AI Understanding, Contact
+39. **Graphiques progression** - Chart.js dans Profile
+40. **Streak system** - Compteur jours consécutifs avancé
+41. **Badges/achievements** - Système de récompenses
+42. **OAuth** - Connexion Google/GitHub
+43. **Reset password** - Mot de passe oublié
+44. **Multiple langages** - JavaScript, Java, C++
+45. **Domaine custom** - readcod.app ou autre
 
 ---
 
@@ -483,14 +497,18 @@ export default MyComponent;
 - [ ] ❌ Badges/achievements
 - [ ] ❌ Leaderboard
 
-### Phase 6 : Production & Deploy ⚠️ PRESQUE PRÊT
+### Phase 6 : Production & Deploy 🚀 PRÊT POUR DÉPLOIEMENT
 - [x] ✅ Animations avancées implémentées
 - [x] ✅ Responsive mobile optimisé
 - [x] ✅ Tests unitaires (97 tests, 100%)
 - [x] ✅ Firebase Auth + Firestore configurés
-- [ ] 🔄 Firestore Security Rules à configurer
-- [ ] ❌ PWA setup (offline, installation)
-- [ ] ❌ Deploy Vercel/Netlify
+- [x] ✅ Firestore Security Rules créées (firestore.rules)
+- [x] ✅ PWA configuré (vite-plugin-pwa, Service Worker, manifest)
+- [x] ✅ Configuration Vercel (vercel.json)
+- [x] ✅ Documentation complète (DEPLOYMENT.md, PRODUCTION_CHECKLIST.md, PWA_SETUP.md)
+- [ ] 🔄 Générer icônes PWA (8 tailles)
+- [ ] 🔄 Déployer Firestore Rules (firebase deploy)
+- [ ] 🔄 Premier déploiement Vercel
 - [ ] ❌ Custom domain
 
 ---
@@ -519,8 +537,8 @@ export default MyComponent;
 ## 🐛 BUGS CONNUS & LIMITATIONS
 
 ### ⚠️ Limitations Contenu
-- **Seulement 3 niveaux disponibles** : 30 exercices Easy (les utilisateurs finissent rapidement)
-- **Pas de niveaux Medium/Hard** : Besoin de 60 exercices supplémentaires
+- **50 exercices disponibles** : 30 Easy + 10 Medium + 10 Hard ✅
+- **Seulement Python** : Pas encore JavaScript, Java, C++
 
 ### ⚠️ Code & Performance
 - **CSS inline massif** : 4 pages avec ~400 lignes de CSS inline chacune
@@ -531,42 +549,43 @@ export default MyComponent;
 - **Header component** : Inutilisé dans Exercise.jsx (code dupliqué)
 
 ### ⚠️ Configuration Production
-- **Firestore Security Rules** : À configurer dans Firebase Console (voir FIRESTORE_SECURITY.md)
+- **Icônes PWA manquantes** : 8 tailles à générer (voir public/icons/README.md)
+- **Firestore Rules** : Créées mais à déployer (firebase deploy --only firestore:rules)
 - **Routes manquantes** : 4 pages affichent "En cours de développement"
-- **Pas de PWA** : Mode offline non disponible
-- **Pas déployé** : App uniquement en local
+- **Pas encore déployé** : Configuration prête, déploiement à faire
 
 ## 💡 NOTES TECHNIQUES
 
 ### 📊 Statistiques Projet
-- **39 fichiers** JSX/JS/CSS/JSON
+- **50+ fichiers** JSX/JS/CSS/JSON/Config 🆕
 - **11 composants** React réutilisables
 - **8 pages** complètes
 - **2 contexts** (Auth + Progress)
 - **1 service** (progressService)
 - **1 hook** custom (useHaptic)
 - **6 fichiers** de tests (97 tests)
-- **13 fichiers** Markdown documentation
+- **16 fichiers** Markdown documentation 🆕
 
 ### 🎯 État Technique
-- **Plateforme fonctionnelle complète** : App prête pour testing utilisateur
+- **Plateforme production-ready** : App prête pour déploiement 🆕
 - **3 modes d'input** : options, free_input, clickable_lines
 - **4 types d'exercices** : predict_output, find_error, trace_execution, concept_understanding
-- **30 exercices Python Easy** : Couvre 3 niveaux de progression
+- **50 exercices Python** : 30 Easy + 10 Medium + 10 Hard 🆕
 - **Firebase Authentication** : Email/Password + mode invité
 - **Firestore Database** : Sauvegarde cloud + migration localStorage
+- **PWA configuré** : Service Worker, manifest, cache offline 🆕
 - **Tests unitaires** : 97 tests (100% réussite) - Vitest + React Testing Library
-- **Performance optimisée** : 60fps mobile, React.memo, lazy loading
+- **Performance optimisée** : 60fps mobile, React.memo, lazy loading, code splitting 🆕
 - **Code quality** : Composants modulaires, hooks personnalisés, Context API
 - **Mobile-first** : Responsive iPhone SE à Pro Max
 - **Accessibility** : Touch targets 44px+, navigation clavier
-- **Sécurité** : Variables environnement, validation formulaires, messages français
+- **Sécurité** : Firestore Rules, variables environnement, validation formulaires 🆕
 
 ### ⚠️ Limitations Actuelles
-- **Contenu limité** : Seulement exercices niveau Easy
+- **Icônes PWA** : À générer (8 tailles)
 - **CSS inline** : ~1600 lignes CSS à externaliser (4 pages)
-- **Routes manquantes** : 4 pages placeholder
-- **Pas en production** : Local uniquement
+- **Routes manquantes** : 4 pages placeholder (Leçons, Challenges, AI, Contact)
+- **Pas encore déployé** : Prêt, mais déploiement pas encore effectué
 
 ## 🔧 COMMANDES UTILES
 ```bash
@@ -576,11 +595,21 @@ npm run build           # Build production
 npm run preview         # Preview build
 npm run lint            # ESLint check
 
-# Tests ✅ NOUVEAU
+# Tests
 npm test                 # Lancer tests en mode watch
 npm run test:run         # Lancer tests une fois
 npm run test:ui          # Interface UI interactive
 npm run test:coverage    # Générer rapport couverture
+
+# Firebase 🆕
+firebase login           # Connexion Firebase CLI
+firebase deploy --only firestore:rules  # Déployer règles Firestore
+firebase deploy --only hosting          # Déployer sur Firebase Hosting
+
+# Vercel 🆕
+vercel                   # Déployer sur Vercel (preview)
+vercel --prod            # Déployer en production
+vercel env add           # Ajouter variable environnement
 
 # Structure
 tree src                # Voir arborescence
@@ -599,7 +628,7 @@ find src -name "*.jsx"  # Lister composants
 - ✅ Mise à jour documentation
 - ✅ Review code et bonnes pratiques
 
-**Prochaine étape recommandée :** Configurer Firestore Security Rules (voir FIRESTORE_SECURITY.md) puis déployer sur Vercel/Netlify
+**Prochaine étape recommandée :** Générer icônes PWA, déployer Firestore Rules, puis déployer sur Vercel (voir DEPLOYMENT.md)
 
 ---
 
@@ -621,11 +650,16 @@ find src -name "*.jsx"  # Lister composants
 7. **[REFACTORING_EXERCISE.md](REFACTORING_EXERCISE.md)** - 🔧 Rapport refactoring Exercise.jsx
 
 ### Roadmap & Planning
-8. **[ROADMAP.md](ROADMAP.md)** - 🗺️ Roadmap détaillée prochaines tâches 🆕
+8. **[ROADMAP.md](ROADMAP.md)** - 🗺️ Roadmap détaillée prochaines tâches
 9. **[PROGRESS_SYSTEM.md](PROGRESS_SYSTEM.md)** - 📊 Documentation système progression
+
+### Production & Déploiement 🆕
+10. **[DEPLOYMENT.md](DEPLOYMENT.md)** - 🚀 Guide déploiement complet (Firestore + PWA + Vercel)
+11. **[PRODUCTION_CHECKLIST.md](PRODUCTION_CHECKLIST.md)** - ✅ Checklist pré/post déploiement
+12. **[PWA_SETUP.md](PWA_SETUP.md)** - 📱 Documentation PWA complète
 
 ---
 
-**Dernière mise à jour :** 30 octobre 2025
-**Version :** 0.7.0 (Plateforme complète + 30 exercices + 3 modes d'input)
-**Status :** 🟢 Fonctionnel - Prêt pour ajout contenu Medium/Hard et déploiement
+**Dernière mise à jour :** 31 octobre 2025
+**Version :** 1.0.0-rc (Release Candidate - Prêt pour production)
+**Status :** 🚀 Production Ready - 50 exercices + PWA + Config déploiement

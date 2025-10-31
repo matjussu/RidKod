@@ -1,0 +1,43 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Collection de progression utilisateur
+    match /progress/{userId} {
+      // Autoriser la lecture uniquement si l'utilisateur lit SES propres données
+      allow read: if request.auth != null && request.auth.uid == userId;
+
+      // Autoriser la création uniquement si :
+      // 1. L'utilisateur est authentifié
+      // 2. Le document créé a le même userId que l'utilisateur
+      // 3. Les champs obligatoires sont présents
+      allow create: if request.auth != null
+                    && request.auth.uid == userId
+                    && request.resource.data.userId == userId
+                    && request.resource.data.totalXP is number
+                    && request.resource.data.level is number
+                    && request.resource.data.completedExercises is list;
+
+      // Autoriser la mise à jour uniquement si :
+      // 1. L'utilisateur est authentifié
+      // 2. L'utilisateur modifie SES propres données
+      // 3. Le userId ne peut pas être modifié
+      // 4. Validation basique des données
+      allow update: if request.auth != null
+                    && request.auth.uid == userId
+                    && request.resource.data.userId == userId
+                    && request.resource.data.totalXP >= 0
+                    && request.resource.data.level >= 1
+                    && request.resource.data.level <= 10;
+
+      // Interdire la suppression (garder historique)
+      allow delete: if false;
+    }
+
+    // Bloquer tout accès aux autres collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
