@@ -1,0 +1,341 @@
+/* ========================================
+   DIFFICULTY.CSS - Page sélection difficulté
+   ======================================== */
+
+/* Container principal Difficulty */
+.difficulty-container {
+  height: 100vh;
+  height: -webkit-fill-available;
+  background: #1A1919;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: max(env(safe-area-inset-top), 20px);
+  padding-left: max(20px, env(safe-area-inset-left));
+  padding-right: max(20px, env(safe-area-inset-right));
+  padding-bottom: max(env(safe-area-inset-bottom), 40px);
+  max-width: min(428px, 100vw);
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  opacity: 0;
+  transform: scale(1.05);
+  animation: fadeInScale 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+}
+
+/* Animations */
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Back Button */
+.back-button {
+  position: absolute;
+  top: max(env(safe-area-inset-top), 8px);
+  left: max(20px, env(safe-area-inset-left));
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.back-button:active {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(0.95);
+}
+
+.back-button svg {
+  color: #FFFFFF;
+  width: 24px;
+  height: 24px;
+}
+
+/* Header Section */
+.header-section {
+  text-align: center;
+  margin-bottom: 32px;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+}
+
+.page-title {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 22px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.title-bracket {
+  color: #FF9500;
+  font-weight: 800;
+  font-size: 24px;
+}
+
+.page-subtitle {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 16px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 6px 0 0 0;
+  line-height: 1.2;
+}
+
+.subtitle-bracket {
+  color: #088201;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+/* Difficulties Grid */
+.difficulties-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+}
+
+/* Staggered animation for cards */
+.difficulties-grid > *:nth-child(1) {
+  animation-delay: 0.5s;
+}
+
+.difficulties-grid > *:nth-child(2) {
+  animation-delay: 0.6s;
+}
+
+.difficulties-grid > *:nth-child(3) {
+  animation-delay: 0.7s;
+}
+
+/* Footer */
+.footer {
+  position: absolute;
+  bottom: max(env(safe-area-inset-bottom), 16px);
+  color: #8E8E93;
+  font-size: 20px;
+  font-weight: 400;
+  text-align: center;
+  font-family: "Jersey 25", cursive;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.9s forwards;
+}
+
+/* Responsive */
+
+/* iPhone 14/15 Pro Max */
+@media (max-width: 430px) {
+  .difficulty-container {
+    padding-left: max(18px, env(safe-area-inset-left));
+    padding-right: max(18px, env(safe-area-inset-right));
+  }
+
+  .back-button {
+    left: max(18px, env(safe-area-inset-left));
+  }
+}
+
+/* iPhone 14/15 Pro */
+@media (max-width: 393px) {
+  .difficulty-container {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+
+  .back-button {
+    left: max(16px, env(safe-area-inset-left));
+  }
+}
+
+/* iPhone SE, iPhone 12/13 mini - 375px */
+@media (max-width: 375px) {
+  .difficulty-container {
+    padding-left: max(14px, env(safe-area-inset-left));
+    padding-right: max(14px, env(safe-area-inset-right));
+    padding-top: max(env(safe-area-inset-top), 16px);
+  }
+
+  .back-button {
+    left: max(14px, env(safe-area-inset-left));
+    top: max(env(safe-area-inset-top), 6px);
+    padding: 10px;
+  }
+
+  .back-button svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .header-section {
+    margin-bottom: 28px;
+  }
+
+  .page-title {
+    font-size: 20px;
+  }
+
+  .title-bracket {
+    font-size: 22px;
+  }
+
+  .page-subtitle {
+    font-size: 15px;
+  }
+
+  .subtitle-bracket {
+    font-size: 17px;
+  }
+
+  .difficulties-grid {
+    gap: 14px;
+  }
+
+  .footer {
+    font-size: 18px;
+    bottom: max(env(safe-area-inset-bottom), 14px);
+  }
+}
+
+/* Très petits écrans - iPhone SE 1ère gen */
+@media (max-width: 320px) {
+  .difficulty-container {
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+    padding-top: max(env(safe-area-inset-top), 14px);
+  }
+
+  .back-button {
+    left: max(12px, env(safe-area-inset-left));
+    top: max(env(safe-area-inset-top), 4px);
+    padding: 8px;
+  }
+
+  .back-button svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .header-section {
+    margin-bottom: 24px;
+  }
+
+  .page-title {
+    font-size: 18px;
+  }
+
+  .title-bracket {
+    font-size: 20px;
+  }
+
+  .page-subtitle {
+    font-size: 14px;
+  }
+
+  .subtitle-bracket {
+    font-size: 16px;
+  }
+
+  .difficulties-grid {
+    gap: 12px;
+  }
+
+  .footer {
+    font-size: 16px;
+    bottom: max(env(safe-area-inset-bottom), 12px);
+  }
+}
+
+/* Mode paysage */
+@media (orientation: landscape) {
+  .back-button {
+    top: max(env(safe-area-inset-top), 6px);
+    padding: 8px;
+  }
+
+  .back-button svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .header-section {
+    margin-bottom: 20px;
+  }
+
+  .page-title {
+    font-size: 18px;
+  }
+
+  .title-bracket {
+    font-size: 20px;
+  }
+
+  .page-subtitle {
+    font-size: 14px;
+  }
+
+  .subtitle-bracket {
+    font-size: 16px;
+  }
+
+  .difficulties-grid {
+    gap: 12px;
+  }
+
+  .footer {
+    font-size: 16px;
+    bottom: max(env(safe-area-inset-bottom), 10px);
+  }
+}
+
+/* Fix Safari iOS et WebKit */
+@supports (-webkit-touch-callout: none) {
+  .difficulty-container {
+    height: -webkit-fill-available;
+    min-height: -webkit-fill-available;
+  }
+
+  body {
+    height: -webkit-fill-available;
+  }
+}
