@@ -5,12 +5,10 @@
 /* Container principal Home */
 .home-container {
   min-height: 100vh;
-  min-height: -webkit-fill-available;
   background: #1A1919;
   color: #FFFFFF;
   display: flex;
   flex-direction: column;
-  align-items: center;
   padding: max(env(safe-area-inset-top), 20px) max(16px, env(safe-area-inset-right)) max(env(safe-area-inset-bottom), 20px) max(16px, env(safe-area-inset-left));
   max-width: min(428px, 100vw);
   margin: 0 auto;
@@ -53,6 +51,7 @@
   margin-bottom: 32px;
   margin-top: 0;
   flex-shrink: 0;
+  align-self: center;
   opacity: 0;
   transform: translateY(20px);
   animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
@@ -73,6 +72,7 @@
   max-width: 100%;
   margin-bottom: 24px;
   flex-shrink: 0;
+  align-self: center;
   opacity: 0;
   transform: translateY(30px);
   animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
@@ -177,6 +177,7 @@
   -webkit-tap-highlight-color: transparent;
   margin-bottom: 24px;
   flex-shrink: 0;
+  align-self: center;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   box-shadow:
