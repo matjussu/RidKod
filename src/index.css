@@ -22,12 +22,16 @@ a:hover {
   color: #D26812;
 }
 
+html {
+  height: 100%;
+}
+
 body {
   margin: 0;
   min-width: 320px;
-  min-height: 100vh;
-  width: 100%;
+  height: 100vh;
   height: 100%;
+  width: 100%;
 }
 
 h1 {

@@ -43,6 +43,8 @@ const Welcome = () => {
         }
 
         .welcome-container {
+          height: 100vh;
+          height: 100%;
           min-height: 100vh;
           min-height: -webkit-fill-available;
           background: #1A1919;

@@ -28,7 +28,7 @@ const Profile = () => {
   if (loading) {
     return (
       <div style={{
-        minHeight: '100vh',
+        height: '100vh',
         background: '#1A1919',
         display: 'flex',
         alignItems: 'center',
@@ -62,7 +62,10 @@ const Profile = () => {
         }
 
         .profile-container {
+          height: 100vh;
+          height: 100%;
           min-height: 100vh;
+          min-height: -webkit-fill-available;
           background: #1A1919;
           color: #FFFFFF;
           display: flex;
