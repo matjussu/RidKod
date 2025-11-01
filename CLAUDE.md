@@ -197,8 +197,13 @@ readcod-app/
 │   │   ├── services/               ✅ FAIT - Tests services (31 tests)
 │   │   └── setup.js                ✅ FAIT - Configuration Vitest
 │   ├── utils/                      ⚠️ OPTIONNEL - Helpers divers
-│   ├── styles/                     ✅ FAIT - CSS modules 🆕
-│   │   └── Exercise.css            ✅ FAIT - 466 lignes, 70+ variables CSS
+│   ├── styles/                     ✅ FAIT - CSS modules externalisés 🆕
+│   │   ├── Exercise.css            ✅ FAIT - 466 lignes, 70+ variables CSS
+│   │   ├── Home.css                ✅ FAIT - 230 lignes (externalisé) 🆕
+│   │   ├── Language.css            ✅ FAIT - 240 lignes (externalisé) 🆕
+│   │   ├── Difficulty.css          ✅ FAIT - 250 lignes (externalisé) 🆕
+│   │   ├── Auth.css                ✅ FAIT - 240 lignes (Login/Signup)
+│   │   └── Layout.css              ✅ FAIT - 310 lignes (Profile/Header)
 │   ├── App.jsx                     ✅ FAIT - Router avec routes principales
 │   ├── App.css                     ✅ FAIT - Styles de base
 │   ├── index.css                   ✅ FAIT - Reset CSS global
@@ -314,7 +319,7 @@ readcod-app/
 9. **Context API** - AuthContext + ProgressContext ✅
 10. **Performance** - React.memo, lazy loading, optimisations ✅
 11. **Tests unitaires** - 97 tests (100% réussite) Vitest + RTL ✅
-12. **CSS externalisé** - Exercise.css (466 lignes, 70+ variables) ✅
+12. **CSS externalisé** - 6 fichiers CSS (Home, Language, Difficulty, Auth, Layout, Exercise) ✅
 
 **Design & UX**
 13. **Syntax highlighting** - Python custom avec coloration précise ✅
@@ -347,7 +352,7 @@ readcod-app/
 34. **Icônes PWA** - 8 tailles à générer (voir public/icons/README.md)
 35. **Déployer Firestore Rules** - firebase deploy --only firestore:rules
 36. **Premier déploiement Vercel** - Configurer variables environnement
-37. **CSS inline** - Externaliser Home.jsx, Profile.jsx, Language.jsx, Difficulty.jsx
+37. **CSS layout mobile** - Résoudre problème dimensionnement iPhone (70% height) ⚠️
 
 ### ❌ TODO (Prochaines features)
 38. **Pages manquantes** - Leçons, Challenges, AI Understanding, Contact
@@ -419,7 +424,7 @@ export default MyComponent;
 - [x] ✅ Implémenter Context API (AuthContext + ProgressContext)
 - [x] ✅ localStorage pour progression + auth
 - [x] ✅ Externaliser styles Exercise.css (466 lignes)
-- [ ] 🔄 Externaliser styles Home/Profile/Language/Difficulty
+- [x] ✅ Externaliser styles Home/Language/Difficulty (Home.css, Language.css, Difficulty.css) 🆕
 
 ### Phase 1.5 : Authentification ✅ TERMINÉ
 - [x] ✅ Installation Firebase SDK
@@ -536,16 +541,38 @@ export default MyComponent;
 
 ## 🐛 BUGS CONNUS & LIMITATIONS
 
+### 🔴 BUG CRITIQUE - Layout Mobile iPhone
+
+**Problème identifié :** Sur iPhone 16, les pages Home/Language/Difficulty n'occupent que 70% de la hauteur d'écran (contenu collé en haut, 30% d'espace vide en bas).
+
+**Pages affectées :**
+- ✅ Home.jsx - CSS externalisé dans Home.css
+- ✅ Language.jsx - CSS externalisé dans Language.css
+- ✅ Difficulty.jsx - CSS externalisé dans Difficulty.css
+
+**Pages fonctionnelles (référence) :**
+- ✅ Login.jsx / Signup.jsx - Auth.css fonctionne correctement (100% height)
+
+**Tentatives de correction :**
+1. ❌ Augmentation vertical spacing (margin-bottom) - AUCUN EFFET
+2. ❌ Suppression `align-items: center` + ajout `align-self: center` - PAS ENCORE TESTÉ SUR DEVICE
+
+**Hypothèses en cours :**
+- Problème spécifique iOS Safari avec flexbox
+- `min-height: 100vh` ne fonctionne pas correctement
+- Besoin d'utiliser `height: 100dvh` (dynamic viewport height) pour iOS
+
+**Status :** En attente de tests après push du commit c3f0576
+
+---
+
 ### ⚠️ Limitations Contenu
 - **50 exercices disponibles** : 30 Easy + 10 Medium + 10 Hard ✅
 - **Seulement Python** : Pas encore JavaScript, Java, C++
 
 ### ⚠️ Code & Performance
-- **CSS inline massif** : 4 pages avec ~400 lignes de CSS inline chacune
-  - Home.jsx : 493 lignes (dont ~80% CSS)
-  - Profile.jsx : 446 lignes (dont ~75% CSS)
-  - Language.jsx : 492 lignes (dont ~80% CSS)
-  - Difficulty.jsx : 509 lignes (dont ~80% CSS)
+- **CSS externalisé** : Home.css, Language.css, Difficulty.css créés ✅
+- **Layout mobile** : Problème dimensionnement iPhone (contenu 70% height au lieu de 100%) ⚠️
 - **Header component** : Inutilisé dans Exercise.jsx (code dupliqué)
 
 ### ⚠️ Configuration Production
@@ -583,9 +610,9 @@ export default MyComponent;
 
 ### ⚠️ Limitations Actuelles
 - **Icônes PWA** : À générer (8 tailles)
-- **CSS inline** : ~1600 lignes CSS à externaliser (4 pages)
+- **Layout mobile** : Problème dimensionnement iPhone 16 (contenu 70% au lieu de 100%)
 - **Routes manquantes** : 4 pages placeholder (Leçons, Challenges, AI, Contact)
-- **Pas encore déployé** : Prêt, mais déploiement pas encore effectué
+- **Déploiement** : App déployée sur Vercel mais bugs dimensionnement mobile
 
 ## 🔧 COMMANDES UTILES
 ```bash
@@ -660,6 +687,6 @@ find src -name "*.jsx"  # Lister composants
 
 ---
 
-**Dernière mise à jour :** 31 octobre 2025
-**Version :** 1.0.0-rc (Release Candidate - Prêt pour production)
-**Status :** 🚀 Production Ready - 50 exercices + PWA + Config déploiement
+**Dernière mise à jour :** 1 novembre 2025
+**Version :** 1.0.0-rc (Release Candidate - Bug fixes en cours)
+**Status :** ⚠️ Déployé avec bugs - CSS externalisé + Problème layout mobile iPhone
