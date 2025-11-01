@@ -50,7 +50,7 @@
 .logo-container {
   width: 260px;
   height: auto;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
   margin-top: 0;
   flex-shrink: 0;
   opacity: 0;
@@ -71,7 +71,7 @@
   gap: 12px;
   width: 100%;
   max-width: 100%;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
   flex-shrink: 0;
   opacity: 0;
   transform: translateY(30px);
@@ -175,7 +175,7 @@
   color: #FFFFFF;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
   flex-shrink: 0;
   text-transform: uppercase;
   letter-spacing: 0.5px;

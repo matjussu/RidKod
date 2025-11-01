@@ -87,8 +87,8 @@
 /* Header Section */
 .header-section {
   text-align: center;
-  margin-top: 60px;
-  margin-bottom: 40px;
+  margin-top: 80px;
+  margin-bottom: 48px;
   opacity: 0;
   transform: translateY(20px);
   animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
@@ -131,7 +131,7 @@
   gap: 20px;
   width: 100%;
   max-width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 32px;
   opacity: 0;
   transform: translateY(30px);
   animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
