@@ -9,6 +9,7 @@ import Exercise from './pages/Exercise';
 import Language from './pages/Language';
 import Difficulty from './pages/Difficulty';
 import Profile from './pages/Profile';
+import Contact from './pages/Contact';
 
 // Composant pour gérer la route principale "/"
 const RootRoute = () => {
@@ -43,7 +44,9 @@ const App = () => {
           <Route path="/lessons" element={<div style={{color: 'white', padding: '20px', textAlign: 'center'}}>Leçons - En cours de développement</div>} />
           <Route path="/challenges" element={<div style={{color: 'white', padding: '20px', textAlign: 'center'}}>Challenges - En cours de développement</div>} />
           <Route path="/ai-understanding" element={<div style={{color: 'white', padding: '20px', textAlign: 'center'}}>Comprendre l'IA - En cours de développement</div>} />
-          <Route path="/contact" element={<div style={{color: 'white', padding: '20px', textAlign: 'center'}}>Contact - En cours de développement</div>} />
+
+          {/* Contact page */}
+          <Route path="/contact" element={<Contact />} />
         </Routes>
         </ProgressProvider>
       </AuthProvider>
