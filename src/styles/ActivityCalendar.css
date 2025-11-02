@@ -1,0 +1,330 @@
+/* ============================================
+   ACTIVITY CALENDAR - GitHub-style
+   Calendrier d'activité mensuel
+   ============================================ */
+
+.activity-calendar {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+  margin: 20px 0;
+  width: 100%;
+}
+
+/* ============================================
+   HEADER - Navigation & Title
+   ============================================ */
+.activity-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
+.activity-title {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 16px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0;
+  text-align: center;
+  flex: 1;
+  text-transform: capitalize;
+}
+
+.activity-nav-button {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.activity-nav-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.activity-nav-button:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.activity-nav-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.activity-nav-button svg {
+  color: #FFFFFF;
+}
+
+/* ============================================
+   WEEKDAYS - Labels jours
+   ============================================ */
+.activity-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.activity-weekday {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: #8E8E93;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* ============================================
+   GRID - Calendrier
+   ============================================ */
+.activity-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.activity-day {
+  aspect-ratio: 1;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  border: 1px solid transparent;
+}
+
+.activity-day-empty {
+  background: transparent;
+  cursor: default;
+  pointer-events: none;
+}
+
+.activity-day-number {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 9px;
+  font-weight: 600;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  line-height: 1;
+}
+
+/* ============================================
+   ACTIVITY LEVELS - Niveaux de vert
+   ============================================ */
+
+/* Niveau 0 : Pas d'activité */
+.activity-level-0 {
+  background: rgba(142, 142, 147, 0.2);
+  border-color: rgba(142, 142, 147, 0.3);
+}
+
+.activity-level-0:hover {
+  background: rgba(142, 142, 147, 0.3);
+  border-color: rgba(142, 142, 147, 0.5);
+  transform: scale(1.1);
+}
+
+/* Niveau 1 : 1-2 exercices - Vert très clair */
+.activity-level-1 {
+  background: rgba(48, 209, 88, 0.2);
+  border-color: rgba(48, 209, 88, 0.3);
+}
+
+.activity-level-1:hover {
+  background: rgba(48, 209, 88, 0.3);
+  border-color: rgba(48, 209, 88, 0.5);
+  transform: scale(1.1);
+}
+
+/* Niveau 2 : 3-5 exercices - Vert clair */
+.activity-level-2 {
+  background: rgba(48, 209, 88, 0.4);
+  border-color: rgba(48, 209, 88, 0.5);
+}
+
+.activity-level-2:hover {
+  background: rgba(48, 209, 88, 0.5);
+  border-color: rgba(48, 209, 88, 0.7);
+  transform: scale(1.1);
+}
+
+/* Niveau 3 : 6-10 exercices - Vert moyen */
+.activity-level-3 {
+  background: rgba(48, 209, 88, 0.7);
+  border-color: rgba(48, 209, 88, 0.8);
+}
+
+.activity-level-3:hover {
+  background: rgba(48, 209, 88, 0.8);
+  border-color: #30D158;
+  transform: scale(1.1);
+}
+
+/* Niveau 4 : 11+ exercices - Vert foncé */
+.activity-level-4 {
+  background: #30D158;
+  border-color: #088201;
+}
+
+.activity-level-4:hover {
+  background: #088201;
+  border-color: #30D158;
+  transform: scale(1.1);
+  box-shadow: 0 0 12px rgba(48, 209, 88, 0.5);
+}
+
+/* ============================================
+   LEGEND - Légende
+   ============================================ */
+.activity-legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.activity-legend-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: #8E8E93;
+}
+
+.activity-legend-squares {
+  display: flex;
+  gap: 4px;
+}
+
+.activity-legend-square {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.activity-legend-square:hover {
+  transform: scale(1.2);
+}
+
+/* Appliquer les mêmes couleurs que les cases */
+.activity-legend-square.activity-level-0 {
+  background: rgba(142, 142, 147, 0.2);
+  border-color: rgba(142, 142, 147, 0.3);
+}
+
+.activity-legend-square.activity-level-1 {
+  background: rgba(48, 209, 88, 0.2);
+  border-color: rgba(48, 209, 88, 0.3);
+}
+
+.activity-legend-square.activity-level-2 {
+  background: rgba(48, 209, 88, 0.4);
+  border-color: rgba(48, 209, 88, 0.5);
+}
+
+.activity-legend-square.activity-level-3 {
+  background: rgba(48, 209, 88, 0.7);
+  border-color: rgba(48, 209, 88, 0.8);
+}
+
+.activity-legend-square.activity-level-4 {
+  background: #30D158;
+  border-color: #088201;
+}
+
+/* ============================================
+   RESPONSIVE - Mobile
+   ============================================ */
+@media (max-width: 375px) {
+  .activity-calendar {
+    padding: 16px;
+  }
+
+  .activity-title {
+    font-size: 14px;
+  }
+
+  .activity-nav-button {
+    width: 28px;
+    height: 28px;
+  }
+
+  .activity-weekday {
+    font-size: 10px;
+  }
+
+  .activity-grid {
+    gap: 3px;
+  }
+
+  .activity-day {
+    border-radius: 3px;
+  }
+
+  .activity-day-number {
+    font-size: 8px;
+  }
+
+  .activity-legend {
+    gap: 6px;
+  }
+
+  .activity-legend-label {
+    font-size: 10px;
+  }
+
+  .activity-legend-square {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+.activity-day:focus-visible,
+.activity-nav-button:focus-visible {
+  outline: 2px solid #30D158;
+  outline-offset: 2px;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.activity-calendar {
+  animation: fadeIn 0.3s ease;
+}

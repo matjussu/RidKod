@@ -91,6 +91,7 @@ export const initializeProgress = async (userId) => {
         correctAnswers: 0,
         incorrectAnswers: 0
       },
+      dailyActivity: {},             // Activité quotidienne (pour calendrier GitHub-style)
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     };
@@ -205,6 +206,15 @@ export const saveExerciseCompletion = async (userId, exerciseData) => {
       incorrectAnswers: currentProgress.stats.incorrectAnswers + (isCorrect ? 0 : 1)
     };
 
+    // Mettre à jour l'activité quotidienne (pour le calendrier GitHub-style)
+    const today = new Date().toISOString().split('T')[0]; // Format: "YYYY-MM-DD"
+    const currentDailyActivity = currentProgress.dailyActivity || {};
+    const todayCount = currentDailyActivity[today] || 0;
+    const updatedDailyActivity = {
+      ...currentDailyActivity,
+      [today]: todayCount + 1
+    };
+
     // Mettre à jour dans Firestore
     await updateDoc(progressRef, {
       totalXP: newTotalXP,
@@ -212,6 +222,7 @@ export const saveExerciseCompletion = async (userId, exerciseData) => {
       levelStats: updatedLevelStats,
       streak: newStreak,
       stats: updatedStats,
+      dailyActivity: updatedDailyActivity,
       updatedAt: serverTimestamp()
     });
 
@@ -321,6 +332,7 @@ export const migrateFromLocalStorage = async (userId) => {
         correctAnswers: 0,
         incorrectAnswers: 0
       },
+      dailyActivity: parsedProgress.dailyActivity || {},
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     };
@@ -369,7 +381,8 @@ export const getLocalProgress = () => {
         completedLevels: [],
         levelStats: {},
         streak: { current: 0, longest: 0 },
-        stats: { totalExercises: 0, correctAnswers: 0, incorrectAnswers: 0 }
+        stats: { totalExercises: 0, correctAnswers: 0, incorrectAnswers: 0 },
+        dailyActivity: {}
       };
     }
     return JSON.parse(progress);
@@ -382,7 +395,8 @@ export const getLocalProgress = () => {
       completedLevels: [],
       levelStats: {},
       streak: { current: 0, longest: 0 },
-      stats: { totalExercises: 0, correctAnswers: 0, incorrectAnswers: 0 }
+      stats: { totalExercises: 0, correctAnswers: 0, incorrectAnswers: 0 },
+      dailyActivity: {}
     };
   }
 };

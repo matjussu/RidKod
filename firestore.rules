@@ -47,20 +47,23 @@ service cloud.firestore {
                     && request.auth.uid == userId
                     && request.resource.data.userId == userId
                     && request.resource.data.totalXP is number
-                    && request.resource.data.level is number
-                    && request.resource.data.completedExercises is list;
+                    && request.resource.data.userLevel is number
+                    && request.resource.data.currentLevel is number;
 
       // Autoriser la mise à jour uniquement si :
       // 1. L'utilisateur est authentifié
       // 2. L'utilisateur modifie SES propres données
       // 3. Le userId ne peut pas être modifié
       // 4. Validation basique des données
+      // 5. dailyActivity est un map (objet) optionnel
       allow update: if request.auth != null
                     && request.auth.uid == userId
                     && request.resource.data.userId == userId
                     && request.resource.data.totalXP >= 0
-                    && request.resource.data.level >= 1
-                    && request.resource.data.level <= 10;
+                    && request.resource.data.userLevel >= 1
+                    && request.resource.data.userLevel <= 10
+                    && (!request.resource.data.keys().hasAny(['dailyActivity'])
+                        || request.resource.data.dailyActivity is map);
 
       // Interdire la suppression (garder historique)
       allow delete: if false;

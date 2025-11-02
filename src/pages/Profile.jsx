@@ -2,11 +2,13 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useProgress } from '../context/ProgressContext';
 import useHaptic from '../hooks/useHaptic';
+import ActivityCalendar from '../components/profile/ActivityCalendar';
+import '../styles/ActivityCalendar.css';
 
 const Profile = () => {
   const navigate = useNavigate();
   const { user, logout, isAuthenticated } = useAuth();
-  const { getStats, getProgressToNextLevel, loading } = useProgress();
+  const { getStats, getProgressToNextLevel, loading, progress } = useProgress();
   const { triggerLight, triggerSuccess } = useHaptic();
 
   const stats = getStats();
@@ -452,6 +454,9 @@ const Profile = () => {
           <div className="stat-label">Streak</div>
         </div>
       </div>
+
+      {/* Activity Calendar */}
+      <ActivityCalendar dailyActivity={progress?.dailyActivity || {}} />
 
       {/* Logout/Login Button */}
       {isAuthenticated ? (
