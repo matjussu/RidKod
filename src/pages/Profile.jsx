@@ -133,7 +133,6 @@ const Profile = () => {
           width: 80px;
           height: 80px;
           border-radius: 50%;
-          background: linear-gradient(135deg, #30D158 0%, #088201 100%);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -142,12 +141,20 @@ const Profile = () => {
           color: #FFFFFF;
           margin: 0 auto 16px;
           box-shadow: 0 8px 24px rgba(48, 209, 88, 0.3);
+          text-transform: uppercase;
         }
 
         .profile-email {
           font-size: 16px;
           font-weight: 700;
           color: #FFFFFF;
+          margin-bottom: 4px;
+        }
+
+        .profile-email-secondary {
+          font-size: 13px;
+          font-weight: 600;
+          color: #8E8E93;
           margin-bottom: 8px;
         }
 
@@ -373,12 +380,26 @@ const Profile = () => {
 
       {/* Header */}
       <div className="profile-header">
-        <div className="profile-avatar">
-          {isAuthenticated ? (user?.email ? user.email[0].toUpperCase() : '?') : '👤'}
+        <div
+          className="profile-avatar"
+          style={{
+            background: isAuthenticated && user?.avatarColor
+              ? user.avatarColor
+              : isAuthenticated
+              ? 'linear-gradient(135deg, #30D158 0%, #088201 100%)'
+              : 'linear-gradient(135deg, #3A3A3C 0%, #2C2C2E 100%)'
+          }}
+        >
+          {isAuthenticated ? (user?.username ? user.username[0].toUpperCase() : (user?.email ? user.email[0].toUpperCase() : '?')) : '👤'}
         </div>
         <div className="profile-email">
-          {isAuthenticated ? (user?.email || 'Utilisateur') : 'Mode invité'}
+          {isAuthenticated ? (user?.username || user?.email || 'Utilisateur') : 'Mode invité'}
         </div>
+        {isAuthenticated && user?.email && user?.username && (
+          <div className="profile-email-secondary">
+            {user.email}
+          </div>
+        )}
         <div className={`profile-status ${!isAuthenticated ? 'profile-guest' : ''}`}>
           {isAuthenticated ? 'Connecté' : 'Non connecté'}
         </div>

@@ -242,6 +242,62 @@
   animation: spin 0.8s linear infinite;
 }
 
+/* Avatar Color Picker */
+.signup-color-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.signup-color-option {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  border: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  outline: none;
+}
+
+.signup-color-option:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.signup-color-option:active {
+  transform: scale(0.95);
+}
+
+.signup-color-option.selected {
+  border-color: #FFFFFF;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+}
+
+.signup-color-option:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.signup-color-option svg {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+@media (max-width: 375px) {
+  .signup-color-grid {
+    gap: 10px;
+  }
+
+  .signup-color-option {
+    border-radius: 10px;
+    border-width: 2px;
+  }
+}
+
 /* Links Section */
 .login-links,
 .signup-links {

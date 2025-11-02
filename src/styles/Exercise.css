@@ -23,7 +23,7 @@
   --radius-lg: 14px;
 
   /* Options Container */
-  --options-max-height: 300px;
+  --options-max-height: 500px;
   --options-grid-gap: 10px;
 
   /* Colors */
@@ -44,12 +44,12 @@
   --safe-area-top: 8px;
   --safe-area-left: 16px;
   --safe-area-right: 16px;
-  --safe-area-bottom: 16px;
+  --safe-area-bottom: 24px;
 
   /* Close Button Positions */
-  --close-button-top: 4px;
-  --close-button-left: 16px;
-  --close-button-padding: 20px;
+  --close-button-top: 0px;
+  --close-button-left: 6px;
+  --close-button-padding: 8px;
 
   /* Progress Container Padding */
   --progress-padding-horizontal: 48px;
@@ -195,13 +195,17 @@ html, body {
 
 /* Content scrollable */
 .content-scrollable {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   padding-top: var(--space-lg);
   padding-left: max(var(--safe-area-left), env(safe-area-inset-left));
   padding-right: max(var(--safe-area-right), env(safe-area-inset-right));
-  padding-bottom: max(env(safe-area-inset-bottom), var(--safe-area-bottom));
+  padding-bottom: max(env(safe-area-inset-bottom), 32px);
   width: 100%;
   box-sizing: border-box;
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* Hide scrollbar */
@@ -254,7 +258,7 @@ html, body {
 
 .options-container.visible {
   opacity: 1;
-  max-height: var(--options-max-height);
+  max-height: none;
   margin-bottom: var(--space-md);
 }
 

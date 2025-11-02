@@ -3,6 +3,37 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Collection de profils utilisateur
+    match /users/{userId} {
+      // Autoriser la lecture uniquement si l'utilisateur lit SON propre profil
+      allow read: if request.auth != null && request.auth.uid == userId;
+
+      // Autoriser la création uniquement si :
+      // 1. L'utilisateur est authentifié
+      // 2. Le document créé a le même userId que l'utilisateur
+      // 3. Les champs obligatoires sont présents
+      allow create: if request.auth != null
+                    && request.auth.uid == userId
+                    && request.resource.data.username is string
+                    && request.resource.data.username.size() >= 3
+                    && request.resource.data.username.size() <= 15
+                    && request.resource.data.avatarColor is string
+                    && request.resource.data.email is string;
+
+      // Autoriser la mise à jour uniquement si :
+      // 1. L'utilisateur est authentifié
+      // 2. L'utilisateur modifie SON propre profil
+      // 3. L'email ne peut pas être modifié
+      allow update: if request.auth != null
+                    && request.auth.uid == userId
+                    && request.resource.data.email == resource.data.email
+                    && request.resource.data.username.size() >= 3
+                    && request.resource.data.username.size() <= 15;
+
+      // Interdire la suppression (garder historique)
+      allow delete: if false;
+    }
+
     // Collection de progression utilisateur
     match /progress/{userId} {
       // Autoriser la lecture uniquement si l'utilisateur lit SES propres données

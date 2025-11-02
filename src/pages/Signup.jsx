@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import useHaptic from '../hooks/useHaptic';
+import { AVATAR_COLORS } from '../services/userService';
 import '../styles/Layout.css';
 import '../styles/Auth.css';
 
@@ -10,9 +11,11 @@ const Signup = () => {
   const { signup, skipAuth } = useAuth();
   const { triggerSuccess, triggerError, triggerLight } = useHaptic();
 
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [avatarColor, setAvatarColor] = useState(AVATAR_COLORS[0].value);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -21,8 +24,20 @@ const Signup = () => {
     setErrorMessage('');
 
     // Validation
-    if (!email || !password || !confirmPassword) {
+    if (!username || !email || !password || !confirmPassword) {
       setErrorMessage('Veuillez remplir tous les champs.');
+      triggerError();
+      return;
+    }
+
+    if (username.length < 3 || username.length > 15) {
+      setErrorMessage('Le pseudo doit contenir entre 3 et 15 caractères.');
+      triggerError();
+      return;
+    }
+
+    if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+      setErrorMessage('Le pseudo ne peut contenir que des lettres, chiffres et underscores.');
       triggerError();
       return;
     }
@@ -41,7 +56,7 @@ const Signup = () => {
 
     setIsLoading(true);
 
-    const result = await signup(email, password);
+    const result = await signup(email, password, username, avatarColor);
 
     if (result.success) {
       triggerSuccess();
@@ -96,6 +111,20 @@ const Signup = () => {
         )}
 
         <div className="signup-input-group">
+          <label htmlFor="username" className="signup-label">Pseudo</label>
+          <input
+            type="text"
+            id="username"
+            className="signup-input"
+            placeholder="Choisis ton pseudo (3-15 caractères)"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            disabled={isLoading}
+            maxLength={15}
+          />
+        </div>
+
+        <div className="signup-input-group">
           <label htmlFor="email" className="signup-label">Email</label>
           <input
             type="email"
@@ -132,6 +161,34 @@ const Signup = () => {
             onChange={(e) => setConfirmPassword(e.target.value)}
             disabled={isLoading}
           />
+        </div>
+
+        {/* Sélecteur couleur avatar */}
+        <div className="signup-input-group">
+          <label className="signup-label">Couleur de ton avatar</label>
+          <div className="signup-color-grid">
+            {AVATAR_COLORS.map((color) => (
+              <button
+                key={color.id}
+                type="button"
+                className={`signup-color-option ${avatarColor === color.value ? 'selected' : ''}`}
+                style={{ background: color.value }}
+                onClick={() => {
+                  setAvatarColor(color.value);
+                  triggerLight();
+                }}
+                disabled={isLoading}
+                aria-label={`Couleur ${color.name}`}
+                title={color.name}
+              >
+                {avatarColor === color.value && (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                )}
+              </button>
+            ))}
+          </div>
         </div>
 
         <button type="submit" className="signup-submit" disabled={isLoading}>

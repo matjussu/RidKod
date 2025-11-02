@@ -6,6 +6,7 @@ import {
   onAuthStateChanged
 } from 'firebase/auth';
 import { auth } from '../config/firebase';
+import { createUserProfile, getUserProfile } from '../services/userService';
 
 // Création du contexte
 const AuthContext = createContext({});
@@ -27,15 +28,31 @@ export const AuthProvider = ({ children }) => {
 
   // Écouter les changements d'état d'authentification
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
-
-      // Sauvegarder dans localStorage pour persistance
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
+        // Charger le profil Firestore
+        const profileResult = await getUserProfile(currentUser.uid);
+
+        if (profileResult.success) {
+          // Merger les données Firebase Auth + Firestore
+          setUser({
+            ...currentUser,
+            username: profileResult.profile.username,
+            avatarColor: profileResult.profile.avatarColor
+          });
+        } else {
+          // Fallback: utiliser seulement les données Firebase Auth
+          setUser(currentUser);
+        }
+
+        // Sauvegarder dans localStorage pour persistance
         localStorage.setItem('hasAccount', 'true');
         localStorage.setItem('userEmail', currentUser.email);
+      } else {
+        setUser(null);
       }
+
+      setLoading(false);
     });
 
     // Cleanup
@@ -43,10 +60,24 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // Inscription
-  const signup = async (email, password) => {
+  const signup = async (email, password, username, avatarColor) => {
     try {
       setError(null);
+
+      // Créer compte Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+      // Créer profil Firestore
+      const profileResult = await createUserProfile(userCredential.user.uid, {
+        username,
+        avatarColor,
+        email
+      });
+
+      if (!profileResult.success) {
+        console.error('Failed to create user profile:', profileResult.error);
+      }
+
       return { success: true, user: userCredential.user };
     } catch (err) {
       let errorMessage = 'Une erreur est survenue lors de l\'inscription.';

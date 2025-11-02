@@ -19,6 +19,7 @@ const AuthButton = () => {
         .auth-button-container {
           display: flex;
           align-items: center;
+          justify-content: center;
           gap: 12px;
           margin-bottom: 20px;
           padding: 0;
@@ -27,12 +28,11 @@ const AuthButton = () => {
         /* User Info */
         .auth-user-info {
           display: flex;
+          flex-direction: column;
           align-items: center;
-          gap: 12px;
-          flex: 1;
+          gap: 8px;
           cursor: pointer;
-          padding: 8px;
-          margin-left: -8px;
+          padding: 12px;
           border-radius: 12px;
           transition: all 0.2s ease;
         }
@@ -49,7 +49,6 @@ const AuthButton = () => {
           width: 40px;
           height: 40px;
           border-radius: 50%;
-          background: linear-gradient(135deg, #30D158 0%, #088201 100%);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -58,41 +57,44 @@ const AuthButton = () => {
           font-size: 18px;
           color: #FFFFFF;
           text-transform: uppercase;
+          flex-shrink: 0;
         }
 
         .auth-user-details {
           display: flex;
           flex-direction: column;
-          gap: 2px;
+          align-items: center;
+          gap: 4px;
         }
 
         .auth-user-email {
           font-family: "JetBrains Mono", monospace;
-          font-size: 14px;
+          font-size: 15px;
           font-weight: 700;
           color: #FFFFFF;
           line-height: 1;
+          text-align: center;
         }
 
         .auth-user-status {
           font-family: "JetBrains Mono", monospace;
-          font-size: 11px;
+          font-size: 12px;
           font-weight: 600;
           color: #30D158;
           line-height: 1;
           text-transform: uppercase;
           letter-spacing: 0.5px;
+          text-align: center;
         }
 
         /* Guest Mode */
         .auth-guest-info {
           display: flex;
+          flex-direction: column;
           align-items: center;
-          gap: 12px;
-          flex: 1;
+          gap: 8px;
           cursor: pointer;
-          padding: 8px;
-          margin-left: -8px;
+          padding: 12px;
           border-radius: 12px;
           transition: all 0.2s ease;
         }
@@ -121,6 +123,7 @@ const AuthButton = () => {
           font-size: 14px;
           font-weight: 700;
           color: #8E8E93;
+          text-align: center;
         }
 
         /* Buttons */
@@ -194,12 +197,17 @@ const AuthButton = () => {
         <>
           {/* Utilisateur connecté */}
           <div className="auth-user-info" onClick={handleProfileClick}>
-            <div className="auth-user-avatar">
-              {user?.email ? user.email[0].toUpperCase() : '?'}
+            <div
+              className="auth-user-avatar"
+              style={{
+                background: user?.avatarColor || 'linear-gradient(135deg, #30D158 0%, #088201 100%)'
+              }}
+            >
+              {user?.username ? user.username[0].toUpperCase() : (user?.email ? user.email[0].toUpperCase() : '?')}
             </div>
             <div className="auth-user-details">
               <div className="auth-user-email">
-                {user?.email?.split('@')[0] || 'Utilisateur'}
+                {user?.username || user?.email?.split('@')[0] || 'Utilisateur'}
               </div>
               <div className="auth-user-status">Voir profil →</div>
             </div>
