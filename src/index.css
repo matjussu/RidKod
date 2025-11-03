@@ -3,9 +3,9 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
+  color-scheme: dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #1A1919;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -24,14 +24,22 @@ a:hover {
 
 html {
   height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: #1A1919;
+  overflow-x: hidden;
 }
 
 body {
   margin: 0;
+  padding: 0;
   min-width: 320px;
-  height: 100vh;
   height: 100%;
   width: 100%;
+  background: #1A1919;
+  overflow-x: hidden;
+  position: relative;
 }
 
 h1 {
@@ -58,15 +66,13 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+/* Force dark mode always */
 @media (prefers-color-scheme: light) {
   :root {
-    color: #D26812;
-    background-color: #ffffff;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #1A1919;
   }
-  a:hover {
-    color: #D26812;
-  }
-  button {
-    background-color: #f9f9f9;
+  html, body {
+    background: #1A1919;
   }
 }
