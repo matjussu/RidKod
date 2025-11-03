@@ -10,7 +10,10 @@
   color: #FFFFFF;
   display: flex;
   flex-direction: column;
-  padding: max(env(safe-area-inset-top), 20px) max(16px, env(safe-area-inset-right)) max(env(safe-area-inset-bottom), 20px) max(16px, env(safe-area-inset-left));
+  padding-top: max(env(safe-area-inset-top), 20px);
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
+  padding-bottom: max(env(safe-area-inset-bottom), 8px);
   max-width: min(428px, 100vw);
   margin: 0 auto;
   width: 100%;

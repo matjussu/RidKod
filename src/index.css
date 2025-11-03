@@ -5,7 +5,7 @@
 
   color-scheme: dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color:none;
+  background-color: #1A1919;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -66,13 +66,15 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-/* Force dark mode always */
 @media (prefers-color-scheme: light) {
   :root {
-    color: rgba(255, 255, 255, 0.87);
-    background-color: #1A1919;
+    color: #D26812;
+    background-color: #ffffff;
   }
-  html, body {
-    background: #1A1919;
+  a:hover {
+    color: #D26812;
+  }
+  button {
+    background-color: #f9f9f9;
   }
 }
