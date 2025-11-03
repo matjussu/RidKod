@@ -96,7 +96,7 @@
 
 .page-title {
   font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 800;
   color: #FFFFFF;
   margin: 0;
@@ -106,12 +106,12 @@
 .title-bracket {
   color: #FF9500;
   font-weight: 800;
-  font-size: 24px;
+  font-size: 26px;
 }
 
 .page-subtitle {
   font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 800;
   color: #FFFFFF;
   margin: 6px 0 0 0;
@@ -121,7 +121,7 @@
 .subtitle-bracket {
   color: #088201;
   font-weight: 800;
-  font-size: 18px;
+  font-size: 20px;
 }
 
 /* Difficulties Grid */
@@ -150,20 +150,7 @@
   animation-delay: 0.7s;
 }
 
-/* Footer */
-.footer {
-  margin-top: auto;
-  padding-top: 20px;
-  padding-bottom: max(env(safe-area-inset-bottom), 16px);
-  color: #8E8E93;
-  font-size: 20px;
-  font-weight: 400;
-  text-align: center;
-  font-family: "Jersey 25", cursive;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.9s forwards;
-}
+
 
 /* Responsive */
 
@@ -215,11 +202,11 @@
   }
 
   .page-title {
-    font-size: 20px;
+    font-size: 22px;
   }
 
   .title-bracket {
-    font-size: 22px;
+    font-size: 24px;
   }
 
   .page-subtitle {
