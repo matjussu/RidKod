@@ -267,10 +267,4 @@
   }
 }
 
-/* Fix Safari iOS */
-@supports (-webkit-touch-callout: none) {
-  .home-container {
-    height: -webkit-fill-available;
-    min-height: -webkit-fill-available;
-  }
-}
+/* Fix Safari iOS - REMOVED: causing 70% height bug */

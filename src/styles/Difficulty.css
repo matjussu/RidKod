@@ -328,14 +328,4 @@
   }
 }
 
-/* Fix Safari iOS et WebKit */
-@supports (-webkit-touch-callout: none) {
-  .difficulty-container {
-    height: -webkit-fill-available;
-    min-height: -webkit-fill-available;
-  }
-
-  body {
-    height: -webkit-fill-available;
-  }
-}
+/* Fix Safari iOS et WebKit - REMOVED: causing 70% height bug */
