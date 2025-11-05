@@ -162,7 +162,7 @@ const Exercise = () => {
 
     setTimeout(() => {
       setShowGlow(false);
-    }, correct ? 600 : 800);
+    }, correct ? 1200 : 1500);
   };
 
   const handleContinue = () => {
