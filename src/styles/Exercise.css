@@ -231,10 +231,9 @@ html, body {
   padding: 8px 4px;
   margin-bottom: var(--space-md);
   overflow-x: auto;
-  overflow-y: auto;
+  overflow-y: visible;
   height: auto;
   min-height: var(--code-height-min);
-  max-height: var(--code-height-max);
   width: 100%;
   min-width: 0;
   max-width: 100%;
@@ -244,9 +243,7 @@ html, body {
   align-items: center;
 }
 
-.code-container.compact {
-  max-height: var(--code-height-max-compact);
-}
+/* Removed .code-container.compact max-height to allow natural expansion */
 
 /* Options Container with Animation */
 .options-container {
