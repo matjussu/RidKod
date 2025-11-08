@@ -14,111 +14,103 @@
       "type": "code_example",
       "language": "python",
       "code": "# Exemple : Afficher 5 fois \"Hello\"\nfor i in range(5):\n    print(\"Hello\")\n\n# Sortie :\n# Hello\n# Hello\n# Hello\n# Hello\n# Hello",
-      "caption": "La boucle for avec range() répète le code 5 fois"
+      "caption": "La boucle for avec range() répète le code 5 fois",
+      "highlight": {
+        "style": "info",
+        "content": "💡 **Astuce** : `range(5)` génère les nombres de 0 à 4 (5 nombres au total). La variable `i` prend ces valeurs successivement à chaque tour de boucle."
+      }
     },
     {
       "id": "section_3",
-      "type": "highlight",
-      "style": "info",
-      "content": "💡 **Astuce** : `range(5)` génère les nombres de 0 à 4 (5 nombres au total). La variable `i` prend ces valeurs successivement à chaque tour de boucle."
-    },
-    {
-      "id": "section_4",
       "type": "exercise",
       "exerciseId": "py_ch3_ex1"
     },
     {
-      "id": "section_5",
+      "id": "section_4",
       "type": "text",
       "title": "La fonction range() en détail",
       "content": "La fonction `range()` est ultra puissante ! Elle peut prendre 3 paramètres :\n\n• `range(stop)` : de 0 à stop-1\n• `range(start, stop)` : de start à stop-1\n• `range(start, stop, step)` : de start à stop-1 avec un pas\n\nExemples concrets :"
     },
     {
-      "id": "section_6",
+      "id": "section_5",
       "type": "code_example",
       "language": "python",
       "code": "# Compter de 1 à 5\nfor i in range(1, 6):\n    print(i)  # 1, 2, 3, 4, 5\n\n# Compter de 2 en 2\nfor i in range(0, 10, 2):\n    print(i)  # 0, 2, 4, 6, 8\n\n# Compter à l'envers\nfor i in range(10, 0, -1):\n    print(i)  # 10, 9, 8, ..., 1",
       "caption": "Différentes façons d'utiliser range()"
     },
     {
-      "id": "section_7",
+      "id": "section_6",
       "type": "exercise",
       "exerciseId": "py_ch3_ex2"
     },
     {
-      "id": "section_8",
+      "id": "section_7",
       "type": "text",
       "title": "Parcourir une liste avec for",
       "content": "La boucle `for` est parfaite pour parcourir tous les éléments d'une liste. Tu peux accéder directement à chaque élément sans utiliser d'index :"
     },
     {
-      "id": "section_9",
+      "id": "section_8",
       "type": "code_example",
       "language": "python",
       "code": "fruits = [\"pomme\", \"banane\", \"orange\"]\n\n# Parcourir directement les éléments\nfor fruit in fruits:\n    print(f\"J'aime les {fruit}s\")\n\n# Sortie :\n# J'aime les pommes\n# J'aime les bananes\n# J'aime les oranges",
-      "caption": "Parcourir une liste sans index"
+      "caption": "Parcourir une liste sans index",
+      "highlight": {
+        "style": "warning",
+        "content": "⚠️ **Attention** : Si tu as besoin de l'index ET de l'élément, utilise `enumerate()` :\n\n```python\nfor index, fruit in enumerate(fruits):\n    print(f\"{index}: {fruit}\")\n```"
+      }
     },
     {
-      "id": "section_10",
-      "type": "highlight",
-      "style": "warning",
-      "content": "⚠️ **Attention** : Si tu as besoin de l'index ET de l'élément, utilise `enumerate()` :\n\n```python\nfor index, fruit in enumerate(fruits):\n    print(f\"{index}: {fruit}\")\n```"
-    },
-    {
-      "id": "section_11",
+      "id": "section_9",
       "type": "exercise",
       "exerciseId": "py_ch3_ex3"
     },
     {
-      "id": "section_12",
+      "id": "section_10",
       "type": "text",
       "title": "La boucle while",
       "content": "La boucle `while` répète des instructions **tant qu'une condition est vraie**. Contrairement à `for`, on ne sait pas à l'avance combien de fois elle va tourner.\n\nC'est utile quand tu attends qu'un événement se produise !"
     },
     {
-      "id": "section_13",
+      "id": "section_11",
       "type": "code_example",
       "language": "python",
       "code": "# Exemple : Compter jusqu'à 3\ncompteur = 0\n\nwhile compteur < 3:\n    print(f\"Compteur : {compteur}\")\n    compteur += 1  # IMPORTANT : incrémenter !\n\nprint(\"Fini !\")\n\n# Sortie :\n# Compteur : 0\n# Compteur : 1\n# Compteur : 2\n# Fini !",
-      "caption": "Une boucle while simple"
+      "caption": "Une boucle while simple",
+      "highlight": {
+        "style": "error",
+        "content": "🚨 **Piège courant** : Si tu oublies d'incrémenter `compteur`, la boucle tourne **à l'infini** ! Assure-toi que ta condition devient fausse à un moment donné."
+      }
     },
     {
-      "id": "section_14",
-      "type": "highlight",
-      "style": "error",
-      "content": "🚨 **Piège courant** : Si tu oublies d'incrémenter `compteur`, la boucle tourne **à l'infini** ! Assure-toi que ta condition devient fausse à un moment donné."
-    },
-    {
-      "id": "section_15",
+      "id": "section_12",
       "type": "exercise",
       "exerciseId": "py_ch3_ex4"
     },
     {
-      "id": "section_16",
+      "id": "section_13",
       "type": "text",
       "title": "Break et Continue",
       "content": "Deux mots-clés puissants pour contrôler tes boucles :\n\n• **`break`** : Arrête complètement la boucle\n• **`continue`** : Saute l'itération actuelle et passe à la suivante\n\nExemples pratiques :"
     },
     {
-      "id": "section_17",
+      "id": "section_14",
       "type": "code_example",
       "language": "python",
       "code": "# break : Arrêter la boucle\nfor i in range(10):\n    if i == 5:\n        break  # Stop dès que i vaut 5\n    print(i)  # 0, 1, 2, 3, 4\n\n# continue : Sauter une itération\nfor i in range(5):\n    if i == 2:\n        continue  # Saute 2\n    print(i)  # 0, 1, 3, 4",
-      "caption": "break vs continue"
+      "caption": "break vs continue",
+      "highlight": {
+        "style": "success",
+        "content": "✅ **Cas d'usage réel** : `break` est super pour chercher un élément dans une liste. Dès que tu le trouves, pas besoin de continuer !\n\n```python\nfor nombre in [1, 5, 8, 12, 3]:\n    if nombre > 10:\n        print(f\"Trouvé : {nombre}\")\n        break\n```"
+      }
     },
     {
-      "id": "section_18",
-      "type": "highlight",
-      "style": "success",
-      "content": "✅ **Cas d'usage réel** : `break` est super pour chercher un élément dans une liste. Dès que tu le trouves, pas besoin de continuer !\n\n```python\nfor nombre in [1, 5, 8, 12, 3]:\n    if nombre > 10:\n        print(f\"Trouvé : {nombre}\")\n        break\n```"
-    },
-    {
-      "id": "section_19",
+      "id": "section_15",
       "type": "exercise",
       "exerciseId": "py_ch3_ex5"
     },
     {
-      "id": "section_20",
+      "id": "section_16",
       "type": "text",
       "title": "Récapitulatif",
       "content": "🎯 **Ce que tu as appris :**\n\n• Utiliser `for` avec `range()` pour répéter du code N fois\n• Parcourir des listes avec `for element in liste`\n• Utiliser `while` pour des boucles conditionnelles\n• Contrôler les boucles avec `break` et `continue`\n\n**Prochaine étape :** Tu vas maintenant pouvoir manipuler des collections de données avec les listes dans le prochain chapitre !"

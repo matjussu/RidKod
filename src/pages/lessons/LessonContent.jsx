@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useProgress } from '../../context/ProgressContext';
+import { useSwipeable } from 'react-swipeable';
 import LessonSection from '../../components/lessons/LessonSection';
 import QuestionCard from '../../components/exercise/QuestionCard';
 import CodeBlock from '../../components/exercise/CodeBlock';
@@ -30,6 +31,7 @@ const LessonContent = () => {
   const [freeInputValue, setFreeInputValue] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+  const [isExplanationExpanded, setIsExplanationExpanded] = useState(false);
 
   const contentRef = useRef(null);
 
@@ -76,6 +78,42 @@ const LessonContent = () => {
     triggerLight();
     navigate(`/lessons/${language}/chapters`);
   };
+
+  // Fonction pour revenir à la section précédente
+  const handlePrevious = () => {
+    if (currentSectionIndex > 0) {
+      // Reset état exercice
+      setIsSubmitted(false);
+      setIsCorrect(false);
+      setSelectedOption(null);
+      setSelectedLine(null);
+      setFreeInputValue('');
+      setCurrentExercise(null);
+      setIsExplanationExpanded(false);
+
+      setCurrentSectionIndex(currentSectionIndex - 1);
+      triggerLight();
+    }
+  };
+
+  // Configuration swipe handlers
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => {
+      // Swipe gauche = section suivante (toujours autorisé, même exercice non complété)
+      if (currentSectionIndex < chapterData.sections.length - 1) {
+        handleContinue();
+      }
+    },
+    onSwipedRight: () => {
+      // Swipe droite = section précédente
+      handlePrevious();
+    },
+    preventScrollOnSwipe: false, // Permettre scroll vertical
+    trackMouse: true, // Debug desktop
+    delta: 80, // Distance minimale 80px pour détecter swipe
+    swipeDuration: 500, // Temps max pour détecter swipe (ms)
+    touchEventOptions: { passive: true } // Performance scroll
+  });
 
   // Gestion du clavier personnalisé
   const handleKeyPress = (key) => {
@@ -156,6 +194,7 @@ const LessonContent = () => {
     setSelectedLine(null);
     setFreeInputValue('');
     setCurrentExercise(null);
+    setIsExplanationExpanded(false);
 
     // Passer à la section suivante
     if (currentSectionIndex < chapterData.sections.length - 1) {
@@ -193,6 +232,8 @@ const LessonContent = () => {
           highlightedLines={exercise.highlightedLines}
           xpGain={exercise.xpGain}
           code={exercise.code}
+          isExplanationExpanded={isExplanationExpanded}
+          onExplanationToggle={() => setIsExplanationExpanded(!isExplanationExpanded)}
         />
 
         <CodeBlock
@@ -217,7 +258,7 @@ const LessonContent = () => {
             {exercise.options.map((option, index) => (
               <OptionButton
                 key={index}
-                option={option}
+                value={option}
                 index={index}
                 isSelected={selectedOption === index}
                 isSubmitted={isSubmitted}
@@ -271,8 +312,7 @@ const LessonContent = () => {
              (exercise.inputType === 'free_input' && freeInputValue.trim() === '') ||
              (exercise.inputType === 'clickable_lines' && selectedLine === null))
           }
-          onValidate={handleValidate}
-          onContinue={handleContinue}
+          onClick={isSubmitted ? handleContinue : handleValidate}
         />
       </div>
     );
@@ -317,8 +357,8 @@ const LessonContent = () => {
         </div>
       </div>
 
-      {/* Content Wrapper */}
-      <div className="lesson-content-wrapper">
+      {/* Content Wrapper avec swipe handlers */}
+      <div {...swipeHandlers} className="lesson-content-wrapper swipeable-wrapper">
         {/* Chapter Title (seulement sur première section) */}
         {currentSectionIndex === 0 && (
           <>
@@ -341,29 +381,99 @@ const LessonContent = () => {
 
         {/* Navigation Buttons (sauf si c'est un exercice non complété) */}
         {currentSection.type !== 'exercise' && (
-          <div className="lesson-navigation-buttons">
-            {currentSectionIndex < chapterData.sections.length - 1 ? (
-              <button className="lesson-next-button" onClick={handleContinue}>
-                Continuer
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="m9 18 6-6-6-6"/>
-                </svg>
-              </button>
-            ) : (
-              <button className="lesson-finish-button" onClick={() => navigate(`/lessons/${language}/chapters`)}>
-                Terminer le chapitre
-              </button>
-            )}
+          <div className="lesson-navigation-container">
+            {/* Swipe hints */}
+            <div className="swipe-hints">
+              {currentSectionIndex > 0 && (
+                <div className="swipe-hint left">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="m15 18-6-6 6-6"/>
+                  </svg>
+                  Swipe
+                </div>
+              )}
+              {currentSectionIndex < chapterData.sections.length - 1 && (
+                <div className="swipe-hint right">
+                  Swipe
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="m9 18 6-6-6-6"/>
+                  </svg>
+                </div>
+              )}
+            </div>
+
+            {/* Boutons navigation */}
+            <div className="lesson-navigation-buttons">
+              {currentSectionIndex < chapterData.sections.length - 1 ? (
+                <button className="lesson-next-button" onClick={handleContinue}>
+                  Continuer
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="m9 18 6-6-6-6"/>
+                  </svg>
+                </button>
+              ) : (
+                <button className="lesson-finish-button" onClick={() => navigate(`/lessons/${language}/chapters`)}>
+                  Terminer le chapitre
+                </button>
+              )}
+            </div>
           </div>
         )}
       </div>
 
       <style>{`
+        /* Swipe Wrapper - Transitions fluides */
+        .swipeable-wrapper {
+          position: relative;
+          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          user-select: none;
+          -webkit-user-select: none;
+        }
+
+        /* Navigation Container */
+        .lesson-navigation-container {
+          margin-top: 24px;
+        }
+
+        /* Swipe Hints */
+        .swipe-hints {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 16px;
+          padding: 0 4px;
+        }
+
+        .swipe-hint {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+          font-size: 12px;
+          font-weight: 600;
+          color: #8E8E93;
+          opacity: 0.6;
+          transition: opacity 0.2s ease;
+        }
+
+        .swipe-hint svg {
+          opacity: 0.5;
+        }
+
+        /* Animation pulse subtile */
+        @keyframes swipePulse {
+          0%, 100% { opacity: 0.6; }
+          50% { opacity: 0.9; }
+        }
+
+        .swipe-hint {
+          animation: swipePulse 2s ease-in-out infinite;
+        }
+
         /* Navigation Buttons */
         .lesson-navigation-buttons {
           display: flex;
           justify-content: flex-end;
-          margin-top: 24px;
           padding-top: 24px;
           border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
@@ -407,13 +517,22 @@ const LessonContent = () => {
         }
 
         .lesson-exercise-options {
-          display: flex;
-          flex-direction: column;
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
           gap: 12px;
         }
 
         /* Responsive */
         @media (max-width: 375px) {
+          .swipe-hint {
+            font-size: 11px;
+          }
+
+          .swipe-hint svg {
+            width: 12px;
+            height: 12px;
+          }
+
           .lesson-next-button,
           .lesson-finish-button {
             font-size: 14px;

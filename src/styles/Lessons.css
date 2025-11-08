@@ -182,13 +182,16 @@
 /* Container principal LessonContent */
 .lesson-content-container {
   min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height pour mobile */
   background: #1A1919;
   color: #FFFFFF;
   padding-bottom: max(env(safe-area-inset-bottom), 24px);
   box-sizing: border-box;
   position: relative;
   overflow-y: auto;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
+  height: 100%;
 }
 
 /* Sticky Progress Bar */

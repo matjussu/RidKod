@@ -43,6 +43,14 @@ const LessonSection = ({
             {section.caption && (
               <p className="lesson-code-caption">{section.caption}</p>
             )}
+            {/* Highlight intégré si présent */}
+            {section.highlight && (
+              <div className={`lesson-section-highlight lesson-highlight-${section.highlight.style || 'info'}`}>
+                <div className="lesson-highlight-content">
+                  {formatText(section.highlight.content)}
+                </div>
+              </div>
+            )}
           </div>
         );
 
@@ -182,7 +190,7 @@ const styles = `
 
   .lesson-bold {
     font-weight: 800;
-    color: #000000;
+    color: inherit; /* Hérite de la couleur du parent (blanc dans highlights, noir dans text) */
   }
 
   .lesson-inline-code {
