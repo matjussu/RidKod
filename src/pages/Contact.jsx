@@ -78,10 +78,17 @@ const Contact = () => {
     setTerminalLines(prev => [...prev, { text, type, timestamp: Date.now() }]);
   };
 
-  // Auto-scroll to bottom
+  // Auto-scroll to bottom only when not actively typing
   useEffect(() => {
-    terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [terminalLines]);
+    // Only scroll if user is not currently typing (step 5 or 6 = sending/success)
+    // Or when moving to a new step (currentInput is empty)
+    if (step >= 5 || currentInput === '') {
+      terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      // When typing, keep the input field visible
+      inputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, [terminalLines, step, currentInput]);
 
   // Focus input when step changes
   useEffect(() => {
