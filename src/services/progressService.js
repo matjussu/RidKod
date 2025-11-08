@@ -14,6 +14,12 @@ import { db } from '../config/firebase';
  *     1: { correct: 8, incorrect: 2, xp: 80, completedAt: timestamp },
  *     2: { correct: 10, incorrect: 0, xp: 100, completedAt: timestamp }
  *   },
+ *   lessonProgress: {                     // Progression des leçons
+ *     python: {
+ *       py_ch_001: { completed: true, exercisesCompleted: ['ex1', 'ex2'], lastCompletedAt: timestamp },
+ *       py_ch_002: { completed: false, exercisesCompleted: ['ex1'], lastCompletedAt: timestamp }
+ *     }
+ *   },
  *   streak: {
  *     current: number,
  *     longest: number,
@@ -81,6 +87,7 @@ export const initializeProgress = async (userId) => {
       currentLevel: 1,               // Commence au niveau 1 d'exercices
       completedLevels: [],           // Aucun niveau complété
       levelStats: {},                // Pas de stats de niveau encore
+      lessonProgress: {},            // Progression des leçons (vide au départ)
       streak: {
         current: 0,
         longest: 0,

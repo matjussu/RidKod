@@ -1,0 +1,70 @@
+{
+  "language": "python",
+  "chapters": [
+    {
+      "id": "py_ch_001",
+      "title": "Variables & Types",
+      "description": "Découvre comment stocker des données en Python avec les variables et types de base",
+      "difficulty": 1,
+      "estimatedTime": 12,
+      "icon": "🔢",
+      "order": 1,
+      "unlockRequirement": null,
+      "totalExercises": 5,
+      "xpReward": 50,
+      "tags": ["variables", "types", "print", "input"]
+    },
+    {
+      "id": "py_ch_002",
+      "title": "Conditions & Booléens",
+      "description": "Apprends à prendre des décisions avec if, elif et else",
+      "difficulty": 1,
+      "estimatedTime": 15,
+      "icon": "🔀",
+      "order": 2,
+      "unlockRequirement": "py_ch_001",
+      "totalExercises": 5,
+      "xpReward": 60,
+      "tags": ["if", "elif", "else", "booleans", "comparison"]
+    },
+    {
+      "id": "py_ch_003",
+      "title": "Boucles & Itérations",
+      "description": "Maîtrise les boucles for et while pour répéter des actions",
+      "difficulty": 1,
+      "estimatedTime": 18,
+      "icon": "🔁",
+      "order": 3,
+      "unlockRequirement": "py_ch_002",
+      "totalExercises": 5,
+      "xpReward": 70,
+      "tags": ["for", "while", "range", "break", "continue"]
+    },
+    {
+      "id": "py_ch_004",
+      "title": "Listes & Méthodes",
+      "description": "Manipule des collections de données avec les listes Python",
+      "difficulty": 2,
+      "estimatedTime": 20,
+      "icon": "📋",
+      "order": 4,
+      "unlockRequirement": "py_ch_003",
+      "totalExercises": 6,
+      "xpReward": 80,
+      "tags": ["lists", "append", "remove", "slicing", "methods"]
+    },
+    {
+      "id": "py_ch_005",
+      "title": "Fonctions & Paramètres",
+      "description": "Crée ton propre code réutilisable avec les fonctions",
+      "difficulty": 2,
+      "estimatedTime": 22,
+      "icon": "⚙️",
+      "order": 5,
+      "unlockRequirement": "py_ch_004",
+      "totalExercises": 6,
+      "xpReward": 90,
+      "tags": ["functions", "def", "return", "parameters", "arguments"]
+    }
+  ]
+}

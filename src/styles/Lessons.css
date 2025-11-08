@@ -1,0 +1,535 @@
+/* ========================================
+   LESSONS.CSS - Système de leçons complet
+   Styles pour LessonLanguage, LessonChapters, LessonContent
+   ======================================== */
+
+/* ========================================
+   1. LESSON LANGUAGE PAGE
+   ======================================== */
+
+/* Container principal LessonLanguage */
+.lesson-language-container {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  background: #1A1919;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  padding-top: max(env(safe-area-inset-top), 20px);
+  padding-left: max(20px, env(safe-area-inset-left));
+  padding-right: max(20px, env(safe-area-inset-right));
+  padding-bottom: max(env(safe-area-inset-bottom), 8px);
+  max-width: min(428px, 100vw);
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  opacity: 0;
+  transform: scale(1.05);
+  animation: fadeInScale 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+}
+
+/* Back Button */
+.lesson-back-button {
+  position: absolute;
+  top: max(env(safe-area-inset-top), 8px);
+  left: max(16px, env(safe-area-inset-left));
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.lesson-back-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.lesson-back-button:active {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(0.95);
+}
+
+.lesson-back-button svg {
+  color: #FFFFFF;
+  width: 24px;
+  height: 24px;
+}
+
+/* Header Section */
+.lesson-header-section {
+  text-align: center;
+  margin-top: 80px;
+  margin-bottom: 48px;
+  align-self: center;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+}
+
+.lesson-page-title {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 24px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.lesson-title-bracket {
+  color: #FF9500;
+  font-weight: 800;
+  font-size: 26px;
+}
+
+.lesson-page-subtitle {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 18px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 8px 0 0 0;
+  line-height: 1.2;
+}
+
+.lesson-subtitle-bracket {
+  color: #088201;
+  font-weight: 800;
+  font-size: 20px;
+}
+
+/* Languages Grid */
+.lesson-languages-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 32px;
+  align-self: center;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+}
+
+/* Footer */
+.lesson-footer {
+  margin-top: auto;
+  padding-top: 20px;
+  color: #8E8E93;
+  font-size: 22px;
+  font-weight: 400;
+  text-align: center;
+  font-family: "Jersey 25", cursive;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s forwards;
+}
+
+/* ========================================
+   2. LESSON CHAPTERS PAGE
+   ======================================== */
+
+/* Container principal LessonChapters */
+.lesson-chapters-container {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  background: #1A1919;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  padding-top: max(env(safe-area-inset-top), 20px);
+  padding-left: max(20px, env(safe-area-inset-left));
+  padding-right: max(20px, env(safe-area-inset-right));
+  padding-bottom: max(env(safe-area-inset-bottom), 24px);
+  max-width: min(428px, 100vw);
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  opacity: 0;
+  transform: scale(1.05);
+  animation: fadeInScale 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+}
+
+/* Chapters Grid */
+.lesson-chapters-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  margin-bottom: 32px;
+  align-self: center;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+}
+
+/* ========================================
+   3. LESSON CONTENT PAGE
+   ======================================== */
+
+/* Container principal LessonContent */
+.lesson-content-container {
+  min-height: 100vh;
+  background: #1A1919;
+  color: #FFFFFF;
+  padding-bottom: max(env(safe-area-inset-bottom), 24px);
+  box-sizing: border-box;
+  position: relative;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Sticky Progress Bar */
+.lesson-progress-bar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(26, 25, 25, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 16px 20px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.lesson-progress-bar-back {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.lesson-progress-bar-back:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.lesson-progress-bar-back:active {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(0.95);
+}
+
+.lesson-progress-bar-back svg {
+  color: #FFFFFF;
+  width: 20px;
+  height: 20px;
+}
+
+.lesson-progress-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lesson-progress-text {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: #8E8E93;
+  margin: 0;
+}
+
+.lesson-progress-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.lesson-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #088201 0%, #30D158 100%);
+  border-radius: 3px;
+  transition: width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Content Wrapper */
+.lesson-content-wrapper {
+  max-width: min(428px, 100vw);
+  margin: 0 auto;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Chapter Title */
+.lesson-chapter-title {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 26px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+}
+
+.lesson-chapter-subtitle {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 15px;
+  font-weight: 500;
+  color: #8E8E93;
+  margin: 0 0 24px 0;
+  line-height: 1.4;
+}
+
+/* ========================================
+   4. ANIMATIONS
+   ======================================== */
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes unlockShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+/* ========================================
+   5. RESPONSIVE - LESSON LANGUAGE
+   ======================================== */
+
+/* iPhone 14/15 Pro Max */
+@media (max-width: 430px) {
+  .lesson-language-container {
+    padding-left: max(18px, env(safe-area-inset-left));
+    padding-right: max(18px, env(safe-area-inset-right));
+  }
+
+  .lesson-back-button {
+    left: max(18px, env(safe-area-inset-left));
+  }
+}
+
+/* iPhone 14/15 Pro */
+@media (max-width: 393px) {
+  .lesson-language-container {
+    padding-left: max(18px, env(safe-area-inset-left));
+    padding-right: max(18px, env(safe-area-inset-right));
+  }
+
+  .lesson-back-button {
+    left: max(16px, env(safe-area-inset-left));
+  }
+}
+
+/* iPhone SE, iPhone 12/13 mini - 375px */
+@media (max-width: 375px) {
+  .lesson-language-container,
+  .lesson-chapters-container {
+    padding-left: max(14px, env(safe-area-inset-left));
+    padding-right: max(14px, env(safe-area-inset-right));
+    padding-top: max(env(safe-area-inset-top), 16px);
+  }
+
+  .lesson-back-button {
+    left: max(14px, env(safe-area-inset-left));
+    top: max(env(safe-area-inset-top), 6px);
+    padding: 10px;
+  }
+
+  .lesson-back-button svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .lesson-header-section {
+    margin-bottom: 35px;
+  }
+
+  .lesson-page-title {
+    font-size: 22px;
+  }
+
+  .lesson-title-bracket {
+    font-size: 24px;
+  }
+
+  .lesson-page-subtitle {
+    font-size: 16px;
+  }
+
+  .lesson-subtitle-bracket {
+    font-size: 18px;
+  }
+
+  .lesson-languages-grid,
+  .lesson-chapters-grid {
+    gap: 14px;
+  }
+
+  .lesson-content-wrapper {
+    padding: 20px 14px;
+    gap: 20px;
+  }
+
+  .lesson-chapter-title {
+    font-size: 22px;
+  }
+
+  .lesson-chapter-subtitle {
+    font-size: 14px;
+  }
+}
+
+/* Très petits écrans - iPhone SE 1ère gen */
+@media (max-width: 320px) {
+  .lesson-language-container,
+  .lesson-chapters-container {
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+    padding-top: max(env(safe-area-inset-top), 14px);
+  }
+
+  .lesson-back-button {
+    left: max(12px, env(safe-area-inset-left));
+    top: max(env(safe-area-inset-top), 4px);
+    padding: 8px;
+  }
+
+  .lesson-back-button svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .lesson-header-section {
+    margin-bottom: 30px;
+  }
+
+  .lesson-page-title {
+    font-size: 20px;
+  }
+
+  .lesson-title-bracket {
+    font-size: 22px;
+  }
+
+  .lesson-page-subtitle {
+    font-size: 15px;
+  }
+
+  .lesson-subtitle-bracket {
+    font-size: 17px;
+  }
+
+  .lesson-languages-grid,
+  .lesson-chapters-grid {
+    gap: 12px;
+  }
+
+  .lesson-content-wrapper {
+    padding: 16px 12px;
+    gap: 16px;
+  }
+
+  .lesson-chapter-title {
+    font-size: 20px;
+  }
+
+  .lesson-chapter-subtitle {
+    font-size: 13px;
+  }
+}
+
+/* Mode paysage */
+@media (orientation: landscape) {
+  .lesson-header-section {
+    margin-top: 40px;
+    margin-bottom: 25px;
+  }
+
+  .lesson-back-button {
+    top: max(env(safe-area-inset-top), 6px);
+    padding: 8px;
+  }
+
+  .lesson-back-button svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .lesson-page-title {
+    font-size: 20px;
+  }
+
+  .lesson-title-bracket {
+    font-size: 22px;
+  }
+
+  .lesson-page-subtitle {
+    font-size: 15px;
+  }
+
+  .lesson-subtitle-bracket {
+    font-size: 17px;
+  }
+
+  .lesson-languages-grid,
+  .lesson-chapters-grid {
+    gap: 12px;
+    margin-bottom: 15px;
+  }
+
+  .lesson-content-wrapper {
+    padding: 20px;
+    gap: 20px;
+  }
+}

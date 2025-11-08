@@ -10,6 +10,9 @@ import Language from './pages/Language';
 import Difficulty from './pages/Difficulty';
 import Profile from './pages/Profile';
 import Contact from './pages/Contact';
+import LessonLanguage from './pages/lessons/LessonLanguage';
+import LessonChapters from './pages/lessons/LessonChapters';
+import LessonContent from './pages/lessons/LessonContent';
 
 // Composant pour gérer la route principale "/"
 const RootRoute = () => {
@@ -40,8 +43,13 @@ const App = () => {
           <Route path="/difficulty" element={<Difficulty />} />
           <Route path="/exercise" element={<Exercise />} />
 
+          {/* Routes Lessons */}
+          <Route path="/lessons" element={<Navigate to="/lessons/language" replace />} />
+          <Route path="/lessons/language" element={<LessonLanguage />} />
+          <Route path="/lessons/:language/chapters" element={<LessonChapters />} />
+          <Route path="/lessons/:language/:chapterId" element={<LessonContent />} />
+
           {/* Routes en développement */}
-          <Route path="/lessons" element={<div style={{color: 'white', padding: '20px', textAlign: 'center'}}>Leçons - En cours de développement</div>} />
           <Route path="/challenges" element={<div style={{color: 'white', padding: '20px', textAlign: 'center'}}>Challenges - En cours de développement</div>} />
           <Route path="/ai-understanding" element={<div style={{color: 'white', padding: '20px', textAlign: 'center'}}>Comprendre l'IA - En cours de développement</div>} />
 

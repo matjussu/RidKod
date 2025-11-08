@@ -144,29 +144,42 @@ readcod-app/
 ├── public/
 ├── src/
 │   ├── components/
-│   │   ├── layout/
-│   │   │   ├── Header.jsx          ✅ FAIT - Header avec close button et ProgressBar
-│   │   │   └── ProgressBar.jsx     ✅ FAIT - Barre de progression avec current/total
-│   │   ├── exercise/
+│   │   ├── exercise/               ✅ Composants exercices (6 composants)
 │   │   │   ├── QuestionCard.jsx    ✅ FAIT - Question + feedback + SVG icons (React.memo)
 │   │   │   ├── CodeBlock.jsx       ✅ FAIT - Syntax highlighting Python + clickable lines (React.memo)
 │   │   │   ├── OptionButton.jsx    ✅ FAIT - États visuels (React.memo)
 │   │   │   ├── ActionButton.jsx    ✅ FAIT - Validation/Continue (React.memo)
-│   │   │   ├── CustomKeyboard.jsx  ✅ FAIT - Clavier numérique/prédéfini pour free_input 🆕
+│   │   │   ├── CustomKeyboard.jsx  ✅ FAIT - Clavier numérique/prédéfini pour free_input
 │   │   │   └── LevelComplete.jsx   ✅ FAIT - Feedback après 10 exercices (lazy loaded)
-│   │   ├── common/
+│   │   ├── common/                 ✅ Composants communs (2 composants)
 │   │   │   ├── FeedbackGlow.jsx    ✅ FAIT - Effets visuels bordures écran
 │   │   │   └── ExitConfirmModal.jsx ✅ FAIT - Modal confirmation sortie
-│   │   └── auth/                   ✅ NOUVEAU - Composants authentification
-│   │       └── AuthButton.jsx      ✅ FAIT - Bouton auth dans header
+│   │   ├── auth/                   ✅ Composants authentification (1 composant)
+│   │   │   └── AuthButton.jsx      ✅ FAIT - Bouton auth dans header
+│   │   ├── language/               ✅ Composants sélection langage (1 composant)
+│   │   │   └── LanguageCard.jsx    ✅ FAIT - Card langage réutilisable
+│   │   ├── difficulty/             ✅ Composants difficulté (1 composant)
+│   │   │   └── DifficultyCard.jsx  ✅ FAIT - Card difficulté réutilisable
+│   │   ├── profile/                ✅ Composants profil (1 composant)
+│   │   │   └── ActivityCalendar.jsx ✅ FAIT - Calendar heatmap activité
+│   │   └── lessons/                ✅ Composants leçons (3 composants) 🆕
+│   │       ├── ChapterCard.jsx     ✅ FAIT - Card chapitre avec progression
+│   │       ├── LessonSection.jsx   ✅ FAIT - Section leçon (text/code/exercise/tip/warning)
+│   │       └── ProgressCircle.jsx  ✅ FAIT - Progress circle indicator
 │   ├── pages/
-│   │   ├── Welcome.jsx             ✅ NOUVEAU - Page onboarding
-│   │   ├── Login.jsx               ✅ NOUVEAU - Page connexion
-│   │   ├── Signup.jsx              ✅ NOUVEAU - Page inscription
-│   │   ├── Home.jsx                ✅ FAIT - Page d'accueil avec menu iOS-style + auth
-│   │   ├── Language.jsx            ✅ FAIT - Sélection langage
-│   │   ├── Difficulty.jsx          ✅ FAIT - Sélection difficulté
-│   │   └── Exercise.jsx            ✅ FAIT - Page exercice complète avec navigation
+│   │   ├── Welcome.jsx             ✅ FAIT - Page onboarding (310 lignes inline CSS)
+│   │   ├── Login.jsx               ✅ FAIT - Page connexion (Auth.css)
+│   │   ├── Signup.jsx              ✅ FAIT - Page inscription avec avatar picker (Auth.css)
+│   │   ├── Home.jsx                ✅ FAIT - Page d'accueil avec menu iOS-style (Home.css)
+│   │   ├── Profile.jsx             ✅ FAIT - Stats utilisateur + activity calendar (375 lignes inline CSS)
+│   │   ├── Language.jsx            ✅ FAIT - Sélection langage (Language.css)
+│   │   ├── Difficulty.jsx          ✅ FAIT - Sélection difficulté (Difficulty.css)
+│   │   ├── Exercise.jsx            ✅ FAIT - Page exercice complète (Exercise.css, 428 lignes)
+│   │   ├── Contact.jsx             ✅ FAIT - Terminal-style contact form (Contact.css) ⚠️ Email TODO
+│   │   └── lessons/                ✅ NOUVEAU - Module Leçons (3 pages) 🆕
+│   │       ├── LessonLanguage.jsx  ✅ FAIT - Sélection langage leçons (Lessons.css)
+│   │       ├── LessonChapters.jsx  ✅ FAIT - Liste chapitres + progression (Lessons.css) ⚠️ Lock disabled
+│   │       └── LessonContent.jsx   ✅ FAIT - Contenu leçon + exercices (Lessons.css + 60 lignes inline)
 │   ├── assets/                     ✅ FAIT - Logos et icônes langages
 │   │   ├── long_logo.png           ✅ Logo horizontal ReadCod
 │   │   ├── full_logo.png           ✅ Logo complet ReadCod
@@ -180,7 +193,11 @@ readcod-app/
 │   ├── hooks/
 │   │   └── useHaptic.js            ✅ FAIT - Hook vibration mobile
 │   ├── data/
-│   │   └── exercises.json          ✅ FAIT - 30 exercices Python (4 types, 3 inputTypes) 🆕
+│   │   ├── exercises.json          ✅ FAIT - 50 exercices Python (30 Easy + 10 Medium + 10 Hard) 🆕
+│   │   └── lessons/                ✅ NOUVEAU - Contenu leçons JSON 🆕
+│   │       └── python/
+│   │           ├── chapters.json   ✅ FAIT - Liste chapitres Python
+│   │           └── chapter-3.json  ✅ FAIT - Contenu chapitre 3 (autres chapitres TODO)
 │   ├── context/                    ✅ FAIT - Contexts pour state global
 │   │   ├── AuthContext.jsx         ✅ Authentification (login/signup/logout)
 │   │   └── ProgressContext.jsx     ✅ Progression utilisateur (XP/niveaux/stats)
@@ -189,7 +206,8 @@ readcod-app/
 │   ├── constants/                  ✅ NOUVEAU - Constants centralisées 🆕
 │   │   └── exerciseLayout.js       ✅ FAIT - 50+ constants + helper functions
 │   ├── services/                   ✅ FAIT - Services métier
-│   │   └── progressService.js      ✅ FAIT - Gestion progression (localStorage + Firestore)
+│   │   ├── progressService.js      ✅ FAIT - Gestion progression (localStorage + Firestore)
+│   │   └── userService.js          ✅ FAIT - Gestion utilisateurs (AVATAR_COLORS, user data)
 │   ├── tests/                      ✅ NOUVEAU - Tests unitaires (97 tests)
 │   │   ├── __mocks__/              ✅ FAIT - Mocks Firebase
 │   │   ├── components/             ✅ FAIT - Tests composants (42 tests)
@@ -203,7 +221,10 @@ readcod-app/
 │   │   ├── Language.css            ✅ FAIT - 240 lignes (externalisé) 🆕
 │   │   ├── Difficulty.css          ✅ FAIT - 250 lignes (externalisé) 🆕
 │   │   ├── Auth.css                ✅ FAIT - 240 lignes (Login/Signup)
-│   │   └── Layout.css              ✅ FAIT - 310 lignes (Profile/Header)
+│   │   ├── Layout.css              ✅ FAIT - 310 lignes (Profile/Header)
+│   │   ├── Contact.css             ✅ FAIT - Terminal-style form 🆕
+│   │   ├── Lessons.css             ✅ FAIT - Module leçons (partagé 3 pages) 🆕
+│   │   └── ActivityCalendar.css    ✅ FAIT - Calendar component (Profile.jsx) 🆕
 │   ├── App.jsx                     ✅ FAIT - Router avec routes principales
 │   ├── App.css                     ✅ FAIT - Styles de base
 │   ├── index.css                   ✅ FAIT - Reset CSS global
@@ -236,6 +257,106 @@ readcod-app/
 ├── PRODUCTION_CHECKLIST.md         ✅ NOUVEAU - Checklist pré/post déploiement 🆕
 └── PWA_SETUP.md                    ✅ NOUVEAU - Documentation PWA complète 🆕
 ```
+
+---
+
+## 📄 PAGES DÉTAILLÉES (12 pages - 10 complètes)
+
+### ✅ Pages Authentification (3 pages)
+1. **Welcome.jsx** `/` - Onboarding
+   - Logo + 3 boutons (Create Account, Login, Skip)
+   - Animations (fadeIn, slideUp, scaleIn)
+   - 310 lignes inline CSS
+   - Safe area insets iOS
+
+2. **Login.jsx** `/login` - Connexion
+   - Form email/password
+   - Validation + error messages
+   - Loading state
+   - Auth.css + Layout.css
+
+3. **Signup.jsx** `/signup` - Inscription
+   - Username validation (3-15 chars)
+   - Email + password confirmation
+   - Avatar color picker (grid)
+   - Auth.css + Layout.css
+
+### ✅ Pages Principales (4 pages)
+4. **Home.jsx** `/home` - Dashboard
+   - 4 menu cards (Leçons, Entraînements, Challenges, AI)
+   - AuthButton (login/profile)
+   - Contact button + footer
+   - Home.css + Layout.css
+
+5. **Profile.jsx** `/profile` - Stats utilisateur
+   - Avatar (initial + color ou emoji invité)
+   - Level card (XP + progress bar)
+   - 4 stats cards (total, correct, incorrect, streak)
+   - ActivityCalendar (daily activity)
+   - 375 lignes inline CSS + ActivityCalendar.css
+   - Logout/Login button
+
+6. **Language.jsx** `/language` - Training
+   - 4 language cards (Python, HTML, Java, C++)
+   - Python disponible, autres "coming soon"
+   - Language.css + Layout.css
+
+7. **Difficulty.jsx** `/difficulty` - Training
+   - 3 difficulty cards (Easy, Medium, Hard)
+   - Gradients (green, orange, red)
+   - XP rewards (+10, +20, +30)
+   - Difficulty.css + Layout.css
+
+### ✅ Pages Exercices (1 page - LA PLUS COMPLEXE)
+8. **Exercise.jsx** `/exercise` - Interface exercice
+   - 3 input types (options, free_input, clickable_lines)
+   - 4 exercise types
+   - Progress bar (1-10)
+   - CustomKeyboard + CodeBlock
+   - Explanation toggle + highlighting
+   - FeedbackGlow + ExitConfirmModal
+   - LevelComplete (lazy loaded)
+   - Exercise.css (466 lignes, 70+ variables)
+   - Firestore sync automatique
+
+### ✅ Pages Utilitaires (1 page)
+9. **Contact.jsx** `/contact` - Contact form
+   - Terminal-style design unique
+   - Form (name, email, type, message)
+   - FormSubmit.co integration
+   - Typewriter effect success
+   - Command cards (GitHub, Twitter, Discord)
+   - Contact.css
+   - ⚠️ **TODO ligne 79** : Email à configurer
+
+### ✅ Module Leçons (3 pages)
+10. **LessonLanguage.jsx** `/lessons/language`
+    - 4 language cards (idem Language.jsx)
+    - Python → chapters, autres "coming soon"
+    - Lessons.css
+
+11. **LessonChapters.jsx** `/lessons/:language/chapters`
+    - Chargement chapters.json
+    - Chapter cards (title, desc, icon, difficulty, progress)
+    - Lock system (unlock requirements)
+    - Shake animation locked
+    - Lessons.css
+    - ⚠️ **TODO lignes 28-40** : Lock désactivé (test mode)
+
+12. **LessonContent.jsx** `/lessons/:language/:chapterId`
+    - Chargement chapter-X.json
+    - Progress bar sections
+    - Multiple section types (text, code, exercise, tip, warning)
+    - Exercise integration (3 input types)
+    - XP rewards + Firestore sync
+    - Auto-scroll sections
+    - Lessons.css + 60 lignes inline
+    - ⚠️ **TODO ligne 167** : Alert → modal completion
+    - ⚠️ **Seulement chapitre 3** disponible
+
+### ❌ Pages Placeholder (2 routes - À implémenter)
+13. **Challenges** `/challenges` - Inline div App.jsx ligne 53
+14. **AI Understanding** `/ai-understanding` - Inline div App.jsx ligne 54
 
 ---
 
@@ -314,12 +435,12 @@ readcod-app/
 6. **Clickable CodeBlock** - Clic sur lignes + feedback vert/rouge ✅
 
 **Architecture & Code**
-7. **Composants modulaires** - 11 composants React réutilisables ✅
-8. **Système de routing** - React Router avec 12 routes ✅
+7. **Composants modulaires** - 15 composants React réutilisables organisés en 6 dossiers ✅
+8. **Système de routing** - React Router avec 15 routes configurées ✅
 9. **Context API** - AuthContext + ProgressContext ✅
-10. **Performance** - React.memo, lazy loading, optimisations ✅
+10. **Performance** - React.memo (4 composants), lazy loading (LevelComplete), optimisations ✅
 11. **Tests unitaires** - 97 tests (100% réussite) Vitest + RTL ✅
-12. **CSS externalisé** - 6 fichiers CSS (Home, Language, Difficulty, Auth, Layout, Exercise) ✅
+12. **CSS externalisé** - 9 fichiers CSS organisés (~2300 lignes) ✅
 
 **Design & UX**
 13. **Syntax highlighting** - Python custom avec coloration précise ✅
@@ -355,14 +476,17 @@ readcod-app/
 37. **CSS layout mobile** - Résoudre problème dimensionnement iPhone (70% height) ⚠️
 
 ### ❌ TODO (Prochaines features)
-38. **Pages manquantes** - Leçons, Challenges, AI Understanding, Contact
-39. **Graphiques progression** - Chart.js dans Profile
-40. **Streak system** - Compteur jours consécutifs avancé
-41. **Badges/achievements** - Système de récompenses
-42. **OAuth** - Connexion Google/GitHub
-43. **Reset password** - Mot de passe oublié
-44. **Multiple langages** - JavaScript, Java, C++
-45. **Domaine custom** - readcod.app ou autre
+38. **Pages placeholder** - Challenges, AI Understanding (2 routes à implémenter)
+39. **Contact.jsx** - Remplacer email FormSubmit.co (ligne 79)
+40. **LessonChapters.jsx** - Réactiver système de verrouillage chapitres (ligne 28-40)
+41. **LessonContent.jsx** - Créer chapitres 1, 2, 4, 5+ (seulement chapitre 3 disponible)
+42. **Graphiques progression** - Chart.js dans Profile
+43. **Streak system** - Compteur jours consécutifs avancé
+44. **Badges/achievements** - Système de récompenses
+45. **OAuth** - Connexion Google/GitHub
+46. **Reset password** - Mot de passe oublié
+47. **Multiple langages** - JavaScript, Java, C++
+48. **Domaine custom** - readcod.app ou autre
 
 ---
 
@@ -476,24 +600,29 @@ export default MyComponent;
 - [x] ✅ 30 exercices avec 4 types et 3 inputTypes
 - **✅ 3 modes d'input complets : options, free_input, clickable_lines**
 
-### Phase 3 : Pages manquantes ⚠️ PARTIEL
-- [x] ✅ Page Home avec menu iOS
-- [x] ✅ Page Exercise complète (3 modes d'input)
-- [x] ✅ Page Profile avec stats utilisateur
-- [x] ✅ Page Language avec icônes langages
-- [x] ✅ Page Difficulty avec sélection niveau
-- [x] ✅ Pages auth (Welcome, Login, Signup)
-- [ ] ❌ Page Leçons (route existe, contenu à créer)
-- [ ] ❌ Page Challenges (route existe, contenu à créer)
-- [ ] ❌ Page AI Understanding (route existe, contenu à créer)
-- [ ] ❌ Page Contact (route existe, contenu à créer)
+### Phase 3 : Pages ✅ TERMINÉ (10/12 pages)
+- [x] ✅ Page Welcome (onboarding, 310 lignes inline CSS)
+- [x] ✅ Page Login (authentification, Auth.css)
+- [x] ✅ Page Signup (inscription + avatar picker, Auth.css)
+- [x] ✅ Page Home (menu iOS avec 4 cartes, Home.css)
+- [x] ✅ Page Profile (stats + activity calendar, 375 lignes inline CSS)
+- [x] ✅ Page Language (sélection langage, Language.css)
+- [x] ✅ Page Difficulty (sélection difficulté, Difficulty.css)
+- [x] ✅ Page Exercise (interface complète 3 modes input, Exercise.css)
+- [x] ✅ Page Contact (terminal-style form, Contact.css) ⚠️ Email TODO ligne 79
+- [x] ✅ Module Leçons (3 pages : LessonLanguage, LessonChapters, LessonContent) ⚠️ Lock disabled + 1 seul chapitre
+- [ ] ❌ Page Challenges (placeholder div dans App.jsx)
+- [ ] ❌ Page AI Understanding (placeholder div dans App.jsx)
 
-### Phase 4 : Contenu - Plus d'exercices ⚠️ URGENT
+### Phase 4 : Contenu - Exercices ✅ DISPONIBLE (50 exercices)
 - [x] ✅ 30 exercices Python niveau Easy (difficulté 1)
-- [ ] ❌ 30 exercices Python niveau Medium (difficulté 2)
-- [ ] ❌ 30 exercices Python niveau Hard (difficulté 3)
+- [x] ✅ 10 exercices Python niveau Medium (difficulté 2)
+- [x] ✅ 10 exercices Python niveau Hard (difficulté 3)
+- [x] ✅ 4 types d'exercices (predict_output, find_error, trace_execution, concept_understanding)
+- [x] ✅ 3 modes d'input (options, free_input, clickable_lines)
 - [ ] ❌ Support JavaScript (nouveau langage)
-- **⚠️ Actuellement seulement 3 niveaux de 10 exercices Easy**
+- [ ] ❌ Support Java, C++, HTML/CSS
+- **✅ 50 exercices Python disponibles (5 niveaux complets)**
 
 ### Phase 5 : Fonctionnalités avancées
 - [x] ✅ Système de progression XP/Niveaux
@@ -539,59 +668,71 @@ export default MyComponent;
 
 ---
 
-## 🐛 BUGS CONNUS & LIMITATIONS
+## 🐛 BUGS CONNUS & ISSUES
 
-### 🔴 BUG CRITIQUE - Layout Mobile iPhone
+### 🔴 CRITIQUE - Layout Mobile iPhone (EN COURS)
 
-**Problème identifié :** Sur iPhone 16, les pages Home/Language/Difficulty n'occupent que 70% de la hauteur d'écran (contenu collé en haut, 30% d'espace vide en bas).
+**Problème :** Pages Home/Language/Difficulty occupent 70% hauteur écran (30% vide en bas) sur iPhone 16.
 
 **Pages affectées :**
-- ✅ Home.jsx - CSS externalisé dans Home.css
-- ✅ Language.jsx - CSS externalisé dans Language.css
-- ✅ Difficulty.jsx - CSS externalisé dans Difficulty.css
+- Home.jsx (Home.css)
+- Language.jsx (Language.css)
+- Difficulty.jsx (Difficulty.css)
 
-**Pages fonctionnelles (référence) :**
-- ✅ Login.jsx / Signup.jsx - Auth.css fonctionne correctement (100% height)
+**Pages OK (référence) :**
+- Login.jsx / Signup.jsx (Auth.css fonctionne à 100% height)
 
-**Tentatives de correction :**
-1. ❌ Augmentation vertical spacing (margin-bottom) - AUCUN EFFET
-2. ❌ Suppression `align-items: center` + ajout `align-self: center` - PAS ENCORE TESTÉ SUR DEVICE
-
-**Hypothèses en cours :**
-- Problème spécifique iOS Safari avec flexbox
-- `min-height: 100vh` ne fonctionne pas correctement
-- Besoin d'utiliser `height: 100dvh` (dynamic viewport height) pour iOS
-
-**Status :** En attente de tests après push du commit c3f0576
+**Hypothèse :** iOS Safari flexbox issue, besoin `height: 100dvh` au lieu de `min-height: 100vh`
 
 ---
 
-### ⚠️ Limitations Contenu
-- **50 exercices disponibles** : 30 Easy + 10 Medium + 10 Hard ✅
-- **Seulement Python** : Pas encore JavaScript, Java, C++
+### ⚠️ HAUTE PRIORITÉ - TODOs Code
 
-### ⚠️ Code & Performance
-- **CSS externalisé** : Home.css, Language.css, Difficulty.css créés ✅
-- **Layout mobile** : Problème dimensionnement iPhone (contenu 70% height au lieu de 100%) ⚠️
-- **Header component** : Inutilisé dans Exercise.jsx (code dupliqué)
+1. **Contact.jsx ligne 79** - Remplacer `YOUR_EMAIL@example.com` par email FormSubmit.co réel
+2. **LessonChapters.jsx lignes 28-40** - Système de verrouillage chapitres désactivé (TEST MODE) - À réactiver avant production
+3. **LessonContent.jsx ligne 167-168** - Remplacer `alert()` par modal de completion propre
 
-### ⚠️ Configuration Production
-- **Icônes PWA manquantes** : 8 tailles à générer (voir public/icons/README.md)
-- **Firestore Rules** : Créées mais à déployer (firebase deploy --only firestore:rules)
-- **Routes manquantes** : 4 pages affichent "En cours de développement"
-- **Pas encore déployé** : Configuration prête, déploiement à faire
+---
+
+### ⚠️ MOYENNE PRIORITÉ - Contenu Manquant
+
+4. **Routes placeholder** - 2 pages à implémenter :
+   - `/challenges` (App.jsx ligne 53)
+   - `/ai-understanding` (App.jsx ligne 54)
+5. **Leçons Python** - Seulement chapitre 3 disponible, créer chapitres 1, 2, 4, 5+
+6. **Contact.jsx** - Links GitHub/Twitter pointent vers domaines génériques
+
+---
+
+### ⚠️ BASSE PRIORITÉ - Optimisations
+
+7. **Inline styles** - Welcome.jsx (310 lignes) et Profile.jsx (375 lignes) pourraient être externalisés
+8. **Header component** - Inutilisé dans Exercise.jsx (code dupliqué)
+9. **Exercise.jsx** - State management complexe (refactoring possible)
+
+---
+
+### 📦 Configuration Production
+
+- **Icônes PWA** - 8 tailles à générer (voir public/icons/README.md)
+- **Firestore Rules** - Créées mais à déployer (`firebase deploy --only firestore:rules`)
+- **Vercel** - Premier déploiement à faire (variables environnement)
 
 ## 💡 NOTES TECHNIQUES
 
-### 📊 Statistiques Projet
-- **50+ fichiers** JSX/JS/CSS/JSON/Config 🆕
-- **11 composants** React réutilisables
-- **8 pages** complètes
-- **2 contexts** (Auth + Progress)
-- **1 service** (progressService)
+### 📊 Statistiques Projet (Mise à jour complète)
+- **70+ fichiers** JSX/JS/CSS/JSON/Config
+- **15 composants** React réutilisables (6 dossiers : exercise, common, auth, language, difficulty, profile, lessons)
+- **12 pages** créées (10 complètes, 2 placeholders)
+- **15 routes** configurées dans React Router
+- **2 contexts** (AuthContext + ProgressContext)
+- **2 services** (progressService + userService)
 - **1 hook** custom (useHaptic)
-- **6 fichiers** de tests (97 tests)
-- **16 fichiers** Markdown documentation 🆕
+- **9 fichiers CSS** externalisés (~2300 lignes total)
+- **6 fichiers** de tests (97 tests, 100% réussite)
+- **19 fichiers** Markdown documentation (incluant PAGES_STATUS.md, PROJECT_SNAPSHOT.md, DOCS_INDEX.md) 🆕
+- **50 exercices** Python (JSON : exercises.json)
+- **1 chapitre** de leçon complet (JSON : chapter-3.json)
 
 ### 🎯 État Technique
 - **Plateforme production-ready** : App prête pour déploiement 🆕
@@ -608,11 +749,13 @@ export default MyComponent;
 - **Accessibility** : Touch targets 44px+, navigation clavier
 - **Sécurité** : Firestore Rules, variables environnement, validation formulaires 🆕
 
-### ⚠️ Limitations Actuelles
+### ⚠️ Limitations & TODOs Actuels
+- **Layout mobile** : Bug 70% height sur Home/Language/Difficulty (iPhone 16)
+- **Contact form** : Email FormSubmit.co à configurer (ligne 79)
+- **Leçons** : Lock system désactivé (test mode) + 1 seul chapitre disponible
+- **Routes placeholder** : Challenges + AI Understanding (2 pages)
 - **Icônes PWA** : À générer (8 tailles)
-- **Layout mobile** : Problème dimensionnement iPhone 16 (contenu 70% au lieu de 100%)
-- **Routes manquantes** : 4 pages placeholder (Leçons, Challenges, AI, Contact)
-- **Déploiement** : App déployée sur Vercel mais bugs dimensionnement mobile
+- **Déploiement** : Firestore Rules à déployer + premier push Vercel
 
 ## 🔧 COMMANDES UTILES
 ```bash
@@ -659,34 +802,97 @@ find src -name "*.jsx"  # Lister composants
 
 ---
 
-## 📖 DOCUMENTATION FIREBASE
+## 📖 DOCUMENTATION COMPLÈTE
 
-### Authentification
-1. **[QUICKSTART_AUTH.md](QUICKSTART_AUTH.md)** - ⚡ Démarrage rapide en 5 minutes
-2. **[FIREBASE_SETUP.md](FIREBASE_SETUP.md)** - 📝 Guide complet configuration Firebase
-3. **[AUTH_IMPLEMENTATION.md](AUTH_IMPLEMENTATION.md)** - 🔧 Documentation technique détaillée
+**[DOCS_INDEX.md](DOCS_INDEX.md)** - 📚 Index complet de toute la documentation (19 fichiers organisés) 🆕
 
-### Firestore & Sécurité 🆕
-4. **[FIRESTORE_SECURITY.md](FIRESTORE_SECURITY.md)** - 🔒 Règles de sécurité Firestore
+### 📋 Vue d'ensemble rapide
+**[PROJECT_SNAPSHOT.md](PROJECT_SNAPSHOT.md)** - ⚡ Snapshot complet du projet en 1 page (métriques, status, issues, next actions) 🆕
 
-### Tests
-5. **[TESTING.md](TESTING.md)** - 🧪 Guide tests unitaires
-6. **[TEST_RESULTS.md](TEST_RESULTS.md)** - 📊 Résultats tests (97 tests)
+### 🏗️ Architecture & Structure
+1. **[PAGES_STATUS.md](PAGES_STATUS.md)** - 📄 État détaillé des 12 pages (10 complètes, 2 TODO) 🆕
 
-### Refactoring
-7. **[REFACTORING_EXERCISE.md](REFACTORING_EXERCISE.md)** - 🔧 Rapport refactoring Exercise.jsx
+### 🔐 Authentification
+2. **[QUICKSTART_AUTH.md](QUICKSTART_AUTH.md)** - ⚡ Démarrage rapide en 5 minutes
+3. **[FIREBASE_SETUP.md](FIREBASE_SETUP.md)** - 📝 Guide complet configuration Firebase
+4. **[AUTH_IMPLEMENTATION.md](AUTH_IMPLEMENTATION.md)** - 🔧 Documentation technique détaillée
 
-### Roadmap & Planning
-8. **[ROADMAP.md](ROADMAP.md)** - 🗺️ Roadmap détaillée prochaines tâches
-9. **[PROGRESS_SYSTEM.md](PROGRESS_SYSTEM.md)** - 📊 Documentation système progression
+### 🔒 Firestore & Sécurité
+5. **[FIRESTORE_SECURITY.md](FIRESTORE_SECURITY.md)** - 🔒 Règles de sécurité Firestore
 
-### Production & Déploiement 🆕
-10. **[DEPLOYMENT.md](DEPLOYMENT.md)** - 🚀 Guide déploiement complet (Firestore + PWA + Vercel)
-11. **[PRODUCTION_CHECKLIST.md](PRODUCTION_CHECKLIST.md)** - ✅ Checklist pré/post déploiement
-12. **[PWA_SETUP.md](PWA_SETUP.md)** - 📱 Documentation PWA complète
+### 🧪 Tests
+6. **[TESTING.md](TESTING.md)** - 🧪 Guide tests unitaires
+7. **[TEST_RESULTS.md](TEST_RESULTS.md)** - 📊 Résultats tests (97 tests)
+8. **[HOWTO_TESTS.md](HOWTO_TESTS.md)** - 🛠️ Guide pratique tests
+
+### 🔧 Refactoring
+9. **[REFACTORING_EXERCISE.md](REFACTORING_EXERCISE.md)** - 🔧 Rapport refactoring Exercise.jsx
+
+### 🗺️ Roadmap & Planning
+10. **[ROADMAP.md](ROADMAP.md)** - 🗺️ Roadmap détaillée prochaines tâches
+11. **[PROGRESS_SYSTEM.md](PROGRESS_SYSTEM.md)** - 📊 Documentation système progression
+12. **[IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)** - 📝 Résumé implémentation features
+
+### 🚀 Production & Déploiement
+13. **[DEPLOYMENT.md](DEPLOYMENT.md)** - 🚀 Guide déploiement complet (Firestore + PWA + Vercel)
+14. **[PRODUCTION_CHECKLIST.md](PRODUCTION_CHECKLIST.md)** - ✅ Checklist pré/post déploiement
+15. **[PWA_SETUP.md](PWA_SETUP.md)** - 📱 Documentation PWA complète
+
+### 🐛 Debug & Historique
+16. **[DEBUG_FIRESTORE.md](DEBUG_FIRESTORE.md)** - 🔍 Debug Firestore (historique)
 
 ---
 
-**Dernière mise à jour :** 1 novembre 2025
-**Version :** 1.0.0-rc (Release Candidate - Bug fixes en cours)
-**Status :** ⚠️ Déployé avec bugs - CSS externalisé + Problème layout mobile iPhone
+---
+
+## 📋 RÉSUMÉ ÉTAT ACTUEL
+
+### ✅ Ce qui fonctionne (83% complet)
+- **12 pages créées** (10 complètes + 2 placeholders)
+- **15 routes** configurées
+- **50 exercices Python** (3 niveaux)
+- **Module Leçons** fonctionnel (3 pages)
+- **Firebase Auth + Firestore** opérationnels
+- **Tests unitaires** (97 tests, 100%)
+- **PWA configuré** (Service Worker, manifest)
+- **9 CSS files** organisés (~2300 lignes)
+
+### ⚠️ TODOs Critiques
+1. **Bug layout mobile** - Home/Language/Difficulty (70% height iPhone)
+2. **Contact.jsx** - Email FormSubmit.co à configurer
+3. **LessonChapters** - Lock system désactivé (test mode)
+4. **Completion modal** - Remplacer alert() par modal propre
+
+### 📦 Avant Production
+- Générer icônes PWA (8 tailles)
+- Déployer Firestore Rules
+- Implémenter 2 pages placeholder (Challenges, AI Understanding)
+- Créer plus de chapitres de leçons
+
+---
+
+**Dernière mise à jour :** 7 janvier 2025
+**Version :** 1.0.0-rc2 (Release Candidate 2)
+**Status :** ✅ 83% complet - 10/12 pages opérationnelles - TODOs identifiés
+
+---
+
+## 🎯 ACTION IMMÉDIATE
+
+**📋 POUR COMPRENDRE LE PROJET EN 5 MIN :**
+→ **[PROJECT_SNAPSHOT.md](PROJECT_SNAPSHOT.md)** - Vue d'ensemble complète (status, métriques, issues, next actions)
+
+**📄 POUR DÉTAILS PAGES :**
+→ **[PAGES_STATUS.md](PAGES_STATUS.md)** - État détaillé de toutes les pages
+
+**🐛 POUR ISSUES & TODOs :**
+→ Section "BUGS CONNUS & ISSUES" ci-dessus
+
+---
+
+**Prochaines tâches critiques :**
+1. 🔴 Fix bug layout mobile (Home, Language, Difficulty) - 70% height issue
+2. ⚠️ Contact.jsx ligne 79 - Email FormSubmit.co
+3. ⚠️ LessonChapters lignes 28-40 - Réactiver lock system
+4. ⚠️ LessonContent lignes 167-168 - Modal completion
+5. 📦 Implémenter 2 pages placeholder (Challenges, AI Understanding)

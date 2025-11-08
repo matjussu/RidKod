@@ -1,717 +1,499 @@
-/* ============================================
-   CONTACT.CSS - Terminal Contact Page
-   Design spectaculaire avec animations
-   ============================================ */
+/* ===================================
+   CONTACT PAGE - TERMINAL INTER ACTIF
+   Terminal progressif épuré style classique
+   =================================== */
 
-/* ============================================
-   CSS VARIABLES - Design System
-   ============================================ */
-:root {
-  /* Terminal Colors */
-  --terminal-bg: #000000;
-  --terminal-border: #FF9500;
-  --terminal-glow: rgba(255, 149, 0, 0.3);
-
-  /* Syntax Highlighting */
-  --terminal-key: #FF9500;       /* Orange - property names */
-  --terminal-string: #30D158;    /* Green - string values */
-  --terminal-comment: #8E8E93;   /* Gray - comments */
-  --terminal-prompt: #0A84FF;    /* Blue - $ prompt */
-  --terminal-command: #FFFFFF;   /* White - commands */
-  --terminal-error: #FF453A;     /* Red - errors */
-
-  /* Spacing */
-  --contact-padding: 24px;
-  --terminal-padding: 20px;
-  --section-gap: 40px;
-
-  /* Animation Timing */
-  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-spring: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* ============================================
-   CONTAINER - Full Screen Layout
-   ============================================ */
+/* Container */
 .contact-container {
-  height: 100vh;
-  height: 100%;
   min-height: 100vh;
-  min-height: -webkit-fill-available;
-  width: 100%;
-  background: var(--bg-primary, #1A1919);
+  background: #0d0d0d;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  padding: var(--contact-padding);
-  padding-top: max(env(safe-area-inset-top), 20px);
-  padding-bottom: max(env(safe-area-inset-bottom), 20px);
-  overflow-y: auto;
-  gap: var(--section-gap);
-}
-
-/* ============================================
-   BACK BUTTON - Red X (like other pages)
-   ============================================ */
-.contact-back-button {
-  position: absolute;
-  top: max(env(safe-area-inset-top), 8px);
-  left: 8px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 12px;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  z-index: 10;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.contact-back-button:hover {
-  transform: scale(1.1);
-}
-
-.contact-back-button:active {
-  transform: scale(0.95);
-}
-
-.contact-back-button svg {
-  color: var(--color-error, #FF453A);
-  width: 24px;
-  height: 24px;
-}
-
-/* ============================================
-   HEADER - Title & Subtitle
-   ============================================ */
-.contact-header {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 32px;
-}
-
-.contact-title {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 24px;
-  font-weight: 800;
-  color: #FFFFFF;
-  margin: 0;
-}
-
-.contact-title-prompt {
-  color: var(--terminal-prompt);
-  margin-right: 8px;
-}
-
-.contact-subtitle {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--terminal-comment);
-  margin: 0;
-}
-
-.contact-cursor {
-  display: inline-block;
-  width: 8px;
-  height: 16px;
-  background: var(--terminal-border);
-  margin-right: 4px;
-  animation: cursorBlink 1.2s infinite;
-}
-
-@keyframes cursorBlink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
-}
-
-/* ============================================
-   TERMINAL FORM - Main Container
-   ============================================ */
-.contact-terminal {
-  background: var(--terminal-bg);
-  border: 2px solid var(--terminal-border);
-  border-radius: 16px;
-  padding: var(--terminal-padding);
-  box-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.4),
-    0 0 40px var(--terminal-glow),
-    inset 0 1px 0 rgba(255, 149, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
   position: relative;
-  overflow: hidden;
 }
 
-.contact-terminal::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    var(--terminal-border) 50%,
-    transparent 100%
-  );
-  opacity: 0.5;
-}
-
-/* ============================================
-   TERMINAL LINES - Code Syntax
-   ============================================ */
-.terminal-line {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--terminal-command);
-  line-height: 1.6;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.terminal-input-line {
-  min-height: 40px;
-  align-items: center;
-}
-
-.terminal-textarea-line {
-  min-height: auto;
-  align-items: flex-start;
-}
-
-.terminal-prompt {
-  color: var(--terminal-prompt);
-  margin-right: 8px;
-  font-weight: 800;
-}
-
-.terminal-command {
-  color: var(--terminal-command);
-}
-
-.terminal-indent {
-  width: 16px;
-  flex-shrink: 0;
-}
-
-.terminal-key {
-  color: var(--terminal-key);
-  margin-right: 4px;
-}
-
-.terminal-string {
-  color: var(--terminal-string);
-}
-
-.terminal-comma {
-  color: var(--terminal-command);
-  margin-left: 2px;
-}
-
-/* ============================================
-   FORM INPUTS - Inline Terminal Style
-   ============================================ */
-.terminal-input,
-.terminal-select,
-.terminal-textarea {
-  background: transparent;
-  border: none;
-  color: var(--terminal-string);
-  font-family: "JetBrains Mono", monospace;
-  font-size: 15px;
-  font-weight: 600;
-  outline: none;
-  padding: 0;
-  margin: 0 4px;
-  flex: 1;
-  min-width: 120px;
-}
-
-.terminal-input::placeholder,
-.terminal-textarea::placeholder {
-  color: rgba(48, 209, 88, 0.5);
-  font-style: italic;
-}
-
-.terminal-input:focus,
-.terminal-select:focus,
-.terminal-textarea:focus {
-  color: #FFFFFF;
-}
-
-.terminal-input:disabled,
-.terminal-select:disabled,
-.terminal-textarea:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Select Dropdown */
-.terminal-select {
-  cursor: pointer;
-  appearance: none;
-  background-image: none;
-}
-
-.terminal-select option {
-  background: var(--terminal-bg);
-  color: var(--terminal-string);
-  font-family: "JetBrains Mono", monospace;
-  font-weight: 600;
-}
-
-/* Textarea */
-.terminal-textarea {
-  resize: none;
+/* Terminal Window (macOS-style) */
+.terminal-window {
   width: 100%;
-  max-width: 100%;
-  margin-top: 4px;
-  line-height: 1.6;
-  min-height: 60px;
-}
-
-/* Character Counter */
-.terminal-char-count {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--terminal-comment);
-  margin-top: 4px;
-  text-align: right;
-  transition: color var(--transition-fast);
-}
-
-.terminal-char-count.warning {
-  color: var(--terminal-border);
-}
-
-.terminal-char-count.error {
-  color: var(--terminal-error);
-}
-
-/* ============================================
-   CURSOR BLINK ANIMATION
-   ============================================ */
-.terminal-cursor-blink {
-  display: inline-block;
-  width: 2px;
-  height: 18px;
-  background: var(--terminal-string);
-  margin-left: 2px;
-  animation: cursorBlink 1s infinite;
-}
-
-/* ============================================
-   ERROR MESSAGE
-   ============================================ */
-.terminal-error {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--terminal-error);
-  margin-top: 12px;
-  padding: 12px;
-  background: rgba(255, 69, 58, 0.1);
-  border: 1px solid rgba(255, 69, 58, 0.3);
+  max-width: 800px;
+  background: #1a1a1a;
   border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  margin-top: 20px;
+  margin-bottom: 20px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Fullscreen mode */
+.terminal-window.terminal-fullscreen {
+  max-width: 95vw;
+}
+
+.terminal-window.terminal-fullscreen .terminal-body {
+  max-height: 80vh;
+}
+
+/* Terminal Header (traffic lights macOS) */
+.terminal-header {
+  background: #2a2a2a;
+  padding: 12px 16px;
   display: flex;
   align-items: center;
+  border-bottom: 1px solid #333;
+}
+
+.terminal-buttons {
+  display: flex;
   gap: 8px;
-  animation: errorShake 0.5s ease;
+  margin-right: 16px;
 }
 
-.terminal-error-icon {
-  font-size: 16px;
-}
-
-@keyframes errorShake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  75% { transform: translateX(4px); }
-}
-
-/* ============================================
-   EXECUTE BUTTON - Spectacular
-   ============================================ */
-.contact-execute-button {
-  margin-top: 16px;
-  width: 100%;
-  height: 56px;
-  background: linear-gradient(135deg, var(--terminal-border) 0%, #FF8800 100%);
+.terminal-button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
   border: none;
-  border-radius: 12px;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 14px;
-  font-weight: 800;
-  color: #FFFFFF;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
   cursor: pointer;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.15s ease;
+  padding: 0;
+}
+
+.terminal-button-close {
+  background: #ff5f56;
+}
+
+.terminal-button-minimize {
+  background: #ffbd2e;
+}
+
+.terminal-button-maximize {
+  background: #27c93f;
+}
+
+/* Symbol inside buttons (hidden by default) */
+.terminal-button-symbol {
+  display: none;
+  font-size: 9px;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.7);
+  line-height: 1;
+  user-select: none;
+}
+
+/* Show symbols on parent hover */
+.terminal-buttons:hover .terminal-button-symbol {
+  display: block;
+}
+
+/* Hover effects */
+.terminal-button:hover {
+  filter: brightness(1.1);
+}
+
+.terminal-button-close:hover {
+  background: #ff5f56;
+}
+
+.terminal-button-minimize:hover {
+  background: #ffbd2e;
+}
+
+.terminal-button-maximize:hover {
+  background: #27c93f;
+}
+
+/* Active state */
+.terminal-button:active {
+  transform: scale(0.9);
+  filter: brightness(0.9);
+}
+
+.terminal-title {
+  color: #938e8e;
+  font-size: 13px;
+  font-weight: 500;
+  flex: 1;
+  text-align: center;
+  margin-right: 60px; /* Compensate buttons */
+}
+
+/* Terminal Body */
+.terminal-body {
+  background: #000;
+  min-height: 400px;
+  max-height: 600px;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+/* Custom Scrollbar */
+.terminal-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.terminal-body::-webkit-scrollbar-track {
+  background: #0d0d0d;
+}
+
+.terminal-body::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+
+.terminal-body::-webkit-scrollbar-thumb:hover {
+  background: #444;
+}
+
+/* Terminal Output */
+.terminal-output {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Terminal Lines (différents types) */
+.terminal-line {
+  display: flex;
+  align-items: flex-start;
   gap: 8px;
-  transition: all var(--transition-smooth);
-  box-shadow:
-    0 4px 15px rgba(255, 149, 0, 0.4),
-    0 0 20px rgba(255, 149, 0, 0.2);
-  position: relative;
-  overflow: hidden;
+  margin-bottom: 4px;
+  color: #09ac00;
+  font-weight: 400;
 }
 
-.contact-execute-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.3) 50%,
-    transparent 100%
-  );
-  transition: left 0.5s ease;
+.terminal-line-system {
+  color: #888;
 }
 
-.contact-execute-button:hover::before {
-  left: 100%;
+.terminal-line-output {
+  color: #09ac00;
 }
 
-.contact-execute-button:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    0 6px 20px rgba(255, 149, 0, 0.5),
-    0 0 30px rgba(255, 149, 0, 0.3);
+.terminal-line-question {
+  color: #f09c00;
+  font-weight: 600;
 }
 
-.contact-execute-button:active {
-  transform: scale(0.98);
+.terminal-line-input {
+  color: #fff;
 }
 
-.contact-execute-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
+.terminal-line-success {
+  color: #09ac00;
+  font-weight: 600;
 }
 
-.execute-icon {
-  font-size: 18px;
-  font-weight: 800;
+.terminal-line-error {
+  color: #ff0000;
+  font-weight: 600;
 }
 
-.execute-spinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #FFFFFF;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* ============================================
-   OUTPUT SECTION - Typewriter Effect
-   ============================================ */
-.contact-output {
-  background: var(--terminal-bg);
-  border: 2px solid var(--terminal-string);
-  border-radius: 16px;
-  padding: var(--terminal-padding);
-  box-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.4),
-    0 0 40px rgba(48, 209, 88, 0.2);
-  animation: outputFadeIn 0.5s ease;
-}
-
-@keyframes outputFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.output-header {
+.terminal-line-separator {
   margin-bottom: 12px;
 }
 
-.output-title {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 14px;
+/* Terminal Prompt ($, ?, !) */
+.terminal-prompt {
+  color: #09ac00;
   font-weight: 700;
-  color: var(--terminal-comment);
+  flex-shrink: 0;
+  min-width: 16px;
 }
 
-.output-content {
+/* Active Input Line (ligne actuelle) */
+.terminal-line-active {
   display: flex;
-  flex-direction: column;
+  align-items: flex-start;
   gap: 8px;
+  margin-top: 8px;
 }
 
-.output-line {
-  font-family: "JetBrains Mono", monospace;
+/* Terminal Input (texte simple) */
+.terminal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
   font-size: 14px;
-  font-weight: 600;
-  color: var(--terminal-string);
+  font-weight: 400;
+  padding: 0;
+  caret-color: transparent; /* Hide default cursor */
+}
+
+.terminal-input::placeholder {
+  color: #555;
+  font-style: italic;
+}
+
+/* Terminal Textarea (message multiline) */
+.terminal-textarea {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 0;
+  resize: vertical;
+  min-height: 80px;
   line-height: 1.6;
-  animation: typewriter 0.3s ease;
+  caret-color: #09ac00; /* Green cursor that follows text */
 }
 
-@keyframes typewriter {
-  from {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-  to {
+.terminal-textarea::placeholder {
+  color: #555;
+  font-style: italic;
+}
+
+/* Terminal Cursor (clignotant) */
+.terminal-cursor {
+  color: #09ac00;
+  font-weight: 700;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 50% {
     opacity: 1;
-    transform: translateX(0);
+  }
+  50.01%, 100% {
+    opacity: 0;
   }
 }
 
-/* ============================================
-   COMMAND CARDS - Alternative Options
-   ============================================ */
+/* Helper Text (instructions pour l'utilisateur) */
+.contact-helper {
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.contact-helper p {
+  color: #888;
+  font-size: 13px;
+  margin: 0;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  display: inline-block;
+}
+
+/* Command Cards (liens alternatifs) */
 .contact-commands {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  width: 100%;
+  max-width: 800px;
+  margin-top: 16px;
+  padding-top: 0;
 }
 
 .commands-title {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--terminal-comment);
-}
-
-.commands-comment {
-  color: var(--terminal-comment);
+  color: #888;
+  font-size: 13px;
+  margin-bottom: 12px;
+  text-align: center;
+  font-weight: 500;
 }
 
 .commands-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
 }
 
+/* Command Card */
 .command-card {
-  background: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%);
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
+  gap: 8px;
   cursor: pointer;
-  transition: all var(--transition-smooth);
+  transition: all 0.2s ease;
   position: relative;
-  overflow: hidden;
-}
-
-.command-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg,
-    rgba(255, 149, 0, 0.1) 0%,
-    transparent 100%
-  );
-  opacity: 0;
-  transition: opacity var(--transition-smooth);
-}
-
-.command-card:hover::before {
-  opacity: 1;
 }
 
 .command-card:hover {
-  transform: translateY(-4px) scale(1.02);
-  border-color: var(--terminal-border);
-  box-shadow:
-    0 8px 20px rgba(0, 0, 0, 0.3),
-    0 0 20px rgba(255, 149, 0, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
 }
 
 .command-card:active {
-  transform: translateY(-2px) scale(1);
+  transform: translateY(0);
 }
 
 .command-card-disabled {
-  opacity: 0.4;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
 .command-card-disabled:hover {
-  transform: none;
+  background: rgba(255, 255, 255, 0.05);
   border-color: rgba(255, 255, 255, 0.1);
-  box-shadow: none;
-}
-
-.command-text {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 13px;
-  font-weight: 700;
-  color: #FFFFFF;
-  text-align: center;
-}
-
-.command-badge {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 10px;
-  font-weight: 800;
-  color: var(--terminal-border);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  background: rgba(255, 149, 0, 0.1);
-  padding: 4px 8px;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 149, 0, 0.3);
+  transform: none;
 }
 
 .command-icon {
-  color: rgba(255, 255, 255, 0.6);
-  transition: all var(--transition-smooth);
+  color: #ffffff;
+  margin-bottom: 4px;
 }
 
-.command-card:hover .command-icon {
-  color: var(--terminal-border);
-  transform: scale(1.1);
-}
-
-/* ============================================
-   FOOTER HINT
-   ============================================ */
-.contact-footer {
-  display: flex;
-  justify-content: center;
-  margin-top: auto;
-  padding-top: 12px;
-}
-
-.footer-hint {
-  font-family: "JetBrains Mono", monospace;
+.command-card span {
+  color: #fff;
   font-size: 12px;
-  font-weight: 600;
-  color: var(--terminal-comment);
-  text-align: center;
-  font-style: italic;
+  font-weight: 500;
 }
 
-/* ============================================
-   RESPONSIVE - Mobile Optimizations
-   ============================================ */
-@media (max-width: 375px) {
-  :root {
-    --contact-padding: 16px;
-    --terminal-padding: 12px;
-    --section-gap: 20px;
+.command-badge {
+  position: absolute;
+  top: 14px;
+  right: 8px;
+  background: #ff9500;
+  color: #000;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 768px) {
+  .contact-container {
+    padding: 16px;
   }
 
-  .contact-title {
-    font-size: 20px;
+  .terminal-window {
+    margin-top: 50px;
   }
 
-  .contact-subtitle {
-    font-size: 12px;
+  .terminal-body {
+    min-height: 300px;
+    max-height: 500px;
+    padding: 12px;
   }
 
-  .terminal-line {
+  .terminal-output {
     font-size: 13px;
   }
 
   .terminal-input,
-  .terminal-select,
   .terminal-textarea {
     font-size: 13px;
-    min-width: 100px;
-  }
-
-  .contact-execute-button {
-    height: 52px;
-    font-size: 12px;
   }
 
   .commands-grid {
     grid-template-columns: 1fr;
+    gap: 8px;
   }
 
   .command-card {
-    padding: 14px;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 12px;
   }
 
-  .command-text {
+  .command-icon {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-close-button {
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .terminal-window {
+    margin-top: 45px;
+    border-radius: 6px;
+  }
+
+  .terminal-header {
+    padding: 10px 12px;
+  }
+
+  .terminal-title {
     font-size: 12px;
   }
+
+  .terminal-body {
+    padding: 10px;
+  }
+
+  .terminal-output {
+    font-size: 12px;
+  }
+
+  .terminal-input,
+  .terminal-textarea {
+    font-size: 12px;
+  }
+
+  .contact-helper p {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .commands-title {
+    font-size: 12px;
+  }
+
+  .command-card {
+    padding: 12px;
+  }
+
+  .command-card span {
+    font-size: 11px;
+  }
 }
 
-/* ============================================
-   ACCESSIBILITY - Focus States
-   ============================================ */
-.terminal-input:focus-visible,
-.terminal-select:focus-visible,
-.terminal-textarea:focus-visible {
-  outline: 2px solid var(--terminal-border);
-  outline-offset: 2px;
-  border-radius: 4px;
+/* ===================================
+   ACCESSIBILITY
+   =================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .terminal-cursor {
+    animation: none;
+  }
+
+  .contact-close-button,
+  .command-card {
+    transition: none;
+  }
 }
 
-.contact-back-button:focus-visible,
-.contact-execute-button:focus-visible,
+/* Focus visible pour navigation clavier */
+.terminal-input:focus,
+.terminal-textarea:focus {
+  outline: none;
+}
+
+.terminal-button:focus,
+.terminal-button:focus-visible {
+  outline: none;
+}
+
 .command-card:focus-visible {
-  outline: 2px solid var(--terminal-border);
+  outline: 2px solid #00ff00;
   outline-offset: 2px;
-}
-
-/* ============================================
-   DARK MODE ENHANCEMENTS
-   ============================================ */
-@media (prefers-color-scheme: dark) {
-  .contact-terminal {
-    box-shadow:
-      0 4px 20px rgba(0, 0, 0, 0.6),
-      0 0 40px var(--terminal-glow),
-      inset 0 1px 0 rgba(255, 149, 0, 0.15);
-  }
-
-  .contact-output {
-    box-shadow:
-      0 4px 20px rgba(0, 0, 0, 0.6),
-      0 0 40px rgba(48, 209, 88, 0.3);
-  }
-}
-
-/* ============================================
-   PRINT STYLES
-   ============================================ */
-@media print {
-  .contact-back-button,
-  .contact-execute-button,
-  .contact-commands,
-  .contact-footer {
-    display: none;
-  }
-
-  .contact-terminal {
-    border: 2px solid #000000;
-    box-shadow: none;
-  }
 }

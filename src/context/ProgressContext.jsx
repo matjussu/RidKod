@@ -256,6 +256,33 @@ export const ProgressProvider = ({ children }) => {
     };
   };
 
+  // Mettre à jour la progression directement (pour les leçons)
+  const updateProgress = async (updatedFields) => {
+    try {
+      const currentProgress = progress || getLocalProgress();
+      const updatedProgress = {
+        ...currentProgress,
+        ...updatedFields
+      };
+
+      if (isAuthenticated && user) {
+        // Mode connecté - sauvegarder dans Firestore
+        // TODO: Ajouter fonction updateUserProgress dans progressService
+        saveProgressLocally(updatedProgress);
+      } else {
+        // Mode invité - sauvegarder localement
+        saveProgressLocally(updatedProgress);
+      }
+
+      setProgress(updatedProgress);
+      return updatedProgress;
+    } catch (err) {
+      console.error('Erreur lors de la mise à jour de la progression:', err);
+      setError(err.message);
+      throw err;
+    }
+  };
+
   const value = {
     progress,
     loading,
@@ -265,7 +292,8 @@ export const ProgressProvider = ({ children }) => {
     isLevelCompleted,
     getLevelStats,
     getStats,
-    getProgressToNextLevel
+    getProgressToNextLevel,
+    updateProgress
   };
 
   return (
