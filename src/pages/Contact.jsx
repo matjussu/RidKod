@@ -26,7 +26,6 @@ const Contact = () => {
   // UI state
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
-  const [isFullscreen, setIsFullscreen] = useState(false);
   const [cursorPosition, setCursorPosition] = useState(0);
 
   // Questions configuration
@@ -127,14 +126,11 @@ const Contact = () => {
   };
 
   const handleMinimizeButton = () => {
-    triggerLight();
-    // Scroll to bottom of terminal
-    terminalEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    // Decorative only - no action
   };
 
   const handleMaximizeButton = () => {
-    triggerLight();
-    setIsFullscreen(prev => !prev);
+    // Decorative only - no action
   };
 
   const handleCommandClick = (command) => {
@@ -360,7 +356,7 @@ const Contact = () => {
   return (
     <div className="contact-container">
       {/* Terminal Window */}
-      <div className={`terminal-window ${isFullscreen ? 'terminal-fullscreen' : ''}`}>
+      <div className="terminal-window">
         {/* Terminal Header */}
         <div className="terminal-header">
           <div className="terminal-buttons">

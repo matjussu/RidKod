@@ -6,13 +6,16 @@
 /* Container */
 .contact-container {
   min-height: 100vh;
+  height: 100vh;
   background: #0d0d0d;
   padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   font-family: 'JetBrains Mono', 'Courier New', monospace;
   position: relative;
+  overflow: hidden;
 }
 
 /* Terminal Window (macOS-style) */
