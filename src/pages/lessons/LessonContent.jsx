@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useProgress } from '../../context/ProgressContext';
-import { useSwipeable } from 'react-swipeable';
 import LessonSection from '../../components/lessons/LessonSection';
 import QuestionCard from '../../components/exercise/QuestionCard';
 import CodeBlock from '../../components/exercise/CodeBlock';
@@ -122,24 +121,20 @@ const LessonContent = () => {
     }
   };
 
-  // Configuration swipe handlers
-  const swipeHandlers = useSwipeable({
-    onSwipedLeft: () => {
-      // Swipe gauche = section suivante (toujours autorisé, même exercice non complété)
-      if (currentSectionIndex < chapterData.sections.length - 1) {
-        handleContinue();
-      }
-    },
-    onSwipedRight: () => {
-      // Swipe droite = section précédente
+  // Gestion des touches sur les bords (Instagram-style)
+  const handleTapLeft = () => {
+    // Tap sur bord gauche = section précédente
+    if (currentSectionIndex > 0) {
       handlePrevious();
-    },
-    preventScrollOnSwipe: false, // Permettre scroll vertical
-    trackMouse: true, // Debug desktop
-    delta: 80, // Distance minimale 80px pour détecter swipe
-    swipeDuration: 500, // Temps max pour détecter swipe (ms)
-    touchEventOptions: { passive: true } // Performance scroll
-  });
+    }
+  };
+
+  const handleTapRight = () => {
+    // Tap sur bord droit = section suivante
+    if (currentSectionIndex < chapterData.sections.length - 1) {
+      handleContinue();
+    }
+  };
 
   // Gestion du clavier personnalisé
   const handleKeyPress = (key) => {
@@ -391,17 +386,27 @@ const LessonContent = () => {
           <p className="lesson-progress-text">
             Section {currentSectionIndex + 1}/{chapterData.sections.length}
           </p>
-          <div className="lesson-progress-track">
-            <div
-              className="lesson-progress-fill"
-              style={{ width: `${progressPercentage}%` }}
-            />
+
+          {/* Instagram-style Story Bars */}
+          <div className="story-bars-container">
+            {chapterData.sections.map((_, index) => (
+              <div
+                key={index}
+                className={`story-bar ${index < currentSectionIndex ? 'completed' : ''} ${index === currentSectionIndex ? 'active' : ''}`}
+              >
+                <div className="story-bar-fill" />
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Content Wrapper avec swipe handlers */}
-      <div {...swipeHandlers} className="lesson-content-wrapper swipeable-wrapper">
+      {/* Tap Zones - Instagram Style */}
+      <div className="tap-zone tap-zone-left" onClick={handleTapLeft} />
+      <div className="tap-zone tap-zone-right" onClick={handleTapRight} />
+
+      {/* Content Wrapper */}
+      <div className="lesson-content-wrapper">
         {/* Chapter Title (seulement sur première section) */}
         {currentSectionIndex === 0 && (
           <>
@@ -422,83 +427,47 @@ const LessonContent = () => {
           }
         />
 
-        {/* Swipe hints ou bouton terminer */}
-        {currentSection.type !== 'exercise' && (
-          <>
-            {/* Si dernière section, afficher bouton Terminer */}
-            {currentSectionIndex === chapterData.sections.length - 1 ? (
-              <button className="finish-chapter-button" onClick={handleFinishChapter}>
-                <span className="finish-text">Terminer le chapitre</span>
-              </button>
-            ) : (
-              /* Sinon, afficher swipe hints */
-              <div className="swipe-hints">
-                {currentSectionIndex > 0 && (
-                  <div className="swipe-hint left">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="m15 18-6-6 6-6"/>
-                    </svg>
-                    Swipe
-                  </div>
-                )}
-                {currentSectionIndex < chapterData.sections.length - 1 && (
-                  <div className="swipe-hint right">
-                    Swipe
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="m9 18 6-6-6-6"/>
-                    </svg>
-                  </div>
-                )}
-              </div>
-            )}
-          </>
+        {/* Bouton terminer si dernière section non-exercice */}
+        {currentSection.type !== 'exercise' && currentSectionIndex === chapterData.sections.length - 1 && (
+          <button className="finish-chapter-button" onClick={handleFinishChapter}>
+            <span className="finish-text">Terminer le chapitre</span>
+          </button>
         )}
       </div>
 
       <style>{`
-        /* Swipe Wrapper - Transitions fluides */
-        .swipeable-wrapper {
-          position: relative;
-          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        /* Tap Zones - Instagram Style */
+        .tap-zone {
+          position: fixed;
+          top: 0;
+          bottom: 0;
+          width: 10%;
+          z-index: 50;
+          cursor: pointer;
+          -webkit-tap-highlight-color: transparent;
+          touch-action: manipulation;
           user-select: none;
           -webkit-user-select: none;
         }
 
-        /* Swipe Hints */
-        .swipe-hints {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-top: 32px;
-          margin-bottom: 24px;
-          padding: 0 4px;
+        .tap-zone-left {
+          left: 0;
         }
 
-        .swipe-hint {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
-          font-size: 12px;
-          font-weight: 600;
-          color: #8E8E93;
-          opacity: 0.6;
-          transition: opacity 0.2s ease;
+        .tap-zone-right {
+          right: 0;
         }
 
-        .swipe-hint svg {
-          opacity: 0.5;
+        /* Debug mode - décommenter pour voir les zones */
+        /*
+        .tap-zone-left {
+          background: rgba(255, 0, 0, 0.1);
         }
 
-        /* Animation pulse subtile */
-        @keyframes swipePulse {
-          0%, 100% { opacity: 0.6; }
-          50% { opacity: 0.9; }
+        .tap-zone-right {
+          background: rgba(0, 255, 0, 0.1);
         }
-
-        .swipe-hint {
-          animation: swipePulse 2s ease-in-out infinite;
-        }
+        */
 
         /* Finish Chapter Button - Racing style */
         .finish-chapter-button {

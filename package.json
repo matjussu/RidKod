@@ -20,7 +20,6 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.4",
-    "react-swipeable": "^7.0.2",
     "react-syntax-highlighter": "^15.6.6"
   },
   "devDependencies": {

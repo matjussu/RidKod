@@ -267,19 +267,54 @@
   margin: 0;
 }
 
-.lesson-progress-track {
+/* Instagram-style Story Bars */
+.story-bars-container {
+  display: flex;
+  gap: 4px;
   width: 100%;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-  overflow: hidden;
+  height: 3px;
+  margin-top: 2px;
 }
 
-.lesson-progress-fill {
+.story-bar {
+  flex: 1;
   height: 100%;
-  background: linear-gradient(90deg, #088201 0%, #30D158 100%);
-  border-radius: 3px;
-  transition: width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.story-bar-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #FF9500 0%, #FFB340 100%);
+  border-radius: 2px;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Barre complétée : remplie à 100% */
+.story-bar.completed .story-bar-fill {
+  width: 100%;
+  background: #30D158;
+}
+
+/* Barre active : animation de remplissage */
+.story-bar.active .story-bar-fill {
+  width: 100%;
+  animation: storyProgress 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes storyProgress {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
 }
 
 /* Content Wrapper */
