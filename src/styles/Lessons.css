@@ -15,7 +15,7 @@
   color: #FFFFFF;
   display: flex;
   flex-direction: column;
-  padding-top: max(env(safe-area-inset-top), 20px);
+  padding-top: max(calc(env(safe-area-inset-top) + 40px), 60px);
   padding-left: max(20px, env(safe-area-inset-left));
   padding-right: max(20px, env(safe-area-inset-right));
   padding-bottom: max(env(safe-area-inset-bottom), 8px);
@@ -79,7 +79,7 @@
 
 .lesson-page-title {
   font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
-  font-size: 60px;
+  font-size: 55px;
   font-weight: 900;
   font-style: italic;
   color: #FFFFFF;
@@ -111,7 +111,7 @@
 .lesson-title-hash {
   color: #FF9500;
   font-weight: 900;
-  font-size: 60px;
+  font-size: 55px;
   text-shadow: 2px 2px 8px rgba(255, 149, 0, 0.6);
   -webkit-text-fill-color: #FF9500;
   margin-right: 8px;
@@ -157,7 +157,7 @@
   color: #FFFFFF;
   display: flex;
   flex-direction: column;
-  padding-top: max(env(safe-area-inset-top), 20px);
+  padding-top: max(calc(env(safe-area-inset-top) + 40px), 60px);
   padding-left: max(20px, env(safe-area-inset-left));
   padding-right: max(20px, env(safe-area-inset-right));
   padding-bottom: max(env(safe-area-inset-bottom), 24px);

@@ -102,7 +102,7 @@ const LessonLanguage = () => {
       {/* Header Section */}
       <div className="lesson-header-section">
         <h1 className="lesson-page-title">
-          <span className="lesson-title-hash">{"#"}</span>
+          <span className="lesson-title-hash">{"//"}</span>
           Learn
         </h1>
       </div>

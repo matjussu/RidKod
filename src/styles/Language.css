@@ -96,32 +96,42 @@
 
 .page-title {
   font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
-  font-size: 24px;
-  font-weight: 800;
+  font-size: 60px;
+  font-weight: 900;
+  font-style: italic;
   color: #FFFFFF;
   margin: 0;
-  line-height: 1.2;
+  line-height: 1;
+  transform: skewX(-5deg);
+  letter-spacing: 0px;
+  text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.6);
+  background: linear-gradient(135deg, #FFFFFF 0%, #E0E0E0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
 }
 
-.title-bracket {
+.page-title::before {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px;
+  height: 4px;
+  background: linear-gradient(90deg, #FF9500 0%, #FFB340 100%);
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(255, 149, 0, 0.4);
+}
+
+.title-hash {
   color: #FF9500;
-  font-weight: 800;
-  font-size: 26px;
-}
-
-.page-subtitle {
-  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
-  font-size: 18px;
-  font-weight: 800;
-  color: #FFFFFF;
-  margin: 8px 0 0 0;
-  line-height: 1.2;
-}
-
-.subtitle-bracket {
-  color: #088201;
-  font-weight: 800;
-  font-size: 20px;
+  font-weight: 900;
+  font-size: 60px;
+  text-shadow: 2px 2px 8px rgba(255, 149, 0, 0.6);
+  -webkit-text-fill-color: #FF9500;
+  margin-right: 8px;
 }
 
 /* Languages Grid */
@@ -205,16 +215,8 @@
     font-size: 22px;
   }
 
-  .title-bracket {
-    font-size: 24px;
-  }
-
-  .page-subtitle {
-    font-size: 16px;
-  }
-
-  .subtitle-bracket {
-    font-size: 18px;
+  .title-hash {
+    font-size: 30px;
   }
 
   .languages-grid {
@@ -249,16 +251,8 @@
     font-size: 20px;
   }
 
-  .title-bracket {
-    font-size: 22px;
-  }
-
-  .page-subtitle {
-    font-size: 15px;
-  }
-
-  .subtitle-bracket {
-    font-size: 17px;
+  .title-hash {
+    font-size: 28px;
   }
 
   .languages-grid {
@@ -287,16 +281,8 @@
     font-size: 20px;
   }
 
-  .title-bracket {
-    font-size: 22px;
-  }
-
-  .page-subtitle {
-    font-size: 15px;
-  }
-
-  .subtitle-bracket {
-    font-size: 17px;
+  .title-hash {
+    font-size: 28px;
   }
 
   .languages-grid {

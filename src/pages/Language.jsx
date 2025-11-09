@@ -103,15 +103,9 @@ const Language = () => {
       {/* Header Section */}
       <div className="header-section">
         <h1 className="page-title">
-          <span className="title-bracket">{"<"}</span>
-          Choisi
-          <span className="title-bracket">{"/"}</span>
+          <span className="title-hash">//</span>
+          Languages
         </h1>
-        <h2 className="page-subtitle">
-          <span className="subtitle-bracket">{"/"}</span>
-          Un langage
-          <span className="subtitle-bracket">{">"}</span>
-        </h2>
       </div>
 
       {/* Languages Grid */}

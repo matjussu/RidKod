@@ -99,15 +99,9 @@ const Difficulty = () => {
       {/* Header Section */}
       <div className="header-section">
         <h1 className="page-title">
-          <span className="title-bracket">{"<"}</span>
-          Choisis
-          <span className="title-bracket">{"/"}</span>
+          <span className="title-hash">//</span>
+          Difficulty
         </h1>
-        <h2 className="page-subtitle">
-          <span className="subtitle-bracket">{"/"}</span>
-          Ta difficulté
-          <span className="subtitle-bracket">{">"}</span>
-        </h2>
       </div>
 
       {/* Difficulties Grid */}

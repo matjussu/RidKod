@@ -105,7 +105,7 @@ const LessonChapters = () => {
       {/* Header Section */}
       <div className="lesson-header-section">
         <h1 className="lesson-page-title">
-          <span className="lesson-title-hash">#</span>
+          <span className="lesson-title-hash">//</span>
         Chapitres
         </h1>
       </div>
