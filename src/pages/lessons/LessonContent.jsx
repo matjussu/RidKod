@@ -12,6 +12,7 @@ import useHaptic from '../../hooks/useHaptic';
 import '../../styles/Lessons.css';
 
 // Import des données chapitres
+import chapter0Data from '../../data/lessons/python/chapter-0.json';
 import chapter3Data from '../../data/lessons/python/chapter-3.json';
 
 const LessonContent = () => {
@@ -37,7 +38,9 @@ const LessonContent = () => {
 
   // Charger les données du chapitre
   useEffect(() => {
-    if (chapterId === 'py_ch_003') {
+    if (chapterId === 'py_ch_000') {
+      setChapterData(chapter0Data);
+    } else if (chapterId === 'py_ch_003') {
       setChapterData(chapter3Data);
     } else {
       // Pour les chapitres non encore implémentés, afficher message
@@ -49,7 +52,7 @@ const LessonContent = () => {
             id: "section_placeholder",
             type: "text",
             title: "Contenu à venir",
-            content: "Ce chapitre est actuellement en cours de rédaction. Pour le moment, seul le **Chapitre 3 : Boucles & Itérations** est disponible.\n\nRevenez bientôt pour découvrir ce nouveau contenu !"
+            content: "Ce chapitre est actuellement en cours de rédaction. Pour le moment, les **Chapitre 0 : Introduction** et **Chapitre 3 : Boucles & Itérations** sont disponibles.\n\nRevenez bientôt pour découvrir ce nouveau contenu !"
           }
         ],
         exercises: []
@@ -199,15 +202,27 @@ const LessonContent = () => {
     // Passer à la section suivante
     if (currentSectionIndex < chapterData.sections.length - 1) {
       setCurrentSectionIndex(currentSectionIndex + 1);
-    } else {
-      // Fin du chapitre
-      const allExercisesCompleted = completedExercises.length === chapterData.exercises.length;
-      if (allExercisesCompleted) {
-        // TODO: Afficher modal de completion
-        alert(`🎉 Chapitre terminé ! +${chapterData.exercises.length * 10} XP`);
-      }
-      navigate(`/lessons/${language}/chapters`);
     }
+  };
+
+  // Terminer le chapitre et retourner à la liste
+  const handleFinishChapter = () => {
+    const allExercisesCompleted = completedExercises.length === chapterData.exercises.length;
+
+    if (allExercisesCompleted) {
+      // Ajouter +100 XP pour avoir complété le chapitre
+      updateProgress({
+        xp: progress.xp + 100
+      });
+      triggerSuccess();
+
+      // Afficher feedback de succès
+      alert(`🎉 Chapitre terminé ! +100 XP`);
+    } else {
+      triggerLight();
+    }
+
+    navigate(`/lessons/${language}/chapters`);
   };
 
   // Render exercice intégré
@@ -379,45 +394,36 @@ const LessonContent = () => {
           }
         />
 
-        {/* Navigation Buttons (sauf si c'est un exercice non complété) */}
+        {/* Swipe hints ou bouton terminer */}
         {currentSection.type !== 'exercise' && (
-          <div className="lesson-navigation-container">
-            {/* Swipe hints */}
-            <div className="swipe-hints">
-              {currentSectionIndex > 0 && (
-                <div className="swipe-hint left">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="m15 18-6-6 6-6"/>
-                  </svg>
-                  Swipe
-                </div>
-              )}
-              {currentSectionIndex < chapterData.sections.length - 1 && (
-                <div className="swipe-hint right">
-                  Swipe
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="m9 18 6-6-6-6"/>
-                  </svg>
-                </div>
-              )}
-            </div>
-
-            {/* Boutons navigation */}
-            <div className="lesson-navigation-buttons">
-              {currentSectionIndex < chapterData.sections.length - 1 ? (
-                <button className="lesson-next-button" onClick={handleContinue}>
-                  Continuer
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="m9 18 6-6-6-6"/>
-                  </svg>
-                </button>
-              ) : (
-                <button className="lesson-finish-button" onClick={() => navigate(`/lessons/${language}/chapters`)}>
-                  Terminer le chapitre
-                </button>
-              )}
-            </div>
-          </div>
+          <>
+            {/* Si dernière section, afficher bouton Terminer */}
+            {currentSectionIndex === chapterData.sections.length - 1 ? (
+              <button className="finish-chapter-button" onClick={handleFinishChapter}>
+                <span className="finish-text">Terminer le chapitre</span>
+              </button>
+            ) : (
+              /* Sinon, afficher swipe hints */
+              <div className="swipe-hints">
+                {currentSectionIndex > 0 && (
+                  <div className="swipe-hint left">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="m15 18-6-6 6-6"/>
+                    </svg>
+                    Swipe
+                  </div>
+                )}
+                {currentSectionIndex < chapterData.sections.length - 1 && (
+                  <div className="swipe-hint right">
+                    Swipe
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="m9 18 6-6-6-6"/>
+                    </svg>
+                  </div>
+                )}
+              </div>
+            )}
+          </>
         )}
       </div>
 
@@ -430,17 +436,13 @@ const LessonContent = () => {
           -webkit-user-select: none;
         }
 
-        /* Navigation Container */
-        .lesson-navigation-container {
-          margin-top: 24px;
-        }
-
         /* Swipe Hints */
         .swipe-hints {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 16px;
+          margin-top: 32px;
+          margin-bottom: 24px;
           padding: 0 4px;
         }
 
@@ -470,43 +472,43 @@ const LessonContent = () => {
           animation: swipePulse 2s ease-in-out infinite;
         }
 
-        /* Navigation Buttons */
-        .lesson-navigation-buttons {
-          display: flex;
-          justify-content: flex-end;
-          padding-top: 24px;
-          border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .lesson-next-button,
-        .lesson-finish-button {
-          background: linear-gradient(135deg, #088201 0%, #30D158 100%);
-          color: #FFFFFF;
-          font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
-          font-size: 15px;
-          font-weight: 700;
-          padding: 14px 24px;
-          border: none;
-          border-radius: 12px;
+        /* Finish Chapter Button - Racing style */
+        .finish-chapter-button {
+          width: 100%;
+          background: linear-gradient(135deg, #FF9500 0%, #FFB340 100%);
+          border: 3px solid #FFD700;
+          border-radius: 16px;
+          padding: 20px;
+          margin-top: 32px;
+          margin-bottom: 24px;
           cursor: pointer;
-          display: flex;
-          align-items: center;
-          gap: 8px;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
           touch-action: manipulation;
           -webkit-tap-highlight-color: transparent;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 12px rgba(8, 130, 1, 0.3);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 6px 20px rgba(255, 149, 0, 0.4);
         }
 
-        .lesson-next-button:hover,
-        .lesson-finish-button:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 16px rgba(8, 130, 1, 0.4);
+        .finish-chapter-button:hover {
+          transform: translateY(-4px) scale(1.02);
+          box-shadow: 0 12px 32px rgba(255, 149, 0, 0.6);
         }
 
-        .lesson-next-button:active,
-        .lesson-finish-button:active {
-          transform: translateY(0);
+        .finish-chapter-button:active {
+          transform: translateY(-2px) scale(1.01);
+        }
+
+        .finish-text {
+          font-size: 18px;
+          font-weight: 900;
+          font-style: italic;
+          color: #FFFFFF;
+          letter-spacing: 0.5px;
+          transform: skewX(-5deg);
+          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         /* Exercise Content */
@@ -524,6 +526,14 @@ const LessonContent = () => {
 
         /* Responsive */
         @media (max-width: 375px) {
+          .finish-chapter-button {
+            padding: 16px;
+          }
+
+          .finish-text {
+            font-size: 16px;
+          }
+
           .swipe-hint {
             font-size: 11px;
           }
@@ -532,11 +542,15 @@ const LessonContent = () => {
             width: 12px;
             height: 12px;
           }
+        }
 
-          .lesson-next-button,
-          .lesson-finish-button {
-            font-size: 14px;
-            padding: 12px 20px;
+        @media (max-width: 320px) {
+          .finish-chapter-button {
+            padding: 14px;
+          }
+
+          .finish-text {
+            font-size: 15px;
           }
         }
       `}</style>

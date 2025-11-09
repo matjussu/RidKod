@@ -1,0 +1,109 @@
+{
+  "id": "py_ch_000",
+  "title": "Introduction à Python",
+  "subtitle": "Fais tes premiers pas dans la programmation",
+  "language": "python",
+  "difficulty": 1,
+  "estimatedTime": 10,
+  "sections": [
+    {
+      "id": "section_0_1",
+      "type": "text",
+      "title": "Bienvenue dans le monde de Python !",
+      "content": "Python est un langage de programmation **simple** et **puissant**, parfait pour débuter.\n\nDans ce chapitre, tu vas découvrir les bases essentielles pour comprendre et lire du code Python."
+    },
+    {
+      "id": "section_0_2",
+      "type": "text",
+      "title": "Qu'est-ce qu'un programme ?",
+      "content": "Un programme est une **suite d'instructions** que l'ordinateur exécute une par une, de haut en bas.\n\nChaque ligne de code dit à l'ordinateur exactement quoi faire, comme une recette de cuisine !"
+    },
+    {
+      "id": "section_0_3",
+      "type": "code_example",
+      "code": "print(\"Hello, World!\")",
+      "language": "python",
+      "caption": "Ton premier programme Python - il affiche un message à l'écran",
+      "highlight": {
+        "style": "info",
+        "content": "**Astuce :** La fonction `print()` permet d'afficher du texte dans la console."
+      }
+    },
+    {
+      "id": "section_0_4",
+      "type": "exercise",
+      "exerciseId": "py_ch_000_ex_1"
+    },
+    {
+      "id": "section_0_5",
+      "type": "text",
+      "title": "Les commentaires",
+      "content": "Les commentaires permettent d'expliquer le code. Ils commencent par `#` et ne sont **pas exécutés** par Python.\n\nIls sont très utiles pour comprendre ce que fait le code !"
+    },
+    {
+      "id": "section_0_6",
+      "type": "code_example",
+      "code": "# Ceci est un commentaire\nprint(\"Bonjour !\")  # Affiche un message\n# print(\"Texte caché\")  # Cette ligne ne s'exécute pas",
+      "language": "python",
+      "caption": "Les lignes qui commencent par # sont ignorées par Python"
+    },
+    {
+      "id": "section_0_7",
+      "type": "exercise",
+      "exerciseId": "py_ch_000_ex_2"
+    },
+    {
+      "id": "section_0_8",
+      "type": "highlight",
+      "style": "success",
+      "content": "**Félicitations !** Tu as maintenant compris les bases de Python. Dans les prochains chapitres, tu vas apprendre à manipuler des données et créer des programmes plus complexes !"
+    },
+    {
+      "id": "section_0_9",
+      "type": "exercise",
+      "exerciseId": "py_ch_000_ex_3"
+    }
+  ],
+  "exercises": [
+    {
+      "id": "py_ch_000_ex_1",
+      "type": "predict_output",
+      "question": "Que va afficher ce programme ?",
+      "code": "print(\"Bienvenue sur ReadCod !\")",
+      "inputType": "options",
+      "options": [
+        "Bienvenue sur ReadCod !",
+        "print",
+        "ReadCod",
+        "Erreur"
+      ],
+      "correctAnswer": 0,
+      "explanation": "La fonction `print()` affiche exactement le texte entre guillemets. Ici, elle affiche **Bienvenue sur ReadCod !**",
+      "xpGain": 10,
+      "highlightedLines": []
+    },
+    {
+      "id": "py_ch_000_ex_2",
+      "type": "find_error",
+      "question": "Quelle ligne va s'exécuter et afficher un message ?",
+      "code": "# print(\"Ligne 1\")\nprint(\"Ligne 2\")\n# print(\"Ligne 3\")",
+      "inputType": "clickable_lines",
+      "correctAnswer": 1,
+      "explanation": "Seule la ligne 2 n'est pas un commentaire (elle ne commence pas par `#`). C'est donc la seule ligne qui va s'exécuter et afficher **Ligne 2**.",
+      "xpGain": 10,
+      "highlightedLines": [1]
+    },
+    {
+      "id": "py_ch_000_ex_3",
+      "type": "predict_output",
+      "question": "Combien de lignes ce programme va afficher ?",
+      "code": "print(\"Python\")\nprint(\"est\")\nprint(\"génial !\")",
+      "inputType": "free_input",
+      "keyboardType": "numeric",
+      "correctAnswer": "3",
+      "explanation": "Le programme contient 3 instructions `print()`, donc il affiche **3 lignes** de texte : \"Python\", \"est\", et \"génial !\".",
+      "xpGain": 10,
+      "highlightedLines": []
+    }
+  ]
+}

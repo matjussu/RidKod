@@ -45,18 +45,6 @@ const LessonChapters = () => {
     return lessonProgress[chapterId]?.completed === true;
   };
 
-  // Récupérer la progression d'un chapitre
-  const getChapterProgress = (chapterId) => {
-    const lessonProgress = progress?.lessonProgress?.[language] || {};
-    const chapterData = lessonProgress[chapterId];
-
-    if (!chapterData) return { completedExercises: 0 };
-
-    return {
-      completedExercises: chapterData.exercisesCompleted?.length || 0
-    };
-  };
-
   const handleChapterClick = (chapter) => {
     const unlocked = isChapterUnlocked(chapter);
 
@@ -117,37 +105,24 @@ const LessonChapters = () => {
       {/* Header Section */}
       <div className="lesson-header-section">
         <h1 className="lesson-page-title">
-          <span className="lesson-title-bracket">{"<"}</span>
-          Chapitres
-          <span className="lesson-title-bracket">{"/"}</span>
+          <span className="lesson-title-hash">#</span>
+        Chapitres
         </h1>
-        <h2 className="lesson-page-subtitle">
-          <span className="lesson-subtitle-bracket">{"/"}</span>
-          Python
-          <span className="lesson-subtitle-bracket">{">"}</span>
-        </h2>
       </div>
 
       {/* Chapters Grid */}
       <div className="lesson-chapters-grid">
-        {chapters.map((chapter) => {
+        {chapters.map((chapter, index) => {
           const unlocked = isChapterUnlocked(chapter);
           const completed = isChapterCompleted(chapter.id);
-          const chapterProgress = getChapterProgress(chapter.id);
 
           return (
             <div key={chapter.id} data-chapter-id={chapter.id}>
               <ChapterCard
                 title={chapter.title}
-                description={chapter.description}
-                icon={chapter.icon}
-                difficulty={chapter.difficulty}
+                chapterNumber={index + 1}
                 isLocked={!unlocked}
                 isCompleted={completed}
-                totalExercises={chapter.totalExercises}
-                completedExercises={chapterProgress.completedExercises}
-                xpReward={chapter.xpReward}
-                estimatedTime={chapter.estimatedTime}
                 onClick={() => handleChapterClick(chapter)}
               />
             </div>

@@ -102,15 +102,9 @@ const LessonLanguage = () => {
       {/* Header Section */}
       <div className="lesson-header-section">
         <h1 className="lesson-page-title">
-          <span className="lesson-title-bracket">{"<"}</span>
-          Apprends
-          <span className="lesson-title-bracket">{"/"}</span>
+          <span className="lesson-title-hash">{"#"}</span>
+          Learn
         </h1>
-        <h2 className="lesson-page-subtitle">
-          <span className="lesson-subtitle-bracket">{"/"}</span>
-          Un langage
-          <span className="lesson-subtitle-bracket">{">"}</span>
-        </h2>
       </div>
 
       {/* Languages Grid */}
