@@ -87,7 +87,6 @@
   line-height: 1;
   transform: skewX(-5deg);
   letter-spacing: 0px;
-  text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.6);
   background: linear-gradient(135deg, #FFFFFF 0%, #E0E0E0 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

@@ -123,7 +123,7 @@ const ChapterCard = ({
           font-size: 250px;
           font-weight: 900;
           font-style: italic;
-          color: #FFD700;
+          color: #ffffffff;
           line-height: 0.9;
           opacity: 0.25;
           position: absolute;
