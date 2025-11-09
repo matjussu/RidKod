@@ -8,12 +8,22 @@ import CodeBlock from '../../components/exercise/CodeBlock';
 import OptionButton from '../../components/exercise/OptionButton';
 import ActionButton from '../../components/exercise/ActionButton';
 import CustomKeyboard from '../../components/exercise/CustomKeyboard';
+import ChapterCompleteModal from '../../components/lessons/ChapterCompleteModal';
 import useHaptic from '../../hooks/useHaptic';
 import '../../styles/Lessons.css';
 
 // Import des données chapitres
 import chapter0Data from '../../data/lessons/python/chapter-0.json';
+import chapter1Data from '../../data/lessons/python/chapter-1.json';
+import chapter2Data from '../../data/lessons/python/chapter-2.json';
 import chapter3Data from '../../data/lessons/python/chapter-3.json';
+import chapter4Data from '../../data/lessons/python/chapter-4.json';
+import chapter5Data from '../../data/lessons/python/chapter-5.json';
+import chapter6Data from '../../data/lessons/python/chapter-6.json';
+import chapter7Data from '../../data/lessons/python/chapter-7.json';
+import chapter8Data from '../../data/lessons/python/chapter-8.json';
+import chapter9Data from '../../data/lessons/python/chapter-9.json';
+import chapter10Data from '../../data/lessons/python/chapter-10.json';
 
 const LessonContent = () => {
   const navigate = useNavigate();
@@ -33,15 +43,28 @@ const LessonContent = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [isExplanationExpanded, setIsExplanationExpanded] = useState(false);
+  const [showCompleteModal, setShowCompleteModal] = useState(false);
 
   const contentRef = useRef(null);
 
   // Charger les données du chapitre
   useEffect(() => {
-    if (chapterId === 'py_ch_000') {
-      setChapterData(chapter0Data);
-    } else if (chapterId === 'py_ch_003') {
-      setChapterData(chapter3Data);
+    const chapterMap = {
+      'py_ch_000': chapter0Data,
+      'py_ch_001': chapter1Data,
+      'py_ch_002': chapter2Data,
+      'py_ch_003': chapter3Data,
+      'py_ch_004': chapter4Data,
+      'py_ch_005': chapter5Data,
+      'py_ch_006': chapter6Data,
+      'py_ch_007': chapter7Data,
+      'py_ch_008': chapter8Data,
+      'py_ch_009': chapter9Data,
+      'py_ch_010': chapter10Data,
+    };
+
+    if (chapterMap[chapterId]) {
+      setChapterData(chapterMap[chapterId]);
     } else {
       // Pour les chapitres non encore implémentés, afficher message
       setChapterData({
@@ -216,12 +239,17 @@ const LessonContent = () => {
       });
       triggerSuccess();
 
-      // Afficher feedback de succès
-      alert(`🎉 Chapitre terminé ! +100 XP`);
+      // Afficher modal de succès
+      setShowCompleteModal(true);
     } else {
       triggerLight();
+      navigate(`/lessons/${language}/chapters`);
     }
+  };
 
+  // Fermer le modal et retourner aux chapitres
+  const handleCloseModal = () => {
+    setShowCompleteModal(false);
     navigate(`/lessons/${language}/chapters`);
   };
 
@@ -554,6 +582,15 @@ const LessonContent = () => {
           }
         }
       `}</style>
+
+      {/* Modal de fin de chapitre */}
+      {showCompleteModal && (
+        <ChapterCompleteModal
+          chapterTitle={chapterData.title}
+          xpEarned={100}
+          onClose={handleCloseModal}
+        />
+      )}
     </div>
   );
 };

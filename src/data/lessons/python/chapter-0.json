@@ -1,109 +1,175 @@
 {
-  "id": "py_ch_000",
+  "chapterId": "py_ch_000",
   "title": "Introduction à Python",
-  "subtitle": "Fais tes premiers pas dans la programmation",
-  "language": "python",
-  "difficulty": 1,
-  "estimatedTime": 10,
+  "subtitle": "Découvre la programmation et pourquoi Python va changer ta vie",
   "sections": [
     {
-      "id": "section_0_1",
+      "id": "section_1",
       "type": "text",
-      "title": "Bienvenue dans le monde de Python !",
-      "content": "Python est un langage de programmation **simple** et **puissant**, parfait pour débuter.\n\nDans ce chapitre, tu vas découvrir les bases essentielles pour comprendre et lire du code Python."
+      "title": "Bienvenue dans le monde de la programmation !",
+      "content": "Si tu es ici, c'est que tu veux apprendre à programmer. **Excellente décision !**\n\nLa programmation, c'est comme apprendre une nouvelle langue : au début ça semble compliqué, mais très vite tu vas pouvoir créer des choses incroyables. Et devine quoi ? Python est le langage **le plus facile** pour commencer !"
     },
     {
-      "id": "section_0_2",
+      "id": "section_2",
+      "type": "text",
+      "title": "Qu'est-ce que Python exactement ?",
+      "content": "Python est un **langage de programmation** créé en 1991 par un développeur hollandais, Guido van Rossum. Il l'a nommé d'après la série comique \"Monty Python\" (oui, vraiment !).\n\nC'est un langage **simple, lisible et puissant**. Son créateur voulait qu'il soit facile à apprendre, et il a réussi : aujourd'hui, Python est le langage **n°1 pour débuter** !"
+    },
+    {
+      "id": "section_3",
+      "type": "highlight",
+      "style": "info",
+      "content": "💡 **Fun fact** : Le nom Python vient des Monty Python, pas du serpent ! Mais le logo a quand même deux serpents entrelacés."
+    },
+    {
+      "id": "section_4",
+      "type": "text",
+      "title": "Pourquoi utiliser Python ?",
+      "content": "Python est **partout** ! Voici 5 raisons pour lesquelles c'est LE langage à apprendre en 2025 :\n\n• **Facile à lire** : Le code Python ressemble à de l'anglais simple\n• **Polyvalent** : Sites web, IA, data science, jeux vidéo... tout est possible\n• **Très demandé** : C'est l'un des langages les plus recherchés par les entreprises\n• **Communauté immense** : Des millions de développeurs pour t'aider\n• **Gratuit et open-source** : Tout le monde peut l'utiliser librement"
+    },
+    {
+      "id": "section_5",
+      "type": "text",
+      "title": "Python dans la vie de tous les jours",
+      "content": "Tu utilises Python **tous les jours** sans le savoir ! Voici des exemples concrets :\n\n🎬 **Netflix** : Les recommandations de films utilisent Python\n🎵 **Spotify** : Les playlists personnalisées sont créées avec Python\n📷 **Instagram** : L'application tourne principalement sur Python\n🚗 **Tesla** : Les voitures autonomes utilisent Python pour l'IA\n🔍 **Google** : Le moteur de recherche utilise énormément Python\n🤖 **ChatGPT** : L'intelligence artificielle que tu connais ? Python !"
+    },
+    {
+      "id": "section_6",
+      "type": "highlight",
+      "style": "success",
+      "content": "✅ **Cas d'usage réel** : Quand tu cherches \"pizza près de moi\" sur Google Maps, du code Python analyse ta position, cherche les restaurants, calcule les distances, et affiche les résultats. Tout ça en moins d'une seconde !"
+    },
+    {
+      "id": "section_7",
+      "type": "text",
+      "title": "Quels métiers utilisent Python ?",
+      "content": "Apprendre Python ouvre la porte à des **carrières passionnantes et bien payées** :\n\n💻 **Développeur Web** (50-70k€/an)\nCrée des sites comme YouTube, Instagram, Reddit\n\n📊 **Data Scientist** (60-90k€/an)\nAnalyse des millions de données pour prendre des décisions\n\n🤖 **Ingénieur IA / Machine Learning** (70-100k€/an)\nCrée des IA comme ChatGPT, Siri, Alexa\n\n🔒 **Expert en Cybersécurité** (55-85k€/an)\nProtège les systèmes informatiques des hackers\n\n🎮 **Développeur Jeux Vidéo** (45-65k€/an)\nCrée des jeux avec des moteurs comme Pygame\n\n📈 **Analyste Financier Quantitatif** (80-120k€/an)\nCrée des algorithmes de trading automatique"
+    },
+    {
+      "id": "section_8",
+      "type": "exercise",
+      "exerciseId": "py_ch0_ex1"
+    },
+    {
+      "id": "section_9",
       "type": "text",
       "title": "Qu'est-ce qu'un programme ?",
-      "content": "Un programme est une **suite d'instructions** que l'ordinateur exécute une par une, de haut en bas.\n\nChaque ligne de code dit à l'ordinateur exactement quoi faire, comme une recette de cuisine !"
+      "content": "Un **programme**, c'est une **suite d'instructions** que l'ordinateur exécute une par une, de haut en bas.\n\nImagine une recette de cuisine :\n1. Préchauffer le four à 180°C\n2. Mélanger la farine et le sucre\n3. Ajouter les œufs\n4. Enfourner 30 minutes\n\nEn programmation, c'est pareil ! Tu donnes des étapes à l'ordinateur, et il les suit à la lettre."
     },
     {
-      "id": "section_0_3",
+      "id": "section_10",
       "type": "code_example",
-      "code": "print(\"Hello, World!\")",
       "language": "python",
-      "caption": "Ton premier programme Python - il affiche un message à l'écran",
+      "code": "# Mon premier programme Python !\nprint(\"Hello, World!\")\nprint(\"Je viens de programmer !\")\nprint(\"C'est trop facile !\")",
+      "caption": "Ton premier programme : 3 lignes qui affichent du texte",
       "highlight": {
         "style": "info",
-        "content": "**Astuce :** La fonction `print()` permet d'afficher du texte dans la console."
+        "content": "💡 **Astuce** : `print()` est une **fonction** qui affiche du texte à l'écran. C'est l'outil le plus basique et le plus utilisé en Python !"
       }
     },
     {
-      "id": "section_0_4",
+      "id": "section_11",
       "type": "exercise",
-      "exerciseId": "py_ch_000_ex_1"
+      "exerciseId": "py_ch0_ex2"
     },
     {
-      "id": "section_0_5",
+      "id": "section_12",
       "type": "text",
-      "title": "Les commentaires",
-      "content": "Les commentaires permettent d'expliquer le code. Ils commencent par `#` et ne sont **pas exécutés** par Python.\n\nIls sont très utiles pour comprendre ce que fait le code !"
+      "title": "Les commentaires : expliquer ton code",
+      "content": "Les **commentaires** sont des notes que tu laisses dans ton code. Ils commencent par `#` et Python les **ignore complètement**.\n\nPourquoi c'est utile ?\n• Expliquer ce que fait le code (pour toi ou d'autres)\n• Désactiver temporairement une ligne sans la supprimer\n• Laisser des rappels ou des TODO pour plus tard"
     },
     {
-      "id": "section_0_6",
+      "id": "section_13",
       "type": "code_example",
-      "code": "# Ceci est un commentaire\nprint(\"Bonjour !\")  # Affiche un message\n# print(\"Texte caché\")  # Cette ligne ne s'exécute pas",
       "language": "python",
-      "caption": "Les lignes qui commencent par # sont ignorées par Python"
+      "code": "# Ceci est un commentaire - Python l'ignore\nprint(\"Coucou !\")  # On peut aussi commenter en fin de ligne\n\n# print(\"Ce texte ne s'affichera pas\")\n# La ligne ci-dessus est désactivée par le #",
+      "caption": "Les commentaires permettent d'expliquer le code",
+      "highlight": {
+        "style": "warning",
+        "content": "⚠️ **Bonne pratique** : Commente ton code ! Dans 6 mois, tu ne te souviendras plus de ce que tu as voulu faire. Les commentaires sont tes meilleurs amis."
+      }
     },
     {
-      "id": "section_0_7",
+      "id": "section_14",
       "type": "exercise",
-      "exerciseId": "py_ch_000_ex_2"
+      "exerciseId": "py_ch0_ex3"
     },
     {
-      "id": "section_0_8",
+      "id": "section_15",
+      "type": "text",
+      "title": "Comment lire du code Python",
+      "content": "Sur **ReadCod**, on ne t'apprend pas juste à **écrire** du code, mais surtout à le **lire et comprendre**.\n\nPourquoi ? Parce que :\n• Tu passes **70% de ton temps** à lire du code (pas l'écrire)\n• L'IA génère du code, mais toi tu dois le **comprendre et l'auditer**\n• Apprendre à lire du code te rend **10x meilleur** en programmation\n\nDans les prochains chapitres, tu vas devenir un **expert** pour décrypter n'importe quel code Python !"
+    },
+    {
+      "id": "section_16",
       "type": "highlight",
       "style": "success",
-      "content": "**Félicitations !** Tu as maintenant compris les bases de Python. Dans les prochains chapitres, tu vas apprendre à manipuler des données et créer des programmes plus complexes !"
+      "content": "✅ **Méthode ReadCod** : Chaque exercice te demande de **lire** du code et de prédire ce qu'il fait. Pas besoin d'écrire ! Tu vas développer ton « œil de développeur »."
     },
     {
-      "id": "section_0_9",
+      "id": "section_17",
+      "type": "text",
+      "title": "Récapitulatif : Tu es prêt !",
+      "content": "🎯 **Ce que tu as appris :**\n\n• Python est un langage **facile, puissant et ultra populaire**\n• Il est utilisé par Netflix, Spotify, Tesla, Google...\n• Il ouvre la porte à des **métiers passionnants** (Dev, IA, Data...)\n• Un programme = **suite d'instructions** exécutées de haut en bas\n• `print()` affiche du texte, `#` crée des commentaires\n• ReadCod t'apprend à **LIRE** du code comme un pro\n\n**Prochaine étape :** Choisis n'importe quel chapitre qui t'intéresse ! Tous les chapitres sont déverrouillés, tu peux apprendre dans l'ordre que tu veux. 🚀"
+    },
+    {
+      "id": "section_18",
       "type": "exercise",
-      "exerciseId": "py_ch_000_ex_3"
+      "exerciseId": "py_ch0_ex4"
     }
   ],
   "exercises": [
     {
-      "id": "py_ch_000_ex_1",
-      "type": "predict_output",
-      "question": "Que va afficher ce programme ?",
-      "code": "print(\"Bienvenue sur ReadCod !\")",
+      "id": "py_ch0_ex1",
+      "type": "concept_understanding",
       "inputType": "options",
+      "question": "Lequel de ces services utilise Python dans la vraie vie ?",
+      "code": "# Python est partout !",
+      "options": ["Netflix", "Spotify", "Instagram", "Tous les trois"],
+      "correctAnswer": 3,
+      "explanation": "**Tous les trois** ! Netflix, Spotify et Instagram utilisent massivement Python pour leurs services. C'est la preuve que Python est un langage professionnel et puissant.",
+      "highlightedLines": [],
+      "xpGain": 10
+    },
+    {
+      "id": "py_ch0_ex2",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Que va afficher ce programme ?",
+      "code": "print(\"Bienvenue sur ReadCod !\")\nprint(\"Python est génial\")",
       "options": [
         "Bienvenue sur ReadCod !",
-        "print",
-        "ReadCod",
+        "Python est génial",
+        "Les deux messages (sur 2 lignes)",
         "Erreur"
       ],
-      "correctAnswer": 0,
-      "explanation": "La fonction `print()` affiche exactement le texte entre guillemets. Ici, elle affiche **Bienvenue sur ReadCod !**",
-      "xpGain": 10,
-      "highlightedLines": []
+      "correctAnswer": 2,
+      "explanation": "Chaque `print()` affiche un message sur **une nouvelle ligne**. Le programme affiche donc les **deux messages**, un en dessous de l'autre.",
+      "highlightedLines": [1, 2],
+      "xpGain": 10
     },
     {
-      "id": "py_ch_000_ex_2",
+      "id": "py_ch0_ex3",
       "type": "find_error",
-      "question": "Quelle ligne va s'exécuter et afficher un message ?",
-      "code": "# print(\"Ligne 1\")\nprint(\"Ligne 2\")\n# print(\"Ligne 3\")",
       "inputType": "clickable_lines",
+      "question": "Quelle ligne va réellement s'exécuter ?",
+      "code": "# print(\"Ligne 1\")\nprint(\"Ligne 2\")\n# print(\"Ligne 3\")",
       "correctAnswer": 1,
-      "explanation": "Seule la ligne 2 n'est pas un commentaire (elle ne commence pas par `#`). C'est donc la seule ligne qui va s'exécuter et afficher **Ligne 2**.",
-      "xpGain": 10,
-      "highlightedLines": [1]
+      "explanation": "Seule la **ligne 2** n'est pas un commentaire (elle ne commence pas par `#`). C'est donc la seule qui va s'exécuter et afficher \"Ligne 2\".",
+      "highlightedLines": [2],
+      "xpGain": 10
     },
     {
-      "id": "py_ch_000_ex_3",
+      "id": "py_ch0_ex4",
       "type": "predict_output",
-      "question": "Combien de lignes ce programme va afficher ?",
-      "code": "print(\"Python\")\nprint(\"est\")\nprint(\"génial !\")",
       "inputType": "free_input",
-      "keyboardType": "numeric",
-      "correctAnswer": "3",
-      "explanation": "Le programme contient 3 instructions `print()`, donc il affiche **3 lignes** de texte : \"Python\", \"est\", et \"génial !\".",
-      "xpGain": 10,
-      "highlightedLines": []
+      "question": "Combien de messages ce programme affiche-t-il ?",
+      "code": "print(\"Python\")\nprint(\"est\")\nprint(\"simple\")\nprint(\"!\")",
+      "predefinedAnswers": ["2", "3", "4", "5"],
+      "correctAnswer": "4",
+      "explanation": "Le programme contient **4 instructions** `print()`. Chacune affiche un message, donc il y a **4 lignes** affichées au total.",
+      "highlightedLines": [],
+      "xpGain": 10
     }
   ]
 }

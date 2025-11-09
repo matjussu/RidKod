@@ -3,16 +3,16 @@
   "chapters": [
     {
       "id": "py_ch_000",
-      "title": "Introduction",
-      "description": "Découvre les bases de Python et fais tes premiers pas dans la programmation",
+      "title": "Introduction à Python",
+      "description": "Découvre pourquoi Python va changer ta vie et à quoi il sert dans le monde réel",
       "difficulty": 1,
-      "estimatedTime": 10,
+      "estimatedTime": 15,
       "icon": "👋",
       "order": 0,
       "unlockRequirement": null,
-      "totalExercises": 3,
-      "xpReward": 30,
-      "tags": ["introduction", "basics", "getting-started"]
+      "totalExercises": 4,
+      "xpReward": 40,
+      "tags": ["introduction", "carrières", "use-cases", "débutants"]
     },
     {
       "id": "py_ch_001",
@@ -68,16 +68,81 @@
     },
     {
       "id": "py_ch_005",
-      "title": "Fonctions & Paramètres",
+      "title": "Dictionnaires & Clés",
+      "description": "Stocke des données avec des paires clé-valeur",
+      "difficulty": 2,
+      "estimatedTime": 20,
+      "icon": "🗂️",
+      "order": 5,
+      "unlockRequirement": "py_ch_004",
+      "totalExercises": 6,
+      "xpReward": 80,
+      "tags": ["dict", "keys", "values", "get", "items"]
+    },
+    {
+      "id": "py_ch_006",
+      "title": "Strings & Manipulation",
+      "description": "Maîtrise le traitement de texte en Python",
+      "difficulty": 2,
+      "estimatedTime": 18,
+      "icon": "📝",
+      "order": 6,
+      "unlockRequirement": "py_ch_005",
+      "totalExercises": 5,
+      "xpReward": 70,
+      "tags": ["strings", "f-strings", "split", "join", "upper", "lower"]
+    },
+    {
+      "id": "py_ch_007",
+      "title": "Fonctions & Scope",
       "description": "Crée ton propre code réutilisable avec les fonctions",
       "difficulty": 2,
       "estimatedTime": 22,
       "icon": "⚙️",
-      "order": 5,
-      "unlockRequirement": "py_ch_004",
+      "order": 7,
+      "unlockRequirement": "py_ch_006",
       "totalExercises": 6,
       "xpReward": 90,
-      "tags": ["functions", "def", "return", "parameters", "arguments"]
+      "tags": ["functions", "def", "return", "parameters", "lambda", "scope"]
+    },
+    {
+      "id": "py_ch_008",
+      "title": "List Comprehensions",
+      "description": "Crée des listes en une ligne avec une syntaxe puissante",
+      "difficulty": 3,
+      "estimatedTime": 18,
+      "icon": "⚡",
+      "order": 8,
+      "unlockRequirement": "py_ch_007",
+      "totalExercises": 5,
+      "xpReward": 100,
+      "tags": ["comprehensions", "filter", "map", "advanced"]
+    },
+    {
+      "id": "py_ch_009",
+      "title": "POO - Bases",
+      "description": "Découvre la Programmation Orientée Objet avec les classes",
+      "difficulty": 3,
+      "estimatedTime": 25,
+      "icon": "🏗️",
+      "order": 9,
+      "unlockRequirement": "py_ch_008",
+      "totalExercises": 6,
+      "xpReward": 120,
+      "tags": ["classes", "objects", "oop", "inheritance", "methods"]
+    },
+    {
+      "id": "py_ch_010",
+      "title": "Gestion d'Erreurs",
+      "description": "Crée des programmes robustes avec try, except et finally",
+      "difficulty": 3,
+      "estimatedTime": 20,
+      "icon": "🛡️",
+      "order": 10,
+      "unlockRequirement": "py_ch_009",
+      "totalExercises": 5,
+      "xpReward": 100,
+      "tags": ["try", "except", "finally", "raise", "exceptions"]
     }
   ]
 }

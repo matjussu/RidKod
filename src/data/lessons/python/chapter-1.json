@@ -1,0 +1,180 @@
+{
+  "chapterId": "py_ch_001",
+  "title": "Variables & Types",
+  "subtitle": "Découvre comment stocker des données en Python",
+  "sections": [
+    {
+      "id": "section_1",
+      "type": "text",
+      "title": "Qu'est-ce qu'une variable ?",
+      "content": "Une **variable** est comme une boîte dans laquelle tu peux stocker une valeur (un nombre, du texte, etc.).\n\nElle a un **nom** que tu choisis, et tu peux utiliser ce nom pour accéder à la valeur stockée n'importe où dans ton programme !"
+    },
+    {
+      "id": "section_2",
+      "type": "code_example",
+      "language": "python",
+      "code": "# Créer une variable\nage = 25\nprint(age)  # Affiche : 25\n\n# Modifier une variable\nage = 26\nprint(age)  # Affiche : 26",
+      "caption": "Créer et modifier une variable",
+      "highlight": {
+        "style": "info",
+        "content": "💡 **Astuce** : En Python, pas besoin de déclarer le type de la variable. Python le devine automatiquement !"
+      }
+    },
+    {
+      "id": "section_3",
+      "type": "exercise",
+      "exerciseId": "py_ch1_ex1"
+    },
+    {
+      "id": "section_4",
+      "type": "text",
+      "title": "Les types de données de base",
+      "content": "Python comprend plusieurs **types de données** fondamentaux :\n\n• **int** (entier) : nombres sans virgule → `42`, `-7`, `0`\n• **float** (décimal) : nombres avec virgule → `3.14`, `-0.5`\n• **str** (chaîne) : texte entre guillemets → `\"Bonjour\"`, `'Python'`\n• **bool** (booléen) : vrai ou faux → `True`, `False`"
+    },
+    {
+      "id": "section_5",
+      "type": "code_example",
+      "language": "python",
+      "code": "# Exemples de types\nnombre = 42          # int\nprix = 19.99        # float\nnom = \"Alice\"       # str\nest_majeur = True   # bool\n\nprint(nombre, prix, nom, est_majeur)",
+      "caption": "Les 4 types de base en action"
+    },
+    {
+      "id": "section_6",
+      "type": "exercise",
+      "exerciseId": "py_ch1_ex2"
+    },
+    {
+      "id": "section_7",
+      "type": "text",
+      "title": "La fonction type()",
+      "content": "La fonction `type()` permet de connaître le **type** d'une variable. Très utile quand tu lis du code et que tu veux comprendre quel type de données tu manipules !"
+    },
+    {
+      "id": "section_8",
+      "type": "code_example",
+      "language": "python",
+      "code": "x = 42\nprint(type(x))  # <class 'int'>\n\ny = \"Hello\"\nprint(type(y))  # <class 'str'>\n\nz = 3.14\nprint(type(z))  # <class 'float'>",
+      "caption": "Vérifier le type d'une variable",
+      "highlight": {
+        "style": "success",
+        "content": "✅ **Cas d'usage réel** : Quand tu lis du code complexe, utilise `type()` pour débugger et comprendre quelles données transitent dans ton programme."
+      }
+    },
+    {
+      "id": "section_9",
+      "type": "exercise",
+      "exerciseId": "py_ch1_ex3"
+    },
+    {
+      "id": "section_10",
+      "type": "text",
+      "title": "La fonction input()",
+      "content": "La fonction `input()` permet de demander à l'utilisateur de saisir du texte. **Important** : `input()` renvoie **toujours** une chaîne de caractères (str), même si l'utilisateur tape un nombre !"
+    },
+    {
+      "id": "section_11",
+      "type": "code_example",
+      "language": "python",
+      "code": "# Demander le nom\nnom = input(\"Comment t'appelles-tu ? \")\nprint(f\"Bonjour {nom} !\")\n\n# Demander l'âge (attention, c'est un str !)\nage = input(\"Quel est ton âge ? \")\nprint(type(age))  # <class 'str'>",
+      "caption": "Interagir avec l'utilisateur via input()",
+      "highlight": {
+        "style": "warning",
+        "content": "⚠️ **Attention** : `input()` retourne du texte, pas un nombre ! Si tu tapes `25`, Python le voit comme `\"25\"` (une chaîne)."
+      }
+    },
+    {
+      "id": "section_12",
+      "type": "exercise",
+      "exerciseId": "py_ch1_ex4"
+    },
+    {
+      "id": "section_13",
+      "type": "text",
+      "title": "Conversion de types",
+      "content": "Pour convertir une chaîne en nombre (ou vice-versa), Python propose des fonctions de **conversion** :\n\n• `int()` : convertit en entier\n• `float()` : convertit en décimal\n• `str()` : convertit en chaîne de caractères\n• `bool()` : convertit en booléen"
+    },
+    {
+      "id": "section_14",
+      "type": "code_example",
+      "language": "python",
+      "code": "# Convertir une chaîne en nombre\nage_str = \"25\"\nage_int = int(age_str)\nprint(age_int + 5)  # 30 (addition possible !)\n\n# Convertir un nombre en chaîne\nnombre = 42\ntexte = str(nombre)\nprint(\"Numéro : \" + texte)  # Concaténation",
+      "caption": "Convertir entre types",
+      "highlight": {
+        "style": "error",
+        "content": "🚨 **Piège courant** : Tu ne peux pas additionner un nombre et une chaîne !\n\n```python\nage = \"25\"\nprint(age + 5)  # ERREUR !\n```\n\nIl faut d'abord convertir : `int(age) + 5`"
+      }
+    },
+    {
+      "id": "section_15",
+      "type": "exercise",
+      "exerciseId": "py_ch1_ex5"
+    },
+    {
+      "id": "section_16",
+      "type": "text",
+      "title": "Récapitulatif",
+      "content": "🎯 **Ce que tu as appris :**\n\n• Créer et utiliser des **variables**\n• Les 4 types de base : `int`, `float`, `str`, `bool`\n• Utiliser `type()` pour vérifier le type d'une variable\n• Demander une saisie utilisateur avec `input()`\n• Convertir entre types avec `int()`, `float()`, `str()`\n\n**Prochaine étape :** Tu vas apprendre à prendre des décisions dans ton code avec les conditions `if` !"
+    }
+  ],
+  "exercises": [
+    {
+      "id": "py_ch1_ex1",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Que va afficher ce code ?",
+      "code": "x = 10\nx = 20\nprint(x)",
+      "options": ["10", "20", "10 20", "Erreur"],
+      "correctAnswer": 1,
+      "explanation": "La variable `x` est d'abord initialisée à 10, puis **réassignée** à 20. Le `print()` affiche donc la dernière valeur : **20**.",
+      "highlightedLines": [2, 3],
+      "xpGain": 10
+    },
+    {
+      "id": "py_ch1_ex2",
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Quel est le type de la variable `resultat` ?",
+      "code": "resultat = 3 + 4.5\nprint(resultat)",
+      "options": ["int", "float", "str", "bool"],
+      "correctAnswer": 1,
+      "explanation": "Quand tu additionnes un `int` (3) et un `float` (4.5), Python convertit automatiquement le résultat en `float`. Donc `resultat` vaut `7.5` et est de type **float**.",
+      "highlightedLines": [1],
+      "xpGain": 10
+    },
+    {
+      "id": "py_ch1_ex3",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Que va afficher ce programme ?",
+      "code": "valeur = \"100\"\nprint(type(valeur))",
+      "options": ["<class 'int'>", "<class 'str'>", "<class 'float'>", "100"],
+      "correctAnswer": 1,
+      "explanation": "Même si `\"100\"` ressemble à un nombre, les guillemets en font une **chaîne de caractères**. `type(valeur)` renvoie donc `<class 'str'>`.",
+      "highlightedLines": [1, 2],
+      "xpGain": 10
+    },
+    {
+      "id": "py_ch1_ex4",
+      "type": "find_error",
+      "inputType": "clickable_lines",
+      "question": "L'utilisateur tape \"30\" au clavier. Sur quelle ligne le code va planter ?",
+      "code": "age = input(\"Ton âge : \")\nannees_restantes = 100 - age\nprint(annees_restantes)",
+      "correctAnswer": 1,
+      "explanation": "Ligne 2 : `input()` retourne toujours une **chaîne** (`\"30\"`). Tu ne peux pas soustraire une chaîne d'un nombre ! Il faut d'abord convertir : `100 - int(age)`.",
+      "highlightedLines": [2],
+      "xpGain": 10
+    },
+    {
+      "id": "py_ch1_ex5",
+      "type": "predict_output",
+      "inputType": "free_input",
+      "question": "Que va afficher ce code ?",
+      "code": "nombre = \"42\"\nresultat = int(nombre) + 8\nprint(resultat)",
+      "predefinedAnswers": ["42", "428", "50", "8"],
+      "correctAnswer": "50",
+      "explanation": "`int(nombre)` convertit la chaîne `\"42\"` en entier `42`. Ensuite, `42 + 8 = 50`. Le programme affiche donc **50**.",
+      "highlightedLines": [2],
+      "xpGain": 10
+    }
+  ]
+}

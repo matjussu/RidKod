@@ -1,0 +1,235 @@
+{
+  "chapterId": "py_ch_007",
+  "title": "Fonctions & Scope",
+  "subtitle": "Crée ton propre code réutilisable avec les fonctions",
+  "sections": [
+    {
+      "id": "section_1",
+      "type": "text",
+      "title": "Qu'est-ce qu'une fonction ?",
+      "content": "Une **fonction** est un bloc de code réutilisable qui effectue une tâche précise. C'est comme une mini-machine : tu lui donnes des entrées (paramètres), elle fait un traitement, et te renvoie un résultat.\n\nLes fonctions permettent d'**organiser** ton code et d'**éviter les répétitions** !"
+    },
+    {
+      "id": "section_2",
+      "type": "code_example",
+      "language": "python",
+      "code": "# Définir une fonction\ndef saluer():\n    print(\"Bonjour !\")\n\n# Appeler la fonction\nsaluer()  # Affiche : Bonjour !\nsaluer()  # Affiche : Bonjour ! (réutilisable !)",
+      "caption": "Créer et appeler une fonction simple",
+      "highlight": {
+        "style": "info",
+        "content": "💡 **Astuce** : Le mot-clé `def` signifie \"define\" (définir). L'indentation après le `:` indique le corps de la fonction."
+      }
+    },
+    {
+      "id": "section_3",
+      "type": "exercise",
+      "exerciseId": "py_ch7_ex1"
+    },
+    {
+      "id": "section_4",
+      "type": "text",
+      "title": "Fonctions avec paramètres",
+      "content": "Les **paramètres** permettent de passer des données à une fonction. Tu peux voir ça comme des variables locales que la fonction utilise.\n\nSyntaxe : `def nom_fonction(parametre1, parametre2):`"
+    },
+    {
+      "id": "section_5",
+      "type": "code_example",
+      "language": "python",
+      "code": "# Fonction avec 1 paramètre\ndef saluer(nom):\n    print(f\"Bonjour {nom} !\")\n\nsaluer(\"Alice\")  # Bonjour Alice !\nsaluer(\"Bob\")    # Bonjour Bob !\n\n# Fonction avec 2 paramètres\ndef additionner(a, b):\n    print(a + b)\n\nadditionner(5, 3)  # 8",
+      "caption": "Passer des paramètres à une fonction",
+      "highlight": {
+        "style": "warning",
+        "content": "⚠️ **Attention** : L'ordre des arguments est important ! `additionner(5, 3)` n'est pas pareil que `additionner(3, 5)` si la fonction fait une soustraction."
+      }
+    },
+    {
+      "id": "section_6",
+      "type": "exercise",
+      "exerciseId": "py_ch7_ex2"
+    },
+    {
+      "id": "section_7",
+      "type": "text",
+      "title": "Retourner une valeur avec return",
+      "content": "Le mot-clé `return` permet à une fonction de **renvoyer** un résultat que tu peux stocker dans une variable ou réutiliser.\n\nSans `return`, la fonction renvoie `None` par défaut."
+    },
+    {
+      "id": "section_8",
+      "type": "code_example",
+      "language": "python",
+      "code": "# Fonction qui retourne une valeur\ndef carre(x):\n    return x * x\n\nresultat = carre(5)\nprint(resultat)  # 25\n\n# Utiliser directement le résultat\nprint(carre(3) + carre(4))  # 9 + 16 = 25",
+      "caption": "Retourner une valeur avec return",
+      "highlight": {
+        "style": "success",
+        "content": "✅ **Bonne pratique** : Préfère `return` à `print()` dans les fonctions. Cela les rend plus **flexibles** et **testables**."
+      }
+    },
+    {
+      "id": "section_9",
+      "type": "exercise",
+      "exerciseId": "py_ch7_ex3"
+    },
+    {
+      "id": "section_10",
+      "type": "text",
+      "title": "Paramètres avec valeurs par défaut",
+      "content": "Tu peux donner une **valeur par défaut** à un paramètre. Si l'appelant ne fournit pas d'argument, la valeur par défaut est utilisée.\n\nSyntaxe : `def fonction(param=valeur_defaut):`"
+    },
+    {
+      "id": "section_11",
+      "type": "code_example",
+      "language": "python",
+      "code": "def saluer(nom=\"visiteur\", langue=\"fr\"):\n    if langue == \"fr\":\n        return f\"Bonjour {nom} !\"\n    elif langue == \"en\":\n        return f\"Hello {nom}!\"\n\n# Utiliser les valeurs par défaut\nprint(saluer())  # Bonjour visiteur !\n\n# Spécifier les arguments\nprint(saluer(\"Alice\", \"en\"))  # Hello Alice!",
+      "caption": "Paramètres avec valeurs par défaut",
+      "highlight": {
+        "style": "error",
+        "content": "🚨 **Piège courant** : Les paramètres **avec défaut** doivent être **après** ceux sans défaut !\n\n```python\ndef mauvais(a=5, b):  # ERREUR !\n    return a + b\n```\n\nBon ordre : `def bon(b, a=5):`"
+      }
+    },
+    {
+      "id": "section_12",
+      "type": "text",
+      "title": "Le scope (portée des variables)",
+      "content": "Le **scope** détermine où une variable est accessible. Il y a deux types principaux :\n\n• **Variables locales** : créées dans une fonction, accessibles uniquement dans cette fonction\n• **Variables globales** : créées hors de toute fonction, accessibles partout"
+    },
+    {
+      "id": "section_13",
+      "type": "code_example",
+      "language": "python",
+      "code": "# Variable globale\nx = 10\n\ndef ma_fonction():\n    # Variable locale\n    y = 20\n    print(x)  # OK : accès à la globale\n    print(y)  # OK : accès à la locale\n\nma_fonction()\nprint(x)  # OK : 10\nprint(y)  # ERREUR : y n'existe pas ici !",
+      "caption": "Variables locales vs globales",
+      "highlight": {
+        "style": "warning",
+        "content": "⚠️ **Attention** : Modifier une variable globale dans une fonction nécessite le mot-clé `global`. Mais c'est une **mauvaise pratique** ! Préfère utiliser `return`."
+      }
+    },
+    {
+      "id": "section_14",
+      "type": "exercise",
+      "exerciseId": "py_ch7_ex4"
+    },
+    {
+      "id": "section_15",
+      "type": "text",
+      "title": "Fonctions lambda (anonymes)",
+      "content": "Les **fonctions lambda** sont des fonctions courtes et anonymes (sans nom) définies en une seule ligne. Elles sont utiles pour des opérations simples.\n\nSyntaxe : `lambda parametres: expression`"
+    },
+    {
+      "id": "section_16",
+      "type": "code_example",
+      "language": "python",
+      "code": "# Fonction classique\ndef doubler(x):\n    return x * 2\n\n# Fonction lambda équivalente\ndoubler_lambda = lambda x: x * 2\n\nprint(doubler(5))         # 10\nprint(doubler_lambda(5))  # 10\n\n# Utilisation avec sorted()\nproduits = [(\"pomme\", 3), (\"banane\", 1), (\"orange\", 2)]\nproduits_tries = sorted(produits, key=lambda p: p[1])\nprint(produits_tries)  # Triés par prix",
+      "caption": "Fonctions lambda pour des opérations courtes",
+      "highlight": {
+        "style": "info",
+        "content": "💡 **Astuce** : Les lambda sont parfaites avec `map()`, `filter()`, et `sorted()`. Pour du code plus complexe, préfère une fonction normale avec `def`."
+      }
+    },
+    {
+      "id": "section_17",
+      "type": "exercise",
+      "exerciseId": "py_ch7_ex5"
+    },
+    {
+      "id": "section_18",
+      "type": "text",
+      "title": "Anatomie d'un code : Système de notes",
+      "content": "Voici un exemple concret qui combine tout : fonctions avec paramètres, return, et valeurs par défaut. Lis ce code et essaie de comprendre le flow :"
+    },
+    {
+      "id": "section_19",
+      "type": "code_example",
+      "language": "python",
+      "code": "# Calculer la moyenne d'une liste de notes\ndef calculer_moyenne(notes):\n    if len(notes) == 0:\n        return 0\n    return sum(notes) / len(notes)\n\n# Obtenir la mention selon la moyenne\ndef obtenir_mention(moyenne, systeme=\"fr\"):\n    if systeme == \"fr\":\n        if moyenne >= 16:\n            return \"Très bien\"\n        elif moyenne >= 14:\n            return \"Bien\"\n        elif moyenne >= 12:\n            return \"Assez bien\"\n        else:\n            return \"Passable\"\n    else:\n        return \"A\" if moyenne >= 90 else \"B\"\n\n# Utilisation\nmesNotes = [15, 17, 14, 16]\nmoyenne = calculer_moyenne(mesNotes)\nmention = obtenir_mention(moyenne)\nprint(f\"Moyenne : {moyenne}, Mention : {mention}\")",
+      "caption": "Exemple réel : système de calcul de notes",
+      "highlight": {
+        "style": "success",
+        "content": "✅ **Décortiquons le code** :\n\nLigne 2-4 : Fonction avec **return anticipé** (early return) si liste vide\nLigne 7-17 : Fonction avec **paramètre par défaut** `systeme=\"fr\"`\nLigne 20-23 : Composition de fonctions : résultat d'une fonction passé à une autre"
+      }
+    },
+    {
+      "id": "section_20",
+      "type": "exercise",
+      "exerciseId": "py_ch7_ex6"
+    },
+    {
+      "id": "section_21",
+      "type": "text",
+      "title": "Récapitulatif",
+      "content": "🎯 **Ce que tu as appris :**\n\n• Définir des fonctions avec `def nom():`\n• Passer des paramètres et utiliser `return`\n• Paramètres avec valeurs par défaut\n• Comprendre le **scope** (local vs global)\n• Créer des fonctions lambda courtes\n• Organiser du code complexe avec plusieurs fonctions\n\n**Prochaine étape :** Tu vas découvrir les **list comprehensions**, une syntaxe Python ultra puissante pour créer des listes en une ligne !"
+    }
+  ],
+  "exercises": [
+    {
+      "id": "py_ch7_ex1",
+      "type": "predict_output",
+      "inputType": "free_input",
+      "question": "Combien de fois \"Hello\" est affiché ?",
+      "code": "def afficher():\n    print(\"Hello\")\n\nafficher()\nafficher()",
+      "predefinedAnswers": ["0", "1", "2", "3"],
+      "correctAnswer": "2",
+      "explanation": "La fonction `afficher()` est appelée **2 fois** (lignes 4 et 5), donc \"Hello\" est affiché **2 fois**.",
+      "highlightedLines": [4, 5],
+      "xpGain": 10
+    },
+    {
+      "id": "py_ch7_ex2",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Que va afficher ce code ?",
+      "code": "def multiplier(a, b):\n    print(a * b)\n\nmultiplier(3, 4)",
+      "options": ["7", "12", "34", "Erreur"],
+      "correctAnswer": 1,
+      "explanation": "La fonction reçoit `a=3` et `b=4`, puis fait `3 * 4 = 12`. Elle affiche donc **12**.",
+      "highlightedLines": [2, 4],
+      "xpGain": 10
+    },
+    {
+      "id": "py_ch7_ex3",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Que va afficher ce programme ?",
+      "code": "def doubler(n):\n    return n * 2\n\nx = doubler(5)\nprint(x + 3)",
+      "options": ["5", "8", "10", "13"],
+      "correctAnswer": 3,
+      "explanation": "`doubler(5)` retourne `10`, qui est stocké dans `x`. Ensuite, `x + 3 = 10 + 3 = 13`.",
+      "highlightedLines": [2, 4, 5],
+      "xpGain": 10
+    },
+    {
+      "id": "py_ch7_ex4",
+      "type": "find_error",
+      "inputType": "clickable_lines",
+      "question": "Ce code devrait afficher la variable locale, mais il plante. Quelle ligne contient l'erreur ?",
+      "code": "def ma_fonction():\n    message = \"Hello\"\n\nprint(message)",
+      "correctAnswer": 3,
+      "explanation": "Ligne 4 : La variable `message` est **locale** à la fonction. Elle n'existe pas en dehors de `ma_fonction()`. Cela lève une **NameError**.",
+      "highlightedLines": [4],
+      "xpGain": 10
+    },
+    {
+      "id": "py_ch7_ex5",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Que renvoie cette fonction lambda ?",
+      "code": "triple = lambda x: x * 3\nresultat = triple(4)\nprint(resultat)",
+      "options": ["3", "4", "7", "12"],
+      "correctAnswer": 3,
+      "explanation": "La lambda `lambda x: x * 3` prend `x` et retourne `x * 3`. Avec `x=4`, elle retourne `4 * 3 = 12`.",
+      "highlightedLines": [1, 2],
+      "xpGain": 10
+    },
+    {
+      "id": "py_ch7_ex6",
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Quelle est la valeur de retour de cette fonction si on l'appelle sans argument ?",
+      "code": "def saluer(nom=\"Invité\"):\n    return f\"Bonjour {nom}\"\n\nprint(saluer())",
+      "options": ["Bonjour", "Bonjour nom", "Bonjour Invité", "Erreur"],
+      "correctAnswer": 2,
+      "explanation": "Aucun argument n'est fourni, donc le paramètre `nom` prend sa **valeur par défaut** : `\"Invité\"`. La fonction retourne donc **Bonjour Invité**.",
+      "highlightedLines": [1, 4],
+      "xpGain": 10
+    }
+  ]
+}

@@ -1,0 +1,218 @@
+{
+  "chapterId": "py_ch_010",
+  "title": "Gestion d'Erreurs",
+  "subtitle": "Crée des programmes robustes avec try, except et finally",
+  "sections": [
+    {
+      "id": "section_1",
+      "type": "text",
+      "title": "Pourquoi gérer les erreurs ?",
+      "content": "En Python, quand une erreur se produit, le programme **plante** (exception non gérée). La gestion d'erreurs permet de **prévoir** ces situations et de réagir intelligemment au lieu de crasher.\n\nC'est essentiel pour créer des applications **robustes** et **professionnelles** !"
+    },
+    {
+      "id": "section_2",
+      "type": "code_example",
+      "language": "python",
+      "code": "# Sans gestion d'erreur : CRASH\nage = int(input(\"Ton âge : \"))  # Si user tape \"abc\" → ERREUR !\n\n# Avec gestion d'erreur : ROBUSTE\ntry:\n    age = int(input(\"Ton âge : \"))\n    print(f\"Tu as {age} ans\")\nexcept ValueError:\n    print(\"Merci d'entrer un nombre valide\")",
+      "caption": "Programme sans vs avec gestion d'erreur",
+      "highlight": {
+        "style": "info",
+        "content": "💡 **Astuce** : Les blocs `try/except` permettent de **capturer** les erreurs et de les traiter au lieu de laisser le programme planter."
+      }
+    },
+    {
+      "id": "section_3",
+      "type": "exercise",
+      "exerciseId": "py_ch10_ex1"
+    },
+    {
+      "id": "section_4",
+      "type": "text",
+      "title": "La structure try/except",
+      "content": "La structure de base de la gestion d'erreurs :\n\n• **`try:`** code qui pourrait générer une erreur\n• **`except Type:`** code exécuté si l'erreur `Type` se produit\n\nSi aucune erreur : seul le `try` s'exécute. Si erreur : on saute au `except`."
+    },
+    {
+      "id": "section_5",
+      "type": "code_example",
+      "language": "python",
+      "code": "try:\n    resultat = 10 / 0  # Division par zéro !\nexcept ZeroDivisionError:\n    print(\"Impossible de diviser par zéro\")\n    resultat = 0\n\nprint(f\"Résultat : {resultat}\")  # Résultat : 0",
+      "caption": "Gérer une division par zéro",
+      "highlight": {
+        "style": "success",
+        "content": "✅ **Cas d'usage réel** : Formulaires utilisateur, parsing de fichiers, requêtes réseau... Tout ce qui dépend d'entrées externes doit être protégé par try/except."
+      }
+    },
+    {
+      "id": "section_6",
+      "type": "exercise",
+      "exerciseId": "py_ch10_ex2"
+    },
+    {
+      "id": "section_7",
+      "type": "text",
+      "title": "Types d'erreurs courants",
+      "content": "Python a de nombreux **types d'exceptions**. Voici les plus fréquents :\n\n• **`ValueError`** : valeur incorrecte (ex: `int(\"abc\")`)\n• **`ZeroDivisionError`** : division par zéro\n• **`TypeError`** : opération sur mauvais type\n• **`KeyError`** : clé inexistante dans un dict\n• **`IndexError`** : index hors limites\n• **`FileNotFoundError`** : fichier introuvable"
+    },
+    {
+      "id": "section_8",
+      "type": "code_example",
+      "language": "python",
+      "code": "# ValueError\ntry:\n    x = int(\"abc\")\nexcept ValueError:\n    print(\"Conversion impossible\")\n\n# KeyError\ndata = {\"nom\": \"Alice\"}\ntry:\n    print(data[\"age\"])  # Clé inexistante\nexcept KeyError:\n    print(\"Clé non trouvée\")",
+      "caption": "Gérer différents types d'erreurs",
+      "highlight": {
+        "style": "warning",
+        "content": "⚠️ **Attention** : Spécifie toujours le type d'exception (`except ValueError:`). Un `except:` nu capte **tout** et peut masquer des bugs !"
+      }
+    },
+    {
+      "id": "section_9",
+      "type": "text",
+      "title": "Capturer plusieurs exceptions",
+      "content": "Tu peux gérer **plusieurs types** d'erreurs différemment avec plusieurs blocs `except`, ou les grouper dans un tuple :"
+    },
+    {
+      "id": "section_10",
+      "type": "code_example",
+      "language": "python",
+      "code": "# Plusieurs except séparés\ntry:\n    nombre = int(input(\"Nombre : \"))\n    resultat = 100 / nombre\nexcept ValueError:\n    print(\"Entrée invalide\")\nexcept ZeroDivisionError:\n    print(\"Division par zéro\")\n\n# Plusieurs exceptions dans un tuple\ntry:\n    # ... code\nexcept (ValueError, ZeroDivisionError) as e:\n    print(f\"Erreur : {e}\")",
+      "caption": "Gérer plusieurs types d'exceptions",
+      "highlight": {
+        "style": "info",
+        "content": "💡 **Astuce** : Utilise `as e` pour capturer l'objet erreur et afficher son message détaillé."
+      }
+    },
+    {
+      "id": "section_11",
+      "type": "exercise",
+      "exerciseId": "py_ch10_ex3"
+    },
+    {
+      "id": "section_12",
+      "type": "text",
+      "title": "Le bloc else (optionnel)",
+      "content": "Le bloc `else` s'exécute **uniquement si aucune exception** n'a été levée dans le `try`. Utile pour séparer le code normal du code de gestion d'erreur :"
+    },
+    {
+      "id": "section_13",
+      "type": "code_example",
+      "language": "python",
+      "code": "try:\n    fichier = open(\"data.txt\", \"r\")\nexcept FileNotFoundError:\n    print(\"Fichier introuvable\")\nelse:\n    print(\"Fichier ouvert avec succès\")\n    contenu = fichier.read()\n    fichier.close()\n    print(contenu)",
+      "caption": "Utiliser else pour le cas de succès",
+      "highlight": {
+        "style": "success",
+        "content": "✅ **Bonne pratique** : Le `else` clarifie l'intention : \"Ce code ne doit s'exécuter QUE si tout va bien\"."
+      }
+    },
+    {
+      "id": "section_14",
+      "type": "text",
+      "title": "Le bloc finally (nettoyage)",
+      "content": "Le bloc `finally` s'exécute **TOUJOURS**, qu'il y ait eu une erreur ou non. Parfait pour le **nettoyage** (fermer des fichiers, des connexions, etc.)."
+    },
+    {
+      "id": "section_15",
+      "type": "code_example",
+      "language": "python",
+      "code": "fichier = None\ntry:\n    fichier = open(\"config.txt\", \"r\")\n    contenu = fichier.read()\nexcept FileNotFoundError:\n    print(\"Fichier non trouvé\")\nfinally:\n    if fichier:\n        fichier.close()\n    print(\"Nettoyage terminé\")\n\n# Ce message s'affiche TOUJOURS (erreur ou pas)",
+      "caption": "finally pour garantir le nettoyage",
+      "highlight": {
+        "style": "error",
+        "content": "🚨 **Piège courant** : Oublier de fermer un fichier peut causer des **fuites de ressources**. `finally` garantit que le nettoyage est fait."
+      }
+    },
+    {
+      "id": "section_16",
+      "type": "exercise",
+      "exerciseId": "py_ch10_ex4"
+    },
+    {
+      "id": "section_17",
+      "type": "text",
+      "title": "Lever ses propres exceptions : raise",
+      "content": "Tu peux **lever** (raise) tes propres exceptions avec le mot-clé `raise`. Utile pour valider des données et signaler des erreurs métier :"
+    },
+    {
+      "id": "section_18",
+      "type": "code_example",
+      "language": "python",
+      "code": "def definir_age(age):\n    if age < 0:\n        raise ValueError(\"L'âge ne peut pas être négatif\")\n    if age > 150:\n        raise ValueError(\"L'âge semble irréaliste\")\n    return age\n\ntry:\n    mon_age = definir_age(-5)\nexcept ValueError as e:\n    print(f\"Erreur : {e}\")\n\n# Affiche : Erreur : L'âge ne peut pas être négatif",
+      "caption": "Lever des exceptions personnalisées",
+      "highlight": {
+        "style": "success",
+        "content": "✅ **Cas d'usage réel** : Dans une API, tu peux lever des exceptions pour signaler des données invalides (ex: email mal formé, montant négatif, etc.)."
+      }
+    },
+    {
+      "id": "section_19",
+      "type": "exercise",
+      "exerciseId": "py_ch10_ex5"
+    },
+    {
+      "id": "section_20",
+      "type": "text",
+      "title": "Récapitulatif",
+      "content": "🎯 **Ce que tu as appris :**\n\n• Structure `try/except` pour capturer les erreurs\n• Types d'exceptions courants (`ValueError`, `ZeroDivisionError`, `KeyError`...)\n• Gérer plusieurs exceptions avec plusieurs `except`\n• Bloc `else` pour le code de succès\n• Bloc `finally` pour le nettoyage garanti\n• Lever ses propres exceptions avec `raise`\n\n**Félicitations !** Tu as terminé le parcours Python débutant. Tu es maintenant capable de lire et comprendre du code Python professionnel ! 🎉"
+    }
+  ],
+  "exercises": [
+    {
+      "id": "py_ch10_ex1",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Que va afficher ce code si l'utilisateur tape \"abc\" ?",
+      "code": "try:\n    nombre = int(input())  # User tape \"abc\"\n    print(\"OK\")\nexcept ValueError:\n    print(\"Erreur\")",
+      "options": ["OK", "Erreur", "abc", "Le programme plante"],
+      "correctAnswer": 1,
+      "explanation": "`int(\"abc\")` lève une `ValueError`. Le code saute au bloc `except` et affiche **Erreur**.",
+      "highlightedLines": [2, 4, 5],
+      "xpGain": 10
+    },
+    {
+      "id": "py_ch10_ex2",
+      "type": "find_error",
+      "inputType": "clickable_lines",
+      "question": "Ce code devrait gérer la division par zéro, mais il plante. Quelle ligne contient l'erreur ?",
+      "code": "try:\n    resultat = 10 / 0\nexcept ValueError:\n    print(\"Division impossible\")",
+      "correctAnswer": 2,
+      "explanation": "Ligne 3 : Une division par zéro lève une **ZeroDivisionError**, pas une `ValueError`. Il faut écrire `except ZeroDivisionError:`.",
+      "highlightedLines": [3],
+      "xpGain": 10
+    },
+    {
+      "id": "py_ch10_ex3",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Que va afficher ce programme ?",
+      "code": "try:\n    liste = [1, 2, 3]\n    print(liste[5])\nexcept IndexError:\n    print(\"Index invalide\")\nexcept ValueError:\n    print(\"Valeur invalide\")",
+      "options": ["Index invalide", "Valeur invalide", "5", "Le programme plante"],
+      "correctAnswer": 0,
+      "explanation": "Accéder à `liste[5]` sur une liste de 3 éléments lève une **IndexError**. Le premier `except` correspondant est exécuté : **Index invalide**.",
+      "highlightedLines": [3, 4, 5],
+      "xpGain": 10
+    },
+    {
+      "id": "py_ch10_ex4",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Le bloc finally s'exécute-t-il dans ce cas ?",
+      "code": "try:\n    x = 10 / 2\nexcept ZeroDivisionError:\n    print(\"Erreur\")\nfinally:\n    print(\"Nettoyage\")",
+      "options": ["Oui", "Non", "Seulement si erreur", "Seulement sans erreur"],
+      "correctAnswer": 0,
+      "explanation": "Le bloc `finally` s'exécute **TOUJOURS**, qu'il y ait erreur ou non. Ici, aucune erreur, mais \"Nettoyage\" est quand même affiché.",
+      "highlightedLines": [5, 6],
+      "xpGain": 10
+    },
+    {
+      "id": "py_ch10_ex5",
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que fait le mot-clé raise ?",
+      "code": "def verifier(x):\n    if x < 0:\n        raise ValueError(\"Négatif interdit\")\n    return x",
+      "options": ["Capture une erreur", "Lève une exception", "Affiche un message", "Retourne une valeur"],
+      "correctAnswer": 1,
+      "explanation": "`raise` **lève** (déclenche) une exception. Ici, si `x < 0`, on lève une `ValueError` avec un message personnalisé.",
+      "highlightedLines": [3],
+      "xpGain": 10
+    }
+  ]
+}

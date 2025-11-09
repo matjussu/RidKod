@@ -1,0 +1,252 @@
+{
+  "chapterId": "py_ch_009",
+  "title": "POO - Bases",
+  "subtitle": "Découvre la Programmation Orientée Objet avec les classes",
+  "sections": [
+    {
+      "id": "section_1",
+      "type": "text",
+      "title": "Qu'est-ce que la POO ?",
+      "content": "La **Programmation Orientée Objet (POO)** est un paradigme qui organise le code autour d'**objets**. Un objet regroupe des **données** (attributs) et des **comportements** (méthodes).\n\nC'est comme une recette : une **classe** est le modèle, un **objet** est un gâteau créé avec ce modèle !"
+    },
+    {
+      "id": "section_2",
+      "type": "code_example",
+      "language": "python",
+      "code": "# Définir une classe\nclass Voiture:\n    pass  # Classe vide pour l'instant\n\n# Créer un objet (instance)\nma_voiture = Voiture()\nprint(type(ma_voiture))  # <class '__main__.Voiture'>",
+      "caption": "Créer une classe simple",
+      "highlight": {
+        "style": "info",
+        "content": "💡 **Astuce** : Par convention, les noms de classes commencent par une **majuscule** (ex: `Voiture`, `Personne`, `JeuVideo`)."
+      }
+    },
+    {
+      "id": "section_3",
+      "type": "exercise",
+      "exerciseId": "py_ch9_ex1"
+    },
+    {
+      "id": "section_4",
+      "type": "text",
+      "title": "Le constructeur __init__",
+      "content": "La méthode spéciale `__init__` est le **constructeur**. Elle est appelée automatiquement quand tu crées un objet et permet d'initialiser ses attributs.\n\nLe paramètre `self` représente l'**instance elle-même** (équivalent de `this` en Java/JavaScript)."
+    },
+    {
+      "id": "section_5",
+      "type": "code_example",
+      "language": "python",
+      "code": "class Personne:\n    def __init__(self, nom, age):\n        self.nom = nom\n        self.age = age\n\n# Créer des instances\nalice = Personne(\"Alice\", 25)\nbob = Personne(\"Bob\", 30)\n\nprint(alice.nom)  # Alice\nprint(bob.age)    # 30",
+      "caption": "Initialiser des attributs avec __init__",
+      "highlight": {
+        "style": "warning",
+        "content": "⚠️ **Attention** : Le premier paramètre de **toutes** les méthodes de classe doit être `self` (sauf pour les méthodes statiques)."
+      }
+    },
+    {
+      "id": "section_6",
+      "type": "exercise",
+      "exerciseId": "py_ch9_ex2"
+    },
+    {
+      "id": "section_7",
+      "type": "text",
+      "title": "Les attributs d'instance",
+      "content": "Les **attributs d'instance** sont des variables propres à chaque objet. Ils sont créés avec `self.nom_attribut` dans `__init__` ou dans d'autres méthodes.\n\nChaque instance a ses propres valeurs d'attributs !"
+    },
+    {
+      "id": "section_8",
+      "type": "code_example",
+      "language": "python",
+      "code": "class CompteBancaire:\n    def __init__(self, proprietaire, solde):\n        self.proprietaire = proprietaire\n        self.solde = solde\n\ncompte1 = CompteBancaire(\"Alice\", 1000)\ncompte2 = CompteBancaire(\"Bob\", 500)\n\nprint(compte1.solde)  # 1000\nprint(compte2.solde)  # 500 (différent !)",
+      "caption": "Chaque instance a ses propres attributs",
+      "highlight": {
+        "style": "success",
+        "content": "✅ **Cas d'usage réel** : Dans un jeu vidéo, chaque personnage (instance de la classe `Personnage`) a sa propre santé, position, inventaire, etc."
+      }
+    },
+    {
+      "id": "section_9",
+      "type": "text",
+      "title": "Les méthodes d'instance",
+      "content": "Les **méthodes** sont des fonctions définies dans une classe. Elles permettent de définir les **comportements** d'un objet.\n\nElles prennent toujours `self` comme premier paramètre pour accéder aux attributs de l'instance."
+    },
+    {
+      "id": "section_10",
+      "type": "code_example",
+      "language": "python",
+      "code": "class Rectangle:\n    def __init__(self, largeur, hauteur):\n        self.largeur = largeur\n        self.hauteur = hauteur\n    \n    def aire(self):\n        return self.largeur * self.hauteur\n    \n    def perimetre(self):\n        return 2 * (self.largeur + self.hauteur)\n\nrect = Rectangle(5, 3)\nprint(rect.aire())       # 15\nprint(rect.perimetre())  # 16",
+      "caption": "Définir des méthodes pour calculer des valeurs",
+      "highlight": {
+        "style": "info",
+        "content": "💡 **Astuce** : Les méthodes permettent d'**encapsuler** la logique. Au lieu de calculer l'aire manuellement, tu appelles simplement `rect.aire()`."
+      }
+    },
+    {
+      "id": "section_11",
+      "type": "exercise",
+      "exerciseId": "py_ch9_ex3"
+    },
+    {
+      "id": "section_12",
+      "type": "text",
+      "title": "Modifier les attributs",
+      "content": "Tu peux modifier les attributs d'un objet soit **directement**, soit via des **méthodes** (recommandé pour plus de contrôle) :"
+    },
+    {
+      "id": "section_13",
+      "type": "code_example",
+      "language": "python",
+      "code": "class CompteBancaire:\n    def __init__(self, solde):\n        self.solde = solde\n    \n    def deposer(self, montant):\n        self.solde += montant\n    \n    def retirer(self, montant):\n        if montant <= self.solde:\n            self.solde -= montant\n        else:\n            print(\"Solde insuffisant\")\n\ncompte = CompteBancaire(100)\ncompte.deposer(50)\nprint(compte.solde)  # 150\ncompte.retirer(200)  # \"Solde insuffisant\"",
+      "caption": "Modifier les attributs via des méthodes",
+      "highlight": {
+        "style": "success",
+        "content": "✅ **Bonne pratique** : Utilise des méthodes pour modifier les attributs plutôt que l'accès direct (`compte.solde = 1000`). Cela permet de valider les données."
+      }
+    },
+    {
+      "id": "section_14",
+      "type": "exercise",
+      "exerciseId": "py_ch9_ex4"
+    },
+    {
+      "id": "section_15",
+      "type": "text",
+      "title": "Les attributs de classe",
+      "content": "Les **attributs de classe** sont partagés par **toutes les instances**. Ils sont définis directement dans la classe, pas dans `__init__`.\n\nUtiles pour des constantes ou des compteurs globaux !"
+    },
+    {
+      "id": "section_16",
+      "type": "code_example",
+      "language": "python",
+      "code": "class Joueur:\n    nombre_joueurs = 0  # Attribut de classe\n    \n    def __init__(self, nom):\n        self.nom = nom  # Attribut d'instance\n        Joueur.nombre_joueurs += 1\n\nj1 = Joueur(\"Alice\")\nj2 = Joueur(\"Bob\")\nj3 = Joueur(\"Charlie\")\n\nprint(Joueur.nombre_joueurs)  # 3\nprint(j1.nombre_joueurs)      # 3 (accessible aussi via instance)",
+      "caption": "Attributs de classe vs attributs d'instance",
+      "highlight": {
+        "style": "warning",
+        "content": "⚠️ **Attention** : Pour modifier un attribut de classe, utilise `NomClasse.attribut`, pas `self.attribut` (qui créerait un attribut d'instance)."
+      }
+    },
+    {
+      "id": "section_17",
+      "type": "text",
+      "title": "La méthode __str__ (représentation)",
+      "content": "La méthode spéciale `__str__` définit comment un objet est affiché avec `print()`. C'est comme un \"mode d'affichage humain\" de ton objet."
+    },
+    {
+      "id": "section_18",
+      "type": "code_example",
+      "language": "python",
+      "code": "class Livre:\n    def __init__(self, titre, auteur):\n        self.titre = titre\n        self.auteur = auteur\n    \n    def __str__(self):\n        return f\"'{self.titre}' par {self.auteur}\"\n\nlivre = Livre(\"1984\", \"George Orwell\")\nprint(livre)  # '1984' par George Orwell\n\n# Sans __str__, afficherait :\n# <__main__.Livre object at 0x...>",
+      "caption": "Personnaliser l'affichage avec __str__",
+      "highlight": {
+        "style": "info",
+        "content": "💡 **Astuce** : Définis toujours `__str__` pour rendre tes objets lisibles lors du debugging avec `print()`."
+      }
+    },
+    {
+      "id": "section_19",
+      "type": "exercise",
+      "exerciseId": "py_ch9_ex5"
+    },
+    {
+      "id": "section_20",
+      "type": "text",
+      "title": "Héritage : les bases",
+      "content": "L'**héritage** permet de créer une classe **enfant** qui hérite des attributs et méthodes d'une classe **parent**.\n\nSyntaxe : `class Enfant(Parent):`"
+    },
+    {
+      "id": "section_21",
+      "type": "code_example",
+      "language": "python",
+      "code": "class Animal:\n    def __init__(self, nom):\n        self.nom = nom\n    \n    def parler(self):\n        return \"...\"\n\nclass Chien(Animal):\n    def parler(self):  # Surcharge (override)\n        return \"Woof!\"\n\nclass Chat(Animal):\n    def parler(self):\n        return \"Miaou!\"\n\nchien = Chien(\"Rex\")\nchat = Chat(\"Félix\")\nprint(chien.parler())  # Woof!\nprint(chat.parler())   # Miaou!",
+      "caption": "Héritage et surcharge de méthodes",
+      "highlight": {
+        "style": "success",
+        "content": "✅ **Cas d'usage réel** : Dans un jeu, une classe `Personnage` peut être parent de `Guerrier`, `Mage`, `Archer`, chacun avec ses propres compétences."
+      }
+    },
+    {
+      "id": "section_22",
+      "type": "exercise",
+      "exerciseId": "py_ch9_ex6"
+    },
+    {
+      "id": "section_23",
+      "type": "text",
+      "title": "Récapitulatif",
+      "content": "🎯 **Ce que tu as appris :**\n\n• Créer des **classes** avec `class NomClasse:`\n• Initialiser avec le constructeur `__init__(self, ...)`\n• Définir des **attributs** (`self.attribut`)\n• Créer des **méthodes** (fonctions de classe)\n• Attributs de classe vs attributs d'instance\n• Personnaliser l'affichage avec `__str__`\n• Bases de l'**héritage** et surcharge\n\n**Prochaine étape :** Tu vas apprendre à **gérer les erreurs** proprement avec try/except pour créer des programmes robustes !"
+    }
+  ],
+  "exercises": [
+    {
+      "id": "py_ch9_ex1",
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Qu'est-ce qu'une instance ?",
+      "code": "class Voiture:\n    pass\n\nma_voiture = Voiture()",
+      "options": ["La classe Voiture", "La variable ma_voiture", "Un objet créé à partir de la classe", "Une méthode"],
+      "correctAnswer": 2,
+      "explanation": "`ma_voiture` est une **instance** (objet concret) créée à partir du modèle (classe) `Voiture`.",
+      "highlightedLines": [4],
+      "xpGain": 10
+    },
+    {
+      "id": "py_ch9_ex2",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Que va afficher ce code ?",
+      "code": "class Personne:\n    def __init__(self, nom):\n        self.nom = nom\n\np = Personne(\"Alice\")\nprint(p.nom)",
+      "options": ["Personne", "Alice", "nom", "Erreur"],
+      "correctAnswer": 1,
+      "explanation": "Le constructeur `__init__` initialise `self.nom` avec la valeur `\"Alice\"`. L'attribut `p.nom` vaut donc **Alice**.",
+      "highlightedLines": [2, 3, 6],
+      "xpGain": 10
+    },
+    {
+      "id": "py_ch9_ex3",
+      "type": "predict_output",
+      "inputType": "free_input",
+      "question": "Que va retourner l'appel de la méthode ?",
+      "code": "class Calcul:\n    def __init__(self, x):\n        self.x = x\n    \n    def doubler(self):\n        return self.x * 2\n\nc = Calcul(7)\nprint(c.doubler())",
+      "predefinedAnswers": ["7", "14", "2", "9"],
+      "correctAnswer": "14",
+      "explanation": "La méthode `doubler()` retourne `self.x * 2`. Avec `x = 7`, le résultat est `7 * 2 = 14`.",
+      "highlightedLines": [5, 6, 9],
+      "xpGain": 10
+    },
+    {
+      "id": "py_ch9_ex4",
+      "type": "trace_execution",
+      "inputType": "free_input",
+      "question": "Quelle est la valeur de compte.solde après ces opérations ?",
+      "code": "class Compte:\n    def __init__(self):\n        self.solde = 0\n    \n    def ajouter(self, montant):\n        self.solde += montant\n\ncompte = Compte()\ncompte.ajouter(50)\ncompte.ajouter(30)\nprint(compte.solde)",
+      "predefinedAnswers": ["0", "30", "50", "80"],
+      "correctAnswer": "80",
+      "explanation": "Le solde part de 0, puis on ajoute 50 (total 50), puis 30 (total **80**).",
+      "highlightedLines": [5, 6, 9, 10],
+      "xpGain": 10
+    },
+    {
+      "id": "py_ch9_ex5",
+      "type": "find_error",
+      "inputType": "clickable_lines",
+      "question": "Ce code devrait compter les instances créées, mais le compteur ne s'incrémente pas. Quelle ligne contient l'erreur ?",
+      "code": "class Produit:\n    total = 0\n    \n    def __init__(self, nom):\n        self.nom = nom\n        self.total += 1",
+      "correctAnswer": 5,
+      "explanation": "Ligne 6 : `self.total += 1` crée un **attribut d'instance** au lieu de modifier l'attribut de classe. Il faut écrire `Produit.total += 1`.",
+      "highlightedLines": [6],
+      "xpGain": 10
+    },
+    {
+      "id": "py_ch9_ex6",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Que va afficher ce code avec héritage ?",
+      "code": "class Animal:\n    def crier(self):\n        return \"...\"\n\nclass Chien(Animal):\n    def crier(self):\n        return \"Woof\"\n\nd = Chien()\nprint(d.crier())",
+      "options": ["...", "Woof", "Animal", "Erreur"],
+      "correctAnswer": 1,
+      "explanation": "La classe `Chien` **surcharge** la méthode `crier()` de la classe parent. L'instance utilise la version de la classe enfant : **Woof**.",
+      "highlightedLines": [6, 7, 10],
+      "xpGain": 10
+    }
+  ]
+}

@@ -24,19 +24,9 @@ const LessonChapters = () => {
   }, [language]);
 
   // Vérifier si un chapitre est déverrouillé
-  const isChapterUnlocked = (chapter) => {
-    // 🔓 MODE TEST : Tous les chapitres déverrouillés temporairement
-    // TODO: Réactiver le système de lock en production
+  const isChapterUnlocked = () => {
+    // Tous les chapitres sont déverrouillés - l'utilisateur peut apprendre dans l'ordre qu'il veut
     return true;
-
-    // Code original (commenté pour test) :
-    // // Premier chapitre toujours déverrouillé
-    // if (!chapter.unlockRequirement) return true;
-    //
-    // // Vérifier si le chapitre requis est complété
-    // const lessonProgress = progress?.lessonProgress?.[language] || {};
-    // const requiredChapter = lessonProgress[chapter.unlockRequirement];
-    // return requiredChapter?.completed === true;
   };
 
   // Vérifier si un chapitre est complété

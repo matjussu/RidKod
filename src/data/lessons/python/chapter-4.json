@@ -1,0 +1,235 @@
+{
+  "chapterId": "py_ch_004",
+  "title": "Listes & Méthodes",
+  "subtitle": "Manipule des collections de données avec les listes Python",
+  "sections": [
+    {
+      "id": "section_1",
+      "type": "text",
+      "title": "Qu'est-ce qu'une liste ?",
+      "content": "Une **liste** est une collection ordonnée d'éléments. C'est comme un tiroir avec plusieurs compartiments : tu peux stocker plusieurs valeurs dans une seule variable !\n\nLes listes sont **mutables** : tu peux les modifier après leur création (ajouter, supprimer, modifier des éléments)."
+    },
+    {
+      "id": "section_2",
+      "type": "code_example",
+      "language": "python",
+      "code": "# Créer une liste\nfruits = [\"pomme\", \"banane\", \"orange\"]\nnombres = [1, 2, 3, 4, 5]\nmixte = [\"Python\", 42, True, 3.14]\n\nprint(fruits)  # ['pomme', 'banane', 'orange']",
+      "caption": "Créer des listes avec des crochets []",
+      "highlight": {
+        "style": "info",
+        "content": "💡 **Astuce** : Une liste peut contenir **n'importe quel type** de données, et même mélanger les types !"
+      }
+    },
+    {
+      "id": "section_3",
+      "type": "exercise",
+      "exerciseId": "py_ch4_ex1"
+    },
+    {
+      "id": "section_4",
+      "type": "text",
+      "title": "Accéder aux éléments (indexing)",
+      "content": "Chaque élément d'une liste a un **index** (position). En Python, les index commencent à **0** !\n\n• Premier élément : index `0`\n• Deuxième élément : index `1`\n• Dernier élément : index `-1` (index négatif = partir de la fin)"
+    },
+    {
+      "id": "section_5",
+      "type": "code_example",
+      "language": "python",
+      "code": "fruits = [\"pomme\", \"banane\", \"orange\", \"kiwi\"]\n\nprint(fruits[0])   # pomme (premier)\nprint(fruits[2])   # orange (troisième)\nprint(fruits[-1])  # kiwi (dernier)\nprint(fruits[-2])  # orange (avant-dernier)",
+      "caption": "Accéder aux éléments par index",
+      "highlight": {
+        "style": "warning",
+        "content": "⚠️ **Attention** : Si tu essaies d'accéder à un index qui n'existe pas (ex: `fruits[10]`), Python lève une erreur `IndexError` !"
+      }
+    },
+    {
+      "id": "section_6",
+      "type": "exercise",
+      "exerciseId": "py_ch4_ex2"
+    },
+    {
+      "id": "section_7",
+      "type": "text",
+      "title": "Le slicing (découper des listes)",
+      "content": "Le **slicing** permet d'extraire une **portion** d'une liste. La syntaxe est `liste[debut:fin]` (fin non incluse).\n\nTu peux aussi omettre le début ou la fin pour aller jusqu'au bout !"
+    },
+    {
+      "id": "section_8",
+      "type": "code_example",
+      "language": "python",
+      "code": "nombres = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\n\nprint(nombres[2:5])   # [2, 3, 4]\nprint(nombres[:3])    # [0, 1, 2] (du début à 3)\nprint(nombres[7:])    # [7, 8, 9] (de 7 à la fin)\nprint(nombres[-3:])   # [7, 8, 9] (3 derniers)\nprint(nombres[::2])   # [0, 2, 4, 6, 8] (tous les 2)",
+      "caption": "Découper une liste avec le slicing",
+      "highlight": {
+        "style": "success",
+        "content": "✅ **Cas d'usage réel** : Le slicing est ultra utilisé pour extraire des plages de données (ex: les 10 premiers résultats d'une recherche)."
+      }
+    },
+    {
+      "id": "section_9",
+      "type": "exercise",
+      "exerciseId": "py_ch4_ex3"
+    },
+    {
+      "id": "section_10",
+      "type": "text",
+      "title": "Ajouter des éléments : append() et insert()",
+      "content": "Pour **ajouter** des éléments à une liste, tu as plusieurs méthodes :\n\n• `append(element)` : ajoute à la **fin** de la liste\n• `insert(index, element)` : insère à une **position précise**"
+    },
+    {
+      "id": "section_11",
+      "type": "code_example",
+      "language": "python",
+      "code": "fruits = [\"pomme\", \"banane\"]\n\n# Ajouter à la fin\nfruits.append(\"orange\")\nprint(fruits)  # ['pomme', 'banane', 'orange']\n\n# Insérer à l'index 1\nfruits.insert(1, \"kiwi\")\nprint(fruits)  # ['pomme', 'kiwi', 'banane', 'orange']",
+      "caption": "Ajouter des éléments avec append() et insert()",
+      "highlight": {
+        "style": "info",
+        "content": "💡 **Astuce** : `append()` est plus rapide que `insert()`. Préfère `append()` si tu veux juste ajouter à la fin !"
+      }
+    },
+    {
+      "id": "section_12",
+      "type": "exercise",
+      "exerciseId": "py_ch4_ex4"
+    },
+    {
+      "id": "section_13",
+      "type": "text",
+      "title": "Supprimer des éléments : remove() et pop()",
+      "content": "Pour **supprimer** des éléments, tu as le choix entre :\n\n• `remove(element)` : supprime la **première occurrence** de l'élément\n• `pop(index)` : supprime l'élément à l'index donné et le **retourne**\n• `pop()` : supprime le **dernier** élément (par défaut)"
+    },
+    {
+      "id": "section_14",
+      "type": "code_example",
+      "language": "python",
+      "code": "fruits = [\"pomme\", \"banane\", \"orange\", \"banane\"]\n\n# Supprimer par valeur (première occurrence)\nfruits.remove(\"banane\")\nprint(fruits)  # ['pomme', 'orange', 'banane']\n\n# Supprimer par index et récupérer la valeur\ndernier = fruits.pop()\nprint(dernier)  # banane\nprint(fruits)   # ['pomme', 'orange']",
+      "caption": "Supprimer des éléments avec remove() et pop()",
+      "highlight": {
+        "style": "error",
+        "content": "🚨 **Piège courant** : `remove()` lève une erreur si l'élément n'existe pas ! Vérifie avec `if element in liste:` avant de supprimer."
+      }
+    },
+    {
+      "id": "section_15",
+      "type": "text",
+      "title": "Méthodes utiles : len(), sort(), reverse()",
+      "content": "Python propose plein de méthodes pratiques pour manipuler les listes :\n\n• `len(liste)` : nombre d'éléments\n• `liste.sort()` : trie la liste (modifie la liste originale)\n• `liste.reverse()` : inverse l'ordre\n• `element in liste` : vérifie si un élément est présent"
+    },
+    {
+      "id": "section_16",
+      "type": "code_example",
+      "language": "python",
+      "code": "nombres = [3, 1, 4, 1, 5, 9]\n\n# Longueur\nprint(len(nombres))  # 6\n\n# Trier\nnombres.sort()\nprint(nombres)  # [1, 1, 3, 4, 5, 9]\n\n# Inverser\nnombres.reverse()\nprint(nombres)  # [9, 5, 4, 3, 1, 1]\n\n# Vérifier présence\nprint(5 in nombres)  # True",
+      "caption": "Méthodes courantes sur les listes",
+      "highlight": {
+        "style": "warning",
+        "content": "⚠️ **Attention** : `sort()` et `reverse()` modifient la liste **en place**. Si tu veux garder l'originale, fais d'abord une copie : `nouvelle = liste.copy()`."
+      }
+    },
+    {
+      "id": "section_17",
+      "type": "exercise",
+      "exerciseId": "py_ch4_ex5"
+    },
+    {
+      "id": "section_18",
+      "type": "text",
+      "title": "Anatomie d'un code : Gestion d'une todo list",
+      "content": "Voici un exemple concret qui combine tout ce que tu as appris. Lis ce code ligne par ligne et essaie de comprendre ce qu'il fait :"
+    },
+    {
+      "id": "section_19",
+      "type": "code_example",
+      "language": "python",
+      "code": "# Gestion d'une todo list\ntaches = [\"Réviser\", \"Faire du sport\", \"Lire\"]\n\n# Ajouter une tâche\ntaches.append(\"Coder\")\n\n# Terminer la première tâche\ntache_terminee = taches.pop(0)\nprint(f\"Terminé : {tache_terminee}\")\n\n# Afficher les tâches restantes\nprint(f\"Il reste {len(taches)} tâches\")\nfor i, tache in enumerate(taches):\n    print(f\"{i+1}. {tache}\")",
+      "caption": "Exemple réel : gérer une liste de tâches",
+      "highlight": {
+        "style": "success",
+        "content": "✅ **Décortiquons le code** :\n\nLigne 2 : Création liste initiale\nLigne 5 : Ajout d'une nouvelle tâche\nLigne 8 : Suppression ET récupération de la 1ère tâche\nLigne 12-13 : Parcours avec numérotation automatique"
+      }
+    },
+    {
+      "id": "section_20",
+      "type": "exercise",
+      "exerciseId": "py_ch4_ex6"
+    },
+    {
+      "id": "section_21",
+      "type": "text",
+      "title": "Récapitulatif",
+      "content": "🎯 **Ce que tu as appris :**\n\n• Créer des listes avec `[]`\n• Accéder aux éléments par index (positif ou négatif)\n• Découper des listes avec le **slicing** `[debut:fin]`\n• Ajouter des éléments avec `append()` et `insert()`\n• Supprimer avec `remove()` et `pop()`\n• Utiliser `len()`, `sort()`, `reverse()`, `in`\n\n**Prochaine étape :** Tu vas découvrir les **dictionnaires**, parfaits pour stocker des données avec des clés (comme un annuaire) !"
+    }
+  ],
+  "exercises": [
+    {
+      "id": "py_ch4_ex1",
+      "type": "predict_output",
+      "inputType": "free_input",
+      "question": "Combien d'éléments contient cette liste ?",
+      "code": "ma_liste = [10, 20, 30, 40, 50]\nprint(len(ma_liste))",
+      "predefinedAnswers": ["3", "4", "5", "6"],
+      "correctAnswer": "5",
+      "explanation": "La liste contient 5 éléments (10, 20, 30, 40, 50). La fonction `len()` renvoie donc **5**.",
+      "highlightedLines": [1],
+      "xpGain": 10
+    },
+    {
+      "id": "py_ch4_ex2",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Que va afficher ce code ?",
+      "code": "animaux = [\"chat\", \"chien\", \"oiseau\"]\nprint(animaux[1])",
+      "options": ["chat", "chien", "oiseau", "Erreur"],
+      "correctAnswer": 1,
+      "explanation": "Les index commencent à 0 en Python. L'index 1 correspond au **deuxième** élément, donc **chien**.",
+      "highlightedLines": [2],
+      "xpGain": 10
+    },
+    {
+      "id": "py_ch4_ex3",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Que renvoie ce slicing ?",
+      "code": "nombres = [0, 1, 2, 3, 4, 5]\nresultat = nombres[1:4]\nprint(resultat)",
+      "options": ["[0, 1, 2, 3]", "[1, 2, 3]", "[1, 2, 3, 4]", "[2, 3, 4]"],
+      "correctAnswer": 1,
+      "explanation": "Le slicing `[1:4]` extrait les éléments de l'index 1 (inclus) à 4 (**exclus**). Résultat : **[1, 2, 3]**.",
+      "highlightedLines": [2],
+      "xpGain": 10
+    },
+    {
+      "id": "py_ch4_ex4",
+      "type": "trace_execution",
+      "inputType": "free_input",
+      "question": "Combien d'éléments contient la liste après ces opérations ?",
+      "code": "fruits = [\"pomme\", \"banane\"]\nfruits.append(\"orange\")\nfruits.append(\"kiwi\")\nprint(len(fruits))",
+      "predefinedAnswers": ["2", "3", "4", "5"],
+      "correctAnswer": "4",
+      "explanation": "On part de 2 éléments, puis on ajoute 2 fois avec `append()`. Résultat : **4 éléments** (pomme, banane, orange, kiwi).",
+      "highlightedLines": [2, 3],
+      "xpGain": 10
+    },
+    {
+      "id": "py_ch4_ex5",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Que va afficher ce programme ?",
+      "code": "nombres = [5, 2, 8, 1]\nnombres.sort()\nprint(nombres[0])",
+      "options": ["1", "2", "5", "8"],
+      "correctAnswer": 0,
+      "explanation": "La méthode `sort()` trie la liste en ordre croissant : [1, 2, 5, 8]. Le premier élément (index 0) est donc **1**.",
+      "highlightedLines": [2, 3],
+      "xpGain": 10
+    },
+    {
+      "id": "py_ch4_ex6",
+      "type": "find_error",
+      "inputType": "clickable_lines",
+      "question": "Ce code devrait supprimer \"banane\" mais il plante. Quelle ligne contient l'erreur ?",
+      "code": "fruits = [\"pomme\", \"orange\", \"kiwi\"]\nfruits.remove(\"banane\")\nprint(fruits)",
+      "correctAnswer": 1,
+      "explanation": "Ligne 2 : `remove()` cherche \"banane\" dans la liste mais ne le trouve pas. Cela lève une **ValueError**. Il faut d'abord vérifier avec `if \"banane\" in fruits:`.",
+      "highlightedLines": [2],
+      "xpGain": 10
+    }
+  ]
+}
