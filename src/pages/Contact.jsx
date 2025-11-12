@@ -77,17 +77,7 @@ const Contact = () => {
     setTerminalLines(prev => [...prev, { text, type, timestamp: Date.now() }]);
   };
 
-  // Auto-scroll to bottom only when not actively typing
-  useEffect(() => {
-    // Only scroll if user is not currently typing (step 5 or 6 = sending/success)
-    // Or when moving to a new step (currentInput is empty)
-    if (step >= 5 || currentInput === '') {
-      terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      // When typing, keep the input field visible
-      inputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-  }, [terminalLines, step, currentInput]);
+  // No auto-scroll - let user control their scroll position
 
   // Focus input when step changes
   useEffect(() => {
@@ -279,8 +269,8 @@ const Contact = () => {
     await new Promise(resolve => setTimeout(resolve, 1500));
 
     try {
-      // FormSubmit.co endpoint - REMPLACER PAR TON EMAIL
-      const response = await fetch('https://formsubmit.co/ajax/YOUR_EMAIL@example.com', {
+      // FormSubmit.co endpoint
+      const response = await fetch('https://formsubmit.co/ajax/matteolepietre@gmail.com', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -364,23 +354,17 @@ const Contact = () => {
               className="terminal-button terminal-button-close"
               onClick={handleCloseButton}
               aria-label="Fermer"
-            >
-              <span className="terminal-button-symbol">×</span>
-            </button>
+            />
             <button
               className="terminal-button terminal-button-minimize"
               onClick={handleMinimizeButton}
               aria-label="Réduire"
-            >
-              <span className="terminal-button-symbol">−</span>
-            </button>
+            />
             <button
               className="terminal-button terminal-button-maximize"
               onClick={handleMaximizeButton}
               aria-label="Agrandir"
-            >
-              <span className="terminal-button-symbol">+</span>
-            </button>
+            />
           </div>
           <div className="terminal-title">contact@readcod.app</div>
         </div>

@@ -22,12 +22,13 @@
 .terminal-window {
   width: 100%;
   max-width: 800px;
+  height: calc(100vh - 40px); /* Full height minus padding */
   background: #1a1a1a;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-  margin-top: 20px;
-  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -47,6 +48,10 @@
   display: flex;
   align-items: center;
   border-bottom: 1px solid #333;
+  flex-shrink: 0; /* Header never shrinks */
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .terminal-buttons {
@@ -131,28 +136,16 @@
 /* Terminal Body */
 .terminal-body {
   background: #000;
-  min-height: 400px;
-  max-height: 600px;
+  flex: 1; /* Takes all remaining space */
   overflow-y: auto;
   padding: 16px;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
 }
 
-/* Custom Scrollbar */
+/* Hide Scrollbar */
 .terminal-body::-webkit-scrollbar {
-  width: 8px;
-}
-
-.terminal-body::-webkit-scrollbar-track {
-  background: #0d0d0d;
-}
-
-.terminal-body::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 4px;
-}
-
-.terminal-body::-webkit-scrollbar-thumb:hover {
-  background: #444;
+  display: none; /* Chrome, Safari, Opera */
 }
 
 /* Terminal Output */
@@ -384,12 +377,10 @@
   }
 
   .terminal-window {
-    margin-top: 50px;
+    height: calc(100vh - 32px); /* Adjust for smaller padding */
   }
 
   .terminal-body {
-    min-height: 300px;
-    max-height: 500px;
     padding: 12px;
   }
 
