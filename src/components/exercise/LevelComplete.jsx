@@ -1,31 +1,61 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react';
 import useHaptic from '../../hooks/useHaptic';
 
 const LevelComplete = ({ stats, level = 1, onContinue }) => {
-  const navigate = useNavigate();
   const { triggerSuccess } = useHaptic();
+  const [isSliding, setIsSliding] = useState(false);
+  const [slideProgress, setSlideProgress] = useState(100);
+  const sliderRef = useRef(null);
 
   useEffect(() => {
     triggerSuccess();
-  }, []);
+  }, [triggerSuccess]);
 
-  const accuracy = stats.totalAnswered > 0
-    ? Math.round((stats.correctAnswers / stats.totalAnswered) * 100)
-    : 0;
+  // Extraire le numéro de niveau depuis le format "difficulty_levelNumber" (ex: "1_1" → 1)
+  const levelNumber = typeof level === 'string' ? level.split('_')[1] : level;
 
-  const getPerformanceMessage = () => {
-    if (accuracy === 100) return "Performance parfaite";
-    if (accuracy >= 80) return "Excellent travail";
-    if (accuracy >= 60) return "Bon effort";
-    if (accuracy >= 40) return "Continue comme ça";
-    return "Persévère, tu progresses";
+  // Formatter le temps en minutes:secondes
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const getPerformanceColor = () => {
-    if (accuracy >= 80) return '#30D158';
-    if (accuracy >= 60) return '#FF9500';
-    return '#FF453A';
+  // Gérer le slide
+  const handleTouchStart = () => {
+    setIsSliding(true);
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isSliding || !sliderRef.current) return;
+
+    const touch = e.touches[0];
+    const rect = sliderRef.current.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+
+    setSlideProgress(100 - percentage);
+
+    if (percentage >= 95) {
+      handleSlideComplete();
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (slideProgress > 10) {
+      // Reset si pas complété
+      setSlideProgress(100);
+    }
+    setIsSliding(false);
+  };
+
+  const handleSlideComplete = () => {
+    setIsSliding(false);
+    setSlideProgress(0);
+    triggerSuccess();
+    setTimeout(() => {
+      onContinue();
+    }, 300);
   };
 
   return (
@@ -65,7 +95,8 @@ const LevelComplete = ({ stats, level = 1, onContinue }) => {
         /* Header Section */
         .level-complete-header {
           text-align: center;
-          margin-bottom: 40px;
+          margin-top: 80px;
+          margin-bottom: 48px;
           opacity: 0;
           animation: slideDown 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
         }
@@ -76,45 +107,80 @@ const LevelComplete = ({ stats, level = 1, onContinue }) => {
         }
 
         .level-complete-title {
-          font-size: 28px;
-          font-weight: 800;
+          font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+          font-size: 48px;
+          font-weight: 900;
+          font-style: italic;
           color: #FFFFFF;
-          margin-bottom: 8px;
-          letter-spacing: -0.5px;
+          margin: 0;
+          line-height: 1;
+          transform: skewX(-5deg);
+          letter-spacing: 0px;
+          text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.6);
+          position: relative;
         }
 
-        .level-complete-subtitle {
-          font-size: 15px;
-          font-weight: 600;
-          color: #8E8E93;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
+        .level-complete-title::before {
+          content: '';
+          position: absolute;
+          bottom: -20px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 500px;
+          height: 4px;
+          background: linear-gradient(90deg, #30D158 0%, #088201 100%);
+          border-radius: 2px;
+          box-shadow: 0 2px 8px rgba(48, 209, 88, 0.4);
+        }
+
+        .title-hash {
+          color: #30D158;
+          font-weight: 900;
+          font-size: 48px;
+          text-shadow: 2px 2px 8px rgba(48, 209, 88, 0.6);
+          -webkit-text-fill-color: #30D158;
         }
 
         /* Stats Grid */
         .stats-grid {
           width: 100%;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          margin-bottom: 32px;
+        }
+
+        .stats-row {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 16px;
-          margin-bottom: 24px;
+          gap: 12px;
         }
 
         .stat-card {
-          background: linear-gradient(135deg, #3A3A3C 0%, #2C2C2E 100%);
+          background: rgba(255, 255, 255, 0.08);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
           border-radius: 20px;
-          padding: 24px;
+          padding: 28px 24px;
           border: 1px solid rgba(255, 255, 255, 0.1);
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
           text-align: center;
           opacity: 0;
           animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+          transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        .stat-card:nth-child(1) { animation-delay: 0.3s; }
-        .stat-card:nth-child(2) { animation-delay: 0.4s; }
-        .stat-card:nth-child(3) { animation-delay: 0.5s; }
-        .stat-card:nth-child(4) { animation-delay: 0.6s; }
+        .stat-card:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+          background: rgba(255, 255, 255, 0.12);
+        }
+
+        .stats-row { animation-delay: 0.3s; }
+
+        .stat-card.time {
+          animation-delay: 0.4s;
+        }
 
         @keyframes slideUp {
           0% { opacity: 0; transform: translateY(30px); }
@@ -122,109 +188,45 @@ const LevelComplete = ({ stats, level = 1, onContinue }) => {
         }
 
         .stat-label {
-          font-size: 12px;
-          font-weight: 700;
-          color: #8E8E93;
+          font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+          font-size: 13px;
+          font-weight: 600;
+          color: rgba(255, 255, 255, 0.6);
           text-transform: uppercase;
           letter-spacing: 0.5px;
-          margin-bottom: 12px;
+          margin-bottom: 8px;
         }
 
         .stat-value {
+          font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
           font-size: 48px;
-          font-weight: 800;
+          font-weight: 700;
           line-height: 1;
           color: #FFFFFF;
         }
 
         .stat-value.success {
           color: #30D158;
+          text-shadow: 0 0 20px rgba(48, 209, 88, 0.8),
+                       0 0 40px rgba(48, 209, 88, 0.5),
+                       0 0 60px rgba(48, 209, 88, 0.3);
         }
 
         .stat-value.error {
           color: #FF453A;
+          text-shadow: 0 0 20px rgba(255, 69, 58, 0.8),
+                       0 0 40px rgba(255, 69, 58, 0.5),
+                       0 0 60px rgba(255, 69, 58, 0.3);
         }
 
-        .stat-value.xp {
-          color: #FF9500;
+        .stat-value.time {
+          color: #1871BE;
+          font-size: 44px;
+          text-shadow: 0 0 20px rgba(24, 113, 190, 0.8),
+                       0 0 40px rgba(24, 113, 190, 0.5),
+                       0 0 60px rgba(24, 113, 190, 0.3);
         }
 
-        .stat-value.level {
-          background: linear-gradient(135deg, #30D158 0%, #088201 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-        }
-
-        /* Accuracy Circle */
-        .accuracy-section {
-          width: 100%;
-          margin-bottom: 24px;
-          opacity: 0;
-          animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.7s forwards;
-        }
-
-        .accuracy-card {
-          background: linear-gradient(135deg, #3A3A3C 0%, #2C2C2E 100%);
-          border-radius: 20px;
-          padding: 32px;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-          text-align: center;
-          position: relative;
-          overflow: hidden;
-        }
-
-        .accuracy-circle-container {
-          position: relative;
-          width: 140px;
-          height: 140px;
-          margin: 0 auto 20px;
-        }
-
-        .accuracy-circle-bg {
-          width: 140px;
-          height: 140px;
-          border-radius: 50%;
-          background: rgba(255, 255, 255, 0.05);
-        }
-
-        .accuracy-circle {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 140px;
-          height: 140px;
-          border-radius: 50%;
-          border: 8px solid transparent;
-          transform: rotate(-90deg);
-          transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        .accuracy-percentage {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          font-size: 36px;
-          font-weight: 800;
-          line-height: 1;
-        }
-
-        .accuracy-label {
-          font-size: 13px;
-          font-weight: 700;
-          color: #8E8E93;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-          margin-bottom: 8px;
-        }
-
-        .performance-message {
-          font-size: 18px;
-          font-weight: 700;
-          margin-top: 8px;
-        }
 
         /* Streak Section */
         .streak-section {
@@ -243,73 +245,93 @@ const LevelComplete = ({ stats, level = 1, onContinue }) => {
         }
 
         .streak-value {
-          font-size: 32px;
-          font-weight: 800;
+          font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+          font-size: 28px;
+          font-weight: 700;
           color: #FF9500;
-          margin-bottom: 4px;
-        }
-
-        .streak-label {
-          font-size: 13px;
-          font-weight: 600;
-          color: #FF9500;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-        }
-
-        /* Buttons Container */
-        .buttons-container {
-          width: 100%;
           display: flex;
-          flex-direction: column;
-          gap: 12px;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          text-shadow: 0 0 20px rgba(255, 149, 0, 0.6);
+        }
+
+        .flame-icon {
+          font-size: 32px;
+          filter: drop-shadow(0 0 10px rgba(255, 149, 0, 0.8));
+        }
+
+        /* Slider Container */
+        .slider-container {
+          width: 100%;
           opacity: 0;
           animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.9s forwards;
         }
 
-        .continue-button,
-        .home-button {
+        .xp-slider {
+          position: relative;
           width: 100%;
-          height: 56px;
-          border: none;
-          border-radius: 16px;
-          font-family: "JetBrains Mono", monospace;
-          font-size: 16px;
-          font-weight: 800;
+          height: 80px;
+          background: linear-gradient(135deg, #30D158 0%, #088201 100%);
+          border-radius: 20px;
+          overflow: hidden;
+          box-shadow: 0 8px 32px rgba(48, 209, 88, 0.4);
+          cursor: pointer;
+          user-select: none;
+          -webkit-user-select: none;
+        }
+
+        .xp-slider-text {
+          position: absolute;
+          top: 50%;
+          right: -15px;
+          transform: translateY(-50%) skewX(-12deg);
+          font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+          font-size: 95px;
+          font-weight: 900;
           color: #FFFFFF;
           text-transform: uppercase;
-          letter-spacing: 0.5px;
-          cursor: pointer;
-          transition: all 0.3s ease;
+          letter-spacing: 0px;
+          word-spacing: -40px;
+          text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.4);
+          z-index: 2;
+          pointer-events: none;
         }
 
-        .continue-button {
-          background: linear-gradient(135deg, #30D158 0%, #088201 100%);
-          box-shadow: 0 6px 24px rgba(48, 209, 88, 0.3);
+        .xp-slider-arrow {
+          position: absolute;
+          top: 50%;
+          left: 5px;
+          transform: translateY(-50%);
+          font-family: "JetBrains Mono", "SF Mono", Monaco, monospace;
+          font-size: 20px;
+          font-weight: 900;
+          color: rgba(255, 255, 255, 0.7);
+          text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+          z-index: 2;
+          pointer-events: none;
+          animation: slideHint 2s ease-in-out infinite;
         }
 
-        .continue-button:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 10px 30px rgba(48, 209, 88, 0.4);
+        @keyframes slideHint {
+          0%, 100% {
+            opacity: 0.7;
+            transform: translateY(-50%) translateX(0px);
+          }
+          50% {
+            opacity: 1;
+            transform: translateY(-50%) translateX(10px);
+          }
         }
 
-        .continue-button:active {
-          transform: scale(0.98);
+        .xp-slider.completed {
+          background: linear-gradient(135deg, #088201 0%, #065c01 100%);
+          animation: success-flash 0.5s ease;
         }
 
-        .home-button {
-          background: linear-gradient(135deg, #3A3A3C 0%, #2C2C2E 100%);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-        }
-
-        .home-button:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-        }
-
-        .home-button:active {
-          transform: scale(0.98);
+        @keyframes success-flash {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.7; }
         }
 
         /* Responsive */
@@ -337,56 +359,31 @@ const LevelComplete = ({ stats, level = 1, onContinue }) => {
 
       {/* Header */}
       <div className="level-complete-header">
-        <div className="level-complete-title">Niveau {level} complété</div>
-        <div className="level-complete-subtitle">{getPerformanceMessage()}</div>
+        <h1 className="level-complete-title">
+          <span className="title-hash">//</span>
+          Level {levelNumber} Completed
+        </h1>
       </div>
 
       {/* Stats Grid */}
       <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-label">Correct</div>
-          <div className="stat-value success">{stats.correctAnswers}</div>
-        </div>
-
-        <div className="stat-card">
-          <div className="stat-label">Incorrect</div>
-          <div className="stat-value error">{stats.incorrectAnswers}</div>
-        </div>
-
-        <div className="stat-card">
-          <div className="stat-label">XP gagnés</div>
-          <div className="stat-value xp">+{stats.xpGained}</div>
-        </div>
-
-        <div className="stat-card">
-          <div className="stat-label">Niveau</div>
-          <div className="stat-value level">{stats.currentUserLevel}</div>
-        </div>
-      </div>
-
-      {/* Accuracy Circle */}
-      <div className="accuracy-section">
-        <div className="accuracy-card">
-          <div className="accuracy-label">Précision</div>
-          <div className="accuracy-circle-container">
-            <div className="accuracy-circle-bg"></div>
-            <div
-              className="accuracy-circle"
-              style={{
-                borderColor: getPerformanceColor(),
-                borderTopColor: 'transparent',
-                borderRightColor: accuracy >= 25 ? getPerformanceColor() : 'transparent',
-                borderBottomColor: accuracy >= 50 ? getPerformanceColor() : 'transparent',
-                borderLeftColor: accuracy >= 75 ? getPerformanceColor() : 'transparent'
-              }}
-            ></div>
-            <div className="accuracy-percentage" style={{ color: getPerformanceColor() }}>
-              {accuracy}%
-            </div>
+        {/* Row 1 : Correct / Incorrect */}
+        <div className="stats-row">
+          <div className="stat-card">
+            <div className="stat-label">Correct</div>
+            <div className="stat-value success">{stats.correctAnswers}</div>
           </div>
-          <div className="performance-message" style={{ color: getPerformanceColor() }}>
-            {getPerformanceMessage()}
+
+          <div className="stat-card">
+            <div className="stat-label">Incorrect</div>
+            <div className="stat-value error">{stats.incorrectAnswers}</div>
           </div>
+        </div>
+
+        {/* Row 2 : Temps (full width) */}
+        <div className="stat-card time">
+          <div className="stat-label">Time</div>
+          <div className="stat-value time">{formatTime(stats.timeElapsed || 0)}</div>
         </div>
       </div>
 
@@ -394,20 +391,26 @@ const LevelComplete = ({ stats, level = 1, onContinue }) => {
       {stats.streak > 0 && (
         <div className="streak-section">
           <div className="streak-card">
-            <div className="streak-value">{stats.streak} jours</div>
-            <div className="streak-label">Série en cours</div>
+            <div className="streak-value">
+              <span className="flame-icon">🔥</span>
+              {stats.streak} streak
+            </div>
           </div>
         </div>
       )}
 
-      {/* Buttons */}
-      <div className="buttons-container">
-        <button className="continue-button" onClick={onContinue}>
-          Continuer
-        </button>
-        <button className="home-button" onClick={() => navigate('/home')}>
-          Retour au menu
-        </button>
+      {/* Slider XP */}
+      <div className="slider-container">
+        <div
+          ref={sliderRef}
+          className={`xp-slider ${isSliding ? 'sliding' : ''} ${slideProgress === 0 ? 'completed' : ''}`}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div className="xp-slider-arrow">&gt;&gt;&gt;</div>
+          <div className="xp-slider-text">GET XP</div>
+        </div>
       </div>
     </div>
   );

@@ -13,8 +13,9 @@ import exercisesData from "../data/exercises.json";
 import { isBlockComplete, EXERCISES_PER_LEVEL } from '../constants/exerciseLayout';
 import '../styles/Exercise.css';
 
-// Lazy load LevelComplete component (only loaded when needed)
+// Lazy load LevelComplete and XPCollect components (only loaded when needed)
 const LevelComplete = lazy(() => import("../components/exercise/LevelComplete"));
+const XPCollect = lazy(() => import("../components/exercise/XPCollect"));
 
 const Exercise = () => {
   const navigate = useNavigate();
@@ -53,6 +54,7 @@ const Exercise = () => {
 
   // Level complete state
   const [showLevelComplete, setShowLevelComplete] = useState(false);
+  const [showXPCollect, setShowXPCollect] = useState(false);
   const [blockStats, setBlockStats] = useState(() => {
     return {
       correctAnswers: 0,
@@ -60,9 +62,13 @@ const Exercise = () => {
       xpGained: 0,
       currentUserLevel: stats.userLevel,
       streak: stats.streak?.current || 0,
-      totalAnswered: 0
+      totalAnswered: 0,
+      timeElapsed: 0 // Temps en secondes
     };
   });
+
+  // Timer pour mesurer le temps passé sur le niveau
+  const [levelStartTime] = useState(Date.now());
 
   // Haptic feedback hook
   const { triggerSuccess, triggerError, triggerLight } = useHaptic();
@@ -177,10 +183,12 @@ const Exercise = () => {
     if (blockComplete) {
       // Afficher l'écran de feedback (ne PAS marquer complété maintenant)
       const stats = getStats();
+      const timeElapsed = Math.floor((Date.now() - levelStartTime) / 1000); // En secondes
       setBlockStats(prev => ({
         ...prev,
         currentUserLevel: stats.userLevel,
-        streak: stats.streak?.current || 0
+        streak: stats.streak?.current || 0,
+        timeElapsed
       }));
       setShowLevelComplete(true);
     } else if (currentExerciseIndex < exercises.length - 1) {
@@ -193,16 +201,26 @@ const Exercise = () => {
     } else {
       // Fin de tous les exercices disponibles
       const stats = getStats();
+      const timeElapsed = Math.floor((Date.now() - levelStartTime) / 1000); // En secondes
       setBlockStats(prev => ({
         ...prev,
         currentUserLevel: stats.userLevel,
-        streak: stats.streak?.current || 0
+        streak: stats.streak?.current || 0,
+        timeElapsed
       }));
       setShowLevelComplete(true);
     }
   };
 
-  const handleLevelContinue = async () => {
+  const handleLevelContinue = () => {
+    // Quand user clique "GET XP" sur LevelComplete
+    // → Afficher XPCollect au lieu de continuer directement
+    setShowLevelComplete(false);
+    setShowXPCollect(true);
+  };
+
+  const handleXPCollectContinue = async () => {
+    // Après avoir collecté l'XP
     // Marquer le niveau comme complété dans Firebase MAINTENANT
     try {
       await completeLevel(currentExerciseLevel);
@@ -211,7 +229,7 @@ const Exercise = () => {
       console.error('Erreur lors de la complétion du niveau:', error);
     }
 
-    setShowLevelComplete(false);
+    setShowXPCollect(false);
 
     // Réinitialiser les stats du bloc
     const stats = getStats();
@@ -424,6 +442,16 @@ const Exercise = () => {
         onContinue={handleModalContinue}
         onExit={handleModalExit}
       />
+
+      {/* XP Collection Screen - After LevelComplete */}
+      {showXPCollect && (
+        <Suspense fallback={<div className="loading-container" />}>
+          <XPCollect
+            totalXP={blockStats.xpGained}
+            onContinue={handleXPCollectContinue}
+          />
+        </Suspense>
+      )}
     </div>
   );
 };
