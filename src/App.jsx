@@ -13,6 +13,8 @@ import Contact from './pages/Contact';
 import LessonLanguage from './pages/lessons/LessonLanguage';
 import LessonChapters from './pages/lessons/LessonChapters';
 import LessonContent from './pages/lessons/LessonContent';
+import LevelComplete from './pages/LevelComplete';
+import XPCollect from './pages/XPCollect';
 
 // Composant pour gérer la route principale "/"
 const RootRoute = () => {
@@ -42,6 +44,8 @@ const App = () => {
           <Route path="/language" element={<Language />} />
           <Route path="/difficulty" element={<Difficulty />} />
           <Route path="/exercise" element={<Exercise />} />
+          <Route path="/level-complete" element={<LevelComplete />} />
+          <Route path="/xp-collect" element={<XPCollect />} />
 
           {/* Routes Lessons */}
           <Route path="/lessons" element={<Navigate to="/lessons/language" replace />} />

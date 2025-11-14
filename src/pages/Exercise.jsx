@@ -1,4 +1,4 @@
-import React, { useState, lazy, Suspense } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useProgress } from '../context/ProgressContext';
 import QuestionCard from "../components/exercise/QuestionCard";
@@ -13,14 +13,10 @@ import exercisesData from "../data/exercises.json";
 import { isBlockComplete, EXERCISES_PER_LEVEL } from '../constants/exerciseLayout';
 import '../styles/Exercise.css';
 
-// Lazy load LevelComplete and XPCollect components (only loaded when needed)
-const LevelComplete = lazy(() => import("../components/exercise/LevelComplete"));
-const XPCollect = lazy(() => import("../components/exercise/XPCollect"));
-
 const Exercise = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { completeExercise, completeLevel, getStats, isLevelCompleted } = useProgress();
+  const { completeExercise, getStats, isLevelCompleted } = useProgress();
 
   // Récupérer le langage et la difficulté depuis la navigation
   const language = location.state?.language || 'PYTHON';
@@ -52,9 +48,7 @@ const Exercise = () => {
   // Exit modal state
   const [showExitModal, setShowExitModal] = useState(false);
 
-  // Level complete state
-  const [showLevelComplete, setShowLevelComplete] = useState(false);
-  const [showXPCollect, setShowXPCollect] = useState(false);
+  // Level stats tracking
   const [blockStats, setBlockStats] = useState(() => {
     return {
       correctAnswers: 0,
@@ -181,16 +175,24 @@ const Exercise = () => {
     const blockComplete = isBlockComplete(currentExerciseIndex);
 
     if (blockComplete) {
-      // Afficher l'écran de feedback (ne PAS marquer complété maintenant)
+      // Naviguer vers LevelComplete avec les stats
       const stats = getStats();
       const timeElapsed = Math.floor((Date.now() - levelStartTime) / 1000); // En secondes
-      setBlockStats(prev => ({
-        ...prev,
-        currentUserLevel: stats.userLevel,
-        streak: stats.streak?.current || 0,
-        timeElapsed
-      }));
-      setShowLevelComplete(true);
+
+      navigate('/level-complete', {
+        state: {
+          stats: {
+            correctAnswers: blockStats.correctAnswers,
+            incorrectAnswers: blockStats.incorrectAnswers,
+            timeElapsed,
+            streak: stats.streak?.current || 0
+          },
+          level: currentExerciseLevel,
+          totalXP: blockStats.xpGained,
+          difficulty,
+          currentExerciseLevel
+        }
+      });
     } else if (currentExerciseIndex < exercises.length - 1) {
       // Continuer normalement au prochain exercice
       setCurrentExerciseIndex(nextExerciseIndex);
@@ -202,61 +204,21 @@ const Exercise = () => {
       // Fin de tous les exercices disponibles
       const stats = getStats();
       const timeElapsed = Math.floor((Date.now() - levelStartTime) / 1000); // En secondes
-      setBlockStats(prev => ({
-        ...prev,
-        currentUserLevel: stats.userLevel,
-        streak: stats.streak?.current || 0,
-        timeElapsed
-      }));
-      setShowLevelComplete(true);
-    }
-  };
 
-  const handleLevelContinue = () => {
-    // Quand user clique "GET XP" sur LevelComplete
-    // → Afficher XPCollect au lieu de continuer directement
-    setShowLevelComplete(false);
-    setShowXPCollect(true);
-  };
-
-  const handleXPCollectContinue = async () => {
-    // Après avoir collecté l'XP
-    // Marquer le niveau comme complété dans Firebase MAINTENANT
-    try {
-      await completeLevel(currentExerciseLevel);
-      console.log(`✅ Niveau ${currentExerciseLevel} complété et sauvegardé !`);
-    } catch (error) {
-      console.error('Erreur lors de la complétion du niveau:', error);
-    }
-
-    setShowXPCollect(false);
-
-    // Réinitialiser les stats du bloc
-    const stats = getStats();
-    setBlockStats({
-      correctAnswers: 0,
-      incorrectAnswers: 0,
-      xpGained: 0,
-      totalAnswered: 0,
-      currentUserLevel: stats.userLevel,
-      streak: stats.streak?.current || 0
-    });
-
-    // Vérifier s'il reste des exercices disponibles
-    const nextExerciseIndex = currentExerciseIndex + 1;
-    const nextExerciseLevel = Math.floor(nextExerciseIndex / EXERCISES_PER_LEVEL) + 1;
-
-    // Si on dépasse le dernier exercice disponible OU si le prochain niveau est déjà complété
-    if (nextExerciseIndex >= exercises.length || isLevelCompleted(nextExerciseLevel)) {
-      // Retour à l'accueil
-      navigate('/home');
-    } else {
-      // Continuer au prochain exercice
-      setCurrentExerciseIndex(nextExerciseIndex);
-      setSelectedOption(null);
-      setUserInput('');
-      setSelectedLine(null);
-      setIsSubmitted(false);
+      navigate('/level-complete', {
+        state: {
+          stats: {
+            correctAnswers: blockStats.correctAnswers,
+            incorrectAnswers: blockStats.incorrectAnswers,
+            timeElapsed,
+            streak: stats.streak?.current || 0
+          },
+          level: currentExerciseLevel,
+          totalXP: blockStats.xpGained,
+          difficulty,
+          currentExerciseLevel
+        }
+      });
     }
   };
 
@@ -312,27 +274,6 @@ const Exercise = () => {
   };
 
   const isCorrect = checkAnswer();
-
-  // Afficher l'écran de feedback si le bloc est complété
-  if (showLevelComplete) {
-    return (
-      <Suspense fallback={<div style={{
-        minHeight: '100vh',
-        background: '#1A1919',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: '#FFFFFF',
-        fontFamily: 'JetBrains Mono, monospace'
-      }}>Chargement...</div>}>
-        <LevelComplete
-          stats={blockStats}
-          level={currentExerciseLevel}
-          onContinue={handleLevelContinue}
-        />
-      </Suspense>
-    );
-  }
 
   return (
     <div className="exercise-app">
@@ -442,16 +383,6 @@ const Exercise = () => {
         onContinue={handleModalContinue}
         onExit={handleModalExit}
       />
-
-      {/* XP Collection Screen - After LevelComplete */}
-      {showXPCollect && (
-        <Suspense fallback={<div className="loading-container" />}>
-          <XPCollect
-            totalXP={blockStats.xpGained}
-            onContinue={handleXPCollectContinue}
-          />
-        </Suspense>
-      )}
     </div>
   );
 };

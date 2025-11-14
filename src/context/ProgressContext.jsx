@@ -9,8 +9,10 @@ import {
   getLocalProgress,
   calculateLevel,
   getXPForNextLevel,
-  EXERCISES_PER_LEVEL
+  EXERCISES_PER_LEVEL,
+  updateUserProgress
 } from '../services/progressService';
+import { exerciseRateLimiter, lessonRateLimiter } from '../utils/throttle';
 
 // Création du contexte
 const ProgressContext = createContext({});
@@ -69,16 +71,29 @@ export const ProgressProvider = ({ children }) => {
     loadProgress();
   }, [user, isAuthenticated]);
 
-  // Sauvegarder la complétion d'un exercice (NOUVELLE LOGIQUE)
+  // Sauvegarder la complétion d'un exercice (OPTIMISÉ + RATE LIMITED)
   const completeExercise = async (exerciseData) => {
     try {
+      // Rate limiting : Max 30 exercices/minute (1 toutes les 2 secondes)
+      const userId = user?.uid || 'guest';
+      if (!exerciseRateLimiter.check(userId)) {
+        const timeUntilReset = exerciseRateLimiter.getTimeUntilReset(userId);
+        const secondsRemaining = Math.ceil(timeUntilReset / 1000);
+
+        console.warn(`⚠️ Rate limit atteint pour ${userId} - Réessayer dans ${secondsRemaining}s`);
+        throw new Error(
+          `Trop d'exercices complétés trop rapidement. Attendez ${secondsRemaining} secondes.`
+        );
+      }
+
       if (isAuthenticated && user) {
-        // Mode connecté - sauvegarder dans Firestore
+        // Mode connecté - Update optimiste (pas de rechargement Firestore)
         const result = await saveExerciseCompletion(user.uid, exerciseData);
 
-        // Recharger la progression pour avoir les données à jour
-        const updatedProgress = await getUserProgress(user.uid);
-        setProgress(updatedProgress);
+        // Utiliser les données retournées directement (évite un round-trip Firestore)
+        if (result.updatedProgress) {
+          setProgress(result.updatedProgress);
+        }
 
         return result;
       } else {
@@ -256,26 +271,37 @@ export const ProgressProvider = ({ children }) => {
     };
   };
 
-  // Mettre à jour la progression directement (pour les leçons)
+  // Mettre à jour la progression directement (pour les leçons) - OPTIMISÉ + RATE LIMITED
   const updateProgress = async (updatedFields) => {
     try {
-      const currentProgress = progress || getLocalProgress();
-      const updatedProgress = {
-        ...currentProgress,
-        ...updatedFields
-      };
+      // Rate limiting leçons : Max 60 updates/minute (plus permissif)
+      const userId = user?.uid || 'guest';
+      if (!lessonRateLimiter.check(userId)) {
+        const timeUntilReset = lessonRateLimiter.getTimeUntilReset(userId);
+        const secondsRemaining = Math.ceil(timeUntilReset / 1000);
 
-      if (isAuthenticated && user) {
-        // Mode connecté - sauvegarder dans Firestore
-        // TODO: Ajouter fonction updateUserProgress dans progressService
-        saveProgressLocally(updatedProgress);
-      } else {
-        // Mode invité - sauvegarder localement
-        saveProgressLocally(updatedProgress);
+        console.warn(`⚠️ Rate limit leçons atteint pour ${userId}`);
+        throw new Error(
+          `Trop d'actions trop rapidement. Attendez ${secondsRemaining} secondes.`
+        );
       }
 
-      setProgress(updatedProgress);
-      return updatedProgress;
+      if (isAuthenticated && user) {
+        // Mode connecté - Update optimiste Firestore
+        const updatedProgress = await updateUserProgress(user.uid, updatedFields);
+        setProgress(updatedProgress);
+        return updatedProgress;
+      } else {
+        // Mode invité - sauvegarder localement
+        const currentProgress = progress || getLocalProgress();
+        const updatedProgress = {
+          ...currentProgress,
+          ...updatedFields
+        };
+        saveProgressLocally(updatedProgress);
+        setProgress(updatedProgress);
+        return updatedProgress;
+      }
     } catch (err) {
       console.error('Erreur lors de la mise à jour de la progression:', err);
       setError(err.message);

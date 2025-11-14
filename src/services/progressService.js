@@ -222,8 +222,8 @@ export const saveExerciseCompletion = async (userId, exerciseData) => {
       [today]: todayCount + 1
     };
 
-    // Mettre à jour dans Firestore
-    await updateDoc(progressRef, {
+    // Préparer les données mises à jour
+    const updatedData = {
       totalXP: newTotalXP,
       userLevel: newUserLevel,
       levelStats: updatedLevelStats,
@@ -231,14 +231,30 @@ export const saveExerciseCompletion = async (userId, exerciseData) => {
       stats: updatedStats,
       dailyActivity: updatedDailyActivity,
       updatedAt: serverTimestamp()
-    });
+    };
+
+    // Mettre à jour dans Firestore
+    await updateDoc(progressRef, updatedData);
+
+    // Retourner les données complètes mises à jour (pour éviter un rechargement)
+    const fullUpdatedProgress = {
+      ...currentProgress,
+      ...updatedData,
+      // Remplacer serverTimestamp() par la date actuelle pour l'état local
+      updatedAt: new Date(),
+      streak: {
+        ...newStreak,
+        lastActivityDate: new Date()
+      }
+    };
 
     return {
       totalXP: newTotalXP,
       userLevel: newUserLevel,
       xpGained: xpGained,
       leveledUp: newUserLevel > currentProgress.userLevel,
-      alreadyCompleted: false
+      alreadyCompleted: false,
+      updatedProgress: fullUpdatedProgress  // Ajout des données complètes
     };
   } catch (error) {
     console.error('Erreur lors de la sauvegarde de la progression:', error);
@@ -405,5 +421,43 @@ export const getLocalProgress = () => {
       stats: { totalExercises: 0, correctAnswers: 0, incorrectAnswers: 0 },
       dailyActivity: {}
     };
+  }
+};
+
+/**
+ * Mettre à jour la progression utilisateur (pour leçons, achievements, etc.)
+ * Permet de modifier des champs spécifiques sans recharger toute la progression
+ */
+export const updateUserProgress = async (userId, updatedFields) => {
+  try {
+    const progressRef = doc(db, 'progress', userId);
+    const progressSnap = await getDoc(progressRef);
+
+    if (!progressSnap.exists()) {
+      throw new Error('Progression utilisateur introuvable');
+    }
+
+    const currentProgress = progressSnap.data();
+
+    // Préparer les données mises à jour
+    const updatedData = {
+      ...updatedFields,
+      updatedAt: serverTimestamp()
+    };
+
+    // Mettre à jour dans Firestore
+    await updateDoc(progressRef, updatedData);
+
+    // Retourner les données complètes mises à jour
+    const fullUpdatedProgress = {
+      ...currentProgress,
+      ...updatedFields,
+      updatedAt: new Date()
+    };
+
+    return fullUpdatedProgress;
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour de la progression:', error);
+    throw error;
   }
 };
