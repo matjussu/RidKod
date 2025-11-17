@@ -2,7 +2,7 @@ import React from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 
 const CodeBlock = ({
-  code,
+  code = '',
   language,
   highlightedLines = [],
   isHighlightActive = false,
@@ -13,6 +13,9 @@ const CodeBlock = ({
   isSubmitted = false,
   correctAnswer = null
 }) => {
+  // Protection : ne rien afficher si pas de code
+  if (!code) return null;
+
   // Custom Python theme with exact color specifications
   const customPythonTheme = {
     'code[class*="language-"]': {

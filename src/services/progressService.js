@@ -1,6 +1,13 @@
 // Service pour gérer la progression utilisateur dans Firestore
 import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../config/firebase';
+import {
+  enqueueExercise,
+  flushQueue,
+  getQueueSize,
+  calculateOptimisticProgress,
+  getQueueManager
+} from '../utils/debounce';
 
 /**
  * Structure de données de progression :
@@ -258,6 +265,373 @@ export const saveExerciseCompletion = async (userId, exerciseData) => {
     };
   } catch (error) {
     console.error('Erreur lors de la sauvegarde de la progression:', error);
+    throw error;
+  }
+};
+
+/**
+ * ========================================
+ * DEBOUNCED VERSION - Avec Queue & Batch
+ * ========================================
+ */
+
+/**
+ * Sauvegarder la complétion d'un exercice avec debounce (OPTIMISÉ)
+ *
+ * Fonctionnement :
+ * 1. Calcul optimiste local (XP, niveau) pour UI réactive
+ * 2. Ajouter à la queue (localStorage backup)
+ * 3. Flush automatique après 5s d'inactivité
+ *
+ * @param {string} userId - ID utilisateur
+ * @param {Object} exerciseData - { exerciseLevel, isCorrect, xpGained }
+ * @returns {Object} { totalXP, userLevel, xpGained, leveledUp, isOptimistic: true }
+ */
+export const saveExerciseCompletionDebounced = async (userId, exerciseData) => {
+  try {
+    // 1. Récupérer la progression actuelle (cache local si possible)
+    const currentProgress = await getUserProgress(userId);
+
+    // 2. Vérifier si le niveau est déjà complété
+    if (currentProgress.completedLevels?.includes(exerciseData.exerciseLevel)) {
+      console.warn(`Niveau ${exerciseData.exerciseLevel} déjà complété - pas de XP gagné`);
+      return {
+        totalXP: currentProgress.totalXP,
+        userLevel: currentProgress.userLevel,
+        xpGained: 0,
+        leveledUp: false,
+        alreadyCompleted: true,
+        isOptimistic: false
+      };
+    }
+
+    // 3. Calcul optimiste local (UI réactive)
+    const optimisticResult = calculateOptimisticProgress(currentProgress, exerciseData);
+
+    // 4. Ajouter à la queue (backup localStorage + timer 5s)
+    enqueueExercise({
+      userId,
+      ...exerciseData
+    });
+
+    console.log(`📝 Exercice ajouté à la queue (${getQueueSize()} en attente)`);
+
+    // 5. Retourner immédiatement le résultat optimiste (UI ne bloque pas)
+    return {
+      ...optimisticResult,
+      isOptimistic: true,
+      queueSize: getQueueSize()
+    };
+  } catch (error) {
+    console.error('Erreur lors de la sauvegarde optimiste:', error);
+
+    // Fallback : sauvegarde directe sans debounce
+    return await saveExerciseCompletion(userId, exerciseData);
+  }
+};
+
+/**
+ * Écrire un batch d'exercices dans Firestore (agrégation)
+ *
+ * Appelé par le QueueManager après 5s d'inactivité
+ *
+ * @param {string} exerciseLevel - Niveau d'exercice (ex: "1_1")
+ * @param {Object} aggregated - { correct, incorrect, xpGained }
+ * @returns {Promise<Object>} Résultat de l'écriture
+ */
+const writeBatchToFirestore = async (userId, exerciseLevel, aggregated) => {
+  try {
+    const progressRef = doc(db, 'progress', userId);
+    const progressSnap = await getDoc(progressRef);
+
+    if (!progressSnap.exists()) {
+      throw new Error('Progression utilisateur introuvable');
+    }
+
+    const currentProgress = progressSnap.data();
+
+    // Vérifier si le niveau est déjà complété
+    if (currentProgress.completedLevels?.includes(exerciseLevel)) {
+      console.warn(`Batch ignoré : niveau ${exerciseLevel} déjà complété`);
+      return { skipped: true };
+    }
+
+    // Récupérer les stats du niveau actuel
+    const levelStats = currentProgress.levelStats?.[exerciseLevel] || {
+      correct: 0,
+      incorrect: 0,
+      xp: 0
+    };
+
+    // Agréger les stats du batch avec les stats existantes
+    const updatedLevelStats = {
+      ...currentProgress.levelStats,
+      [exerciseLevel]: {
+        correct: levelStats.correct + aggregated.correct,
+        incorrect: levelStats.incorrect + aggregated.incorrect,
+        xp: levelStats.xp + aggregated.xpGained
+      }
+    };
+
+    // Calculer nouveau total XP et niveau utilisateur
+    const newTotalXP = currentProgress.totalXP + aggregated.xpGained;
+    const newUserLevel = calculateLevel(newTotalXP);
+
+    // Mettre à jour le streak (simplifié pour batch)
+    const daysSinceLastActivity = currentProgress.streak.lastActivityDate
+      ? calculateStreak(currentProgress.streak.lastActivityDate)
+      : 0;
+
+    let newStreak = currentProgress.streak;
+    if (daysSinceLastActivity === 0) {
+      newStreak = {
+        ...currentProgress.streak,
+        lastActivityDate: serverTimestamp()
+      };
+    } else if (daysSinceLastActivity === 1) {
+      const newCurrentStreak = currentProgress.streak.current + 1;
+      newStreak = {
+        current: newCurrentStreak,
+        longest: Math.max(newCurrentStreak, currentProgress.streak.longest),
+        lastActivityDate: serverTimestamp()
+      };
+    } else {
+      newStreak = {
+        current: 1,
+        longest: currentProgress.streak.longest,
+        lastActivityDate: serverTimestamp()
+      };
+    }
+
+    // Mettre à jour les stats globales (agréger le batch)
+    const updatedStats = {
+      totalExercises: currentProgress.stats.totalExercises + aggregated.correct + aggregated.incorrect,
+      correctAnswers: currentProgress.stats.correctAnswers + aggregated.correct,
+      incorrectAnswers: currentProgress.stats.incorrectAnswers + aggregated.incorrect
+    };
+
+    // Mettre à jour l'activité quotidienne
+    const today = new Date().toISOString().split('T')[0];
+    const currentDailyActivity = currentProgress.dailyActivity || {};
+    const todayCount = currentDailyActivity[today] || 0;
+    const updatedDailyActivity = {
+      ...currentDailyActivity,
+      [today]: todayCount + aggregated.correct + aggregated.incorrect
+    };
+
+    // Préparer les données mises à jour
+    const updatedData = {
+      totalXP: newTotalXP,
+      userLevel: newUserLevel,
+      levelStats: updatedLevelStats,
+      streak: newStreak,
+      stats: updatedStats,
+      dailyActivity: updatedDailyActivity,
+      updatedAt: serverTimestamp()
+    };
+
+    // 🔥 ÉCRITURE UNIQUE FIRESTORE pour tout le batch
+    await updateDoc(progressRef, updatedData);
+
+    console.log(`✅ Batch écrit : ${aggregated.correct + aggregated.incorrect} exercices (niveau ${exerciseLevel})`);
+
+    return {
+      success: true,
+      exerciseLevel,
+      itemsWritten: aggregated.correct + aggregated.incorrect
+    };
+  } catch (error) {
+    console.error('Erreur lors de l\'écriture batch:', error);
+    throw error;
+  }
+};
+
+/**
+ * Wrapper pour writeBatchToFirestore (utilisé par QueueManager)
+ */
+const createBatchWriter = (userId) => {
+  return async (exerciseLevel, aggregated) => {
+    return await writeBatchToFirestore(userId, exerciseLevel, aggregated);
+  };
+};
+
+/**
+ * Flusher manuellement la queue (utilitaire public)
+ * @param {string} userId - ID utilisateur
+ */
+export const flushExerciseQueue = async (userId) => {
+  const batchWriter = createBatchWriter(userId);
+  return await flushQueue(batchWriter);
+};
+
+/**
+ * Traiter la queue au chargement de la page (récupération après crash/offline)
+ * À appeler dans ProgressContext au mount
+ */
+export const processQueueOnLoad = async (userId) => {
+  const queueSize = getQueueSize();
+
+  if (queueSize === 0) {
+    return { processed: 0 };
+  }
+
+  console.log(`🔄 Traitement queue au chargement : ${queueSize} exercices en attente`);
+
+  try {
+    const batchWriter = createBatchWriter(userId);
+    const result = await flushQueue(batchWriter);
+
+    console.log(`✅ Queue traitée : ${result.flushed} exercices → ${result.writes} écritures Firestore`);
+
+    return result;
+  } catch (error) {
+    console.error('❌ Erreur traitement queue:', error);
+    return { processed: 0, error };
+  }
+};
+
+/**
+ * ========================================
+ * OPTIMISÉ : Compléter un niveau entier (batch)
+ * ========================================
+ */
+
+/**
+ * Compléter un niveau entier avec stats agrégées (1 seule écriture Firestore)
+ *
+ * @param {string} userId - ID utilisateur
+ * @param {string} exerciseLevel - Niveau d'exercice (ex: "1_1")
+ * @param {Object} levelStats - { correctAnswers, incorrectAnswers, xpGained }
+ * @returns {Promise<Object>} Progression mise à jour
+ */
+export const completeLevelBatch = async (userId, exerciseLevel, levelStats) => {
+  try {
+    const progressRef = doc(db, 'progress', userId);
+    const progressSnap = await getDoc(progressRef);
+
+    if (!progressSnap.exists()) {
+      // Initialiser si n'existe pas encore
+      await initializeProgress(userId);
+      const newSnap = await getDoc(progressRef);
+      return await completeLevelBatch(userId, exerciseLevel, levelStats);
+    }
+
+    const currentProgress = progressSnap.data();
+
+    // Vérifier si le niveau est déjà complété
+    if (currentProgress.completedLevels?.includes(exerciseLevel)) {
+      console.warn(`Niveau ${exerciseLevel} déjà complété - ignoré`);
+      return {
+        totalXP: currentProgress.totalXP,
+        userLevel: currentProgress.userLevel,
+        xpGained: 0,
+        alreadyCompleted: true
+      };
+    }
+
+    const { correctAnswers, incorrectAnswers, xpGained } = levelStats;
+    const totalExercises = correctAnswers + incorrectAnswers;
+
+    // Mettre à jour les stats du niveau
+    const updatedLevelStats = {
+      ...currentProgress.levelStats,
+      [exerciseLevel]: {
+        correct: correctAnswers,
+        incorrect: incorrectAnswers,
+        xp: xpGained,
+        completedAt: serverTimestamp()
+      }
+    };
+
+    // Calculer nouveau total XP et niveau utilisateur
+    const newTotalXP = currentProgress.totalXP + xpGained;
+    const newUserLevel = calculateLevel(newTotalXP);
+
+    // Mettre à jour le streak
+    const daysSinceLastActivity = currentProgress.streak.lastActivityDate
+      ? calculateStreak(currentProgress.streak.lastActivityDate)
+      : 0;
+
+    let newStreak = currentProgress.streak;
+    if (daysSinceLastActivity === 0) {
+      // Même jour - conserver le streak
+      newStreak = {
+        ...currentProgress.streak,
+        lastActivityDate: serverTimestamp()
+      };
+    } else if (daysSinceLastActivity === 1) {
+      // Jour consécutif - incrémenter le streak
+      const newCurrentStreak = currentProgress.streak.current + 1;
+      newStreak = {
+        current: newCurrentStreak,
+        longest: Math.max(newCurrentStreak, currentProgress.streak.longest),
+        lastActivityDate: serverTimestamp()
+      };
+    } else {
+      // Plus d'un jour - réinitialiser le streak
+      newStreak = {
+        current: 1,
+        longest: currentProgress.streak.longest,
+        lastActivityDate: serverTimestamp()
+      };
+    }
+
+    // Mettre à jour les stats globales
+    const updatedStats = {
+      totalExercises: currentProgress.stats.totalExercises + totalExercises,
+      correctAnswers: currentProgress.stats.correctAnswers + correctAnswers,
+      incorrectAnswers: currentProgress.stats.incorrectAnswers + incorrectAnswers
+    };
+
+    // Mettre à jour l'activité quotidienne
+    const today = new Date().toISOString().split('T')[0];
+    const currentDailyActivity = currentProgress.dailyActivity || {};
+    const todayCount = currentDailyActivity[today] || 0;
+    const updatedDailyActivity = {
+      ...currentDailyActivity,
+      [today]: todayCount + totalExercises
+    };
+
+    // Ajouter le niveau aux niveaux complétés
+    const updatedCompletedLevels = [...(currentProgress.completedLevels || []), exerciseLevel];
+
+    // Préparer les données mises à jour
+    const updatedData = {
+      totalXP: newTotalXP,
+      userLevel: newUserLevel,
+      levelStats: updatedLevelStats,
+      completedLevels: updatedCompletedLevels,
+      currentLevel: exerciseLevel + 1, // Passer au niveau suivant
+      streak: newStreak,
+      stats: updatedStats,
+      dailyActivity: updatedDailyActivity,
+      updatedAt: serverTimestamp()
+    };
+
+    // 🔥 ÉCRITURE UNIQUE FIRESTORE pour tout le niveau
+    await updateDoc(progressRef, updatedData);
+
+    console.log(`✅ Niveau ${exerciseLevel} complété en batch : ${correctAnswers}/${totalExercises} corrects, +${xpGained} XP`);
+
+    // Retourner les données complètes mises à jour
+    return {
+      totalXP: newTotalXP,
+      userLevel: newUserLevel,
+      xpGained,
+      leveledUp: newUserLevel > currentProgress.userLevel,
+      alreadyCompleted: false,
+      updatedProgress: {
+        ...currentProgress,
+        ...updatedData,
+        updatedAt: new Date(),
+        streak: {
+          ...newStreak,
+          lastActivityDate: new Date()
+        }
+      }
+    };
+  } catch (error) {
+    console.error('Erreur lors de la complétion du niveau batch:', error);
     throw error;
   }
 };

@@ -3,16 +3,21 @@ import { useAuth } from './AuthContext';
 import {
   getUserProgress,
   saveExerciseCompletion,
+  saveExerciseCompletionDebounced,
   completeLevelBlock,
+  completeLevelBatch,
   migrateFromLocalStorage,
   saveProgressLocally,
   getLocalProgress,
   calculateLevel,
   getXPForNextLevel,
   EXERCISES_PER_LEVEL,
-  updateUserProgress
+  updateUserProgress,
+  processQueueOnLoad,
+  flushExerciseQueue
 } from '../services/progressService';
 import { exerciseRateLimiter, lessonRateLimiter } from '../utils/throttle';
+import { getQueueSize } from '../utils/debounce';
 
 // Création du contexte
 const ProgressContext = createContext({});
@@ -50,6 +55,23 @@ export const ProgressProvider = ({ children }) => {
           // Charger la progression
           const userProgress = await getUserProgress(user.uid);
           setProgress(userProgress);
+
+          // 🆕 DEBOUNCE: Traiter la queue d'exercices en attente (récupération après offline/crash)
+          const queueSize = getQueueSize();
+          if (queueSize > 0) {
+            console.log(`📦 Queue détectée : ${queueSize} exercices en attente`);
+            try {
+              await processQueueOnLoad(user.uid);
+              console.log('✅ Queue traitée avec succès');
+
+              // Recharger la progression après traitement de la queue
+              const updatedProgress = await getUserProgress(user.uid);
+              setProgress(updatedProgress);
+            } catch (queueError) {
+              console.error('⚠️ Erreur traitement queue (continuera au prochain flush):', queueError);
+              // Ne pas bloquer le chargement si la queue échoue
+            }
+          }
         } else {
           // Mode invité - charger depuis localStorage
           console.log('Chargement progression localStorage (mode invité)');
@@ -71,6 +93,34 @@ export const ProgressProvider = ({ children }) => {
     loadProgress();
   }, [user, isAuthenticated]);
 
+  // 🆕 DEBOUNCE: Flusher la queue sur fermeture de la page (beforeunload)
+  useEffect(() => {
+    const handleBeforeUnload = async (event) => {
+      const queueSize = getQueueSize();
+
+      if (queueSize > 0 && isAuthenticated && user) {
+        // Tenter de flusher la queue avant fermeture (best effort)
+        console.warn(`⚠️ beforeunload: ${queueSize} exercices en attente - tentative flush...`);
+
+        try {
+          // Note : beforeunload ne supporte pas bien l'async
+          // La queue reste dans localStorage et sera traitée au prochain chargement
+          await flushExerciseQueue(user.uid);
+          console.log('✅ Queue flushée avant fermeture');
+        } catch (error) {
+          console.error('❌ Erreur flush beforeunload (queue persistée):', error);
+          // La queue reste dans localStorage (récupération au prochain chargement)
+        }
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [isAuthenticated, user]);
+
   // Sauvegarder la complétion d'un exercice (OPTIMISÉ + RATE LIMITED)
   const completeExercise = async (exerciseData) => {
     try {
@@ -87,12 +137,20 @@ export const ProgressProvider = ({ children }) => {
       }
 
       if (isAuthenticated && user) {
-        // Mode connecté - Update optimiste (pas de rechargement Firestore)
-        const result = await saveExerciseCompletion(user.uid, exerciseData);
+        // 🆕 DEBOUNCE: Mode connecté - Update optimiste avec queue (batching automatique)
+        const result = await saveExerciseCompletionDebounced(user.uid, exerciseData);
 
-        // Utiliser les données retournées directement (évite un round-trip Firestore)
-        if (result.updatedProgress) {
-          setProgress(result.updatedProgress);
+        // Calcul optimiste : update immédiat de l'UI (pas d'attente Firestore)
+        if (result.isOptimistic) {
+          // Mettre à jour localement avec les valeurs optimistes
+          const optimisticProgress = {
+            ...progress,
+            totalXP: result.newTotalXP,
+            userLevel: result.newUserLevel
+          };
+          setProgress(optimisticProgress);
+
+          console.log(`⚡ Update optimiste: +${result.xpGained} XP (queue: ${result.queueSize})`);
         }
 
         return result;
@@ -213,6 +271,89 @@ export const ProgressProvider = ({ children }) => {
     }
   };
 
+  // ✅ OPTIMISÉ : Compléter un niveau avec stats batch (1 seule écriture Firestore)
+  const completeLevelWithBatch = async (exerciseLevel, levelStats) => {
+    try {
+      if (isAuthenticated && user) {
+        // Mode connecté - sauvegarder avec batch optimisé
+        const result = await completeLevelBatch(user.uid, exerciseLevel, levelStats);
+
+        // Mettre à jour la progression avec les données retournées
+        if (result.updatedProgress) {
+          setProgress(result.updatedProgress);
+        }
+
+        return result;
+      } else {
+        // Mode invité - sauvegarder localement
+        const currentProgress = progress || getLocalProgress();
+        const { correctAnswers, incorrectAnswers, xpGained } = levelStats;
+
+        // Vérifier si déjà complété
+        if (currentProgress.completedLevels?.includes(exerciseLevel)) {
+          console.warn(`Niveau ${exerciseLevel} déjà complété`);
+          return {
+            totalXP: currentProgress.totalXP,
+            userLevel: currentProgress.userLevel,
+            xpGained: 0,
+            alreadyCompleted: true
+          };
+        }
+
+        const totalExercises = correctAnswers + incorrectAnswers;
+
+        // Mettre à jour les stats du niveau
+        const updatedLevelStats = {
+          ...currentProgress.levelStats,
+          [exerciseLevel]: {
+            correct: correctAnswers,
+            incorrect: incorrectAnswers,
+            xp: xpGained,
+            completedAt: new Date().toISOString()
+          }
+        };
+
+        // Calculer nouveau total XP et niveau
+        const newTotalXP = currentProgress.totalXP + xpGained;
+        const newUserLevel = calculateLevel(newTotalXP);
+
+        // Mettre à jour les stats globales
+        const updatedStats = {
+          totalExercises: currentProgress.stats.totalExercises + totalExercises,
+          correctAnswers: currentProgress.stats.correctAnswers + correctAnswers,
+          incorrectAnswers: currentProgress.stats.incorrectAnswers + incorrectAnswers
+        };
+
+        // Ajouter le niveau aux niveaux complétés
+        const updatedCompletedLevels = [...(currentProgress.completedLevels || []), exerciseLevel];
+
+        const updatedProgress = {
+          ...currentProgress,
+          totalXP: newTotalXP,
+          userLevel: newUserLevel,
+          levelStats: updatedLevelStats,
+          completedLevels: updatedCompletedLevels,
+          stats: updatedStats
+        };
+
+        saveProgressLocally(updatedProgress);
+        setProgress(updatedProgress);
+
+        return {
+          totalXP: newTotalXP,
+          userLevel: newUserLevel,
+          xpGained,
+          leveledUp: newUserLevel > currentProgress.userLevel,
+          alreadyCompleted: false
+        };
+      }
+    } catch (err) {
+      console.error('Erreur lors de la complétion du niveau batch:', err);
+      setError(err.message);
+      throw err;
+    }
+  };
+
   // Vérifier si un niveau a été complété
   const isLevelCompleted = (exerciseLevel) => {
     if (!progress || !progress.completedLevels) return false;
@@ -315,6 +456,7 @@ export const ProgressProvider = ({ children }) => {
     error,
     completeExercise,
     completeLevel,
+    completeLevelWithBatch,
     isLevelCompleted,
     getLevelStats,
     getStats,

@@ -1,0 +1,782 @@
+[
+  {
+    "id": "py_easy_001",
+    "language": "python",
+    "difficulty": 1,
+    "type": "predict_output",
+    "inputType": "options",
+    "question": "Que renvoie ce programme ?",
+    "code": "shopping_cart = ['pain', 'lait', 'œufs']\nshopping_cart.append('fromage')\ntotal_items = len(shopping_cart)\nprint(total_items)",
+    "options": [
+      "3",
+      "4",
+      "5",
+      "Error"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Ligne 1 : On crée une liste shopping_cart avec 3 items initiaux\n\nLigne 2 : append('fromage') ajoute un nouvel élément → maintenant 4 items au total\n\nLigne 3 : len(shopping_cart) compte tous les éléments → retourne 4\n\nLigne 4 : print() affiche le résultat : 4",
+    "highlightedLines": [
+      2,
+      3
+    ],
+    "xpGain": 10,
+    "tags": [
+      "lists",
+      "methods",
+      "len"
+    ]
+  },
+  {
+    "id": "py_easy_002",
+    "language": "python",
+    "difficulty": 1,
+    "type": "predict_output",
+    "inputType": "options",
+    "question": "Que renvoie ce programme ?",
+    "code": "user_score = 0\nfor level in range(3):\n    user_score += 10\nprint(user_score)",
+    "options": [
+      "10",
+      "30",
+      "3",
+      "0"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Ligne 1 : user_score démarre à 0\n\nLigne 2 : range(3) génère [0, 1, 2] → la boucle s'exécute 3 fois\n\nLigne 3 : À chaque itération, on ajoute 10 au score\n• 1ère fois : 0 + 10 = 10\n• 2ème fois : 10 + 10 = 20\n• 3ème fois : 20 + 10 = 30\n\nLigne 4 : print() affiche le score final : 30",
+    "highlightedLines": [
+      2,
+      3
+    ],
+    "xpGain": 10,
+    "tags": [
+      "loops",
+      "range",
+      "arithmetic"
+    ]
+  },
+  {
+    "id": "py_easy_003",
+    "language": "python",
+    "difficulty": 1,
+    "type": "predict_output",
+    "inputType": "options",
+    "question": "Que renvoie ce programme ?",
+    "code": "employee_name = 'Alice'\nwelcome_message = 'Bonjour ' + employee_name\nprint(len(welcome_message))",
+    "options": [
+      "5",
+      "8",
+      "13",
+      "14"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Ligne 1 : employee_name stocke 'Alice' (5 caractères)\n\nLigne 2 : Concaténation de chaînes\n• 'Bonjour ' = 8 caractères (avec l'espace)\n• + 'Alice' = 5 caractères\n• Résultat : 'Bonjour Alice' = 13 caractères total\n\nLigne 3 : len() compte tous les caractères → retourne 13",
+    "highlightedLines": [
+      2,
+      3
+    ],
+    "xpGain": 10,
+    "tags": [
+      "strings",
+      "concatenation",
+      "len"
+    ]
+  },
+  {
+    "id": "py_easy_004",
+    "language": "python",
+    "difficulty": 1,
+    "type": "predict_output",
+    "inputType": "options",
+    "question": "Que renvoie ce programme ?",
+    "code": "temperature = 15\nif temperature > 20:\n    comfort_level = 'chaud'\nelse:\n    comfort_level = 'froid'\nprint(comfort_level)",
+    "options": [
+      "chaud",
+      "froid",
+      "15",
+      "Error"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Ligne 1 : temperature vaut 15\n\nLigne 2 : Condition if temperature > 20\n• 15 > 20 est False\n• Donc on saute le bloc if (ligne 3)\n\nLigne 4-5 : On exécute le bloc else\n• comfort_level = 'froid'\n\nLigne 6 : print() affiche 'froid'",
+    "highlightedLines": [
+      2,
+      5
+    ],
+    "xpGain": 10,
+    "tags": [
+      "conditions",
+      "if-else",
+      "comparison"
+    ]
+  },
+  {
+    "id": "py_easy_005",
+    "language": "python",
+    "difficulty": 1,
+    "type": "predict_output",
+    "inputType": "options",
+    "question": "Que renvoie ce programme ?",
+    "code": "inventory = [10, 5, 8]\nfirst_item = inventory[0]\nlast_item = inventory[-1]\nresult = first_item + last_item\nprint(result)",
+    "options": [
+      "13",
+      "18",
+      "15",
+      "23"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Ligne 1 : inventory contient [10, 5, 8]\n\nLigne 2 : inventory[0] récupère le premier élément → 10\n\nLigne 3 : inventory[-1] récupère le dernier élément → 8\n\nLigne 4 : Addition 10 + 8 = 18\n\nLigne 5 : print() affiche 18",
+    "highlightedLines": [
+      2,
+      3,
+      4
+    ],
+    "xpGain": 10,
+    "tags": [
+      "lists",
+      "indexing",
+      "arithmetic"
+    ]
+  },
+  {
+    "id": "py_easy_006",
+    "language": "python",
+    "difficulty": 1,
+    "type": "predict_output",
+    "inputType": "free_input",
+    "keyboardType": "numeric",
+    "question": "Que renvoie ce programme ?",
+    "code": "price = 50\ndiscount = 10\nfinal_price = price - discount\nprint(final_price)",
+    "acceptedAnswers": [
+      "40",
+      "40.0"
+    ],
+    "explanation": "Ligne 1 : price vaut 50\n\nLigne 2 : discount vaut 10\n\nLigne 3 : Soustraction 50 - 10 = 40\n\nLigne 4 : print() affiche 40",
+    "highlightedLines": [
+      3
+    ],
+    "xpGain": 10,
+    "tags": [
+      "variables",
+      "arithmetic",
+      "subtraction"
+    ]
+  },
+  {
+    "id": "py_easy_007",
+    "language": "python",
+    "difficulty": 1,
+    "type": "predict_output",
+    "inputType": "free_input",
+    "keyboardType": "numeric",
+    "question": "Que renvoie ce programme ?",
+    "code": "numbers = [2, 4, 6, 8]\ntotal = 0\nfor num in numbers:\n    total += num\nprint(total)",
+    "acceptedAnswers": [
+      "20",
+      "20.0"
+    ],
+    "explanation": "Ligne 2 : total démarre à 0\n\nLigne 3-4 : Boucle qui additionne tous les nombres\n• 0 + 2 = 2\n• 2 + 4 = 6\n• 6 + 6 = 12\n• 12 + 8 = 20\n\nLigne 5 : print() affiche 20",
+    "highlightedLines": [
+      3,
+      4
+    ],
+    "xpGain": 10,
+    "tags": [
+      "loops",
+      "arithmetic",
+      "sum"
+    ]
+  },
+  {
+    "id": "py_easy_008",
+    "language": "python",
+    "difficulty": 1,
+    "type": "predict_output",
+    "inputType": "options",
+    "question": "Que renvoie ce programme ?",
+    "code": "text = 'Python'\nsubstring = text[0:3]\nprint(substring)",
+    "options": [
+      "Pyt",
+      "Pyth",
+      "Python",
+      "hon"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Ligne 1 : text contient 'Python'\n\nLigne 2 : Slicing text[0:3]\n• Commence à l'index 0 (inclus) : 'P'\n• S'arrête à l'index 3 (exclus) : jusqu'à 't'\n• Résultat : 'Pyt'\n\nLigne 3 : print() affiche 'Pyt'",
+    "highlightedLines": [
+      2
+    ],
+    "xpGain": 10,
+    "tags": [
+      "strings",
+      "slicing",
+      "indexing"
+    ]
+  },
+  {
+    "id": "py_easy_009",
+    "language": "python",
+    "difficulty": 1,
+    "type": "predict_output",
+    "inputType": "free_input",
+    "keyboardType": "numeric",
+    "question": "Que renvoie ce programme ?",
+    "code": "counter = 5\nwhile counter > 0:\n    counter -= 2\nprint(counter)",
+    "acceptedAnswers": [
+      "-1",
+      "-1.0"
+    ],
+    "explanation": "Ligne 1 : counter démarre à 5\n\nLigne 2-3 : Boucle while tant que counter > 0\n• Itération 1 : counter = 5 - 2 = 3 (encore > 0)\n• Itération 2 : counter = 3 - 2 = 1 (encore > 0)\n• Itération 3 : counter = 1 - 2 = -1 (plus > 0, on sort)\n\nLigne 4 : print() affiche -1",
+    "highlightedLines": [
+      2,
+      3
+    ],
+    "xpGain": 10,
+    "tags": [
+      "while",
+      "loops",
+      "counter"
+    ]
+  },
+  {
+    "id": "py_easy_010",
+    "language": "python",
+    "difficulty": 1,
+    "type": "predict_output",
+    "inputType": "options",
+    "question": "Que renvoie ce programme ?",
+    "code": "numbers = [1, 2, 3, 4, 5]\nresult = numbers[2] * 2\nprint(result)",
+    "options": [
+      "4",
+      "6",
+      "8",
+      "10"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Ligne 1 : numbers contient [1, 2, 3, 4, 5]\n\nLigne 2 : numbers[2] accède au 3ème élément (index 2) → 3\n• Puis multiplication par 2 : 3 * 2 = 6\n\nLigne 3 : print() affiche 6",
+    "highlightedLines": [
+      2
+    ],
+    "xpGain": 10,
+    "tags": [
+      "lists",
+      "indexing",
+      "arithmetic"
+    ]
+  },
+  {
+    "id": "py_easy_011",
+    "language": "python",
+    "difficulty": 1,
+    "type": "find_error",
+    "inputType": "clickable_lines",
+    "question": "Quelle ligne contient une erreur ?",
+    "code": "age = 25\nname = 'Marc'\nprint('Tu as', age, 'ans)\nprint('Bonjour', name)",
+    "clickableLines": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "correctAnswer": 3,
+    "explanation": "Ligne 3 : Erreur de syntaxe - guillemet fermant manquant\n\nLa chaîne commence par un guillemet simple ' mais ne se termine pas avant la parenthèse.\n\nCorrection : print('Tu as', age, 'ans')",
+    "highlightedLines": [
+      3
+    ],
+    "xpGain": 10,
+    "tags": [
+      "syntax",
+      "strings",
+      "quotes"
+    ]
+  },
+  {
+    "id": "py_easy_012",
+    "language": "python",
+    "difficulty": 1,
+    "type": "trace_execution",
+    "inputType": "free_input",
+    "keyboardType": "numeric",
+    "question": "Quelle est la valeur finale de x ?",
+    "code": "x = 10\nx = x + 5\nx = x * 2\nprint(x)",
+    "acceptedAnswers": [
+      "30",
+      "30.0"
+    ],
+    "explanation": "Ligne 1 : x = 10\n\nLigne 2 : x = 10 + 5 = 15\n\nLigne 3 : x = 15 * 2 = 30\n\nLigne 4 : print() affiche 30",
+    "highlightedLines": [
+      2,
+      3
+    ],
+    "xpGain": 10,
+    "tags": [
+      "variables",
+      "arithmetic",
+      "assignment"
+    ]
+  },
+  {
+    "id": "py_easy_013",
+    "language": "python",
+    "difficulty": 1,
+    "type": "concept_understanding",
+    "inputType": "options",
+    "question": "Que fait ce programme ?",
+    "code": "fruits = ['pomme', 'banane', 'orange']\nfor fruit in fruits:\n    print(fruit.upper())",
+    "options": [
+      "Affiche chaque fruit en minuscules",
+      "Affiche chaque fruit en majuscules",
+      "Compte le nombre de fruits",
+      "Trie les fruits par ordre alphabétique"
+    ],
+    "correctAnswer": 1,
+    "explanation": "La méthode .upper() convertit une chaîne en MAJUSCULES.\n\nLa boucle for parcourt chaque élément de la liste fruits et affiche sa version en majuscules :\n• POMME\n• BANANE\n• ORANGE",
+    "highlightedLines": [
+      3
+    ],
+    "xpGain": 10,
+    "tags": [
+      "strings",
+      "methods",
+      "loops"
+    ]
+  },
+  {
+    "id": "py_easy_014",
+    "language": "python",
+    "difficulty": 1,
+    "type": "find_error",
+    "inputType": "clickable_lines",
+    "question": "Quelle ligne contient une erreur ?",
+    "code": "numbers = [1, 2, 3]\nfor i in range(3):\n  result = numbers[i] * 2\n    print(result)",
+    "clickableLines": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "correctAnswer": 4,
+    "explanation": "Ligne 4 : Erreur d'indentation\n\nLe print() a une indentation incorrecte (4 espaces au lieu de 2). En Python, tous les statements dans un même bloc doivent avoir la même indentation.\n\nCorrection : aligner print(result) avec result = ...",
+    "highlightedLines": [
+      4
+    ],
+    "xpGain": 10,
+    "tags": [
+      "syntax",
+      "indentation",
+      "loops"
+    ]
+  },
+  {
+    "id": "py_easy_015",
+    "language": "python",
+    "difficulty": 1,
+    "type": "predict_output",
+    "inputType": "free_input",
+    "keyboardType": "numeric",
+    "question": "Que renvoie ce programme ?",
+    "code": "a = 7\nb = 3\nresult = a // b\nprint(result)",
+    "acceptedAnswers": [
+      "2",
+      "2.0"
+    ],
+    "explanation": "Ligne 3 : L'opérateur // est la division entière (floor division)\n\n7 // 3 donne le quotient entier sans la partie décimale :\n• 7 / 3 = 2.333...\n• 7 // 3 = 2 (partie entière seulement)\n\nLigne 4 : print() affiche 2",
+    "highlightedLines": [
+      3
+    ],
+    "xpGain": 10,
+    "tags": [
+      "arithmetic",
+      "operators",
+      "division"
+    ]
+  },
+  {
+    "id": "py_easy_016",
+    "language": "python",
+    "difficulty": 1,
+    "type": "concept_understanding",
+    "inputType": "options",
+    "question": "Que fait ce programme ?",
+    "code": "message = 'Bonjour'\nif len(message) > 5:\n    print('Message long')\nelse:\n    print('Message court')",
+    "options": [
+      "Affiche 'Message long'",
+      "Affiche 'Message court'",
+      "Compte les lettres",
+      "Affiche le message"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Ligne 1 : message = 'Bonjour' (7 caractères)\n\nLigne 2 : len(message) retourne 7, et 7 > 5 est True\n\nDonc le programme exécute le bloc if et affiche 'Message long'",
+    "highlightedLines": [
+      2
+    ],
+    "xpGain": 10,
+    "tags": [
+      "strings",
+      "len",
+      "conditions"
+    ]
+  },
+  {
+    "id": "py_easy_017",
+    "language": "python",
+    "difficulty": 1,
+    "type": "trace_execution",
+    "inputType": "free_input",
+    "keyboardType": "numeric",
+    "question": "Quelle est la valeur finale de count ?",
+    "code": "count = 0\nfor i in range(5):\n    count += 1\nprint(count)",
+    "acceptedAnswers": [
+      "5",
+      "5.0"
+    ],
+    "explanation": "Ligne 1 : count démarre à 0\n\nLigne 2 : range(5) génère [0, 1, 2, 3, 4] → 5 itérations\n\nLigne 3 : À chaque itération, count augmente de 1\n• count = 1, 2, 3, 4, 5\n\nLigne 4 : print() affiche 5",
+    "highlightedLines": [
+      2,
+      3
+    ],
+    "xpGain": 10,
+    "tags": [
+      "loops",
+      "counter",
+      "range"
+    ]
+  },
+  {
+    "id": "py_easy_018",
+    "language": "python",
+    "difficulty": 1,
+    "type": "find_error",
+    "inputType": "clickable_lines",
+    "question": "Quelle ligne contient une erreur ?",
+    "code": "name = 'Alice'\nage = 30\nresultat = name + age\nprint(resultat)",
+    "clickableLines": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "correctAnswer": 3,
+    "explanation": "Ligne 3 : TypeError - Impossible de concaténer str + int\n\nPython ne peut pas additionner directement une chaîne ('Alice') avec un nombre (30).\n\nCorrection : resultat = name + str(age) ou utiliser f-string",
+    "highlightedLines": [
+      3
+    ],
+    "xpGain": 10,
+    "tags": [
+      "types",
+      "strings",
+      "concatenation",
+      "errors"
+    ]
+  },
+  {
+    "id": "py_easy_019",
+    "language": "python",
+    "difficulty": 1,
+    "type": "predict_output",
+    "inputType": "options",
+    "question": "Que renvoie ce programme ?",
+    "code": "numbers = [10, 20, 30]\nnumbers.pop()\nprint(len(numbers))",
+    "options": [
+      "0",
+      "1",
+      "2",
+      "3"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Ligne 1 : numbers contient 3 éléments [10, 20, 30]\n\nLigne 2 : pop() supprime et retourne le dernier élément (30)\n• numbers devient [10, 20] → 2 éléments\n\nLigne 3 : len(numbers) retourne 2",
+    "highlightedLines": [
+      2
+    ],
+    "xpGain": 10,
+    "tags": [
+      "lists",
+      "methods",
+      "pop",
+      "len"
+    ]
+  },
+  {
+    "id": "py_easy_020",
+    "language": "python",
+    "difficulty": 1,
+    "type": "trace_execution",
+    "inputType": "free_input",
+    "keyboardType": "numeric",
+    "question": "Quelle est la valeur finale de total ?",
+    "code": "total = 100\ntotal -= 20\ntotal *= 2\nprint(total)",
+    "acceptedAnswers": [
+      "160",
+      "160.0"
+    ],
+    "explanation": "Ligne 1 : total = 100\n\nLigne 2 : total -= 20 → total = 100 - 20 = 80\n\nLigne 3 : total *= 2 → total = 80 * 2 = 160\n\nLigne 4 : print() affiche 160",
+    "highlightedLines": [
+      2,
+      3
+    ],
+    "xpGain": 10,
+    "tags": [
+      "variables",
+      "arithmetic",
+      "operators"
+    ]
+  },
+  {
+    "id": "py_easy_021",
+    "language": "python",
+    "difficulty": 1,
+    "type": "concept_understanding",
+    "inputType": "options",
+    "question": "Que fait cette fonction ?",
+    "code": "def double(x):\n    return x * 2\n\nresult = double(5)\nprint(result)",
+    "options": [
+      "Affiche 5",
+      "Affiche 10",
+      "Affiche 25",
+      "Provoque une erreur"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Ligne 1-2 : La fonction double() prend un paramètre x et retourne x * 2\n\nLigne 4 : double(5) appelle la fonction avec x = 5\n• Retourne 5 * 2 = 10\n\nLigne 5 : print() affiche 10",
+    "highlightedLines": [
+      2,
+      4
+    ],
+    "xpGain": 10,
+    "tags": [
+      "functions",
+      "parameters",
+      "return"
+    ]
+  },
+  {
+    "id": "py_easy_022",
+    "language": "python",
+    "difficulty": 1,
+    "type": "find_error",
+    "inputType": "clickable_lines",
+    "question": "Quelle ligne contient une erreur ?",
+    "code": "colors = ['rouge', 'vert', 'bleu']\nprint(colors[3])\nprint('Couleur trouvée')",
+    "clickableLines": [
+      1,
+      2,
+      3
+    ],
+    "correctAnswer": 2,
+    "explanation": "Ligne 2 : IndexError - list index out of range\n\nLa liste colors a 3 éléments aux index 0, 1, 2.\nL'index 3 n'existe pas !\n\nCorrection : utiliser colors[0], colors[1] ou colors[2]",
+    "highlightedLines": [
+      2
+    ],
+    "xpGain": 10,
+    "tags": [
+      "lists",
+      "indexing",
+      "errors",
+      "range"
+    ]
+  },
+  {
+    "id": "py_easy_023",
+    "language": "python",
+    "difficulty": 1,
+    "type": "predict_output",
+    "inputType": "free_input",
+    "keyboardType": "numeric",
+    "question": "Que renvoie ce programme ?",
+    "code": "x = 12\ny = 5\nresult = x % y\nprint(result)",
+    "acceptedAnswers": [
+      "2",
+      "2.0"
+    ],
+    "explanation": "Ligne 3 : L'opérateur % calcule le reste de la division (modulo)\n\n12 % 5 :\n• 12 / 5 = 2 avec un reste de 2\n• 5 * 2 = 10, il reste 12 - 10 = 2\n\nLigne 4 : print() affiche 2",
+    "highlightedLines": [
+      3
+    ],
+    "xpGain": 10,
+    "tags": [
+      "arithmetic",
+      "operators",
+      "modulo"
+    ]
+  },
+  {
+    "id": "py_easy_024",
+    "language": "python",
+    "difficulty": 1,
+    "type": "concept_understanding",
+    "inputType": "options",
+    "question": "Que fait ce programme ?",
+    "code": "numbers = [5, 2, 8, 1, 9]\nnumbers.sort()\nprint(numbers[0])",
+    "options": [
+      "Affiche le plus grand nombre",
+      "Affiche le plus petit nombre",
+      "Affiche le premier nombre",
+      "Affiche la longueur de la liste"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Ligne 2 : sort() trie la liste par ordre croissant\n• numbers devient [1, 2, 5, 8, 9]\n\nLigne 3 : numbers[0] accède au premier élément après le tri\n• Premier élément = plus petit nombre = 1",
+    "highlightedLines": [
+      2,
+      3
+    ],
+    "xpGain": 10,
+    "tags": [
+      "lists",
+      "methods",
+      "sort",
+      "indexing"
+    ]
+  },
+  {
+    "id": "py_easy_025",
+    "language": "python",
+    "difficulty": 1,
+    "type": "find_error",
+    "inputType": "clickable_lines",
+    "question": "Quelle ligne contient une erreur ?",
+    "code": "def greet(name):\n    print('Bonjour', nom)\n\ngreet('Alice')",
+    "clickableLines": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "correctAnswer": 2,
+    "explanation": "Ligne 2 : NameError - variable 'nom' non définie\n\nLe paramètre de la fonction s'appelle 'name', pas 'nom'.\n\nCorrection : print('Bonjour', name)",
+    "highlightedLines": [
+      2
+    ],
+    "xpGain": 10,
+    "tags": [
+      "functions",
+      "variables",
+      "errors",
+      "scope"
+    ]
+  },
+  {
+    "id": "py_easy_026",
+    "language": "python",
+    "difficulty": 1,
+    "type": "trace_execution",
+    "inputType": "free_input",
+    "keyboardType": "numeric",
+    "question": "Quelle est la valeur finale de n ?",
+    "code": "n = 3\nn = n ** 2\nn = n + 1\nprint(n)",
+    "acceptedAnswers": [
+      "10",
+      "10.0"
+    ],
+    "explanation": "Ligne 1 : n = 3\n\nLigne 2 : n = 3 ** 2 (3 puissance 2) = 9\n\nLigne 3 : n = 9 + 1 = 10\n\nLigne 4 : print() affiche 10",
+    "highlightedLines": [
+      2,
+      3
+    ],
+    "xpGain": 10,
+    "tags": [
+      "variables",
+      "arithmetic",
+      "power"
+    ]
+  },
+  {
+    "id": "py_easy_027",
+    "language": "python",
+    "difficulty": 1,
+    "type": "predict_output",
+    "inputType": "options",
+    "question": "Que renvoie ce programme ?",
+    "code": "text = 'Python'\nprint(text[-1])",
+    "options": [
+      "P",
+      "y",
+      "n",
+      "h"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Ligne 1 : text = 'Python'\n\nLigne 2 : text[-1] accède au dernier caractère avec un index négatif\n• Index -1 = dernier élément = 'n'\n\nprint() affiche 'n'",
+    "highlightedLines": [
+      2
+    ],
+    "xpGain": 10,
+    "tags": [
+      "strings",
+      "indexing",
+      "negative_index"
+    ]
+  },
+  {
+    "id": "py_easy_028",
+    "language": "python",
+    "difficulty": 1,
+    "type": "find_error",
+    "inputType": "clickable_lines",
+    "question": "Quelle ligne contient une erreur ?",
+    "code": "score = 85\nif score >= 50\n    print('Réussi')\nelse:\n    print('Échoué')",
+    "clickableLines": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "correctAnswer": 2,
+    "explanation": "Ligne 2 : Erreur de syntaxe - deux-points manquants\n\nEn Python, toute instruction if doit se terminer par :\n\nCorrection : if score >= 50:",
+    "highlightedLines": [
+      2
+    ],
+    "xpGain": 10,
+    "tags": [
+      "syntax",
+      "conditions",
+      "if"
+    ]
+  },
+  {
+    "id": "py_easy_029",
+    "language": "python",
+    "difficulty": 1,
+    "type": "predict_output",
+    "inputType": "free_input",
+    "keyboardType": "numeric",
+    "question": "Que renvoie ce programme ?",
+    "code": "numbers = [2, 4, 6]\nresult = sum(numbers)\nprint(result)",
+    "acceptedAnswers": [
+      "12",
+      "12.0"
+    ],
+    "explanation": "Ligne 1 : numbers = [2, 4, 6]\n\nLigne 2 : sum() additionne tous les éléments de la liste\n• 2 + 4 + 6 = 12\n\nLigne 3 : print() affiche 12",
+    "highlightedLines": [
+      2
+    ],
+    "xpGain": 10,
+    "tags": [
+      "lists",
+      "sum",
+      "functions"
+    ]
+  },
+  {
+    "id": "py_easy_030",
+    "language": "python",
+    "difficulty": 1,
+    "type": "find_error",
+    "inputType": "clickable_lines",
+    "question": "Quelle ligne contient une erreur ?",
+    "code": "numbers = [1, 2, 3]\ntotal = 0\nfor num in numbers\n    total += num\nprint(total)",
+    "clickableLines": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "correctAnswer": 3,
+    "explanation": "Ligne 3 : Erreur de syntaxe - deux-points manquants\n\nToute boucle for doit se terminer par :\n\nCorrection : for num in numbers:",
+    "highlightedLines": [
+      3
+    ],
+    "xpGain": 10,
+    "tags": [
+      "syntax",
+      "loops",
+      "for"
+    ]
+  }
+]
