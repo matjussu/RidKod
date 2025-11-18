@@ -26,7 +26,7 @@ const LessonLanguage = () => {
 
       setTimeout(() => {
         if (language === 'PYTHON') {
-          navigate('/lessons/python/chapters');
+          navigate('/lessons/python/modules');
         } else {
           // Pour les autres langages pas encore implémentés
           alert(`Les leçons ${language} arrivent bientôt !`);
@@ -36,7 +36,7 @@ const LessonLanguage = () => {
       }, 200);
     } else {
       if (language === 'PYTHON') {
-        navigate('/lessons/python/chapters');
+        navigate('/lessons/python/modules');
       }
     }
   };

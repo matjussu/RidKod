@@ -1,0 +1,63 @@
+{
+  "lessonId": "py_les_1_1",
+  "moduleId": "py_mod_001",
+  "title": "La lecture de haut en bas",
+  "subtitle": "Comprends comment Python exécute ton code ligne par ligne",
+  "sections": [
+    {
+      "id": "section_1",
+      "type": "text",
+      "title": "Le Concept",
+      "content": "La première règle pour lire du code est simple : **un ordinateur lit de haut en bas, une ligne à la fois.**\n\nComme un lecteur qui suit les lignes d'un livre, l'ordinateur exécute l'instruction de la ligne 1, puis passe à la ligne 2, puis à la ligne 3...\n\nVotre premier objectif en tant que lecteur de code est de suivre ce flux simple."
+    },
+    {
+      "id": "section_2",
+      "type": "code_example",
+      "language": "python",
+      "title": "Exemple",
+      "code": "print(\"Première ligne\")\n\n# Ceci est un commentaire, l'ordinateur l'ignore\nprint(\"Deuxième ligne\")\n\nvariable = \"Assignation\"\nprint(\"Troisième ligne\")",
+      "caption": "L'ordinateur va :\n1. **Ligne 1 :** Afficher \"Première ligne\"\n2. **Ligne 3 :** Ignorer le commentaire\n3. **Ligne 4 :** Afficher \"Deuxième ligne\"\n4. **Ligne 6 :** Créer une variable (nous y reviendrons)\n5. **Ligne 7 :** Afficher \"Troisième ligne\"\n\nL'ordre de sortie est prévisible : le code est lu de haut en bas."
+    },
+    {
+      "id": "section_3",
+      "type": "exercise",
+      "exerciseId": "py_les_1_1_ex1"
+    },
+    {
+      "id": "section_4",
+      "type": "exercise",
+      "exerciseId": "py_les_1_1_ex2"
+    }
+  ],
+  "exercises": [
+    {
+      "id": "py_les_1_1_ex1",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Quel sera l'affichage final de ce script ?",
+      "code": "print(\"A\")\nprint(\"B\")\nprint(\"C\")",
+      "options": [
+        "C B A",
+        "A B C",
+        "A C B",
+        "Aucun affichage"
+      ],
+      "correctAnswer": 1,
+      "explanation": "L'ordinateur exécute la ligne 1 (`print(\"A\")`), puis la ligne 2 (`print(\"B\")`), et enfin la ligne 3 (`print(\"C\")`). L'ordre est A, puis B, puis C.",
+      "highlightedLines": [1, 2, 3],
+      "xpGain": 10
+    },
+    {
+      "id": "py_les_1_1_ex2",
+      "type": "predict_output",
+      "inputType": "free_input",
+      "question": "Combien d'étapes seront affichées au total ?",
+      "code": "action_1 = \"Ouvrir la porte\"\nprint(\"Étape 1\")\n\naction_2 = \"Prendre les clés\"\nprint(\"Étape 2\")\n\nprint(\"Étape 3\")",
+      "predefinedAnswers": ["1", "2", "3", "6"],
+      "correctAnswer": "3",
+      "explanation": "Même si des variables sont définies entre les `print()`, l'ordinateur suit l'ordre. Il affiche \"Étape 1\", puis définit `action_2`, puis affiche \"Étape 2\", et enfin affiche \"Étape 3\". Les définitions de variables n'affichent rien elles-mêmes. **Total : 3 étapes affichées**.",
+      "highlightedLines": [2, 5, 7],
+      "xpGain": 10
+    }
+  ]
+}

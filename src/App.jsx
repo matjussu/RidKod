@@ -11,7 +11,8 @@ import Difficulty from './pages/Difficulty';
 import Profile from './pages/Profile';
 import Contact from './pages/Contact';
 import LessonLanguage from './pages/lessons/LessonLanguage';
-import LessonChapters from './pages/lessons/LessonChapters';
+import LessonModules from './pages/lessons/LessonModules';
+import LessonList from './pages/lessons/LessonList';
 import LessonContent from './pages/lessons/LessonContent';
 import LevelComplete from './pages/LevelComplete';
 import XPCollect from './pages/XPCollect';
@@ -50,8 +51,9 @@ const App = () => {
           {/* Routes Lessons */}
           <Route path="/lessons" element={<Navigate to="/lessons/language" replace />} />
           <Route path="/lessons/language" element={<LessonLanguage />} />
-          <Route path="/lessons/:language/chapters" element={<LessonChapters />} />
-          <Route path="/lessons/:language/:chapterId" element={<LessonContent />} />
+          <Route path="/lessons/:language/modules" element={<LessonModules />} />
+          <Route path="/lessons/:language/:moduleId/lessons" element={<LessonList />} />
+          <Route path="/lessons/:language/:moduleId/:lessonId" element={<LessonContent />} />
 
           {/* Routes en développement */}
           <Route path="/challenges" element={<div style={{color: 'white', padding: '20px', textAlign: 'center'}}>Challenges - En cours de développement</div>} />

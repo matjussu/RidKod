@@ -1,6 +1,6 @@
 /* ========================================
    LESSONS.CSS - Système de leçons complet
-   Styles pour LessonLanguage, LessonChapters, LessonContent
+   Styles pour LessonLanguage, LessonModules, LessonList, LessonContent
    ======================================== */
 
 /* ========================================
@@ -145,10 +145,10 @@
 }
 
 /* ========================================
-   2. LESSON CHAPTERS PAGE
+   2. LESSON CHAPTERS PAGE (DEPRECATED - kept for backwards compatibility)
    ======================================== */
 
-/* Container principal LessonChapters */
+/* Container principal LessonChapters (DEPRECATED - use modules/lessons instead) */
 .lesson-chapters-container {
   min-height: 100vh;
   min-height: -webkit-fill-available;
@@ -186,7 +186,354 @@
 }
 
 /* ========================================
-   3. LESSON CONTENT PAGE
+   3. LESSON MODULES PAGE
+   ======================================== */
+
+/* Container principal LessonModules */
+.modules-container {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  background: #1A1919;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  padding-top: max(calc(env(safe-area-inset-top) + 20px), 40px);
+  padding-left: max(20px, env(safe-area-inset-left));
+  padding-right: max(20px, env(safe-area-inset-right));
+  padding-bottom: max(env(safe-area-inset-bottom), 24px);
+  max-width: min(428px, 100vw);
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  opacity: 0;
+  transform: scale(1.05);
+  animation: fadeInScale 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+}
+
+/* Modules Header */
+.modules-header {
+  text-align: center;
+  margin-bottom: 32px;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+}
+
+.modules-title {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 32px;
+  font-weight: 900;
+  font-style: italic;
+  color: #FFFFFF;
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+  transform: skewX(-5deg);
+  letter-spacing: 0.5px;
+}
+
+.modules-subtitle {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 14px;
+  font-weight: 500;
+  color: #8E8E93;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Modules Grid */
+.modules-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  margin-bottom: 32px;
+  align-self: center;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+}
+
+/* ========================================
+   4. LESSON LIST PAGE (Individual Module)
+   ======================================== */
+
+/* Container principal LessonList */
+.lessons-container {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  background: #1A1919;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  padding-top: max(calc(env(safe-area-inset-top) + 20px), 40px);
+  padding-left: max(20px, env(safe-area-inset-left));
+  padding-right: max(20px, env(safe-area-inset-right));
+  padding-bottom: max(env(safe-area-inset-bottom), 24px);
+  max-width: min(428px, 100vw);
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  opacity: 0;
+  transform: scale(1.05);
+  animation: fadeInScale 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+}
+
+/* Lessons Header */
+.lessons-header {
+  text-align: center;
+  margin-bottom: 32px;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+}
+
+.lessons-module-number {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: #FF9500;
+  margin: 0 0 8px 0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.lessons-title {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 28px;
+  font-weight: 900;
+  font-style: italic;
+  color: #FFFFFF;
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+  transform: skewX(-5deg);
+  letter-spacing: 0.5px;
+}
+
+.lessons-subtitle {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 14px;
+  font-weight: 500;
+  color: #8E8E93;
+  margin: 0 0 12px 0;
+  line-height: 1.4;
+}
+
+.lessons-meta {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.lessons-meta span {
+  opacity: 0.7;
+}
+
+/* Lessons Grid (DEPRECATED - kept for backwards compatibility) */
+.lessons-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  width: 100%;
+  margin-bottom: 32px;
+  align-self: center;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+}
+
+/* ========================================
+   4.5. LESSON PATH GAMING LAYOUT (Style Duolingo)
+   ======================================== */
+
+/* Container principal Path */
+.path-container {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  background: #1A1919;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  padding-top: max(calc(env(safe-area-inset-top) + 20px), 40px);
+  padding-left: max(20px, env(safe-area-inset-left));
+  padding-right: max(20px, env(safe-area-inset-right));
+  padding-bottom: max(env(safe-area-inset-bottom), 80px);
+  max-width: min(428px, 100vw);
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  opacity: 0;
+  transform: scale(1.05);
+  animation: fadeInScale 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  position: relative;
+}
+
+/* Path Header */
+.path-header {
+  text-align: center;
+  margin-bottom: 32px;
+  padding: 0 20px;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+  z-index: 10;
+  position: relative;
+}
+
+.path-header-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.path-module-number {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: #FF9500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.path-title {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 28px;
+  font-weight: 900;
+  font-style: italic;
+  color: #FFFFFF;
+  margin: 0;
+  line-height: 1.2;
+  transform: skewX(-5deg);
+  letter-spacing: 0.5px;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+/* Mini Progress Bar */
+.path-progress {
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.path-progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.path-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #30D158 0%, #088201 100%);
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 8px rgba(48, 209, 88, 0.6);
+}
+
+.path-progress-text {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+}
+
+/* Path Lessons Wrapper */
+.path-lessons-wrapper {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+}
+
+/* Path Lessons List */
+.path-lessons-list {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  z-index: 1;
+  opacity: 0;
+  animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive Path */
+@media (max-width: 768px) {
+  .path-title {
+    font-size: 24px;
+  }
+
+  .path-progress {
+    max-width: 260px;
+  }
+
+  .path-lessons-list {
+    max-width: 340px;
+  }
+}
+
+@media (max-width: 480px) {
+  .path-container {
+    padding-bottom: max(env(safe-area-inset-bottom), 60px);
+  }
+
+  .path-header {
+    margin-bottom: 24px;
+    padding: 0 12px;
+  }
+
+  .path-title {
+    font-size: 22px;
+  }
+
+  .path-module-number {
+    font-size: 12px;
+  }
+
+  .path-progress {
+    max-width: 240px;
+  }
+
+  .path-progress-text {
+    font-size: 12px;
+  }
+
+  .path-lessons-list {
+    max-width: 300px;
+    padding: 12px 0;
+  }
+}
+
+/* ========================================
+   5. LESSON CONTENT PAGE
    ======================================== */
 
 /* Container principal LessonContent */
