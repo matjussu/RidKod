@@ -474,6 +474,9 @@
   z-index: 1;
   opacity: 0;
   animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+  transform-origin: top center;
+  /* Scale est calculé pour que les cercles suivent le zigzag à toutes les tailles */
+  transform: scale(1);
 }
 
 @keyframes fadeIn {
@@ -497,6 +500,7 @@
 
   .path-lessons-list {
     max-width: 340px;
+    transform: scale(0.895); /* 340/380 pour suivre la réduction du container */
   }
 }
 
@@ -529,6 +533,7 @@
   .path-lessons-list {
     max-width: 300px;
     padding: 12px 0;
+    transform: scale(0.789); /* 300/380 pour suivre la réduction du container */
   }
 }
 

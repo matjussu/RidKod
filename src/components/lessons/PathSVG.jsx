@@ -11,7 +11,7 @@ const PathSVG = ({
   completedCount = 0
 }) => {
   // Calculer le path SVG zigzag
-  const { pathData, totalLength, checkpoints } = useMemo(() => {
+  const { pathData, totalLength } = useMemo(() => {
     const { startY, spacing, amplitude, centerX } = PATH_CONFIG;
 
     let path = `M ${centerX} ${startY}`; // Start point
@@ -31,21 +31,12 @@ const PathSVG = ({
     const bossY = startY + ((totalLessons + 1) * spacing) + 60;
     path += ` Q ${centerX} ${startY + ((totalLessons + 0.5) * spacing) + 60}, ${centerX} ${bossY}`;
 
-    // Calculer checkpoints (tous les 2-3 niveaux)
-    const checkpointPositions = [];
-    for (let i = 2; i < totalLessons; i += 3) {
-      const y = startY + (i * spacing);
-      const x = i % 2 === 0 ? centerX + amplitude : centerX - amplitude;
-      checkpointPositions.push({ x, y });
-    }
-
     // Estimer la longueur du path (approximation)
     const length = totalLessons * spacing * 1.4;
 
     return {
       pathData: path,
-      totalLength: length,
-      checkpoints: checkpointPositions
+      totalLength: length
     };
   }, [totalLessons]);
 
@@ -81,12 +72,6 @@ const PathSVG = ({
           <stop offset={`${progress}%`} stopColor="#2C2C2E" />
           <stop offset="100%" stopColor="#2C2C2E" />
         </linearGradient>
-
-        {/* Gradient pour checkpoints */}
-        <radialGradient id="checkpointGradient">
-          <stop offset="0%" stopColor="#FFD700" stopOpacity="0.8" />
-          <stop offset="100%" stopColor="#FF9500" stopOpacity="0.4" />
-        </radialGradient>
       </defs>
 
       {/* Path principal (fond gris) */}
@@ -115,57 +100,6 @@ const PathSVG = ({
         }}
       />
 
-      {/* Checkpoints (étoiles) */}
-      {checkpoints.map((checkpoint, index) => (
-        <g key={index} transform={`translate(${checkpoint.x}, ${checkpoint.y})`}>
-          {/* Glow effect */}
-          <circle
-            r="20"
-            fill="url(#checkpointGradient)"
-            opacity="0.6"
-            style={{
-              animation: 'checkpoint-glow 2s ease-in-out infinite',
-              animationDelay: `${index * 0.3}s`
-            }}
-          />
-          {/* Étoile */}
-          <text
-            fontSize="24"
-            textAnchor="middle"
-            dominantBaseline="central"
-            fill="#FFD700"
-            style={{
-              filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8))',
-              animation: 'checkpoint-float 3s ease-in-out infinite',
-              animationDelay: `${index * 0.3}s`
-            }}
-          >
-            ⭐
-          </text>
-        </g>
-      ))}
-
-      <style>{`
-        @keyframes checkpoint-glow {
-          0%, 100% {
-            transform: scale(1);
-            opacity: 0.4;
-          }
-          50% {
-            transform: scale(1.2);
-            opacity: 0.8;
-          }
-        }
-
-        @keyframes checkpoint-float {
-          0%, 100% {
-            transform: translateY(0px);
-          }
-          50% {
-            transform: translateY(-8px);
-          }
-        }
-      `}</style>
     </svg>
   );
 };

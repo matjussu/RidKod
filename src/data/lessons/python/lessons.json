@@ -17,7 +17,7 @@
     {
       "id": "py_les_1_2",
       "moduleId": "py_mod_001",
-      "title": "Suivre les \"sauts\" (Appels de fonction)",
+      "title": "Suivre les \"sauts\"",
       "description": "Apprends à suivre le flux d'exécution quand le code appelle des fonctions",
       "difficulty": 1,
       "estimatedTime": 15,
@@ -43,7 +43,7 @@
     {
       "id": "py_les_1_4",
       "moduleId": "py_mod_001",
-      "title": "Prédire une boucle for",
+      "title": "Prédire boucle for",
       "description": "Anticipe le nombre d'itérations et le comportement des boucles for",
       "difficulty": 1,
       "estimatedTime": 13,
@@ -69,7 +69,7 @@
     {
       "id": "py_les_1_6",
       "moduleId": "py_mod_001",
-      "title": "Sortir d'une boucle (break / continue)",
+      "title": "Sortir d'une boucle",
       "description": "Comprends comment break et continue modifient le flux des boucles",
       "difficulty": 1,
       "estimatedTime": 12,
