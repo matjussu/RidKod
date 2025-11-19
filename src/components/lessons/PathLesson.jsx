@@ -63,7 +63,8 @@ const PathLesson = ({
           position: absolute;
           left: var(--lesson-x);
           top: var(--lesson-y);
-          transform: translate(-50%, -50%);
+          width: 0;
+          height: 0;
           background: none;
           border: none;
           cursor: pointer;
@@ -71,41 +72,64 @@ const PathLesson = ({
           font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
           touch-action: manipulation;
           -webkit-tap-highlight-color: transparent;
-          display: flex;
-          align-items: center;
-          gap: 16px;
+          overflow: visible;
+          z-index: 10;
           transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .path-lesson:hover {
+        .path-lesson:hover .path-lesson-circle {
           transform: translate(-50%, -50%) scale(1.05);
         }
 
-        .path-lesson:active {
+        .path-lesson:active .path-lesson-circle {
           transform: translate(-50%, -50%) scale(0.98);
         }
 
-        /* Direction du label selon position */
-        .path-lesson-label-left {
-          flex-direction: row;
-        }
-
-        .path-lesson-label-right {
-          flex-direction: row-reverse;
-        }
-
-        /* Cercle principal */
+        /* Cercle principal - Toujours centré sur (0,0) du bouton */
         .path-lesson-circle {
+          position: absolute;
+          top: 0;
+          left: 0;
+          transform: translate(-50%, -50%);
           width: 80px;
           height: 80px;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          position: relative;
           flex-shrink: 0;
           box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          z-index: 2;
+        }
+
+        /* Label - Positionné en absolu par rapport au centre */
+        .path-lesson-label {
+          position: absolute;
+          top: 0;
+          transform: translateY(-50%);
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          max-width: 160px;
+          width: max-content;
+          z-index: 1;
+          pointer-events: none; /* Clics passent au travers vers le bouton si besoin, ou non */
+        }
+
+        /* Direction du label selon position */
+        /* position='left' => Node à gauche => Label à droite */
+        .path-lesson-label-left .path-lesson-label {
+          left: 56px; /* 40px radius + 16px gap */
+          text-align: left;
+          align-items: flex-start;
+        }
+
+        /* position='right' => Node à droite => Label à gauche */
+        .path-lesson-label-right .path-lesson-label {
+          right: 56px; /* 40px radius + 16px gap */
+          text-align: right;
+          align-items: flex-end;
         }
 
         /* États du cercle */
@@ -136,11 +160,11 @@ const PathLesson = ({
         /* Animation pulse pour leçon active */
         @keyframes pulse {
           0%, 100% {
-            transform: scale(1);
+            transform: translate(-50%, -50%) scale(1);
             box-shadow: 0 0 32px rgba(255, 149, 0, 0.6), 0 8px 24px rgba(0, 0, 0, 0.3);
           }
           50% {
-            transform: scale(1.1);
+            transform: translate(-50%, -50%) scale(1.1);
             box-shadow: 0 0 48px rgba(255, 149, 0, 0.8), 0 12px 32px rgba(0, 0, 0, 0.4);
           }
         }
@@ -153,6 +177,7 @@ const PathLesson = ({
           width: 100%;
           height: 100%;
           pointer-events: none;
+          border-radius: 50%;
         }
 
         .particle {
@@ -187,14 +212,6 @@ const PathLesson = ({
           }
         }
 
-        /* Label */
-        .path-lesson-label {
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
-          max-width: 160px;
-        }
-
         .path-lesson-number {
           font-size: 12px;
           font-weight: 700;
@@ -226,22 +243,17 @@ const PathLesson = ({
 
         /* Responsive */
         @media (max-width: 768px) {
-          .path-lesson {
-            gap: 12px;
-            margin: 20px 0;
-          }
-
-          .path-lesson-left {
-            margin-left: 12px;
-          }
-
-          .path-lesson-right {
-            margin-right: 12px;
-          }
-
           .path-lesson-circle {
             width: 64px;
             height: 64px;
+          }
+
+          .path-lesson-label-left .path-lesson-label {
+            left: 44px; /* 32px radius + 12px gap */
+          }
+
+          .path-lesson-label-right .path-lesson-label {
+            right: 44px; /* 32px radius + 12px gap */
           }
 
           .path-lesson-icon {
@@ -262,14 +274,17 @@ const PathLesson = ({
         }
 
         @media (max-width: 480px) {
-          .path-lesson {
-            gap: 10px;
-            margin: 16px 0;
-          }
-
           .path-lesson-circle {
             width: 56px;
             height: 56px;
+          }
+
+          .path-lesson-label-left .path-lesson-label {
+            left: 38px; /* 28px radius + 10px gap */
+          }
+
+          .path-lesson-label-right .path-lesson-label {
+            right: 38px; /* 28px radius + 10px gap */
           }
 
           .path-lesson-icon {

@@ -1,62 +1,70 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { PATH_CONFIG } from '../../constants/pathLayout';
+import { PATH_CONFIG, getPathPoint } from '../../constants/pathLayout';
 
 /**
  * PathSVG - Chemin SVG animé reliant les leçons (style Duolingo)
- * Zigzag vertical avec gradient de progression
+ * Courbe sinusoïdale fluide générée mathématiquement
  */
 const PathSVG = ({
   totalLessons = 7,
   completedCount = 0
 }) => {
-  // Calculer le path SVG zigzag
-  const { pathData, totalLength } = useMemo(() => {
-    const { startY, spacing, amplitude, centerX } = PATH_CONFIG;
+  // Calculer le path SVG
+  const { pathData, totalLength, maxY } = useMemo(() => {
+    const { startY, spacing, bossSpacing } = PATH_CONFIG;
 
-    let path = `M ${centerX} ${startY}`; // Start point
+    // Point de départ
+    let path = `M ${getPathPoint(startY).x} ${startY}`;
 
-    // Créer le zigzag pour chaque leçon
-    for (let i = 1; i <= totalLessons; i++) {
-      const y = startY + (i * spacing);
-      // Alternance gauche/droite
-      const x = i % 2 === 0 ? centerX + amplitude : centerX - amplitude;
+    // Calculer la hauteur totale
+    // Dernière leçon + boss
+    const lastLessonY = startY + ((totalLessons - 1) * spacing);
+    const bossY = lastLessonY + bossSpacing;
+    const endY = bossY + 50; // Un peu de marge après le boss
 
-      // Utiliser une courbe quadratic pour un path plus fluide
-      const controlY = startY + ((i - 0.5) * spacing);
-      path += ` Q ${centerX} ${controlY}, ${x} ${y}`;
+    // Générer des points intermédiaires pour une courbe fluide
+    // Résolution : un point tous les 10px
+    const step = 10;
+    let length = 0;
+    let lastPoint = { x: getPathPoint(startY).x, y: startY };
+
+    for (let y = startY + step; y <= endY; y += step) {
+      const point = getPathPoint(y);
+      path += ` L ${point.x} ${point.y}`;
+
+      // Calculer la longueur approximative
+      const dx = point.x - lastPoint.x;
+      const dy = point.y - lastPoint.y;
+      length += Math.sqrt(dx * dx + dy * dy);
+
+      lastPoint = point;
     }
-
-    // Boss fight final
-    const bossY = startY + ((totalLessons + 1) * spacing) + 60;
-    path += ` Q ${centerX} ${startY + ((totalLessons + 0.5) * spacing) + 60}, ${centerX} ${bossY}`;
-
-    // Estimer la longueur du path (approximation)
-    const length = totalLessons * spacing * 1.4;
 
     return {
       pathData: path,
-      totalLength: length
+      totalLength: length,
+      maxY: endY
     };
   }, [totalLessons]);
 
   // Calculer le stroke-dashoffset pour l'animation de progression
-  const progress = totalLessons > 0 ? (completedCount / totalLessons) * 100 : 0;
-  const dashOffset = totalLength - (totalLength * (progress / 100));
+  // On approxime la progression basée sur le nombre de leçons complétées
+  const progressRatio = totalLessons > 0 ? (completedCount / totalLessons) : 0;
+  // On ajuste pour ne pas remplir tout le chemin du boss si pas fini
+  const adjustedProgress = Math.min(progressRatio * 0.9, 1);
 
-  // Calculer la hauteur SVG dynamiquement
-  const svgHeight = (totalLessons + 2) * PATH_CONFIG.spacing + 120;
+  const dashOffset = totalLength - (totalLength * adjustedProgress);
 
   return (
     <svg
       className="path-svg"
-      viewBox={`0 0 400 ${svgHeight}`}
+      viewBox={`0 0 400 ${maxY}`}
       preserveAspectRatio="xMidYMin meet"
       style={{
         position: 'absolute',
         top: 0,
-        left: '50%',
-        transform: 'translateX(-50%)',
+        left: 0,
         width: '100%',
         height: '100%',
         pointerEvents: 'none',
@@ -68,8 +76,8 @@ const PathSVG = ({
         {/* Gradient de progression bleu → vert */}
         <linearGradient id="pathGradient" x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stopColor="#1e5a8e" />
-          <stop offset={`${progress}%`} stopColor="#30D158" />
-          <stop offset={`${progress}%`} stopColor="#2C2C2E" />
+          <stop offset={`${adjustedProgress * 100}%`} stopColor="#30D158" />
+          <stop offset={`${adjustedProgress * 100}%`} stopColor="#2C2C2E" />
           <stop offset="100%" stopColor="#2C2C2E" />
         </linearGradient>
       </defs>

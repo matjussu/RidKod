@@ -70,7 +70,7 @@ const LessonList = () => {
       {/* Back Button */}
       <button className="lesson-back-button" onClick={handleBackClick} aria-label="Retour">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="m15 18-6-6 6-6"/>
+          <path d="m15 18-6-6 6-6" />
         </svg>
       </button>
 
@@ -96,11 +96,6 @@ const LessonList = () => {
 
       {/* Path Background SVG */}
       <div className="path-lessons-wrapper">
-        <PathSVG
-          totalLessons={lessons.length}
-          completedCount={completedLessonsCount}
-        />
-
         {/* Lessons on path */}
         <div
           className="path-lessons-list"
@@ -108,12 +103,20 @@ const LessonList = () => {
             minHeight: `${(lessons.length + 2) * PATH_CONFIG.spacing + 120}px`
           }}
         >
+          <PathSVG
+            totalLessons={lessons.length}
+            completedCount={completedLessonsCount}
+          />
+
           {lessons.map((lesson, index) => {
             const completed = isLessonCompleted(lesson.id);
-            const position = index % 2 === 0 ? 'left' : 'right';
-
             // Calculer la position absolue de la leçon
             const { x, y } = calculateLessonPosition(index);
+
+            // Déterminer la position du label (gauche ou droite) selon la position X
+            // Si x > centerX (droite), label à droite (ou gauche selon préférence)
+            // Ici : si le point est à droite, on met le label à droite (row-reverse) pour qu'il pointe vers l'intérieur
+            const position = x > PATH_CONFIG.centerX ? 'right' : 'left';
 
             // La leçon est active si c'est la première non complétée
             const isActive = !completed &&
