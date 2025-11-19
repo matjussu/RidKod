@@ -5,7 +5,8 @@ import useHaptic from '../../hooks/useHaptic';
 import PathLesson from '../../components/lessons/PathLesson';
 import BossFight from '../../components/lessons/BossFight';
 import PathSVG from '../../components/lessons/PathSVG';
-import { calculateLessonPosition, calculateBossPosition, PATH_CONFIG } from '../../constants/pathLayout';
+import StartNode from '../../components/lessons/StartNode';
+import { calculateLessonPosition, calculateBossPosition, getStartNodePosition, PATH_CONFIG } from '../../constants/pathLayout';
 import modulesData from '../../data/lessons/python/modules.json';
 import lessonsData from '../../data/lessons/python/lessons.json';
 import '../../styles/Lessons.css';
@@ -18,6 +19,7 @@ const LessonList = () => {
 
   const [lessons, setLessons] = useState([]);
   const [moduleData, setModuleData] = useState(null);
+  const [startAnimation, setStartAnimation] = useState(false);
 
   useEffect(() => {
     if (language === 'python') {
@@ -61,9 +63,16 @@ const LessonList = () => {
     navigate(`/lessons/${language}/modules`);
   };
 
+  const handleStartComplete = () => {
+    setStartAnimation(true);
+    // L'animation se lance via le prop startAnimation passé à PathSVG
+  };
+
   if (!moduleData) {
     return null;
   }
+
+  const startPos = getStartNodePosition();
 
   return (
     <div className="path-container">
@@ -106,7 +115,34 @@ const LessonList = () => {
           <PathSVG
             totalLessons={lessons.length}
             completedCount={completedLessonsCount}
+            startAnimation={startAnimation}
           />
+
+          {/* Start Circle (Interactive) */}
+          {completedLessonsCount === 0 && !startAnimation ? (
+            <StartNode
+              x={startPos.x}
+              y={startPos.y}
+              onComplete={handleStartComplete}
+            />
+          ) : (
+            // Cercle statique si déjà commencé
+            <div
+              className="path-start-circle"
+              style={{
+                position: 'absolute',
+                left: startPos.x,
+                top: startPos.y,
+                transform: 'translate(-50%, -50%)',
+                width: '24px',
+                height: '24px',
+                borderRadius: '50%',
+                background: '#2C2C2E',
+                border: '4px solid rgba(255, 255, 255, 0.1)',
+                zIndex: 1
+              }}
+            />
+          )}
 
           {lessons.map((lesson, index) => {
             const completed = isLessonCompleted(lesson.id);

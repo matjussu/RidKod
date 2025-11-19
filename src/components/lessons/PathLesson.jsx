@@ -275,16 +275,16 @@ const PathLesson = ({
 
         @media (max-width: 480px) {
           .path-lesson-circle {
-            width: 56px;
-            height: 56px;
+            width: 72px;
+            height: 72px;
           }
 
           .path-lesson-label-left .path-lesson-label {
-            left: 38px; /* 28px radius + 10px gap */
+            left: 52px; /* 36px radius + 16px gap */
           }
 
           .path-lesson-label-right .path-lesson-label {
-            right: 38px; /* 28px radius + 10px gap */
+            right: 52px; /* 36px radius + 16px gap */
           }
 
           .path-lesson-icon {

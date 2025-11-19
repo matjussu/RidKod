@@ -461,13 +461,16 @@ LessonContent========================================*/
   display: flex;
   justify-content: center;
   padding-top: 0;
+  overflow-x: hidden;
+  /* Prevent scroll if scale doesn't catch it all */
 }
 
 /* Path Lessons List */
 .path-lessons-list {
   position: relative;
   width: 400px;
-  max-width: 100%;
+  min-width: 400px;
+  /* Force fixed width for coordinate consistency */
   display: flex;
   flex-direction: column;
   padding: 20px 0;
@@ -534,8 +537,8 @@ LessonContent========================================*/
   .path-lessons-list {
     width: 400px;
     padding: 12px 0;
-    transform: scale(0.8);
-    /* 320/400 approx */
+    transform: scale(0.95);
+    /* 380/400 approx - fills most mobile screens */
   }
 }
 
