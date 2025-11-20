@@ -1,0 +1,71 @@
+{
+  "language": "python",
+  "modules": [
+    {
+      "id": "py_mod_001",
+      "title": "Prédire ce que Fait le Code",
+      "description": "Apprends à lire un programme de haut en bas et anticiper son comportement",
+      "difficulty": 1,
+      "order": 1,
+      "totalLessons": 7,
+      "estimatedTime": 90,
+      "totalXP": 210,
+      "unlockRequirement": null
+    },
+    {
+      "id": "py_mod_002",
+      "title": "La Vie d'une Variable",
+      "description": "Maîtrise le cycle de vie des variables, leur portée et leurs transformations",
+      "difficulty": 1,
+      "order": 2,
+      "totalLessons": 7,
+      "estimatedTime": 85,
+      "totalXP": 210,
+      "unlockRequirement": null
+    },
+    {
+      "id": "py_mod_003",
+      "title": "Maîtriser les Conteneurs",
+      "description": "Comprends les listes, dictionnaires et leurs comportements complexes",
+      "difficulty": 2,
+      "order": 3,
+      "totalLessons": 5,
+      "estimatedTime": 65,
+      "totalXP": 150,
+      "unlockRequirement": null
+    },
+    {
+      "id": "py_mod_004",
+      "title": "Lire l'Intention (Les Patterns des Pros)",
+      "description": "Déchiffre les patterns de code utilisés par les développeurs expérimentés",
+      "difficulty": 2,
+      "order": 4,
+      "totalLessons": 6,
+      "estimatedTime": 75,
+      "totalXP": 180,
+      "unlockRequirement": null
+    },
+    {
+      "id": "py_mod_005",
+      "title": "Trouver les Pièges (Bugs, Sécurité & IA)",
+      "description": "Apprends à repérer les bugs, failles de sécurité et pièges du code généré par IA",
+      "difficulty": 3,
+      "order": 5,
+      "totalLessons": 6,
+      "estimatedTime": 80,
+      "totalXP": 180,
+      "unlockRequirement": null
+    },
+    {
+      "id": "py_mod_006",
+      "title": "Démystifier les Classes (POO)",
+      "description": "Comprends la programmation orientée objet et les concepts de classes et objets",
+      "difficulty": 3,
+      "order": 6,
+      "totalLessons": 6,
+      "estimatedTime": 75,
+      "totalXP": 180,
+      "unlockRequirement": null
+    }
+  ]
+}
