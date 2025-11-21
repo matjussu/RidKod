@@ -1,10 +1,27 @@
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import logoImage from '../assets/long_logo.png';
+import WelcomeAnimation from '../components/welcome/WelcomeAnimation';
 
 const Welcome = () => {
   const navigate = useNavigate();
   const { skipAuth } = useAuth();
+
+  // Check if user has seen the animation
+  const [showAnimation, setShowAnimation] = useState(() => {
+    return !localStorage.getItem('hasSeenWelcomeAnimation');
+  });
+
+  const handleAnimationComplete = () => {
+    localStorage.setItem('hasSeenWelcomeAnimation', 'true');
+    setShowAnimation(false);
+  };
+
+  // If animation should be shown, display it
+  if (showAnimation) {
+    return <WelcomeAnimation onComplete={handleAnimationComplete} />;
+  }
 
   const handleLogin = () => {
     navigate('/login');
