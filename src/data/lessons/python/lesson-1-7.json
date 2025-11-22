@@ -1,15 +1,68 @@
 {
-  "lessonId": "py_les_17",
+  "lessonId": "py_les_1_7",
   "moduleId": "py_mod_001",
-  "title": "Récap - Prédire ce que fait le code",
-  "subtitle": "Contenu à venir - En cours de rédaction",
+  "lessonNumber": "7",
+  "title": "Gérer l'erreur (try / except)",
+  "subtitle": "Empêcher le programme de planter quand l'imprévu arrive.",
   "sections": [
     {
       "id": "section_1",
       "type": "text",
-      "title": "Introduction",
-      "content": "Cette leçon sera bientôt disponible.\n\nRevenez prochainement pour découvrir le contenu complet de **Récap - Prédire ce que fait le code**."
+      "title": "Le Plan B",
+      "content": "Le code est fragile. Une connexion coupée, un fichier manquant, et c'est le crash.\n\n`try` / `except` est une protection :\n- **`try` (Essayer) :** Le code normal. Si tout va bien, on ignore le `except`.\n- **`except` (Exception) :** Le plan de secours. Si (et seulement si) une erreur arrive dans le `try`, on saute ici pour gérer la crise proprement."
+    },
+    {
+      "id": "section_2",
+      "type": "code_example",
+      "language": "python",
+      "title": "Exemple : Division par Zéro",
+      "code": "print(\"Calcul...\")\ntry:\n    valeur = 10 / 0  # Impossible !\n    print(\"Réussi\")  # Jamais atteint\nexcept:\n    print(\"Erreur mathématique\")\n\nprint(\"Fin programme\")",
+      "tip": {
+        "title": "⚡ Le Décodeur",
+        "content": "**Le Crash :** Sans `try/except`, une erreur arrête le programme avec un message rouge effrayant. Avec `try/except`, le programme reste en vie."
+      },
+      "caption": "1. Le `try` commence.\n2. La division par 0 provoque une erreur immédiate.\n3. Le reste du `try` est abandonné (pas de \"Réussi\").\n4. L'ordinateur saute dans `except`.\n5. Affiche \"Erreur mathématique\".\n6. Le programme survit et affiche \"Fin programme\"."
+    },
+    {
+      "id": "section_3",
+      "type": "exercise",
+      "exerciseId": "py_les_1_7_ex1"
+    },
+    {
+      "id": "section_4",
+      "type": "exercise",
+      "exerciseId": "py_les_1_7_ex2"
     }
   ],
-  "exercises": []
+  "exercises": [
+    {
+      "id": "py_les_1_7_ex1",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Et si tout se passe bien ?",
+      "code": "try:\n    print(\"A\")\nexcept:\n    print(\"B\")\nprint(\"C\")",
+      "options": [
+        "A\nB\nC",
+        "A\nC",
+        "B\nC",
+        "C"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Il n'y a aucune erreur dans le `try`. Donc le code affiche \"A\", ignore totalement le bloc `except` (le plan B n'est pas nécessaire), puis affiche \"C\".",
+      "highlightedLines": [2, 5],
+      "xpGain": 10
+    },
+    {
+      "id": "py_les_1_7_ex2",
+      "type": "predict_output",
+      "inputType": "free_input",
+      "question": "Simulation de perte de connexion.",
+      "code": "status = \"En ligne\"\ntry:\n    # Simulation erreur connexion\n    x = 1 / 0 \n    status = \"Connecté\"\nexcept:\n    status = \"Hors ligne\"\n\nprint(status)",
+      "predefinedAnswers": ["En ligne", "Connecté", "Hors ligne", "Erreur"],
+      "correctAnswer": "Hors ligne",
+      "explanation": "L'erreur survient avant que `status` ne devienne \"Connecté\". On saute dans l'except, où `status` devient \"Hors ligne\".",
+      "highlightedLines": [4, 7],
+      "xpGain": 15
+    }
+  ]
 }

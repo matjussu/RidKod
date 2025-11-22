@@ -1,15 +1,73 @@
 {
-  "lessonId": "py_les_12",
+  "lessonId": "py_les_1_2",
   "moduleId": "py_mod_001",
-  "title": "Variables et assignation",
-  "subtitle": "Contenu à venir - En cours de rédaction",
+  "lessonNumber": "2",
+  "title": "Suivre les \"sauts\" (Appels de fonction)",
+  "subtitle": "Le code ne va pas toujours tout droit. Apprenez à suivre l'exécution quand elle se téléporte.",
   "sections": [
     {
       "id": "section_1",
       "type": "text",
-      "title": "Introduction",
-      "content": "Cette leçon sera bientôt disponible.\n\nRevenez prochainement pour découvrir le contenu complet de **Variables et assignation**."
+      "title": "Le Détour",
+      "content": "Quand l'ordinateur rencontre un **appel de fonction** (ex: `login()`), il arrête sa lecture linéaire.\n\nIl **saute** vers la définition de la fonction (`def login():`), exécute tout le code qui s'y trouve, puis **revient** exactement là où il s'était arrêté pour continuer."
+    },
+    {
+      "id": "section_2",
+      "type": "code_example",
+      "language": "python",
+      "title": "Exemple : Flux d'Authentification",
+      "code": "def verifier_user():\n    print(\"Vérification en cours...\")\n    print(\"OK\")\n\nprint(\"1. Start\")\n\n# L'appel (Le Saut)\nverifier_user()\n\nprint(\"2. End\")",
+      "tip": {
+        "title": "⚡ Le Décodeur",
+        "content": "**1. `def` :** Signifie \"Je définis une action pour plus tard\". Ce code ne s'exécute PAS tout de suite.\n\n**2. `()` :** Les parenthèses sont le déclencheur. `login` est le nom, `login()` est l'action d'exécuter.\n\n**3. Indentation :** Le décalage vers la droite indique quelles lignes appartiennent à la fonction."
+      },
+      "caption": "1. Lit la définition (ne fait rien).\n2. Affiche \"1. Start\".\n3. Voit `verifier_user()`. **SAUTE** ligne 1.\n4. Affiche \"Vérification...\" puis \"OK\".\n5. La fonction finit. **REVIENT** ligne 8.\n6. Affiche \"2. End\"."
+    },
+    {
+      "id": "section_3",
+      "type": "exercise",
+      "exerciseId": "py_les_1_2_ex1"
+    },
+    {
+      "id": "section_4",
+      "type": "exercise",
+      "exerciseId": "py_les_1_2_ex2"
     }
   ],
-  "exercises": []
+  "exercises": [
+    {
+      "id": "py_les_1_2_ex1",
+      "type": "trace_execution",
+      "inputType": "options",
+      "question": "Dans quel ordre exact les messages apparaissent-ils ?",
+      "code": "def alerte():\n    print(\"ALERTE\")\n\nprint(\"Scan\")\nalerte()\nprint(\"Clean\")",
+      "options": [
+        "Scan, Clean, ALERTE",
+        "ALERTE, Scan, Clean",
+        "Scan, ALERTE, Clean",
+        "Scan, Clean"
+      ],
+      "correctAnswer": 2,
+      "explanation": "L'ordre est : 1. Scan (avant l'appel) -> 2. ALERTE (pendant le saut) -> 3. Clean (après le retour).",
+      "highlightedLines": [4, 2, 5, 6],
+      "xpGain": 10
+    },
+    {
+      "id": "py_les_1_2_ex2",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Piège fréquent : Que se passe-t-il ici ?",
+      "code": "def reset_password():\n    print(\"Mot de passe effacé\")\n\nprint(\"Connexion serveur\")\nprint(\"Admin connecté\")",
+      "options": [
+        "Connexion serveur",
+        "Mot de passe effacé",
+        "Connexion serveur\nAdmin connecté",
+        "Connexion serveur\nMot de passe effacé\nAdmin connecté"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Avez-vous vu le piège ? La fonction `reset_password` est définie, mais **jamais appelée** (pas de `reset_password()` dans le script principal). Son code reste dormant. Rien n'est effacé.",
+      "highlightedLines": [4, 5],
+      "xpGain": 15
+    }
+  ]
 }

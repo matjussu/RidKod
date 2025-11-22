@@ -40,6 +40,21 @@ const LessonSection = ({
                 isCompact={false}
               />
             </div>
+            {/* Décodeur intégré sous le code si présent */}
+            {section.tip && (
+              <div className="lesson-section-tip-inline">
+                {section.tip.title && (
+                  <h4 className="lesson-tip-title">{section.tip.title}</h4>
+                )}
+                <div className="lesson-tip-content">
+                  {section.tip.content.split('\n\n').map((paragraph, index) => (
+                    <p key={index} className="lesson-tip-paragraph">
+                      {formatText(paragraph)}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            )}
             {section.caption && (
               <p className="lesson-code-caption">{section.caption}</p>
             )}
@@ -59,6 +74,22 @@ const LessonSection = ({
           <div className={`lesson-section lesson-section-highlight lesson-highlight-${section.style || 'info'}`}>
             <div className="lesson-highlight-content">
               {formatText(section.content)}
+            </div>
+          </div>
+        );
+
+      case 'tip':
+        return (
+          <div className="lesson-section lesson-section-tip">
+            {section.title && (
+              <h4 className="lesson-tip-title">{section.title}</h4>
+            )}
+            <div className="lesson-tip-content">
+              {section.content.split('\n\n').map((paragraph, index) => (
+                <p key={index} className="lesson-tip-paragraph">
+                  {formatText(paragraph)}
+                </p>
+              ))}
             </div>
           </div>
         );
@@ -136,7 +167,7 @@ const LessonSection = ({
 LessonSection.propTypes = {
   section: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    type: PropTypes.oneOf(['text', 'code_example', 'highlight', 'exercise']).isRequired,
+    type: PropTypes.oneOf(['text', 'code_example', 'highlight', 'tip', 'exercise']).isRequired,
     title: PropTypes.string,
     content: PropTypes.string,
     code: PropTypes.string,
@@ -268,6 +299,54 @@ const styles = `
     line-height: 1.6;
   }
 
+  /* Tip Section (Décodeur) - Style Apple Premium */
+  .lesson-section-tip,
+  .lesson-section-tip-inline {
+    background: rgba(255, 204, 0, 0.12);
+    border-radius: 16px;
+    padding: 20px;
+    border-left: 5px solid #FFCC00;
+    box-shadow: 0 4px 12px rgba(255, 204, 0, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .lesson-section-tip-inline {
+    margin-top: 12px;
+  }
+
+  .lesson-tip-title {
+    font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+    font-size: 17px;
+    font-weight: 900;
+    color: #FFCC00;
+    margin: 0 0 12px 0;
+    line-height: 1.3;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .lesson-tip-content {
+    font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+    font-size: 14px;
+    font-weight: 600;
+    color: #FFFFFF;
+    line-height: 1.7;
+  }
+
+  .lesson-tip-paragraph {
+    margin: 0 0 12px 0;
+  }
+
+  .lesson-tip-paragraph:last-child {
+    margin-bottom: 0;
+  }
+
+  .lesson-section-tip .lesson-inline-code {
+    background: rgba(0, 0, 0, 0.3);
+    color: #FFCC00;
+    border: 1px solid rgba(255, 204, 0, 0.3);
+  }
+
   /* Exercise Section */
   .lesson-section-exercise {
     background: #2C2C2E;
@@ -323,6 +402,19 @@ const styles = `
       padding: 14px;
     }
 
+    .lesson-section-tip,
+    .lesson-section-tip-inline {
+      padding: 16px;
+    }
+
+    .lesson-tip-title {
+      font-size: 15px;
+    }
+
+    .lesson-tip-content {
+      font-size: 13px;
+    }
+
     .lesson-section-exercise {
       padding: 16px;
     }
@@ -347,6 +439,19 @@ const styles = `
 
     .lesson-section-highlight {
       padding: 12px;
+    }
+
+    .lesson-section-tip,
+    .lesson-section-tip-inline {
+      padding: 14px;
+    }
+
+    .lesson-tip-title {
+      font-size: 14px;
+    }
+
+    .lesson-tip-content {
+      font-size: 12px;
     }
 
     .lesson-section-exercise {

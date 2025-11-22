@@ -120,14 +120,14 @@ const PathLesson = ({
         /* Direction du label selon position */
         /* position='left' => Node à gauche => Label à droite */
         .path-lesson-label-left .path-lesson-label {
-          left: 56px; /* 40px radius + 16px gap */
+          left: 115px; /* 40px radius + 32px gap */
           text-align: left;
           align-items: flex-start;
         }
 
         /* position='right' => Node à droite => Label à gauche */
         .path-lesson-label-right .path-lesson-label {
-          right: 56px; /* 40px radius + 16px gap */
+          right: 115px; /* 40px radius + 32px gap */
           text-align: right;
           align-items: flex-end;
         }
@@ -249,11 +249,11 @@ const PathLesson = ({
           }
 
           .path-lesson-label-left .path-lesson-label {
-            left: 44px; /* 32px radius + 12px gap */
+            left: 115px; /* 32px radius + 24px gap */
           }
 
           .path-lesson-label-right .path-lesson-label {
-            right: 44px; /* 32px radius + 12px gap */
+            right: 115px; /* 32px radius + 24px gap */
           }
 
           .path-lesson-icon {
@@ -280,11 +280,11 @@ const PathLesson = ({
           }
 
           .path-lesson-label-left .path-lesson-label {
-            left: 52px; /* 36px radius + 16px gap */
+            left: 100px; /* 36px radius + 28px gap */
           }
 
           .path-lesson-label-right .path-lesson-label {
-            right: 52px; /* 36px radius + 16px gap */
+            right: 100px; /* 36px radius + 28px gap */
           }
 
           .path-lesson-icon {

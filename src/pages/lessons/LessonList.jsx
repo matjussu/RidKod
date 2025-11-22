@@ -20,6 +20,7 @@ const LessonList = () => {
   const [lessons, setLessons] = useState([]);
   const [moduleData, setModuleData] = useState(null);
   const [startAnimation, setStartAnimation] = useState(false);
+  const [firstLessonActivated, setFirstLessonActivated] = useState(false);
 
   useEffect(() => {
     if (language === 'python') {
@@ -66,6 +67,12 @@ const LessonList = () => {
   const handleStartComplete = () => {
     setStartAnimation(true);
     // L'animation se lance via le prop startAnimation passé à PathSVG
+
+    // Activer la première leçon après que le path l'atteigne
+    const pathAnimationDuration = 1500; // 1.5s pour que le path atteigne lesson 1
+    setTimeout(() => {
+      setFirstLessonActivated(true);
+    }, pathAnimationDuration);
   };
 
   if (!moduleData) {
@@ -119,7 +126,7 @@ const LessonList = () => {
           />
 
           {/* Start Circle (Interactive) */}
-          {completedLessonsCount === 0 && !startAnimation ? (
+          {completedLessonsCount === 0 ? (
             <StartNode
               x={startPos.x}
               y={startPos.y}
@@ -155,8 +162,11 @@ const LessonList = () => {
             const position = x > PATH_CONFIG.centerX ? 'right' : 'left';
 
             // La leçon est active si c'est la première non complétée
-            const isActive = !completed &&
-              (index === 0 || isLessonCompleted(lessons[index - 1]?.id));
+            // Pour la première leçon : attendre que le path l'atteigne après GO
+            const isActive = !completed && (
+              (index === 0 && firstLessonActivated) || // Première leçon : après animation path
+              (index > 0 && isLessonCompleted(lessons[index - 1]?.id)) // Autres : logique normale
+            );
 
             return (
               <PathLesson

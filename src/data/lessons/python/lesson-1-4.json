@@ -1,15 +1,68 @@
 {
-  "lessonId": "py_les_14",
+  "lessonId": "py_les_1_4",
   "moduleId": "py_mod_001",
-  "title": "Les opérations arithmétiques",
-  "subtitle": "Contenu à venir - En cours de rédaction",
+  "lessonNumber": "4",
+  "title": "Prédire une boucle for",
+  "subtitle": "Savoir à l'avance combien de fois le code va se répéter.",
   "sections": [
     {
       "id": "section_1",
       "type": "text",
-      "title": "Introduction",
-      "content": "Cette leçon sera bientôt disponible.\n\nRevenez prochainement pour découvrir le contenu complet de **Les opérations arithmétiques**."
+      "title": "La Répétition Contrôlée",
+      "content": "La boucle `for` est prévisible. Elle sert à traiter une liste d'éléments un par un.\n\nQuand vous en lisez une, posez-vous deux questions :\n1. **La Collection :** Qu'est-ce qu'on parcourt ? (Liste d'emails, de prix...)\n2. **L'Itérateur :** Quel nom porte la variable temporaire qui change à chaque tour ?"
+    },
+    {
+      "id": "section_2",
+      "type": "code_example",
+      "language": "python",
+      "title": "Exemple : Traitement de fichiers",
+      "code": "fichiers = [\"img1.jpg\", \"img2.jpg\"]\n\nprint(\"Début traitement\")\n\nfor f in fichiers:\n    print(\"Compression de : \" + f)\n\nprint(\"Terminé\")",
+      "tip": {
+        "title": "⚡ Le Décodeur",
+        "content": "**1. `for X in Y:`** Se lit \"Pour chaque élément X dans la liste Y\".\n\n**2. `range(3)` :** Un raccourci courant qui crée une liste virtuelle `[0, 1, 2]`. Utile pour répéter une action X fois."
+      },
+      "caption": "1. La liste contient 2 éléments. La boucle fera 2 tours.\n2. **Tour 1 :** la variable `f` vaut \"img1.jpg\".\n3. **Tour 2 :** la variable `f` vaut \"img2.jpg\".\n4. Plus d'éléments ? La boucle s'arrête.\n5. Affiche \"Terminé\"."
+    },
+    {
+      "id": "section_3",
+      "type": "exercise",
+      "exerciseId": "py_les_1_4_ex1"
+    },
+    {
+      "id": "section_4",
+      "type": "exercise",
+      "exerciseId": "py_les_1_4_ex2"
     }
   ],
-  "exercises": []
+  "exercises": [
+    {
+      "id": "py_les_1_4_ex1",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Combien de lignes 'Alerte' seront affichées ?",
+      "code": "for i in range(4):\n    print(\"Alerte\")",
+      "options": [
+        "3",
+        "4",
+        "5",
+        "1"
+      ],
+      "correctAnswer": 1,
+      "explanation": "`range(4)` compte 0, 1, 2, 3. Cela fait exactement 4 tours. Le message s'affiche 4 fois.",
+      "highlightedLines": [1, 2],
+      "xpGain": 10
+    },
+    {
+      "id": "py_les_1_4_ex2",
+      "type": "predict_output",
+      "inputType": "free_input",
+      "question": "Le pattern 'Accumulateur'. Quelle est la valeur finale de `total` ?",
+      "code": "total = 0\nfor prix in [10, 20, 5]:\n    total = total + prix\nprint(total)",
+      "predefinedAnswers": ["10", "20", "35", "5"],
+      "correctAnswer": "35",
+      "explanation": "Le code additionne chaque prix au total.\n- Tour 1: 0 + 10 = 10\n- Tour 2: 10 + 20 = 30\n- Tour 3: 30 + 5 = 35.",
+      "highlightedLines": [3, 4],
+      "xpGain": 15
+    }
+  ]
 }

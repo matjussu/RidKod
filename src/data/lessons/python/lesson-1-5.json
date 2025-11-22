@@ -1,15 +1,67 @@
 {
-  "lessonId": "py_les_15",
+  "lessonId": "py_les_1_5",
   "moduleId": "py_mod_001",
-  "title": "Afficher des résultats avec print()",
-  "subtitle": "Contenu à venir - En cours de rédaction",
+  "lessonNumber": "5",
+  "title": "Quand s'arrête une boucle while ?",
+  "subtitle": "La boucle de l'incertitude. Elle tourne tant qu'une condition est vraie.",
   "sections": [
     {
       "id": "section_1",
       "type": "text",
-      "title": "Introduction",
-      "content": "Cette leçon sera bientôt disponible.\n\nRevenez prochainement pour découvrir le contenu complet de **Afficher des résultats avec print()**."
+      "title": "Le Risque d'Infini",
+      "content": "La boucle `while` (tant que) ne compte pas. Elle vérifie une condition à chaque tour.\n\nVotre mission de lecture est critique : **trouvez la ligne qui fait changer la condition.** Si rien ne change la condition, la boucle est **infinie** (le programme plante)."
+    },
+    {
+      "id": "section_2",
+      "type": "code_example",
+      "language": "python",
+      "title": "Exemple : Tentative de Connexion",
+      "code": "essais = 0\n\n# On autorise 3 essais max (0, 1, 2)\nwhile essais < 3:\n    print(\"Tentative connexion...\")\n    essais = essais + 1\n\nprint(\"Compte bloqué\")",
+      "tip": {
+        "title": "⚡ Le Décodeur",
+        "content": "**1. `while condition:`** Se lit \"Tant que la condition est Vraie, continue\".\n\n**2. Incrémentation (`i = i + 1`) :** C'est souvent ce qui permet de sortir de la boucle. Si on oublie d'augmenter le compteur, on reste bloqué."
+      },
+      "caption": "Chaque tour augmente `essais` de 1.\n- Quand `essais` arrive à 3, la condition `3 < 3` devient **Fausse**.\n- La boucle s'arrête juste à temps."
+    },
+    {
+      "id": "section_3",
+      "type": "exercise",
+      "exerciseId": "py_les_1_5_ex1"
+    },
+    {
+      "id": "section_4",
+      "type": "exercise",
+      "exerciseId": "py_les_1_5_ex2"
     }
   ],
-  "exercises": []
+  "exercises": [
+    {
+      "id": "py_les_1_5_ex1",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Combien de fois le message s'affiche-t-il ?",
+      "code": "batterie = 10\nwhile batterie > 0:\n    print(\"Marche\")\n    batterie = batterie - 5",
+      "options": [
+        "1 fois",
+        "2 fois",
+        "10 fois",
+        "Infiniment"
+      ],
+      "correctAnswer": 1,
+      "explanation": "- Tour 1: batterie 10 (ok), devient 5.\n- Tour 2: batterie 5 (ok), devient 0.\n- Tour 3: batterie 0 (STOP).",
+      "highlightedLines": [2, 3, 4],
+      "xpGain": 10
+    },
+    {
+      "id": "py_les_1_5_ex2",
+      "type": "find_error",
+      "inputType": "clickable_lines",
+      "question": "Ce code a un bug grave (Boucle Infinie). Cliquez sur la ligne du commentaire qui indique où ajouter du code pour éviter la boucle infinie.",
+      "code": "progression = 0\nwhile progression < 100:\n    print(\"Chargement...\")\n    # Il manque quelque chose ici !",
+      "correctAnswer": 3,
+      "explanation": "La variable `progression` reste à 0 pour l'éternité. La condition `0 < 100` sera toujours vraie. Il manque une ligne comme `progression = progression + 10` pour avancer vers la sortie.",
+      "highlightedLines": [3],
+      "xpGain": 15
+    }
+  ]
 }

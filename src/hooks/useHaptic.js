@@ -20,10 +20,18 @@ const useHaptic = () => {
     }
   };
 
+  const triggerMedium = () => {
+    if (navigator.vibrate) {
+      // Pattern : vibration moyenne pour feedback intermédiaire
+      navigator.vibrate([40]);
+    }
+  };
+
   return {
     triggerSuccess,
     triggerError,
-    triggerLight
+    triggerLight,
+    triggerMedium
   };
 };
 

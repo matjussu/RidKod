@@ -1,22 +1,27 @@
 {
   "lessonId": "py_les_1_1",
   "moduleId": "py_mod_001",
+  "lessonNumber": "1",
   "title": "La lecture de haut en bas",
-  "subtitle": "Comprends comment Python exécute ton code ligne par ligne",
+  "subtitle": "La règle d'or : l'ordinateur lit ligne par ligne, sans jamais revenir en arrière.",
   "sections": [
     {
       "id": "section_1",
       "type": "text",
-      "title": "Le Concept",
-      "content": "La première règle pour lire du code est simple : **un ordinateur lit de haut en bas, une ligne à la fois.**\n\nComme un lecteur qui suit les lignes d'un livre, l'ordinateur exécute l'instruction de la ligne 1, puis passe à la ligne 2, puis à la ligne 3...\n\nVotre premier objectif en tant que lecteur de code est de suivre ce flux simple."
+      "title": "La Règle d'Or",
+      "content": "Pour un ordinateur, l'ordre est sacré. Le code s'exécute strictement **ligne après ligne**, du haut vers le bas.\n\nL'ordinateur ne peut pas \"deviner\" la suite ni revenir en arrière (sauf si on lui dit explicitement). Si vous inversez deux lignes, vous changez souvent tout le résultat."
     },
     {
       "id": "section_2",
       "type": "code_example",
       "language": "python",
-      "title": "Exemple",
-      "code": "print(\"Première ligne\")\n\n# Ceci est un commentaire, l'ordinateur l'ignore\nprint(\"Deuxième ligne\")\n\nvariable = \"Assignation\"\nprint(\"Troisième ligne\")",
-      "caption": "L'ordinateur va :\n1. **Ligne 1 :** Afficher \"Première ligne\"\n2. **Ligne 3 :** Ignorer le commentaire\n3. **Ligne 4 :** Afficher \"Deuxième ligne\"\n4. **Ligne 6 :** Créer une variable (nous y reviendrons)\n5. **Ligne 7 :** Afficher \"Troisième ligne\"\n\nL'ordre de sortie est prévisible : le code est lu de haut en bas."
+      "title": "Exemple : Démarrage Serveur",
+      "code": "print(\"Initialisation...\")\n\nstatut = \"OFF\"\nprint(statut)\n\n# On active le serveur\nstatut = \"ON\"\nprint(statut)",
+      "tip": {
+        "title": "⚡ Le Décodeur",
+        "content": "**1. `print(...)` :** La commande pour afficher du texte à l'écran. C'est votre seule fenêtre pour voir ce qui se passe.\n\n**2. `\"texte\"` :** Les guillemets indiquent que c'est du texte brut (String).\n\n**3. `#` (Commentaire) :** Tout ce qui suit ce symbole est ignoré par l'ordinateur. C'est une note pour les humains."
+      },
+      "caption": "Suivez la chronologie :\n1. Affiche \"Initialisation...\"\n2. La mémoire `statut` reçoit \"OFF\".\n3. Affiche \"OFF\".\n4. La mémoire `statut` est écrasée et reçoit \"ON\".\n5. Affiche \"ON\".\n\nLa variable a changé au cours du temps. L'ordre compte."
     },
     {
       "id": "section_3",
@@ -34,29 +39,29 @@
       "id": "py_les_1_1_ex1",
       "type": "predict_output",
       "inputType": "options",
-      "question": "Quel sera l'affichage final de ce script ?",
-      "code": "print(\"A\")\nprint(\"B\")\nprint(\"C\")",
+      "question": "L'ordre est vital. Qu'affiche ce code à la fin ?",
+      "code": "message = \"Erreur\"\nprint(message)\n\nmessage = \"Succès\"\n# print(message)\n\nmessage = \"Terminé\"",
       "options": [
-        "C B A",
-        "A B C",
-        "A C B",
-        "Aucun affichage"
+        "Erreur\nSuccès\nTerminé",
+        "Erreur",
+        "Erreur\nTerminé",
+        "Succès\nTerminé"
       ],
       "correctAnswer": 1,
-      "explanation": "L'ordinateur exécute la ligne 1 (`print(\"A\")`), puis la ligne 2 (`print(\"B\")`), et enfin la ligne 3 (`print(\"C\")`). L'ordre est A, puis B, puis C.",
-      "highlightedLines": [1, 2, 3],
+      "explanation": "Regardez bien : le deuxième `print` est commenté (`#`). Il ne s'exécute pas. Le code change la variable `message` à \"Succès\" puis à \"Terminé\", mais ne l'affiche jamais. Seul le premier \"Erreur\" est visible.",
+      "highlightedLines": [2, 5],
       "xpGain": 10
     },
     {
       "id": "py_les_1_1_ex2",
       "type": "predict_output",
       "inputType": "free_input",
-      "question": "Combien d'étapes seront affichées au total ?",
-      "code": "action_1 = \"Ouvrir la porte\"\nprint(\"Étape 1\")\n\naction_2 = \"Prendre les clés\"\nprint(\"Étape 2\")\n\nprint(\"Étape 3\")",
-      "predefinedAnswers": ["1", "2", "3", "6"],
-      "correctAnswer": "3",
-      "explanation": "Même si des variables sont définies entre les `print()`, l'ordinateur suit l'ordre. Il affiche \"Étape 1\", puis définit `action_2`, puis affiche \"Étape 2\", et enfin affiche \"Étape 3\". Les définitions de variables n'affichent rien elles-mêmes. **Total : 3 étapes affichées**.",
-      "highlightedLines": [2, 5, 7],
+      "question": "Qu'est-ce qui s'affiche en dernier ?",
+      "code": "prix = 100\nprix = 200\nprint(prix)\nprix = 300",
+      "predefinedAnswers": ["100", "200", "300", "400"],
+      "correctAnswer": "200",
+      "explanation": "L'ordinateur lit ligne par ligne. Au moment où il rencontre `print(prix)` (ligne 3), la variable `prix` vaut 200. Le changement à 300 arrive *après* l'affichage, c'est trop tard pour être vu.",
+      "highlightedLines": [3],
       "xpGain": 10
     }
   ]

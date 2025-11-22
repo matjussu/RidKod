@@ -1,15 +1,73 @@
 {
-  "lessonId": "py_les_16",
+  "lessonId": "py_les_1_6",
   "moduleId": "py_mod_001",
-  "title": "Lire les messages d'erreur",
-  "subtitle": "Contenu à venir - En cours de rédaction",
+  "lessonNumber": "6",
+  "title": "Sortir d'une boucle (break / continue)",
+  "subtitle": "Apprenez à repérer les sorties de secours et les raccourcis dans les boucles.",
   "sections": [
     {
       "id": "section_1",
       "type": "text",
-      "title": "Introduction",
-      "content": "Cette leçon sera bientôt disponible.\n\nRevenez prochainement pour découvrir le contenu complet de **Lire les messages d'erreur**."
+      "title": "Éjection ou Saut ?",
+      "content": "Parfois, il faut perturber la boucle :\n\n1.  **`break` (Éjection) :** Arrêt d'urgence. On sort *totalement* de la boucle, même s'il restait des éléments.\n2.  **`continue` (Suivant) :** On zappe juste le tour actuel. On ignore le reste du code pour cet élément et on passe immédiatement au suivant."
+    },
+    {
+      "id": "section_2",
+      "type": "code_example",
+      "language": "python",
+      "title": "Exemple : Scanner de Sécurité",
+      "code": "files = [\"image.png\", \"virus.exe\", \"texte.txt\"]\n\nfor f in files:\n    if f == \"virus.exe\":\n        print(\"Danger ! Arrêt.\")\n        break\n    print(\"Fichier OK : \" + f)",
+      "tip": {
+        "title": "⚡ Le Décodeur",
+        "content": "**Usage typique :**\n- `break` : J'ai trouvé ce que je cherchais (ex: un virus), inutile de scanner le reste.\n- `continue` : Cet élément ne m'intéresse pas (ex: fichier vide), je passe au suivant."
+      },
+      "caption": "1. \"image.png\" n'est pas un virus. Affiche \"Fichier OK\".\n2. \"virus.exe\" EST un virus. Affiche \"Danger !\".\n3. **BREAK activé.** La boucle est tuée instantanément.\n4. \"texte.txt\" n'est jamais scanné."
+    },
+    {
+      "id": "section_3",
+      "type": "exercise",
+      "exerciseId": "py_les_1_6_ex1"
+    },
+    {
+      "id": "section_4",
+      "type": "exercise",
+      "exerciseId": "py_les_1_6_ex2"
     }
   ],
-  "exercises": []
+  "exercises": [
+    {
+      "id": "py_les_1_6_ex1",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Avec `continue`, qu'est-ce qui est affiché ?",
+      "code": "ids = [10, 0, 20]\nfor i in ids:\n    if i == 0:\n        continue\n    print(i)",
+      "options": [
+        "10",
+        "10\n20",
+        "10\n0\n20",
+        "0"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Quand `i` vaut 0, `continue` se déclenche. L'ordinateur remonte direct en haut de la boucle sans exécuter le `print`. Le 0 est donc invisible.",
+      "highlightedLines": [3, 4, 5],
+      "xpGain": 10
+    },
+    {
+      "id": "py_les_1_6_ex2",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Avec `break`, où s'arrête-t-on ?",
+      "code": "for k in [1, 2, 3, 4]:\n    if k == 3:\n        break\n    print(k)",
+      "options": [
+        "1\n2",
+        "1\n2\n3",
+        "1\n2\n4",
+        "1\n2\n3\n4"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Affiche 1, affiche 2. Arrivé à 3, le `break` stoppe tout *avant* le print. Donc le 3 n'est pas affiché.",
+      "highlightedLines": [2, 3, 4],
+      "xpGain": 10
+    }
+  ]
 }

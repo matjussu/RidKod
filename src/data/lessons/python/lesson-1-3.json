@@ -1,15 +1,67 @@
 {
-  "lessonId": "py_les_13",
+  "lessonId": "py_les_1_3",
   "moduleId": "py_mod_001",
-  "title": "Les types de données de base",
-  "subtitle": "Contenu à venir - En cours de rédaction",
+  "lessonNumber": "3",
+  "title": "Lire une condition (if / else)",
+  "subtitle": "Le code prend des décisions. Apprenez à prédire quel chemin il va emprunter.",
   "sections": [
     {
       "id": "section_1",
       "type": "text",
-      "title": "Introduction",
-      "content": "Cette leçon sera bientôt disponible.\n\nRevenez prochainement pour découvrir le contenu complet de **Les types de données de base**."
+      "title": "L'Aiguillage",
+      "content": "Imaginez un aiguillage de train. Le code arrive à un carrefour (`if`).\n\nIl évalue une question : est-ce Vrai (`True`) ou Faux (`False`) ?\n- **Si Vrai :** Il prend le premier chemin (bloc `if`).\n- **Si Faux :** Il prend le chemin alternatif (`else` ou `elif`).\n\nIl ne peut jamais prendre les deux chemins à la fois."
+    },
+    {
+      "id": "section_2",
+      "type": "code_example",
+      "language": "python",
+      "title": "Exemple : Accès Admin",
+      "code": "role = \"user\"\n\nif role == \"admin\":\n    print(\"Accès complet\")\nelse:\n    print(\"Accès limité\")\n\nprint(\"Journalisation\")",
+      "tip": {
+        "title": "⚡ Le Décodeur",
+        "content": "**1. `==` vs `=` :** Attention ! `=` assigne une valeur. `==` compare deux valeurs (Est-ce égal ?).\n\n**2. `else` :** Signifie \"Dans tous les autres cas\". C'est le filet de sécurité si le `if` est faux."
+      },
+      "caption": "1. `role` vaut \"user\".\n2. Test : Est-ce que \"user\" est égal à \"admin\" ? -> **Non (False)**.\n3. Le bloc `if` est sauté.\n4. Le bloc `else` est exécuté : affiche \"Accès limité\".\n5. On sort de l'aiguillage et affiche \"Journalisation\"."
+    },
+    {
+      "id": "section_3",
+      "type": "exercise",
+      "exerciseId": "py_les_1_3_ex1"
+    },
+    {
+      "id": "section_4",
+      "type": "exercise",
+      "exerciseId": "py_les_1_3_ex2"
     }
   ],
-  "exercises": []
+  "exercises": [
+    {
+      "id": "py_les_1_3_ex1",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Quel message s'affiche ?",
+      "code": "credit = 5\nprix = 10\n\nif credit >= prix:\n    print(\"Achat validé\")\nelse:\n    print(\"Fonds insuffisants\")",
+      "options": [
+        "Achat validé",
+        "Fonds insuffisants",
+        "Rien"
+      ],
+      "correctAnswer": 1,
+      "explanation": "5 n'est pas supérieur ou égal à 10. La condition est `False`. On part dans le `else`.",
+      "highlightedLines": [4, 6],
+      "xpGain": 10
+    },
+    {
+      "id": "py_les_1_3_ex2",
+      "type": "predict_output",
+      "inputType": "free_input",
+      "question": "Attention à l'ordre des conditions (`elif`).",
+      "code": "temperature = 35\n\nif temperature > 30:\n    print(\"Chaud\")\nelif temperature > 20:\n    print(\"Tempéré\")\nelse:\n    print(\"Froid\")",
+      "predefinedAnswers": ["Chaud", "Tempéré", "Froid", "Rien"],
+      "correctAnswer": "Chaud",
+      "explanation": "Le code teste les conditions dans l'ordre. 35 > 30 est **Vrai** dès le premier `if`. Il affiche \"Chaud\" et **sort immédiatement** de la structure. Il ne regarde même pas si 35 > 20.",
+      "highlightedLines": [3, 4],
+      "xpGain": 15
+    }
+  ]
 }
