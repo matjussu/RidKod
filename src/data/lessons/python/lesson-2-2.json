@@ -1,15 +1,121 @@
 {
-  "lessonId": "py_les_22",
+  "lessonId": "py_les_2_2",
   "moduleId": "py_mod_002",
-  "title": "Les opérateurs d'assignation (+=, -=)",
-  "subtitle": "Contenu à venir - En cours de rédaction",
+  "lessonNumber": "2",
+  "title": "Pister la valeur d'une variable",
+  "subtitle": "Comme un détective, apprenez à suivre la piste d'une variable tout au long du programme.",
   "sections": [
     {
       "id": "section_1",
       "type": "text",
-      "title": "Introduction",
-      "content": "Cette leçon sera bientôt disponible.\n\nRevenez prochainement pour découvrir le contenu complet de **Les opérateurs d'assignation (+=, -=)**."
+      "title": "La Variable est un Caméléon",
+      "content": "Une variable peut **changer de valeur** plusieurs fois dans un programme.\n\nPour lire du code, vous devez mentalement **tracer** son évolution, ligne après ligne, comme un détective qui suit une piste.\n\nC'est la compétence n°1 pour débugger du code."
+    },
+    {
+      "id": "section_2",
+      "type": "code_example",
+      "language": "python",
+      "title": "Exemple : Suivre la Variable",
+      "code": "score = 0\nprint(f\"Score initial: {score}\")\n\nscore = score + 10\nprint(f\"Après bonus: {score}\")\n\nscore = score * 2\nprint(f\"Doublé: {score}\")\n\nscore = score - 5\nprint(f\"Score final: {score}\")",
+      "tip": {
+        "title": "⚡ Le Décodeur",
+        "content": "**Tracer une variable :** Notez sa valeur après chaque modification.\n\n**`f\"...{variable}...\"`** : Les f-strings permettent d'insérer une variable dans du texte. `{score}` sera remplacé par sa valeur actuelle.\n\n**Méthode pro :** Lisez le code avec un crayon et notez les valeurs dans la marge."
+      },
+      "caption": "Traçons `score` ligne par ligne :\n• Ligne 1 : score = 0\n• Ligne 4 : score = 0 + 10 = 10\n• Ligne 7 : score = 10 * 2 = 20\n• Ligne 10 : score = 20 - 5 = 15\n\nValeur finale : **15**"
+    },
+    {
+      "id": "section_3",
+      "type": "text",
+      "title": "Le Piège de la Réassignation",
+      "content": "Quand vous écrivez `x = x + 1`, Python fait deux choses **dans l'ordre** :\n\n1. **Lit** la valeur actuelle de x (à droite du =)\n2. **Calcule** x + 1\n3. **Écrase** l'ancienne valeur de x avec le résultat\n\nL'ancienne valeur disparaît définitivement."
+    },
+    {
+      "id": "section_4",
+      "type": "code_example",
+      "language": "python",
+      "title": "Exemple : Réassignation Multiple",
+      "code": "compteur = 5\ncompteur = compteur + 1  # compteur vaut maintenant 6\ncompteur = compteur + 1  # compteur vaut maintenant 7\n\nprint(compteur)  # Affiche 7",
+      "caption": "Chaque ligne **écrase** la valeur précédente :\n• Départ : compteur = 5\n• Ligne 2 : 5 + 1 → compteur = 6 (5 disparaît)\n• Ligne 3 : 6 + 1 → compteur = 7 (6 disparaît)\n\nSeule la dernière valeur (7) reste en mémoire."
+    },
+    {
+      "id": "section_5",
+      "type": "exercise",
+      "exerciseId": "py_les_2_2_ex1"
+    },
+    {
+      "id": "section_6",
+      "type": "exercise",
+      "exerciseId": "py_les_2_2_ex2"
+    },
+    {
+      "id": "section_7",
+      "type": "exercise",
+      "exerciseId": "py_les_2_2_ex3"
+    },
+    {
+      "id": "section_8",
+      "type": "exercise",
+      "exerciseId": "py_les_2_2_ex4"
     }
   ],
-  "exercises": []
+  "exercises": [
+    {
+      "id": "py_les_2_2_ex1",
+      "type": "trace_execution",
+      "inputType": "free_input",
+      "keyboardType": "numeric",
+      "question": "Quelle est la valeur FINALE de 'total' ?",
+      "code": "total = 100\ntotal = total - 20\ntotal = total + 50\nprint(total)",
+      "correctAnswer": "130",
+      "explanation": "Traçons total :\n• Ligne 1 : total = 100\n• Ligne 2 : total = 100 - 20 = 80\n• Ligne 3 : total = 80 + 50 = 130\n\nValeur finale : **130**",
+      "highlightedLines": [1, 2, 3],
+      "xpGain": 10
+    },
+    {
+      "id": "py_les_2_2_ex2",
+      "type": "trace_execution",
+      "inputType": "options",
+      "question": "Que va afficher ce code ?",
+      "code": "x = 10\ny = x\nx = 20\nprint(y)",
+      "options": [
+        "10",
+        "20",
+        "30",
+        "Erreur"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Attention au piège !\n\n• Ligne 1 : x = 10\n• Ligne 2 : y **copie** la valeur de x (y = 10)\n• Ligne 3 : x change à 20, mais y reste inchangée\n\nQuand on assigne `y = x`, on copie la **valeur**, pas le lien. Changer x après ne modifie pas y.",
+      "highlightedLines": [2, 3, 4],
+      "xpGain": 10
+    },
+    {
+      "id": "py_les_2_2_ex3",
+      "type": "trace_execution",
+      "inputType": "free_input",
+      "keyboardType": "numeric",
+      "question": "Quelle est la valeur de 'n' après ces opérations ?",
+      "code": "n = 8\nn = n * 2\nn = n / 4\nn = n + 2",
+      "correctAnswer": "6",
+      "explanation": "Traçons n étape par étape :\n• Ligne 1 : n = 8\n• Ligne 2 : n = 8 * 2 = 16\n• Ligne 3 : n = 16 / 4 = 4.0\n• Ligne 4 : n = 4.0 + 2 = 6.0\n\nValeur finale : **6** (ou 6.0)",
+      "highlightedLines": [1, 2, 3, 4],
+      "xpGain": 10
+    },
+    {
+      "id": "py_les_2_2_ex4",
+      "type": "trace_execution",
+      "inputType": "options",
+      "question": "Piège avancé : Que va afficher ce code ?",
+      "code": "a = 5\nb = 10\na = b\nb = a\nprint(a, b)",
+      "options": [
+        "5 10",
+        "10 10",
+        "10 5",
+        "5 5"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Traçons a et b :\n• Ligne 1 : a = 5, b = ?\n• Ligne 2 : a = 5, b = 10\n• Ligne 3 : a **copie** b → a = 10, b = 10\n• Ligne 4 : b **copie** a → a = 10, b = 10\n\nRésultat : les deux valent 10. La valeur 5 a été écrasée ligne 3 et ne revient jamais.",
+      "highlightedLines": [3, 4],
+      "xpGain": 10
+    }
+  ]
 }

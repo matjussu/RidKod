@@ -1,15 +1,127 @@
 {
-  "lessonId": "py_les_25",
+  "lessonId": "py_les_2_5",
   "moduleId": "py_mod_002",
-  "title": "Tracer l'évolution d'une variable",
-  "subtitle": "Contenu à venir - En cours de rédaction",
+  "lessonNumber": "5",
+  "title": "La \"portée\" des variables (Scope)",
+  "subtitle": "Chaque variable a sa zone d'action. Comprendre où elle vit et où elle meurt.",
   "sections": [
     {
       "id": "section_1",
       "type": "text",
-      "title": "Introduction",
-      "content": "Cette leçon sera bientôt disponible.\n\nRevenez prochainement pour découvrir le contenu complet de **Tracer l'évolution d'une variable**."
+      "title": "Les Variables ont des Territoires",
+      "content": "Une variable n'est pas accessible **partout** dans votre code.\n\nElle a une **portée (scope)** : la zone du code où elle existe et peut être utilisée.\n\nDeux territoires principaux :\n• **Locale** : créée dans une fonction, meurt à la fin de la fonction\n• **Globale** : créée hors des fonctions, accessible partout"
+    },
+    {
+      "id": "section_2",
+      "type": "code_example",
+      "language": "python",
+      "title": "Exemple : Variable Locale",
+      "code": "def calculer():\n    x = 10  # Variable LOCALE\n    print(x)\n\ncalculer()  # Affiche 10\nprint(x)    # ❌ ERREUR : x n'existe pas ici !",
+      "tip": {
+        "title": "⚡ Le Décodeur",
+        "content": "**Variable locale :** Créée **dans** une fonction. Elle n'existe que pendant l'exécution de la fonction.\n\n**Règle d'or :** Ce qui est créé dans la fonction, **reste** dans la fonction.\n\nLigne 6 génère une erreur `NameError: name 'x' is not defined`."
+      },
+      "caption": "La variable x est créée ligne 2 (dans calculer).\nElle disparaît dès que la fonction se termine.\nLigne 6 : Python ne trouve pas x → Erreur."
+    },
+    {
+      "id": "section_3",
+      "type": "code_example",
+      "language": "python",
+      "title": "Exemple : Variable Globale",
+      "code": "total = 0  # Variable GLOBALE\n\ndef ajouter(valeur):\n    print(total + valeur)  # Lecture OK\n\najouter(5)  # Affiche 5\nprint(total)  # Affiche 0",
+      "tip": {
+        "title": "⚡ Le Décodeur",
+        "content": "**Variable globale :** Créée **hors** de toute fonction. Accessible partout (lecture).\n\n**Important :** Les fonctions peuvent **lire** les variables globales, mais pas les **modifier** (sauf avec le mot-clé `global`, qu'on évite)."
+      },
+      "caption": "total est créée au niveau global (ligne 1).\nLa fonction peut la lire (ligne 4).\nMais elle ne peut pas la modifier sans `global`."
+    },
+    {
+      "id": "section_4",
+      "type": "text",
+      "title": "Le Masquage (Shadowing)",
+      "content": "Si une fonction crée une variable **avec le même nom** qu'une variable globale, la variable locale **masque** la globale.\n\nDans la fonction, c'est la version locale qui est utilisée.\n\nLa variable globale reste inchangée."
+    },
+    {
+      "id": "section_5",
+      "type": "code_example",
+      "language": "python",
+      "title": "Exemple : Masquage de Variable",
+      "code": "nom = \"Global\"  # Variable globale\n\ndef afficher():\n    nom = \"Local\"  # Variable locale (même nom !)\n    print(nom)\n\nafficher()  # Affiche \"Local\"\nprint(nom)  # Affiche \"Global\"",
+      "caption": "Deux variables `nom` différentes :\n• Une globale (ligne 1) : vaut \"Global\"\n• Une locale (ligne 4) : vaut \"Local\"\n\nDans la fonction, c'est la locale qui est utilisée.\nÀ l'extérieur, c'est la globale."
+    },
+    {
+      "id": "section_6",
+      "type": "warning",
+      "title": "⚠️ Erreur Classique : Modifier une Globale",
+      "content": "Si vous essayez de **modifier** une variable globale dans une fonction, Python crée une **nouvelle variable locale** au lieu :\n\n```python\ncompteur = 0\n\ndef incrementer():\n    compteur = compteur + 1  # ❌ ERREUR\n\nincrémenter()  # UnboundLocalError\n```\n\nPython voit `compteur =` et crée une locale. Mais il essaie de lire `compteur` avant qu'elle existe → Erreur."
+    },
+    {
+      "id": "section_7",
+      "type": "exercise",
+      "exerciseId": "py_les_2_5_ex1"
+    },
+    {
+      "id": "section_8",
+      "type": "exercise",
+      "exerciseId": "py_les_2_5_ex2"
+    },
+    {
+      "id": "section_9",
+      "type": "exercise",
+      "exerciseId": "py_les_2_5_ex3"
     }
   ],
-  "exercises": []
+  "exercises": [
+    {
+      "id": "py_les_2_5_ex1",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Que va afficher ce code ?",
+      "code": "x = 100\n\ndef test():\n    x = 50\n    print(x)\n\ntest()\nprint(x)",
+      "options": [
+        "50 50",
+        "100 100",
+        "50 100",
+        "100 50"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Il y a deux variables x distinctes :\n• x globale = 100 (ligne 1)\n• x locale = 50 (ligne 4)\n\nDans la fonction : x locale (50)\nHors de la fonction : x globale (100)\n\nAffichage : 50 puis 100",
+      "highlightedLines": [1, 4, 7, 8],
+      "xpGain": 10
+    },
+    {
+      "id": "py_les_2_5_ex2",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Ce code va-t-il fonctionner ?",
+      "code": "def creer():\n    message = \"Bonjour\"\n\ncreer()\nprint(message)",
+      "options": [
+        "Affiche Bonjour",
+        "Erreur : message not defined",
+        "Affiche None",
+        "Affiche une chaîne vide"
+      ],
+      "correctAnswer": 1,
+      "explanation": "message est une variable **locale** à la fonction creer.\n\nElle n'existe que pendant l'exécution de la fonction.\n\nLigne 5 : Python cherche message en global → Erreur `NameError`",
+      "highlightedLines": [2, 5],
+      "xpGain": 10
+    },
+    {
+      "id": "py_les_2_5_ex3",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Que va afficher ce code ?",
+      "code": "score = 10\n\ndef jouer():\n    print(score)\n\njouer()",
+      "options": [
+        "10",
+        "0",
+        "Erreur",
+        "None"
+      ],
+      "correctAnswer": 0,
+      "explanation": "La fonction peut **lire** la variable globale score.\n\nPas d'assignation dans la fonction → pas de variable locale créée.\n\nDonc print(score) lit la globale : 10",
+      "highlightedLines": [1, 4],
+      "xpGain": 10
+    }
+  ]
 }

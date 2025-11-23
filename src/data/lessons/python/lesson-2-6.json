@@ -1,15 +1,149 @@
 {
-  "lessonId": "py_les_26",
+  "lessonId": "py_les_2_6",
   "moduleId": "py_mod_002",
-  "title": "Débugger avec des print() stratégiques",
-  "subtitle": "Contenu à venir - En cours de rédaction",
+  "lessonNumber": "6",
+  "title": "Reconnaître les types (str, int, bool)",
+  "subtitle": "Chaque donnée a un type. Savoir les identifier change tout.",
   "sections": [
     {
       "id": "section_1",
       "type": "text",
-      "title": "Introduction",
-      "content": "Cette leçon sera bientôt disponible.\n\nRevenez prochainement pour découvrir le contenu complet de **Débugger avec des print() stratégiques**."
+      "title": "Le Type Détermine le Comportement",
+      "content": "En Python, chaque valeur a un **type** qui détermine ce qu'on peut faire avec.\n\nLes 4 types de base à maîtriser :\n• **`int`** : Nombres entiers (5, -10, 0)\n• **`float`** : Nombres à virgule (3.14, -0.5)\n• **`str`** : Texte entre guillemets (\"Bonjour\")\n• **`bool`** : Vrai ou Faux (True, False)\n\nLire du code, c'est **deviner** les types."
+    },
+    {
+      "id": "section_2",
+      "type": "code_example",
+      "language": "python",
+      "title": "Exemple : Reconnaître les Types",
+      "code": "age = 25           # int (nombre entier)\nnom = \"Alice\"      # str (texte)\nprix = 19.99       # float (décimal)\nconnecte = True    # bool (booléen)",
+      "tip": {
+        "title": "⚡ Le Décodeur",
+        "content": "**Indices visuels :**\n• Guillemets `\"\"` ou `''` → str (texte)\n• Nombre sans virgule → int\n• Nombre avec point `.` → float\n• `True` ou `False` → bool (attention à la majuscule !)\n\n**Fonction utile :** `type(variable)` affiche le type."
+      },
+      "caption": "Comment les reconnaître :\n• age : Pas de guillemets, pas de point → int\n• nom : Entre guillemets → str\n• prix : Nombre avec point → float\n• connecte : True/False → bool"
+    },
+    {
+      "id": "section_3",
+      "type": "text",
+      "title": "Le Même Symbole, Comportement Différent",
+      "content": "Les opérateurs changent de sens selon les types !\n\n**L'opérateur `+` :**\n• Avec des **nombres** : addition mathématique\n• Avec des **strings** : concaténation (coller ensemble)\n\nC'est source de bugs fréquents."
+    },
+    {
+      "id": "section_4",
+      "type": "code_example",
+      "language": "python",
+      "title": "Exemple : + selon les Types",
+      "code": "# Addition de nombres\nresultat1 = 10 + 5\nprint(resultat1)  # 15\n\n# Concaténation de strings\nresultat2 = \"10\" + \"5\"\nprint(resultat2)  # \"105\"",
+      "caption": "Même symbole `+`, résultats radicalement différents :\n• 10 + 5 = 15 (addition)\n• \"10\" + \"5\" = \"105\" (collage de texte)\n\nLes guillemets changent **tout**."
+    },
+    {
+      "id": "section_5",
+      "type": "warning",
+      "title": "⚠️ Erreur Classique : Mélanger les Types",
+      "content": "Python refuse de mélanger des types incompatibles :\n\n```python\nage = 25\nmessage = \"J'ai \" + age  # ❌ TypeError\n```\n\nOn ne peut pas \"coller\" un texte et un nombre. Il faut **convertir** :\n\n```python\nmessage = \"J'ai \" + str(age)  # ✅ \"J'ai 25\"\n```\n\nOu utiliser les f-strings (plus simple) :\n\n```python\nmessage = f\"J'ai {age} ans\"  # ✅ \"J'ai 25 ans\"\n```"
+    },
+    {
+      "id": "section_6",
+      "type": "code_example",
+      "language": "python",
+      "title": "Exemple : Conversions de Types",
+      "code": "# String → Int\ntext = \"42\"\nnombre = int(text)  # 42 (nombre)\n\n# Int → String\nage = 30\ntext = str(age)  # \"30\" (texte)\n\n# String → Bool\nprint(bool(\"hello\"))  # True (texte non vide)\nprint(bool(\"\"))       # False (texte vide)",
+      "tip": {
+        "title": "⚡ Le Décodeur",
+        "content": "**Fonctions de conversion :**\n• `int()` : Convertit en nombre entier\n• `str()` : Convertit en texte\n• `float()` : Convertit en décimal\n• `bool()` : Convertit en True/False\n\n**Règle bool :** 0, \"\", None → False. Tout le reste → True."
+      },
+      "caption": "Conversions courantes pour lire du code :\n• `int(\"42\")` → retire les guillemets, garde le nombre\n• `str(30)` → ajoute les guillemets, transforme en texte"
+    },
+    {
+      "id": "section_7",
+      "type": "exercise",
+      "exerciseId": "py_les_2_6_ex1"
+    },
+    {
+      "id": "section_8",
+      "type": "exercise",
+      "exerciseId": "py_les_2_6_ex2"
+    },
+    {
+      "id": "section_9",
+      "type": "exercise",
+      "exerciseId": "py_les_2_6_ex3"
+    },
+    {
+      "id": "section_10",
+      "type": "exercise",
+      "exerciseId": "py_les_2_6_ex4"
     }
   ],
-  "exercises": []
+  "exercises": [
+    {
+      "id": "py_les_2_6_ex1",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Que va afficher ce code ?",
+      "code": "x = \"5\"\ny = \"3\"\nprint(x + y)",
+      "options": [
+        "8",
+        "53",
+        "\"8\"",
+        "Erreur"
+      ],
+      "correctAnswer": 1,
+      "explanation": "x et y sont des **strings** (guillemets).\nL'opérateur + sur des strings = concaténation.\nRésultat : \"5\" + \"3\" = \"53\" (texte, pas addition).",
+      "highlightedLines": [1, 2, 3],
+      "xpGain": 10
+    },
+    {
+      "id": "py_les_2_6_ex2",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Que va afficher ce code ?",
+      "code": "nombre = \"100\"\nresultat = int(nombre) + 50\nprint(resultat)",
+      "options": [
+        "\"10050\"",
+        "150",
+        "100",
+        "Erreur"
+      ],
+      "correctAnswer": 1,
+      "explanation": "`int(nombre)` convertit \"100\" (string) en 100 (nombre).\nPuis : 100 + 50 = 150 (addition mathématique).\nAffiche : 150",
+      "highlightedLines": [2],
+      "xpGain": 10
+    },
+    {
+      "id": "py_les_2_6_ex3",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Que va afficher ce code ?",
+      "code": "actif = True\nprint(type(actif))",
+      "options": [
+        "<class 'str'>",
+        "<class 'int'>",
+        "<class 'bool'>",
+        "True"
+      ],
+      "correctAnswer": 2,
+      "explanation": "True (avec majuscule) est un **booléen**.\n`type(actif)` renvoie le type de la variable.\nRésultat : <class 'bool'>",
+      "highlightedLines": [1, 2],
+      "xpGain": 10
+    },
+    {
+      "id": "py_les_2_6_ex4",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Piège fréquent : Ce code va-t-il fonctionner ?",
+      "code": "age = 20\nmessage = \"Tu as \" + age + \" ans\"",
+      "options": [
+        "Affiche : Tu as 20 ans",
+        "Erreur : TypeError",
+        "Affiche : Tu as age ans",
+        "Affiche : 20"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Python ne peut pas **concaténer** (coller) un string et un int.\n\nSolutions :\n• `\"Tu as \" + str(age) + \" ans\"` (conversion)\n• `f\"Tu as {age} ans\"` (f-string, plus simple)\n\nSans conversion → TypeError",
+      "highlightedLines": [2],
+      "xpGain": 10
+    }
+  ]
 }

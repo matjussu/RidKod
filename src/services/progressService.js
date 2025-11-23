@@ -65,9 +65,10 @@ export const getXPForNextLevel = (currentLevel) => {
   return levels[currentLevel - 1] || 15000;
 };
 
-// Calculer le streak (jours consécutifs)
-const calculateStreak = (lastActivityDate) => {
-  if (!lastActivityDate) return 1;
+// ✅ CORRECTION: Renommé calculateStreak → getDaysSinceLastActivity (plus explicite)
+// Retourne le nombre de jours écoulés depuis la dernière activité (0 = même jour, 1 = hier, etc.)
+const getDaysSinceLastActivity = (lastActivityDate) => {
+  if (!lastActivityDate) return null;  // ✅ Retourne null au lieu de 1 (première activité)
 
   const now = new Date();
   const lastActivity = lastActivityDate.toDate();
@@ -187,12 +188,17 @@ export const saveExerciseCompletion = async (userId, exerciseData) => {
     const newUserLevel = calculateLevel(newTotalXP);
 
     // Mettre à jour le streak
-    const daysSinceLastActivity = currentProgress.streak.lastActivityDate
-      ? calculateStreak(currentProgress.streak.lastActivityDate)
-      : 0;
+    const daysSinceLastActivity = getDaysSinceLastActivity(currentProgress.streak.lastActivityDate);
 
     let newStreak = currentProgress.streak;
-    if (daysSinceLastActivity === 0) {
+    if (daysSinceLastActivity === null) {
+      // ✅ CORRECTION: Première activité - initialiser le streak à 1
+      newStreak = {
+        current: 1,
+        longest: 1,
+        lastActivityDate: serverTimestamp()
+      };
+    } else if (daysSinceLastActivity === 0) {
       // Même jour - conserver le streak
       newStreak = {
         ...currentProgress.streak,
@@ -207,9 +213,9 @@ export const saveExerciseCompletion = async (userId, exerciseData) => {
         lastActivityDate: serverTimestamp()
       };
     } else {
-      // Plus d'un jour - réinitialiser le streak
+      // ✅ CORRECTION: Plus d'un jour (24h+) - RESET le streak à 0 au lieu de 1
       newStreak = {
-        current: 1,
+        current: 0,
         longest: currentProgress.streak.longest,
         lastActivityDate: serverTimestamp()
       };
@@ -380,12 +386,17 @@ const writeBatchToFirestore = async (userId, exerciseLevel, aggregated) => {
     const newUserLevel = calculateLevel(newTotalXP);
 
     // Mettre à jour le streak (simplifié pour batch)
-    const daysSinceLastActivity = currentProgress.streak.lastActivityDate
-      ? calculateStreak(currentProgress.streak.lastActivityDate)
-      : 0;
+    const daysSinceLastActivity = getDaysSinceLastActivity(currentProgress.streak.lastActivityDate);
 
     let newStreak = currentProgress.streak;
-    if (daysSinceLastActivity === 0) {
+    if (daysSinceLastActivity === null) {
+      // ✅ Première activité
+      newStreak = {
+        current: 1,
+        longest: 1,
+        lastActivityDate: serverTimestamp()
+      };
+    } else if (daysSinceLastActivity === 0) {
       newStreak = {
         ...currentProgress.streak,
         lastActivityDate: serverTimestamp()
@@ -398,8 +409,9 @@ const writeBatchToFirestore = async (userId, exerciseLevel, aggregated) => {
         lastActivityDate: serverTimestamp()
       };
     } else {
+      // ✅ CORRECTION: Reset à 0 après 24h+
       newStreak = {
-        current: 1,
+        current: 0,
         longest: currentProgress.streak.longest,
         lastActivityDate: serverTimestamp()
       };
@@ -534,13 +546,20 @@ export const completeLevelBatch = async (userId, exerciseLevel, levelStats) => {
     const { correctAnswers, incorrectAnswers, xpGained } = levelStats;
     const totalExercises = correctAnswers + incorrectAnswers;
 
-    // Mettre à jour les stats du niveau
+    // ✅ CORRECTION: Récupérer les stats existantes du niveau (si déjà commencé)
+    const existingLevelStats = currentProgress.levelStats?.[exerciseLevel] || {
+      correct: 0,
+      incorrect: 0,
+      xp: 0
+    };
+
+    // Mettre à jour les stats du niveau (ADDITIONNER au lieu d'écraser)
     const updatedLevelStats = {
       ...currentProgress.levelStats,
       [exerciseLevel]: {
-        correct: correctAnswers,
-        incorrect: incorrectAnswers,
-        xp: xpGained,
+        correct: existingLevelStats.correct + correctAnswers,
+        incorrect: existingLevelStats.incorrect + incorrectAnswers,
+        xp: existingLevelStats.xp + xpGained,
         completedAt: serverTimestamp()
       }
     };
@@ -550,12 +569,17 @@ export const completeLevelBatch = async (userId, exerciseLevel, levelStats) => {
     const newUserLevel = calculateLevel(newTotalXP);
 
     // Mettre à jour le streak
-    const daysSinceLastActivity = currentProgress.streak.lastActivityDate
-      ? calculateStreak(currentProgress.streak.lastActivityDate)
-      : 0;
+    const daysSinceLastActivity = getDaysSinceLastActivity(currentProgress.streak.lastActivityDate);
 
     let newStreak = currentProgress.streak;
-    if (daysSinceLastActivity === 0) {
+    if (daysSinceLastActivity === null) {
+      // ✅ Première activité
+      newStreak = {
+        current: 1,
+        longest: 1,
+        lastActivityDate: serverTimestamp()
+      };
+    } else if (daysSinceLastActivity === 0) {
       // Même jour - conserver le streak
       newStreak = {
         ...currentProgress.streak,
@@ -570,9 +594,9 @@ export const completeLevelBatch = async (userId, exerciseLevel, levelStats) => {
         lastActivityDate: serverTimestamp()
       };
     } else {
-      // Plus d'un jour - réinitialiser le streak
+      // ✅ CORRECTION: Reset à 0 après 24h+
       newStreak = {
-        current: 1,
+        current: 0,
         longest: currentProgress.streak.longest,
         lastActivityDate: serverTimestamp()
       };
@@ -707,36 +731,99 @@ export const migrateFromLocalStorage = async (userId) => {
     const progressRef = doc(db, 'progress', userId);
     const progressSnap = await getDoc(progressRef);
 
+    let migratedProgress;
+
     if (progressSnap.exists()) {
-      // Déjà de la progression dans Firestore - ne pas écraser
-      console.log('Progression Firestore déjà existante - migration ignorée');
-      return null;
+      // ✅ CORRECTION: Merger localStorage avec Firestore existant au lieu d'ignorer
+      const firestoreProgress = progressSnap.data();
+      console.log('⚠️ Progression Firestore déjà existante - MERGE avec localStorage');
+
+      // Merger les completedLevels (union des deux)
+      const mergedCompletedLevels = Array.from(new Set([
+        ...(firestoreProgress.completedLevels || []),
+        ...(parsedProgress.completedLevels || [])
+      ]));
+
+      // Merger levelStats (prendre le max de correct/incorrect/xp pour chaque niveau)
+      const mergedLevelStats = { ...firestoreProgress.levelStats };
+      Object.keys(parsedProgress.levelStats || {}).forEach(level => {
+        const localStats = parsedProgress.levelStats[level];
+        const firestoreStats = mergedLevelStats[level] || { correct: 0, incorrect: 0, xp: 0 };
+
+        mergedLevelStats[level] = {
+          correct: Math.max(localStats.correct || 0, firestoreStats.correct || 0),
+          incorrect: Math.max(localStats.incorrect || 0, firestoreStats.incorrect || 0),
+          xp: Math.max(localStats.xp || 0, firestoreStats.xp || 0),
+          completedAt: firestoreStats.completedAt || localStats.completedAt
+        };
+      });
+
+      // Merger dailyActivity (max par jour)
+      const mergedDailyActivity = { ...firestoreProgress.dailyActivity };
+      Object.keys(parsedProgress.dailyActivity || {}).forEach(date => {
+        mergedDailyActivity[date] = Math.max(
+          mergedDailyActivity[date] || 0,
+          parsedProgress.dailyActivity[date] || 0
+        );
+      });
+
+      migratedProgress = {
+        userId,
+        totalXP: Math.max(firestoreProgress.totalXP || 0, parsedProgress.totalXP || 0),
+        userLevel: calculateLevel(Math.max(firestoreProgress.totalXP || 0, parsedProgress.totalXP || 0)),
+        currentLevel: Math.max(firestoreProgress.currentLevel || 1, parsedProgress.currentLevel || 1),
+        completedLevels: mergedCompletedLevels,
+        levelStats: mergedLevelStats,
+        streak: {
+          current: Math.max(firestoreProgress.streak?.current || 0, parsedProgress.streak?.current || 0),
+          longest: Math.max(firestoreProgress.streak?.longest || 0, parsedProgress.streak?.longest || 0),
+          lastActivityDate: firestoreProgress.streak?.lastActivityDate || parsedProgress.streak?.lastActivityDate || null
+        },
+        stats: {
+          totalExercises: Math.max(firestoreProgress.stats?.totalExercises || 0, parsedProgress.stats?.totalExercises || 0),
+          correctAnswers: Math.max(firestoreProgress.stats?.correctAnswers || 0, parsedProgress.stats?.correctAnswers || 0),
+          incorrectAnswers: Math.max(firestoreProgress.stats?.incorrectAnswers || 0, parsedProgress.stats?.incorrectAnswers || 0)
+        },
+        dailyActivity: mergedDailyActivity,
+        lessonProgress: firestoreProgress.lessonProgress || parsedProgress.lessonProgress || {},
+        xpNodesCollected: firestoreProgress.xpNodesCollected || parsedProgress.xpNodesCollected || {},
+        bossCompleted: firestoreProgress.bossCompleted || parsedProgress.bossCompleted || {},
+        createdAt: firestoreProgress.createdAt || serverTimestamp(),
+        updatedAt: serverTimestamp()
+      };
+
+      await updateDoc(progressRef, migratedProgress);
+      console.log('✅ Migration merge réussie (localStorage + Firestore)');
+    } else {
+      // Pas de progression Firestore - Créer à partir de localStorage
+      migratedProgress = {
+        userId,
+        totalXP: parsedProgress.totalXP || 0,
+        userLevel: parsedProgress.level || 1,
+        currentLevel: parsedProgress.currentLevel || 1,
+        completedLevels: parsedProgress.completedLevels || [],
+        levelStats: parsedProgress.levelStats || {},
+        lessonProgress: parsedProgress.lessonProgress || {},
+        xpNodesCollected: parsedProgress.xpNodesCollected || {},
+        bossCompleted: parsedProgress.bossCompleted || {},
+        streak: parsedProgress.streak || {
+          current: 0,
+          longest: 0,
+          lastActivityDate: null
+        },
+        stats: parsedProgress.stats || {
+          totalExercises: 0,
+          correctAnswers: 0,
+          incorrectAnswers: 0
+        },
+        dailyActivity: parsedProgress.dailyActivity || {},
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      };
+
+      await setDoc(progressRef, migratedProgress);
+      console.log('✅ Migration localStorage → Firestore réussie');
     }
-
-    // Créer la progression dans Firestore à partir de localStorage (NOUVELLE STRUCTURE)
-    const migratedProgress = {
-      userId,
-      totalXP: parsedProgress.totalXP || 0,
-      userLevel: parsedProgress.level || 1,
-      currentLevel: parsedProgress.currentLevel || 1,
-      completedLevels: parsedProgress.completedLevels || [],
-      levelStats: parsedProgress.levelStats || {},
-      streak: parsedProgress.streak || {
-        current: 0,
-        longest: 0,
-        lastActivityDate: null
-      },
-      stats: parsedProgress.stats || {
-        totalExercises: 0,
-        correctAnswers: 0,
-        incorrectAnswers: 0
-      },
-      dailyActivity: parsedProgress.dailyActivity || {},
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
-    };
-
-    await setDoc(progressRef, migratedProgress);
 
     // Nettoyer localStorage après migration réussie
     localStorage.removeItem('userProgress');

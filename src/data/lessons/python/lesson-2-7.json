@@ -1,15 +1,149 @@
 {
-  "lessonId": "py_les_27",
+  "lessonId": "py_les_2_7",
   "moduleId": "py_mod_002",
-  "title": "Récap - La vie d'une variable",
-  "subtitle": "Contenu à venir - En cours de rédaction",
+  "lessonNumber": "7",
+  "title": "Comprendre None (L'absence de valeur)",
+  "subtitle": "None n'est ni 0, ni False, ni vide. C'est l'absence totale de valeur.",
   "sections": [
     {
       "id": "section_1",
       "type": "text",
-      "title": "Introduction",
-      "content": "Cette leçon sera bientôt disponible.\n\nRevenez prochainement pour découvrir le contenu complet de **Récap - La vie d'une variable**."
+      "title": "None = \"Rien du Tout\"",
+      "content": "`None` est une valeur spéciale qui signifie **\"pas de valeur\"**.\n\nC'est différent de :\n• `0` (c'est un nombre)\n• `\"\"` (c'est une chaîne vide)\n• `False` (c'est un booléen)\n\n`None` signifie littéralement : \"Il n'y a rien ici\"."
+    },
+    {
+      "id": "section_2",
+      "type": "code_example",
+      "language": "python",
+      "title": "Exemple : Fonction sans Return",
+      "code": "def dire_bonjour():\n    print(\"Bonjour!\")\n\nresultat = dire_bonjour()\nprint(resultat)  # Affiche None",
+      "tip": {
+        "title": "⚡ Le Décodeur",
+        "content": "**Règle Python :** Une fonction sans `return` renvoie automatiquement `None`.\n\nLa fonction `dire_bonjour` affiche quelque chose, mais ne **renvoie** rien.\n\nDonc `resultat` reçoit `None` par défaut."
+      },
+      "caption": "Flux :\n1. Appel dire_bonjour() → affiche \"Bonjour!\"\n2. Aucun return → renvoie None\n3. resultat = None\n4. print(None) → affiche \"None\""
+    },
+    {
+      "id": "section_3",
+      "type": "text",
+      "title": "None dans les Conditions",
+      "content": "`None` est considéré comme **Faux (Falsy)** dans les conditions.\n\nMais attention : `None` **n'est pas égal à** `False` !\n\n• `if None:` → Faux\n• `None == False` → False\n• `None is None` → True"
+    },
+    {
+      "id": "section_4",
+      "type": "code_example",
+      "language": "python",
+      "title": "Exemple : None dans un If",
+      "code": "def chercher_utilisateur(id):\n    if id == 1:\n        return \"Alice\"\n    # Pas de return si id != 1\n\nuser = chercher_utilisateur(99)\n\nif user:\n    print(f\"Trouvé: {user}\")\nelse:\n    print(\"Non trouvé\")  # Affiche ceci",
+      "caption": "Avec id = 99 :\n1. Condition `id == 1` est fausse\n2. Pas de return → fonction renvoie None\n3. user = None\n4. `if user:` évalue None → Faux\n5. Bloc else s'exécute"
+    },
+    {
+      "id": "section_5",
+      "type": "warning",
+      "title": "⚠️ Piège : None vs \"None\" (String)",
+      "content": "Attention à ne pas confondre :\n\n```python\nx = None       # Valeur spéciale (pas de guillemets)\ny = \"None\"     # String qui contient le texte \"None\"\n\nprint(x)       # None\nprint(y)       # None (mais c'est un texte !)\n\nprint(x == y)  # False (types différents)\n```\n\nSans guillemets : c'est la **valeur** None.\nAvec guillemets : c'est du **texte** \"None\"."
+    },
+    {
+      "id": "section_6",
+      "type": "code_example",
+      "language": "python",
+      "title": "Exemple : Vérifier None avec 'is'",
+      "code": "resultat = None\n\n# ❌ Mauvaise pratique\nif resultat == None:\n    print(\"Vide\")\n\n# ✅ Bonne pratique\nif resultat is None:\n    print(\"Vide\")",
+      "tip": {
+        "title": "⚡ Le Décodeur",
+        "content": "**Pour vérifier None :** Utilisez `is` au lieu de `==`\n\n• `if x is None:` → ✅ Recommandé\n• `if x == None:` → ⚠️ Fonctionne, mais déconseillé\n\n`is` vérifie l'identité, pas juste l'égalité. C'est plus précis pour None."
+      },
+      "caption": "Les deux fonctionnent, mais `is None` est la convention Python.\nC'est plus rapide et plus clair."
+    },
+    {
+      "id": "section_7",
+      "type": "exercise",
+      "exerciseId": "py_les_2_7_ex1"
+    },
+    {
+      "id": "section_8",
+      "type": "exercise",
+      "exerciseId": "py_les_2_7_ex2"
+    },
+    {
+      "id": "section_9",
+      "type": "exercise",
+      "exerciseId": "py_les_2_7_ex3"
+    },
+    {
+      "id": "section_10",
+      "type": "exercise",
+      "exerciseId": "py_les_2_7_ex4"
     }
   ],
-  "exercises": []
+  "exercises": [
+    {
+      "id": "py_les_2_7_ex1",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Que va afficher ce code ?",
+      "code": "def calculer():\n    x = 10 + 5\n\nresultat = calculer()\nprint(resultat)",
+      "options": [
+        "15",
+        "None",
+        "0",
+        "Erreur"
+      ],
+      "correctAnswer": 1,
+      "explanation": "La fonction calculer fait un calcul (x = 15), mais ne **renvoie rien** (pas de return).\n\nDonc elle renvoie None par défaut.\n\nresultat = None → affiche None",
+      "highlightedLines": [1, 2, 4],
+      "xpGain": 10
+    },
+    {
+      "id": "py_les_2_7_ex2",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Que va afficher ce code ?",
+      "code": "valeur = None\n\nif valeur:\n    print(\"A\")\nelse:\n    print(\"B\")",
+      "options": [
+        "A",
+        "B",
+        "None",
+        "Rien"
+      ],
+      "correctAnswer": 1,
+      "explanation": "None est considéré comme **Faux (Falsy)** dans les conditions.\n\n`if None:` est équivalent à `if False:`\n\nDonc le bloc else s'exécute → affiche \"B\"",
+      "highlightedLines": [3, 6],
+      "xpGain": 10
+    },
+    {
+      "id": "py_les_2_7_ex3",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Que va renvoyer cette comparaison ?",
+      "code": "x = None\nprint(x == False)",
+      "options": [
+        "True",
+        "False",
+        "None",
+        "Erreur"
+      ],
+      "correctAnswer": 1,
+      "explanation": "None et False sont deux valeurs **différentes**.\n\nNone est \"Falsy\" dans les conditions, mais `None == False` renvoie False.\n\nPour tester None, utilisez `is None` au lieu de `== None`.",
+      "highlightedLines": [2],
+      "xpGain": 10
+    },
+    {
+      "id": "py_les_2_7_ex4",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Piège subtil : Que va afficher ce code ?",
+      "code": "def mystere():\n    return\n\nresultat = mystere()\nprint(resultat)",
+      "options": [
+        "Rien",
+        "None",
+        "\"\"",
+        "Erreur"
+      ],
+      "correctAnswer": 1,
+      "explanation": "`return` tout seul (sans valeur) renvoie **None**.\n\nC'est équivalent à `return None`.\n\nDonc resultat = None → affiche None",
+      "highlightedLines": [2, 5],
+      "xpGain": 10
+    }
+  ]
 }

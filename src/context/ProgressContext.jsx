@@ -9,7 +9,7 @@ import {
   migrateFromLocalStorage,
   saveProgressLocally,
   getLocalProgress,
-  calculateLevel,
+  calculateLevel,  // ✅ Déjà importé
   getXPForNextLevel,
   EXERCISES_PER_LEVEL,
   updateUserProgress,
@@ -366,21 +366,38 @@ export const ProgressProvider = ({ children }) => {
       return {
         totalXP: 0,
         userLevel: 1,
-        currentLevel: 1,
         totalExercises: 0,
         correctAnswers: 0,
-        incorrectAnswers: 0,
+        completedLessons: 0,  // ✅ NOUVEAU : Leçons terminées au lieu de incorrectAnswers
         streak: { current: 0, longest: 0 }
       };
     }
 
+    // ✅ NOUVEAU : Calculer le nombre total de leçons terminées
+    let completedLessons = 0;
+    if (progress.lessonProgress) {
+      // Parcourir tous les langages (python, javascript, etc.)
+      Object.values(progress.lessonProgress).forEach(languageProgress => {
+        // Parcourir tous les chapitres du langage
+        Object.values(languageProgress).forEach(chapterProgress => {
+          if (chapterProgress?.completed === true) {
+            completedLessons++;
+          }
+        });
+      });
+    }
+
+    // ✅ CORRECTION BUG NIVEAU : Recalculer userLevel depuis totalXP au lieu d'utiliser la valeur stockée
+    const currentTotalXP = progress.totalXP || 0;
+    const calculatedUserLevel = calculateLevel(currentTotalXP);
+
     return {
-      totalXP: progress.totalXP || 0,
-      userLevel: progress.userLevel || 1,
-      currentLevel: progress.currentLevel || 1,
+      totalXP: currentTotalXP,
+      userLevel: calculatedUserLevel,  // ✅ Recalculé dynamiquement (garantit cohérence)
+      // ✅ CORRECTION: currentLevel retiré (jamais utilisé dans Profile.jsx)
       totalExercises: progress.stats?.totalExercises || 0,
       correctAnswers: progress.stats?.correctAnswers || 0,
-      incorrectAnswers: progress.stats?.incorrectAnswers || 0,
+      completedLessons,  // ✅ NOUVEAU : Remplace incorrectAnswers
       streak: progress.streak || { current: 0, longest: 0 }
     };
   };
@@ -395,8 +412,10 @@ export const ProgressProvider = ({ children }) => {
 
   // Calculer la progression vers le niveau utilisateur suivant
   const getProgressToNextLevel = () => {
-    const currentUserLevel = progress?.userLevel || 1;
     const currentXP = progress?.totalXP || 0;
+
+    // ✅ CORRECTION : Recalculer le niveau depuis totalXP (même logique que getStats)
+    const currentUserLevel = calculateLevel(currentXP);
     const xpForNextLevel = getXPForNextLevel(currentUserLevel);
 
     // XP du niveau précédent

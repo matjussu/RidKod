@@ -1,15 +1,110 @@
 {
-  "lessonId": "py_les_23",
+  "lessonId": "py_les_2_3",
   "moduleId": "py_mod_002",
-  "title": "Le cycle de vie d'une variable",
-  "subtitle": "Contenu à venir - En cours de rédaction",
+  "lessonNumber": "3",
+  "title": "Les \"ingrédients\" d'une fonction (Paramètres)",
+  "subtitle": "Une fonction, c'est comme une recette : elle a besoin d'ingrédients pour fonctionner.",
   "sections": [
     {
       "id": "section_1",
       "type": "text",
-      "title": "Introduction",
-      "content": "Cette leçon sera bientôt disponible.\n\nRevenez prochainement pour découvrir le contenu complet de **Le cycle de vie d'une variable**."
+      "title": "La Fonction = Une Recette",
+      "content": "Une fonction peut recevoir des **paramètres** (aussi appelés **arguments**) : ce sont les données dont elle a besoin pour travailler.\n\nComme une recette de cuisine : `faire_gateau(farine, sucre, oeufs)` → la fonction a besoin de ces ingrédients pour fonctionner.\n\nLire une fonction, c'est d'abord identifier **ce qu'elle attend**."
+    },
+    {
+      "id": "section_2",
+      "type": "code_example",
+      "language": "python",
+      "title": "Exemple : Fonction avec Paramètres",
+      "code": "def saluer(nom, age):\n    print(f\"Bonjour {nom}, tu as {age} ans!\")\n\n# Appels avec différents arguments\nsaluer(\"Alice\", 25)\nsaluer(\"Bob\", 30)",
+      "tip": {
+        "title": "⚡ Le Décodeur",
+        "content": "**`def saluer(nom, age):`** → La fonction **définit** 2 paramètres : nom et age.\n\n**`saluer(\"Alice\", 25)`** → On **appelle** la fonction en lui passant 2 arguments : \"Alice\" va dans nom, 25 va dans age.\n\n**Important :** L'ordre compte ! Le 1er argument va dans le 1er paramètre, le 2e dans le 2e, etc."
+      },
+      "caption": "Flux des données :\n• Ligne 5 : saluer(\"Alice\", 25) → nom = \"Alice\", age = 25\n• La fonction affiche : \"Bonjour Alice, tu as 25 ans!\"\n• Ligne 6 : saluer(\"Bob\", 30) → nom = \"Bob\", age = 30\n• La fonction affiche : \"Bonjour Bob, tu as 30 ans!\""
+    },
+    {
+      "id": "section_3",
+      "type": "text",
+      "title": "Paramètres = Variables Locales",
+      "content": "Quand une fonction reçoit des paramètres, elle **crée des variables locales** avec ces noms.\n\nCes variables n'existent **que pendant l'exécution** de la fonction. Après, elles disparaissent.\n\nC'est comme si la fonction avait sa propre mémoire temporaire."
+    },
+    {
+      "id": "section_4",
+      "type": "code_example",
+      "language": "python",
+      "title": "Exemple : Paramètres et Calculs",
+      "code": "def calculer_surface(largeur, hauteur):\n    surface = largeur * hauteur\n    print(f\"Surface: {surface} m²\")\n\ncalculer_surface(5, 3)\ncalculer_surface(10, 2)",
+      "caption": "Chaque appel crée ses propres variables :\n• 1er appel : largeur = 5, hauteur = 3 → surface = 15\n• 2e appel : largeur = 10, hauteur = 2 → surface = 20\n\nLes variables du 1er appel ont **disparu** quand le 2e commence."
+    },
+    {
+      "id": "section_5",
+      "type": "warning",
+      "title": "⚠️ Erreur Classique : Mauvais Nombre d'Arguments",
+      "content": "Si vous appelez une fonction avec un nombre d'arguments **différent** du nombre de paramètres, Python génère une erreur.\n\n```python\ndef dire_bonjour(nom):\n    print(f\"Bonjour {nom}\")\n\ndire_bonjour()  # ❌ TypeError: missing 1 required argument\ndire_bonjour(\"Alice\", \"Bob\")  # ❌ TypeError: takes 1 argument but 2 were given\n```"
+    },
+    {
+      "id": "section_6",
+      "type": "exercise",
+      "exerciseId": "py_les_2_3_ex1"
+    },
+    {
+      "id": "section_7",
+      "type": "exercise",
+      "exerciseId": "py_les_2_3_ex2"
+    },
+    {
+      "id": "section_8",
+      "type": "exercise",
+      "exerciseId": "py_les_2_3_ex3"
     }
   ],
-  "exercises": []
+  "exercises": [
+    {
+      "id": "py_les_2_3_ex1",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Que va afficher ce code ?",
+      "code": "def multiplier(a, b):\n    resultat = a * b\n    print(resultat)\n\nmultiplier(4, 5)",
+      "options": [
+        "4",
+        "5",
+        "20",
+        "45"
+      ],
+      "correctAnswer": 2,
+      "explanation": "La fonction reçoit a = 4 et b = 5.\nElle calcule resultat = 4 * 5 = 20.\nPuis elle affiche 20.",
+      "highlightedLines": [2, 3, 5],
+      "xpGain": 10
+    },
+    {
+      "id": "py_les_2_3_ex2",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Attention à l'ordre ! Que va afficher ce code ?",
+      "code": "def presenter(prenom, ville):\n    print(f\"{prenom} habite à {ville}\")\n\npresenter(\"Paris\", \"Marie\")",
+      "options": [
+        "Marie habite à Paris",
+        "Paris habite à Marie",
+        "Marie Paris",
+        "Erreur"
+      ],
+      "correctAnswer": 1,
+      "explanation": "L'ordre des arguments est crucial !\n• 1er argument \"Paris\" → va dans prenom\n• 2e argument \"Marie\" → va dans ville\n\nRésultat : \"Paris habite à Marie\" (logiquement incorrect, mais syntaxiquement valide).",
+      "highlightedLines": [4],
+      "xpGain": 10
+    },
+    {
+      "id": "py_les_2_3_ex3",
+      "type": "predict_output",
+      "inputType": "free_input",
+      "keyboardType": "numeric",
+      "question": "Quelle sera la valeur affichée ?",
+      "code": "def additionner(x, y):\n    total = x + y\n    print(total)\n\nadditionner(12, 8)",
+      "correctAnswer": "20",
+      "explanation": "La fonction reçoit x = 12 et y = 8.\nElle calcule total = 12 + 8 = 20.\nPuis affiche 20.",
+      "highlightedLines": [2, 5],
+      "xpGain": 10
+    }
+  ]
 }

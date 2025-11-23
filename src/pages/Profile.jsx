@@ -14,6 +14,36 @@ const Profile = () => {
   const stats = getStats();
   const progressToNext = getProgressToNextLevel();
 
+  // ✅ NOUVEAU : Extraire la couleur principale d'un gradient ou couleur simple
+  const extractMainColor = (colorValue) => {
+    if (!colorValue) return '#30D158'; // Défaut vert
+
+    // Si c'est un gradient, extraire la première couleur
+    if (colorValue.includes('linear-gradient')) {
+      const match = colorValue.match(/#[0-9A-Fa-f]{6}/);
+      return match ? match[0] : '#30D158';
+    }
+
+    // Si c'est une couleur simple (hex), la retourner
+    return colorValue.startsWith('#') ? colorValue.slice(0, 7) : '#30D158';
+  };
+
+  // Calculer la couleur du box-shadow en fonction de l'avatar
+  const getAvatarGlowColor = () => {
+    if (isAuthenticated && user?.avatarColor) {
+      const mainColor = extractMainColor(user.avatarColor);
+      // Convertir en rgba avec opacité 0.3
+      const r = parseInt(mainColor.slice(1, 3), 16);
+      const g = parseInt(mainColor.slice(3, 5), 16);
+      const b = parseInt(mainColor.slice(5, 7), 16);
+      return `0 8px 24px rgba(${r}, ${g}, ${b}, 0.3)`;
+    }
+    // Défaut : vert pour connecté, gris pour invité
+    return isAuthenticated
+      ? '0 8px 24px rgba(48, 209, 88, 0.3)'
+      : '0 8px 24px rgba(58, 58, 60, 0.3)';
+  };
+
   const handleBack = () => {
     triggerLight();
     navigate('/home');
@@ -142,7 +172,7 @@ const Profile = () => {
           font-weight: 800;
           color: #FFFFFF;
           margin: 0 auto 16px;
-          box-shadow: 0 8px 24px rgba(48, 209, 88, 0.3);
+          /* ✅ box-shadow déplacé vers style inline (dynamique selon couleur avatar) */
           text-transform: uppercase;
         }
 
@@ -153,12 +183,7 @@ const Profile = () => {
           margin-bottom: 4px;
         }
 
-        .profile-email-secondary {
-          font-size: 13px;
-          font-weight: 600;
-          color: #8E8E93;
-          margin-bottom: 8px;
-        }
+        /* ✅ SUPPRIMÉ : .profile-email-secondary (email retiré) */
 
         .profile-status {
           font-size: 13px;
@@ -196,9 +221,16 @@ const Profile = () => {
         .level-number {
           font-size: 48px;
           font-weight: 800;
-          color: #30D158;
           line-height: 1;
           margin-bottom: 16px;
+        }
+
+        .level-text {
+          color: #FFFFFF;  /* ✅ "Niveau" en blanc */
+        }
+
+        .level-value {
+          color: #30D158;  /* ✅ Numéro en vert */
         }
 
         .level-xp {
@@ -271,6 +303,10 @@ const Profile = () => {
 
         .stat-error {
           color: #FF453A;
+        }
+
+        .stat-lessons {
+          color: #1871BE;
         }
 
         .stat-streak {
@@ -389,7 +425,8 @@ const Profile = () => {
               ? user.avatarColor
               : isAuthenticated
               ? 'linear-gradient(135deg, #30D158 0%, #088201 100%)'
-              : 'linear-gradient(135deg, #3A3A3C 0%, #2C2C2E 100%)'
+              : 'linear-gradient(135deg, #3A3A3C 0%, #2C2C2E 100%)',
+            boxShadow: getAvatarGlowColor()  // ✅ Box-shadow dynamique selon couleur
           }}
         >
           {isAuthenticated ? (user?.username ? user.username[0].toUpperCase() : (user?.email ? user.email[0].toUpperCase() : '?')) : '👤'}
@@ -397,11 +434,7 @@ const Profile = () => {
         <div className="profile-email">
           {isAuthenticated ? (user?.username || user?.email || 'Utilisateur') : 'Mode invité'}
         </div>
-        {isAuthenticated && user?.email && user?.username && (
-          <div className="profile-email-secondary">
-            {user.email}
-          </div>
-        )}
+        {/* ✅ SUPPRIMÉ : Email retiré (page publique) */}
         <div className={`profile-status ${!isAuthenticated ? 'profile-guest' : ''}`}>
           {isAuthenticated ? 'Connecté' : 'Non connecté'}
         </div>
@@ -417,7 +450,10 @@ const Profile = () => {
       {/* Level Card */}
       <div className="level-card">
         <div className="level-title">Niveau actuel</div>
-        <div className="level-number">Niveau {stats.userLevel}</div>
+        <div className="level-number">
+          <span className="level-text">Niveau </span>
+          <span className="level-value">{stats.userLevel}</span>
+        </div>
         <div className="level-xp">{stats.totalXP} XP total</div>
         <div className="level-progress-bar">
           <div
@@ -443,8 +479,8 @@ const Profile = () => {
         </div>
 
         <div className="stat-card">
-          <div className="stat-value stat-error">{stats.incorrectAnswers}</div>
-          <div className="stat-label">Incorrect</div>
+          <div className="stat-value stat-lessons">{stats.completedLessons}</div>
+          <div className="stat-label">Leçons</div>
         </div>
 
         <div className="stat-card">

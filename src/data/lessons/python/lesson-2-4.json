@@ -1,15 +1,132 @@
 {
-  "lessonId": "py_les_24",
+  "lessonId": "py_les_2_4",
   "moduleId": "py_mod_002",
-  "title": "Portée locale et globale (intro)",
-  "subtitle": "Contenu à venir - En cours de rédaction",
+  "lessonNumber": "4",
+  "title": "La valeur de retour (return)",
+  "subtitle": "Une fonction peut renvoyer un résultat. C'est son cadeau de sortie.",
   "sections": [
     {
       "id": "section_1",
       "type": "text",
-      "title": "Introduction",
-      "content": "Cette leçon sera bientôt disponible.\n\nRevenez prochainement pour découvrir le contenu complet de **Portée locale et globale (intro)**."
+      "title": "Print vs Return : La Grande Confusion",
+      "content": "`print()` et `return` sont **complètement différents** :\n\n• **`print()`** affiche quelque chose à l'écran. C'est pour les humains.\n• **`return`** renvoie une valeur au code appelant. C'est pour le programme.\n\nUne fonction peut `return` une valeur sans jamais rien afficher."
+    },
+    {
+      "id": "section_2",
+      "type": "code_example",
+      "language": "python",
+      "title": "Exemple : Fonction qui Renvoie",
+      "code": "def calculer_double(nombre):\n    resultat = nombre * 2\n    return resultat\n\n# Récupération de la valeur\nx = calculer_double(5)\nprint(x)  # Affiche 10",
+      "tip": {
+        "title": "⚡ Le Décodeur",
+        "content": "**`return resultat`** : La fonction **renvoie** la valeur de resultat (10) à l'endroit où elle a été appelée.\n\n**`x = calculer_double(5)`** : La valeur renvoyée (10) est **stockée** dans x.\n\n**Important :** Sans `return`, une fonction renvoie `None` par défaut."
+      },
+      "caption": "Flux complet :\n1. Appel : calculer_double(5)\n2. Calcul : resultat = 5 * 2 = 10\n3. Return : renvoie 10\n4. Assignation : x reçoit 10\n5. Affichage : print(x) → 10"
+    },
+    {
+      "id": "section_3",
+      "type": "text",
+      "title": "Return = Sortie Immédiate",
+      "content": "Dès que Python rencontre `return`, la fonction **s'arrête immédiatement**.\n\nTout le code après le `return` dans la fonction est **ignoré**.\n\nC'est comme une porte de sortie : une fois franchie, on ne revient pas."
+    },
+    {
+      "id": "section_4",
+      "type": "code_example",
+      "language": "python",
+      "title": "Exemple : Return Arrête la Fonction",
+      "code": "def verifier_age(age):\n    if age < 18:\n        return \"Mineur\"\n    \n    return \"Majeur\"\n\nstatut = verifier_age(15)\nprint(statut)  # Affiche \"Mineur\"",
+      "caption": "Avec age = 15 :\n1. Condition `age < 18` est vraie\n2. `return \"Mineur\"` s'exécute → fonction termine\n3. La ligne 5 (`return \"Majeur\"`) n'est **jamais** atteinte\n\nLa fonction renvoie \"Mineur\" et s'arrête."
+    },
+    {
+      "id": "section_5",
+      "type": "warning",
+      "title": "⚠️ Piège : Print ≠ Return",
+      "content": "Cette erreur piège 90% des débutants :\n\n```python\ndef additionner(a, b):\n    print(a + b)  # ❌ Affiche, mais ne renvoie RIEN\n\nresultat = additionner(5, 3)  # resultat vaut None !\nprint(resultat)  # Affiche None\n```\n\nSi vous voulez **utiliser** le résultat ailleurs, vous DEVEZ utiliser `return`."
+    },
+    {
+      "id": "section_6",
+      "type": "exercise",
+      "exerciseId": "py_les_2_4_ex1"
+    },
+    {
+      "id": "section_7",
+      "type": "exercise",
+      "exerciseId": "py_les_2_4_ex2"
+    },
+    {
+      "id": "section_8",
+      "type": "exercise",
+      "exerciseId": "py_les_2_4_ex3"
+    },
+    {
+      "id": "section_9",
+      "type": "exercise",
+      "exerciseId": "py_les_2_4_ex4"
     }
   ],
-  "exercises": []
+  "exercises": [
+    {
+      "id": "py_les_2_4_ex1",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Que va afficher ce code ?",
+      "code": "def triple(n):\n    return n * 3\n\nresultat = triple(4)\nprint(resultat)",
+      "options": [
+        "4",
+        "12",
+        "3",
+        "None"
+      ],
+      "correctAnswer": 1,
+      "explanation": "La fonction triple renvoie n * 3 = 4 * 3 = 12.\nCette valeur est stockée dans resultat.\nPuis on affiche 12.",
+      "highlightedLines": [2, 4, 5],
+      "xpGain": 10
+    },
+    {
+      "id": "py_les_2_4_ex2",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Piège classique ! Que va afficher ce code ?",
+      "code": "def calculer(x):\n    print(x + 5)\n\ny = calculer(10)\nprint(y)",
+      "options": [
+        "15",
+        "10",
+        "None",
+        "15 None"
+      ],
+      "correctAnswer": 2,
+      "explanation": "La fonction `calculer` AFFICHE 15 (via print), mais ne RENVOIE rien.\nDonc y reçoit None (valeur par défaut).\n\nSortie :\n• Ligne 2 affiche : 15\n• Ligne 5 affiche : None",
+      "highlightedLines": [2, 4],
+      "xpGain": 10
+    },
+    {
+      "id": "py_les_2_4_ex3",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Return arrête la fonction. Que va renvoyer cet appel ?",
+      "code": "def mystere(nombre):\n    if nombre > 10:\n        return \"Grand\"\n    return \"Petit\"\n    print(\"Fin\")  # Cette ligne ne s'exécutera JAMAIS\n\nresultat = mystere(15)\nprint(resultat)",
+      "options": [
+        "Grand",
+        "Petit",
+        "Fin",
+        "Grand Fin"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Avec nombre = 15 :\n• Condition `15 > 10` est vraie\n• `return \"Grand\"` s'exécute → fonction termine\n• Les lignes 4 et 5 ne sont JAMAIS atteintes\n\nLa fonction renvoie \"Grand\".",
+      "highlightedLines": [2, 3],
+      "xpGain": 10
+    },
+    {
+      "id": "py_les_2_4_ex4",
+      "type": "predict_output",
+      "inputType": "free_input",
+      "keyboardType": "numeric",
+      "question": "Que va afficher ce code ?",
+      "code": "def somme(a, b):\n    return a + b\n\nx = somme(7, 3)\ny = somme(x, 5)\nprint(y)",
+      "correctAnswer": "15",
+      "explanation": "• 1er appel : somme(7, 3) renvoie 10 → x = 10\n• 2e appel : somme(10, 5) renvoie 15 → y = 15\n• On affiche y : 15\n\nOn peut utiliser le résultat d'une fonction comme argument pour une autre !",
+      "highlightedLines": [2, 4, 5],
+      "xpGain": 10
+    }
+  ]
 }

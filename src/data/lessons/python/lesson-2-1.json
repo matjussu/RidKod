@@ -1,15 +1,109 @@
 {
-  "lessonId": "py_les_21",
+  "lessonId": "py_les_2_1",
   "moduleId": "py_mod_002",
-  "title": "Créer et modifier une variable",
-  "subtitle": "Contenu à venir - En cours de rédaction",
+  "lessonNumber": "1",
+  "title": "Le signe = (Assignation vs Égalité)",
+  "subtitle": "Un seul signe = peut tout changer. Apprenez à distinguer l'assignation de la comparaison.",
   "sections": [
     {
       "id": "section_1",
       "type": "text",
-      "title": "Introduction",
-      "content": "Cette leçon sera bientôt disponible.\n\nRevenez prochainement pour découvrir le contenu complet de **Créer et modifier une variable**."
+      "title": "Deux Mondes Différents",
+      "content": "En Python, le signe `=` **ne teste pas l'égalité**. Il **assigne** une valeur à une variable.\n\nPour tester l'égalité, on utilise **deux signes** : `==`.\n\nC'est la confusion n°1 des débutants. Comprendre cette différence, c'est éviter 90% des bugs."
+    },
+    {
+      "id": "section_2",
+      "type": "code_example",
+      "language": "python",
+      "title": "Exemple : Assignation vs Comparaison",
+      "code": "# ASSIGNATION (=)\nage = 18\nprint(age)  # Affiche 18\n\n# COMPARAISON (==)\nprint(age == 18)  # Affiche True\nprint(age == 20)  # Affiche False",
+      "tip": {
+        "title": "⚡ Le Décodeur",
+        "content": "**`=` (Un seul signe) :** \"Mets cette valeur dans cette boîte\". C'est une **action**.\n\n**`==` (Deux signes) :** \"Ces deux valeurs sont-elles identiques ?\". C'est une **question** qui renvoie True ou False.\n\n**Astuce :** Lisez `=` comme \"devient\" et `==` comme \"est égal à\"."
+      },
+      "caption": "• Ligne 2 : `age = 18` → La variable age **reçoit** la valeur 18\n• Ligne 5 : `age == 18` → On **teste** si age vaut 18 (réponse : True)\n• Ligne 6 : `age == 20` → On **teste** si age vaut 20 (réponse : False)"
+    },
+    {
+      "id": "section_3",
+      "type": "text",
+      "title": "Le Piège Classique",
+      "content": "Dans une condition `if`, vous **devez** utiliser `==` pour comparer.\n\nUtiliser `=` dans un if est une erreur de logique qui peut créer des bugs silencieux."
+    },
+    {
+      "id": "section_4",
+      "type": "code_example",
+      "language": "python",
+      "title": "Exemple : If avec ==",
+      "code": "score = 100\n\n# CORRECT : Comparaison\nif score == 100:\n    print(\"Perfect!\")\n\n# INCORRECT : Assignation (erreur)\n# if score = 100:  # SyntaxError en Python",
+      "caption": "Python vous protège : utiliser `=` dans un if provoque une SyntaxError.\n\nMais attention : dans d'autres langages (C, JavaScript), `if (x = 5)` est **valide** et assigne 5 à x avant de tester ! C'est un bug fréquent."
+    },
+    {
+      "id": "section_5",
+      "type": "exercise",
+      "exerciseId": "py_les_2_1_ex1"
+    },
+    {
+      "id": "section_6",
+      "type": "exercise",
+      "exerciseId": "py_les_2_1_ex2"
+    },
+    {
+      "id": "section_7",
+      "type": "exercise",
+      "exerciseId": "py_les_2_1_ex3"
     }
   ],
-  "exercises": []
+  "exercises": [
+    {
+      "id": "py_les_2_1_ex1",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Que va afficher ce code ?",
+      "code": "x = 5\ny = 5\nprint(x == y)",
+      "options": [
+        "5",
+        "True",
+        "False",
+        "Erreur"
+      ],
+      "correctAnswer": 1,
+      "explanation": "La ligne `x == y` **compare** les deux variables. Comme elles valent toutes les deux 5, la comparaison renvoie **True**.",
+      "highlightedLines": [3],
+      "xpGain": 10
+    },
+    {
+      "id": "py_les_2_1_ex2",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Quelle est la valeur finale de 'x' ?",
+      "code": "x = 10\nx = x + 5\nprint(x)",
+      "options": [
+        "10",
+        "15",
+        "10 + 5",
+        "Erreur"
+      ],
+      "correctAnswer": 1,
+      "explanation": "La ligne `x = x + 5` fait deux choses :\n1. Lit la valeur actuelle de x (10)\n2. Calcule 10 + 5 = 15\n3. **Assigne** ce résultat à x\n\nDonc x vaut maintenant 15.",
+      "highlightedLines": [2],
+      "xpGain": 10
+    },
+    {
+      "id": "py_les_2_1_ex3",
+      "type": "predict_output",
+      "inputType": "options",
+      "question": "Que va afficher ce code ?",
+      "code": "password = \"admin123\"\nuser_input = \"admin123\"\n\nif user_input == password:\n    print(\"Accès autorisé\")\nelse:\n    print(\"Accès refusé\")",
+      "options": [
+        "Accès autorisé",
+        "Accès refusé",
+        "True",
+        "admin123"
+      ],
+      "correctAnswer": 0,
+      "explanation": "La condition `user_input == password` **compare** les deux chaînes de caractères. Comme elles sont identiques (\"admin123\"), la comparaison renvoie True et le code affiche \"Accès autorisé\".",
+      "highlightedLines": [4],
+      "xpGain": 10
+    }
+  ]
 }
