@@ -50,16 +50,21 @@
       "correctAnswer": 1,
       "explanation": "`range(4)` compte 0, 1, 2, 3. Cela fait exactement 4 tours. Le message s'affiche 4 fois.",
       "highlightedLines": [1, 2],
-      "xpGain": 10
+      "xpGain": 15
     },
     {
       "id": "py_les_1_4_ex2",
       "type": "predict_output",
-      "inputType": "free_input",
-      "question": "Le pattern 'Accumulateur'. Quelle est la valeur finale de `total` ?",
+      "inputType": "options",
+      "question": "Quelle est la valeur finale de `total` ?",
       "code": "total = 0\nfor prix in [10, 20, 5]:\n    total = total + prix\nprint(total)",
-      "predefinedAnswers": ["10", "20", "35", "5"],
-      "correctAnswer": "35",
+      "options": [
+        "10",
+        "20",
+        "35",
+        "5"
+      ],
+      "correctAnswer": 2,
       "explanation": "Le code additionne chaque prix au total.\n- Tour 1: 0 + 10 = 10\n- Tour 2: 10 + 20 = 30\n- Tour 3: 30 + 5 = 35.",
       "highlightedLines": [3, 4],
       "xpGain": 15

@@ -11,6 +11,7 @@ const BossFight = ({
   x,
   y,
   unlocked = false,
+  defeated = false,
   completedLessons = 0,
   totalLessons = 0,
   onClick
@@ -30,6 +31,10 @@ const BossFight = ({
   const bossIcon = bossIcons[order] || '🎯';
 
   const handleClick = () => {
+    if (defeated) {
+      // Boss déjà battu, ne rien faire
+      return;
+    }
     if (!unlocked) {
       // Shake animation si locked
       const elem = document.querySelector('.boss-fight');
@@ -40,11 +45,18 @@ const BossFight = ({
     onClick?.();
   };
 
+  // Déterminer la classe selon l'état
+  const getStateClass = () => {
+    if (defeated) return 'boss-defeated';
+    if (unlocked) return 'boss-unlocked';
+    return 'boss-locked';
+  };
+
   return (
     <button
-      className={`boss-fight ${unlocked ? 'boss-unlocked' : 'boss-locked'}`}
+      className={`boss-fight ${getStateClass()}`}
       onClick={handleClick}
-      disabled={!unlocked}
+      disabled={!unlocked || defeated}
       style={{
         '--boss-x': `${x}px`,
         '--boss-y': `${y}px`
@@ -52,10 +64,15 @@ const BossFight = ({
     >
       {/* Cercle boss géant */}
       <div className="boss-circle">
-        <span className="boss-icon">{bossIcon}</span>
+        {/* Afficher checkmark si defeated, sinon icône boss */}
+        {defeated ? (
+          <span className="boss-defeated-icon">✓</span>
+        ) : (
+          <span className="boss-icon">{bossIcon}</span>
+        )}
 
         {/* Lock overlay si pas unlocked */}
-        {!unlocked && (
+        {!unlocked && !defeated && (
           <div className="boss-lock-overlay">
             <span className="boss-lock-icon">🔒</span>
             <span className="boss-lock-text">
@@ -64,8 +81,8 @@ const BossFight = ({
           </div>
         )}
 
-        {/* Glow effect pour boss unlocked */}
-        {unlocked && (
+        {/* Glow effect pour boss unlocked ou defeated */}
+        {(unlocked || defeated) && (
           <div className="boss-glow" />
         )}
       </div>
@@ -115,6 +132,15 @@ const BossFight = ({
           opacity: 0.6;
         }
 
+        .boss-fight.boss-defeated {
+          cursor: default;
+          opacity: 1;
+        }
+
+        .boss-fight.boss-defeated:hover {
+          transform: translate(-50%, -50%);
+        }
+
         /* Shake animation pour boss locked */
         .boss-shake {
           animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97);
@@ -149,6 +175,14 @@ const BossFight = ({
           animation: none;
         }
 
+        .boss-fight.boss-defeated .boss-circle {
+          background: linear-gradient(135deg, #30D158 0%, #34C759 100%);
+          border: 6px solid #34C759;
+          box-shadow: 0 12px 40px rgba(48, 209, 88, 0.8),
+                      inset 0 2px 0 rgba(255, 255, 255, 0.3);
+          animation: float 3s ease-in-out infinite, victoryPulse 2s ease-in-out infinite;
+        }
+
         /* Animation float */
         @keyframes float {
           0%, 100% {
@@ -173,6 +207,36 @@ const BossFight = ({
           }
           50% {
             transform: scale(1.1);
+          }
+        }
+
+        /* Icône defeated (checkmark) */
+        .boss-defeated-icon {
+          font-size: 72px;
+          font-weight: 900;
+          line-height: 1;
+          color: #FFFFFF;
+          filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
+          animation: victoryScale 2s ease-in-out infinite;
+        }
+
+        @keyframes victoryScale {
+          0%, 100% {
+            transform: scale(1) rotate(0deg);
+          }
+          50% {
+            transform: scale(1.15) rotate(5deg);
+          }
+        }
+
+        @keyframes victoryPulse {
+          0%, 100% {
+            box-shadow: 0 12px 40px rgba(48, 209, 88, 0.8),
+                        inset 0 2px 0 rgba(255, 255, 255, 0.3);
+          }
+          50% {
+            box-shadow: 0 12px 60px rgba(48, 209, 88, 1),
+                        inset 0 2px 0 rgba(255, 255, 255, 0.4);
           }
         }
 
@@ -218,6 +282,11 @@ const BossFight = ({
           pointer-events: none;
         }
 
+        .boss-fight.boss-defeated .boss-glow {
+          background: radial-gradient(circle, rgba(48, 209, 88, 0.6) 0%, transparent 70%);
+          animation: pulse-glow-victory 2s ease-in-out infinite;
+        }
+
         @keyframes pulse-glow {
           0%, 100% {
             opacity: 0.6;
@@ -226,6 +295,17 @@ const BossFight = ({
           50% {
             opacity: 1;
             transform: scale(1.1);
+          }
+        }
+
+        @keyframes pulse-glow-victory {
+          0%, 100% {
+            opacity: 0.8;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 1;
+            transform: scale(1.2);
           }
         }
 
@@ -243,6 +323,13 @@ const BossFight = ({
           background: linear-gradient(135deg, #3A3A3C 0%, #2C2C2E 100%);
           border: 3px solid rgba(255, 255, 255, 0.2);
           box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .boss-fight.boss-defeated .boss-badge {
+          background: linear-gradient(135deg, #30D158 0%, #34C759 100%);
+          border: 3px solid #FFD700;
+          box-shadow: 0 4px 16px rgba(48, 209, 88, 0.6),
+                      inset 0 1px 0 rgba(255, 255, 255, 0.4);
         }
 
         .boss-badge-text {
@@ -270,6 +357,10 @@ const BossFight = ({
 
         .boss-fight.boss-locked .boss-reward {
           background: rgba(60, 60, 60, 0.3);
+        }
+
+        .boss-fight.boss-defeated .boss-reward {
+          background: rgba(48, 209, 88, 0.3);
         }
 
         .boss-reward-icon {
@@ -378,6 +469,7 @@ BossFight.propTypes = {
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
   unlocked: PropTypes.bool,
+  defeated: PropTypes.bool,
   completedLessons: PropTypes.number,
   totalLessons: PropTypes.number,
   onClick: PropTypes.func

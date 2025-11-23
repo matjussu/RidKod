@@ -44,21 +44,27 @@
       "options": [
         "Achat validé",
         "Fonds insuffisants",
+        "Achat validé Fonds insuffisants",
         "Rien"
       ],
       "correctAnswer": 1,
       "explanation": "5 n'est pas supérieur ou égal à 10. La condition est `False`. On part dans le `else`.",
       "highlightedLines": [4, 6],
-      "xpGain": 10
+      "xpGain": 15
     },
     {
       "id": "py_les_1_3_ex2",
       "type": "predict_output",
-      "inputType": "free_input",
-      "question": "Attention à l'ordre des conditions (`elif`).",
+      "inputType": "options",
+      "question": "Que va afficher ce programme",
       "code": "temperature = 35\n\nif temperature > 30:\n    print(\"Chaud\")\nelif temperature > 20:\n    print(\"Tempéré\")\nelse:\n    print(\"Froid\")",
-      "predefinedAnswers": ["Chaud", "Tempéré", "Froid", "Rien"],
-      "correctAnswer": "Chaud",
+      "options": [
+        "Chaud",
+        "Tempéré",
+        "Froid",
+        "Rien"
+      ],
+      "correctAnswer": 0,
       "explanation": "Le code teste les conditions dans l'ordre. 35 > 30 est **Vrai** dès le premier `if`. Il affiche \"Chaud\" et **sort immédiatement** de la structure. Il ne regarde même pas si 35 > 20.",
       "highlightedLines": [3, 4],
       "xpGain": 15

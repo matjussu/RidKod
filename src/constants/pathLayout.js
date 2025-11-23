@@ -45,6 +45,23 @@ export const calculateLessonPosition = (index) => {
 };
 
 /**
+ * Calcule la position (x, y) d'un nœud XP entre deux leçons
+ * @param {number} lessonIndex - Index de la leçon précédente (0-based)
+ * @returns {{ x: number, y: number }} Position au milieu du segment entre leçon[i] et leçon[i+1]
+ */
+export const calculateXPNodePosition = (lessonIndex) => {
+  // Positions des deux leçons encadrant le nœud XP
+  const pos1 = calculateLessonPosition(lessonIndex);
+  const pos2 = calculateLessonPosition(lessonIndex + 1);
+
+  // Position au milieu du segment
+  return {
+    x: (pos1.x + pos2.x) / 2,
+    y: (pos1.y + pos2.y) / 2
+  };
+};
+
+/**
  * Calcule la position (x, y) du boss fight
  * @param {number} totalLessons - Nombre total de leçons dans le module
  * @returns {{ x: number, y: number }} Position absolue du boss (Centré)

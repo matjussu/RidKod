@@ -14,8 +14,11 @@ import LessonLanguage from './pages/lessons/LessonLanguage';
 import LessonModules from './pages/lessons/LessonModules';
 import LessonList from './pages/lessons/LessonList';
 import LessonContent from './pages/lessons/LessonContent';
+import XPCollectTraining from './pages/XPCollect';
+import XPCollectLessons from './pages/lessons/XPCollectLessons';
+import BossFightContent from './pages/lessons/BossFightContent';
+import BossXPCollect from './pages/lessons/BossXPCollect';
 import LevelComplete from './pages/LevelComplete';
-import XPCollect from './pages/XPCollect';
 
 // Composant pour gérer la route principale "/"
 const RootRoute = () => {
@@ -46,7 +49,7 @@ const App = () => {
           <Route path="/difficulty" element={<Difficulty />} />
           <Route path="/exercise" element={<Exercise />} />
           <Route path="/level-complete" element={<LevelComplete />} />
-          <Route path="/xp-collect" element={<XPCollect />} />
+          <Route path="/xp-collect" element={<XPCollectTraining />} />
 
           {/* Routes Lessons */}
           <Route path="/lessons" element={<Navigate to="/lessons/language" replace />} />
@@ -54,6 +57,9 @@ const App = () => {
           <Route path="/lessons/:language/modules" element={<LessonModules />} />
           <Route path="/lessons/:language/:moduleId/lessons" element={<LessonList />} />
           <Route path="/lessons/:language/:moduleId/:lessonId" element={<LessonContent />} />
+          <Route path="/lessons/:language/:moduleId/xp-collect/:nodeId" element={<XPCollectLessons />} />
+          <Route path="/lessons/:language/:moduleId/boss" element={<BossFightContent />} />
+          <Route path="/lessons/:language/:moduleId/boss-xp" element={<BossXPCollect />} />
 
           {/* Routes en développement */}
           <Route path="/challenges" element={<div style={{color: 'white', padding: '20px', textAlign: 'center'}}>Challenges - En cours de développement</div>} />

@@ -50,7 +50,7 @@
       "correctAnswer": 1,
       "explanation": "Quand `i` vaut 0, `continue` se déclenche. L'ordinateur remonte direct en haut de la boucle sans exécuter le `print`. Le 0 est donc invisible.",
       "highlightedLines": [3, 4, 5],
-      "xpGain": 10
+      "xpGain": 15
     },
     {
       "id": "py_les_1_6_ex2",
@@ -67,7 +67,7 @@
       "correctAnswer": 0,
       "explanation": "Affiche 1, affiche 2. Arrivé à 3, le `break` stoppe tout *avant* le print. Donc le 3 n'est pas affiché.",
       "highlightedLines": [2, 3, 4],
-      "xpGain": 10
+      "xpGain": 15
     }
   ]
 }

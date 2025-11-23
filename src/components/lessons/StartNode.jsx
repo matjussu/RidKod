@@ -6,10 +6,10 @@ import useHaptic from '../../hooks/useHaptic';
  * StartNode - Bouton de départ premium avec interaction "Hold to Start"
  * Style Apple classe avec progress ring, particules et animations fluides
  */
-const StartNode = ({ x, y, onComplete }) => {
+const StartNode = ({ x, y, onComplete, initialCompleted = false }) => {
     const [isHolding, setIsHolding] = useState(false);
     const [progress, setProgress] = useState(0);
-    const [completed, setCompleted] = useState(false);
+    const [completed, setCompleted] = useState(initialCompleted);
     const [showParticles, setShowParticles] = useState(false);
     const requestRef = useRef();
     const startTimeRef = useRef();
@@ -17,6 +17,14 @@ const StartNode = ({ x, y, onComplete }) => {
     const { triggerLight, triggerMedium, triggerSuccess } = useHaptic();
 
     const HOLD_DURATION = 3000; // 3 secondes pour activer
+
+    // Synchroniser le state avec la prop initialCompleted
+    useEffect(() => {
+        setCompleted(initialCompleted);
+        if (initialCompleted) {
+            setShowParticles(false); // Pas de particules au chargement
+        }
+    }, [initialCompleted]);
 
     const startHold = (e) => {
         if (completed) return;
@@ -317,7 +325,8 @@ const StartNode = ({ x, y, onComplete }) => {
 StartNode.propTypes = {
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
-    onComplete: PropTypes.func
+    onComplete: PropTypes.func,
+    initialCompleted: PropTypes.bool
 };
 
 export default StartNode;

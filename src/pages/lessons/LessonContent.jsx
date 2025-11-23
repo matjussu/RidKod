@@ -8,6 +8,7 @@ import OptionButton from '../../components/exercise/OptionButton';
 import ActionButton from '../../components/exercise/ActionButton';
 import CustomKeyboard from '../../components/exercise/CustomKeyboard';
 import ChapterCompleteModal from '../../components/lessons/ChapterCompleteModal';
+import ModuleCompleteModal from '../../components/lessons/ModuleCompleteModal';
 import useHaptic from '../../hooks/useHaptic';
 import '../../styles/Lessons.css';
 
@@ -74,6 +75,7 @@ const LessonContent = () => {
   const [isCorrect, setIsCorrect] = useState(false);
   const [isExplanationExpanded, setIsExplanationExpanded] = useState(false);
   const [showCompleteModal, setShowCompleteModal] = useState(false);
+  const [showModuleCompleteModal, setShowModuleCompleteModal] = useState(false);
 
   const contentRef = useRef(null);
 
@@ -161,6 +163,62 @@ const LessonContent = () => {
       contentRef.current.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [currentSectionIndex]);
+
+  // Vérifier si le module entier est terminé
+  const isModuleComplete = () => {
+    console.log('🔍 isModuleComplete() - Start check');
+    if (!progress || !moduleId) {
+      console.log('❌ No progress or moduleId');
+      return false;
+    }
+
+    // Définir les leçons de chaque module
+    const moduleLessons = {
+      'py_mod_001': ['py_les_1_1', 'py_les_1_2', 'py_les_1_3', 'py_les_1_4', 'py_les_1_5', 'py_les_1_6', 'py_les_1_7'],
+      'py_mod_002': ['py_les_2_1', 'py_les_2_2', 'py_les_2_3', 'py_les_2_4', 'py_les_2_5', 'py_les_2_6', 'py_les_2_7'],
+      'py_mod_003': ['py_les_3_1', 'py_les_3_2', 'py_les_3_3', 'py_les_3_4', 'py_les_3_5'],
+      'py_mod_004': ['py_les_4_1', 'py_les_4_2', 'py_les_4_3', 'py_les_4_4', 'py_les_4_5', 'py_les_4_6'],
+      'py_mod_005': ['py_les_5_1', 'py_les_5_2', 'py_les_5_3', 'py_les_5_4', 'py_les_5_5', 'py_les_5_6'],
+      'py_mod_006': ['py_les_6_1', 'py_les_6_2', 'py_les_6_3', 'py_les_6_4', 'py_les_6_5', 'py_les_6_6']
+    };
+
+    // Définir les nœuds XP de chaque module
+    const moduleXPNodes = {
+      'py_mod_001': ['xp_1', 'xp_2', 'xp_3', 'xp_4', 'xp_5', 'xp_6'],
+      'py_mod_002': ['xp_7', 'xp_8', 'xp_9', 'xp_10', 'xp_11', 'xp_12'],
+      'py_mod_003': ['xp_13', 'xp_14', 'xp_15', 'xp_16'],
+      'py_mod_004': ['xp_17', 'xp_18', 'xp_19', 'xp_20', 'xp_21'],
+      'py_mod_005': ['xp_22', 'xp_23', 'xp_24', 'xp_25', 'xp_26'],
+      'py_mod_006': ['xp_27', 'xp_28', 'xp_29', 'xp_30', 'xp_31']
+    };
+
+    const lessons = moduleLessons[moduleId] || [];
+    const xpNodes = moduleXPNodes[moduleId] || [];
+
+    console.log('📋 Module:', moduleId);
+    console.log('📋 Lessons requises:', lessons);
+    console.log('📋 XP nodes requis:', xpNodes);
+
+    // Vérifier que toutes les leçons sont complétées
+    const allLessonsComplete = lessons.every(lessonId => {
+      const isComplete = progress.lessonProgress?.[language]?.[lessonId]?.completed === true;
+      console.log(`  Leçon ${lessonId}: ${isComplete ? '✅' : '❌'}`);
+      return isComplete;
+    });
+
+    // Vérifier que tous les nœuds XP sont collectés
+    const allXPNodesCollected = xpNodes.every(nodeId => {
+      const isCollected = progress.xpNodesCollected?.[nodeId] === true;
+      console.log(`  XP ${nodeId}: ${isCollected ? '✅' : '❌'}`);
+      return isCollected;
+    });
+
+    console.log('📊 All lessons complete:', allLessonsComplete);
+    console.log('📊 All XP nodes collected:', allXPNodesCollected);
+    console.log('🎯 Module complete:', allLessonsComplete && allXPNodesCollected);
+
+    return allLessonsComplete && allXPNodesCollected;
+  };
 
   const handleBack = () => {
     triggerLight();
@@ -288,18 +346,32 @@ const LessonContent = () => {
 
   // Terminer la leçon et retourner à la liste
   const handleFinishLesson = () => {
+    console.log('🔍 handleFinishLesson appelée');
+    console.log('📊 completedExercises:', completedExercises);
+    console.log('📊 lessonData.exercises:', lessonData.exercises);
+    console.log('📊 completedExercises.length:', completedExercises.length);
+    console.log('📊 lessonData.exercises.length:', lessonData.exercises.length);
+
     const allExercisesCompleted = completedExercises.length === lessonData.exercises.length;
+    console.log('✅ allExercisesCompleted:', allExercisesCompleted);
 
     if (allExercisesCompleted) {
-      // Ajouter XP pour avoir complété la leçon (30 XP par leçon)
-      updateProgress({
-        xp: progress.xp + 30
-      });
+      // XP sera collecté via les nœuds XP entre les leçons (30 XP par nœud)
       triggerSuccess();
 
-      // Afficher modal de succès
-      setShowCompleteModal(true);
+      // Vérifier si le module entier est terminé
+      const moduleComplete = isModuleComplete();
+      console.log('🎯 isModuleComplete():', moduleComplete);
+
+      if (moduleComplete) {
+        console.log('🎉 Module complet ! Affichage du ModuleCompleteModal');
+        setShowModuleCompleteModal(true);
+      } else {
+        console.log('✅ Leçon complète ! Affichage du ChapterCompleteModal');
+        setShowCompleteModal(true);
+      }
     } else {
+      console.log('⚠️ Tous les exercices ne sont pas complétés, retour à la liste');
       triggerLight();
       navigate(`/lessons/${language}/${moduleId}/lessons`);
     }
@@ -309,6 +381,13 @@ const LessonContent = () => {
   const handleCloseModal = () => {
     setShowCompleteModal(false);
     navigate(`/lessons/${language}/${moduleId}/lessons`);
+  };
+
+  // Gérer le clic sur Boss Fight depuis ModuleCompleteModal
+  const handleBossFight = () => {
+    setShowModuleCompleteModal(false);
+    triggerSuccess();
+    navigate(`/lessons/${language}/${moduleId}/boss`);
   };
 
   // Render exercice intégré
@@ -322,6 +401,10 @@ const LessonContent = () => {
     }
 
     const isExerciseCompleted = completedExercises.includes(exercise.id);
+
+    // Détecter si c'est le dernier exercice (dernière section ET type exercice)
+    const isLastExercise = currentSectionIndex === lessonData.sections.length - 1 &&
+                           currentSection.type === 'exercise';
 
     return (
       <div className="lesson-exercise-content">
@@ -342,7 +425,11 @@ const LessonContent = () => {
           language="python"
           highlightedLines={exercise.highlightedLines || []}
           isHighlightActive={isSubmitted}
-          clickableLines={exercise.inputType === 'clickable_lines' ? [0, 1, 2] : []}
+          clickableLines={
+            exercise.inputType === 'clickable_lines'
+              ? Array.from({ length: exercise.code.split('\n').length }, (_, i) => i)
+              : []
+          }
           selectedLine={selectedLine}
           onLineClick={(lineNum) => {
             if (exercise.inputType === 'clickable_lines' && !isSubmitted) {
@@ -378,7 +465,8 @@ const LessonContent = () => {
         {/* Free input si type free_input */}
         {exercise.inputType === 'free_input' && !isSubmitted && (
           <CustomKeyboard
-            type={exercise.keyboardType || 'numeric'}
+            type={exercise.predefinedAnswers ? 'predefined' : (exercise.keyboardType || 'numeric')}
+            predefinedKeys={exercise.predefinedAnswers}
             value={freeInputValue}
             onKeyPress={handleKeyPress}
           />
@@ -413,7 +501,8 @@ const LessonContent = () => {
              (exercise.inputType === 'free_input' && freeInputValue.trim() === '') ||
              (exercise.inputType === 'clickable_lines' && selectedLine === null))
           }
-          onClick={isSubmitted ? handleContinue : handleValidate}
+          onClick={isSubmitted ? (isLastExercise ? handleFinishLesson : handleContinue) : handleValidate}
+          continueText={isLastExercise ? "Terminer la leçon" : "Continuer"}
         />
       </div>
     );
@@ -490,8 +579,9 @@ const LessonContent = () => {
           }
         />
 
-        {/* Bouton terminer si dernière section non-exercice */}
-        {currentSection.type !== 'exercise' && currentSectionIndex === lessonData.sections.length - 1 && (
+        {/* Bouton terminer si dernière section ET que ce n'est PAS un exercice */}
+        {currentSectionIndex === lessonData.sections.length - 1 &&
+         currentSection.type !== 'exercise' && (
           <button className="finish-lesson-button" onClick={handleFinishLesson}>
             <span className="finish-text">Terminer la leçon</span>
           </button>
@@ -621,6 +711,36 @@ const LessonContent = () => {
           chapterTitle={lessonData.title}
           xpEarned={30}
           onClose={handleCloseModal}
+        />
+      )}
+
+      {/* Modal de fin de module */}
+      {showModuleCompleteModal && (
+        <ModuleCompleteModal
+          moduleTitle={
+            moduleId === 'py_mod_001' ? 'Module 1' :
+            moduleId === 'py_mod_002' ? 'Module 2' :
+            moduleId === 'py_mod_003' ? 'Module 3' :
+            moduleId === 'py_mod_004' ? 'Module 4' :
+            moduleId === 'py_mod_005' ? 'Module 5' :
+            moduleId === 'py_mod_006' ? 'Module 6' : 'Module'
+          }
+          lessonsCompleted={
+            moduleId === 'py_mod_001' || moduleId === 'py_mod_002' ? 7 :
+            moduleId === 'py_mod_003' ? 5 :
+            moduleId === 'py_mod_004' || moduleId === 'py_mod_005' || moduleId === 'py_mod_006' ? 6 : 0
+          }
+          totalLessons={
+            moduleId === 'py_mod_001' || moduleId === 'py_mod_002' ? 7 :
+            moduleId === 'py_mod_003' ? 5 :
+            moduleId === 'py_mod_004' || moduleId === 'py_mod_005' || moduleId === 'py_mod_006' ? 6 : 0
+          }
+          xpEarned={
+            moduleId === 'py_mod_001' || moduleId === 'py_mod_002' ? 180 :
+            moduleId === 'py_mod_003' ? 120 :
+            moduleId === 'py_mod_004' || moduleId === 'py_mod_005' || moduleId === 'py_mod_006' ? 150 : 0
+          }
+          onBossFight={handleBossFight}
         />
       )}
     </div>

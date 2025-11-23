@@ -3,18 +3,29 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useProgress } from '../../context/ProgressContext';
 import useHaptic from '../../hooks/useHaptic';
 import PathLesson from '../../components/lessons/PathLesson';
+import PathXPNode from '../../components/lessons/PathXPNode';
 import BossFight from '../../components/lessons/BossFight';
 import PathSVG from '../../components/lessons/PathSVG';
 import StartNode from '../../components/lessons/StartNode';
-import { calculateLessonPosition, calculateBossPosition, getStartNodePosition, PATH_CONFIG } from '../../constants/pathLayout';
+import { calculateLessonPosition, calculateXPNodePosition, calculateBossPosition, getStartNodePosition, PATH_CONFIG } from '../../constants/pathLayout';
 import modulesData from '../../data/lessons/python/modules.json';
 import lessonsData from '../../data/lessons/python/lessons.json';
 import '../../styles/Lessons.css';
 
+// Map des offsets XP par module (numérotation globale)
+const MODULE_XP_OFFSETS = {
+  'py_mod_001': 0,   // xp_1 to xp_6 (6 nodes)
+  'py_mod_002': 6,   // xp_7 to xp_12 (6 nodes)
+  'py_mod_003': 12,  // xp_13 to xp_16 (4 nodes)
+  'py_mod_004': 16,  // xp_17 to xp_21 (5 nodes)
+  'py_mod_005': 21,  // xp_22 to xp_26 (5 nodes)
+  'py_mod_006': 26   // xp_27 to xp_31 (5 nodes)
+};
+
 const LessonList = () => {
   const navigate = useNavigate();
   const { language, moduleId } = useParams();
-  const { progress } = useProgress();
+  const { progress, updateProgress } = useProgress();
   const { triggerLight, triggerSuccess } = useHaptic();
 
   const [lessons, setLessons] = useState([]);
@@ -43,8 +54,24 @@ const LessonList = () => {
     isLessonCompleted(lesson.id)
   ).length;
 
+  // Tableau de booléens indiquant quelles leçons sont complétées (par index)
+  const lessonsCompletedByIndex = lessons.map(lesson => isLessonCompleted(lesson.id));
+
+  // Récupérer les nœuds XP collectés
+  const xpNodesCollected = progress?.xpNodesCollected || {};
+
+  console.log('📋 LessonList - Progress state:', {
+    completedLessonsCount,
+    lessonsCompletedByIndex,
+    xpNodesCollected,
+    progressRaw: progress?.xpNodesCollected
+  });
+
   // Boss unlocked si toutes les leçons complétées
   const bossUnlocked = completedLessonsCount === lessons.length && lessons.length > 0;
+
+  // Boss defeated si déjà battu (vérifier dans progress.bossesDefeated)
+  const bossDefeated = progress?.bossesDefeated?.[moduleId] || false;
 
   const handleLessonClick = (lesson) => {
     triggerLight();
@@ -55,8 +82,13 @@ const LessonList = () => {
     if (!bossUnlocked) return;
 
     triggerSuccess();
-    // TODO: Navigate to boss fight screen (module review ou quiz final)
-    alert(`Boss Fight Unit ${moduleData.order} - À venir !`);
+    // Navigate to boss fight
+    navigate(`/lessons/${language}/${moduleId}/boss`);
+  };
+
+  const handleXPNodeClick = (nodeId) => {
+    triggerLight();
+    navigate(`/lessons/${language}/${moduleId}/xp-collect/${nodeId}`);
   };
 
   const handleBackClick = () => {
@@ -66,7 +98,14 @@ const LessonList = () => {
 
   const handleStartComplete = () => {
     setStartAnimation(true);
-    // L'animation se lance via le prop startAnimation passé à PathSVG
+
+    // Sauvegarder dans le progress que le start est activé
+    updateProgress({
+      moduleStartActivated: {
+        ...progress.moduleStartActivated,
+        [moduleId]: true
+      }
+    });
 
     // Activer la première leçon après que le path l'atteigne
     const pathAnimationDuration = 1500; // 1.5s pour que le path atteigne lesson 1
@@ -123,33 +162,25 @@ const LessonList = () => {
             totalLessons={lessons.length}
             completedCount={completedLessonsCount}
             startAnimation={startAnimation}
+            completedLessons={lessonsCompletedByIndex}
+            xpNodesCollected={xpNodesCollected}
           />
+          {/* Log props passées à PathSVG */}
+          {console.log('➡️ Props passées à PathSVG:', {
+            totalLessons: lessons.length,
+            completedCount: completedLessonsCount,
+            startAnimation,
+            completedLessons: lessonsCompletedByIndex,
+            xpNodesCollected
+          })}
 
           {/* Start Circle (Interactive) */}
-          {completedLessonsCount === 0 ? (
-            <StartNode
-              x={startPos.x}
-              y={startPos.y}
-              onComplete={handleStartComplete}
-            />
-          ) : (
-            // Cercle statique si déjà commencé
-            <div
-              className="path-start-circle"
-              style={{
-                position: 'absolute',
-                left: startPos.x,
-                top: startPos.y,
-                transform: 'translate(-50%, -50%)',
-                width: '24px',
-                height: '24px',
-                borderRadius: '50%',
-                background: '#2C2C2E',
-                border: '4px solid rgba(255, 255, 255, 0.1)',
-                zIndex: 1
-              }}
-            />
-          )}
+          <StartNode
+            x={startPos.x}
+            y={startPos.y}
+            onComplete={handleStartComplete}
+            initialCompleted={progress?.moduleStartActivated?.[moduleId] || false}
+          />
 
           {lessons.map((lesson, index) => {
             const completed = isLessonCompleted(lesson.id);
@@ -161,11 +192,17 @@ const LessonList = () => {
             // Ici : si le point est à droite, on met le label à droite (row-reverse) pour qu'il pointe vers l'intérieur
             const position = x > PATH_CONFIG.centerX ? 'right' : 'left';
 
-            // La leçon est active si c'est la première non complétée
-            // Pour la première leçon : attendre que le path l'atteigne après GO
+            // Pour les leçons suivantes (index > 0), vérifier que l'XP précédent est collecté
+            const xpOffset = MODULE_XP_OFFSETS[moduleId] || 0;
+            const previousXPNodeId = index > 0 ? `xp_${xpOffset + index}` : null;
+            const isPreviousXPCollected = previousXPNodeId ? (xpNodesCollected[previousXPNodeId] || false) : true;
+
+            // La leçon est active si :
+            // - Leçon 1 : après l'animation du path
+            // - Autres leçons : leçon précédente complétée ET XP précédent collecté
             const isActive = !completed && (
               (index === 0 && firstLessonActivated) || // Première leçon : après animation path
-              (index > 0 && isLessonCompleted(lessons[index - 1]?.id)) // Autres : logique normale
+              (index > 0 && isLessonCompleted(lessons[index - 1]?.id) && isPreviousXPCollected) // Autres : leçon précédente + XP collecté
             );
 
             return (
@@ -182,12 +219,56 @@ const LessonList = () => {
             );
           })}
 
+          {/* XP Nodes entre les leçons */}
+          {lessons.map((lesson, index) => {
+            // Pas de nœud XP après la dernière leçon
+            if (index >= lessons.length - 1) return null;
+
+            // Calculer le nodeId global avec l'offset du module
+            const xpOffset = MODULE_XP_OFFSETS[moduleId] || 0;
+            const nodeId = `xp_${xpOffset + index + 1}`;
+
+            // Le nœud est débloqué si la leçon précédente est complétée
+            const isLocked = !isLessonCompleted(lesson.id);
+
+            // Le nœud est collecté si dans progress.xpNodesCollected
+            const isCollected = progress?.xpNodesCollected?.[nodeId] || false;
+
+            console.log(`🔵 Nœud ${nodeId}:`, {
+              lessonId: lesson.id,
+              lessonCompleted: isLessonCompleted(lesson.id),
+              isLocked,
+              isCollected,
+              rendered: !isLocked && !isCollected ? '✅ OUI' : '❌ NON'
+            });
+
+            // Ne rendre que les nœuds déverrouillés ET non collectés
+            // Les nœuds verrouillés (gris) ne s'affichent pas
+            if (isLocked || isCollected) return null;
+
+            const { x, y } = calculateXPNodePosition(index);
+
+            return (
+              <PathXPNode
+                key={nodeId}
+                nodeId={nodeId}
+                x={x}
+                y={y}
+                xpAmount={30}
+                isLocked={false} // Toujours unlocked si rendu
+                isCollected={false} // Toujours non collecté si rendu
+                onClick={() => handleXPNodeClick(nodeId)}
+              />
+            );
+          })}
+
           {/* Boss Fight */}
           <BossFight
             module={moduleData}
             x={calculateBossPosition(lessons.length).x}
             y={calculateBossPosition(lessons.length).y}
             unlocked={bossUnlocked}
+            defeated={bossDefeated}
             completedLessons={completedLessonsCount}
             totalLessons={lessons.length}
             onClick={handleBossClick}

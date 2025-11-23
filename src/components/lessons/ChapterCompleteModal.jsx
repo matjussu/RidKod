@@ -1,12 +1,9 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const ChapterCompleteModal = ({ chapterTitle, xpEarned, onClose }) => {
-  const navigate = useNavigate();
-
   const handleContinue = () => {
+    // onClose gère déjà la navigation vers LessonList
     onClose();
-    navigate(-1); // Retour à la liste des chapitres
   };
 
   return (

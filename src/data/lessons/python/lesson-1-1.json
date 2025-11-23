@@ -50,19 +50,24 @@
       "correctAnswer": 1,
       "explanation": "Regardez bien : le deuxième `print` est commenté (`#`). Il ne s'exécute pas. Le code change la variable `message` à \"Succès\" puis à \"Terminé\", mais ne l'affiche jamais. Seul le premier \"Erreur\" est visible.",
       "highlightedLines": [2, 5],
-      "xpGain": 10
+      "xpGain": 15
     },
     {
       "id": "py_les_1_1_ex2",
       "type": "predict_output",
-      "inputType": "free_input",
-      "question": "Qu'est-ce qui s'affiche en dernier ?",
+      "inputType": "options",
+      "question": "Qu'est ce que cela va afficher ?",
       "code": "prix = 100\nprix = 200\nprint(prix)\nprix = 300",
-      "predefinedAnswers": ["100", "200", "300", "400"],
-      "correctAnswer": "200",
+      "options": [
+        "100", 
+        "200", 
+        "300",
+        "400"
+      ],
+      "correctAnswer": 1,
       "explanation": "L'ordinateur lit ligne par ligne. Au moment où il rencontre `print(prix)` (ligne 3), la variable `prix` vaut 200. Le changement à 300 arrive *après* l'affichage, c'est trop tard pour être vu.",
       "highlightedLines": [3],
-      "xpGain": 10
+      "xpGain": 15
     }
   ]
 }

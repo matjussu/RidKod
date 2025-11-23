@@ -50,16 +50,16 @@
       "correctAnswer": 1,
       "explanation": "- Tour 1: batterie 10 (ok), devient 5.\n- Tour 2: batterie 5 (ok), devient 0.\n- Tour 3: batterie 0 (STOP).",
       "highlightedLines": [2, 3, 4],
-      "xpGain": 10
+      "xpGain": 15
     },
     {
       "id": "py_les_1_5_ex2",
       "type": "find_error",
       "inputType": "clickable_lines",
-      "question": "Ce code a un bug grave (Boucle Infinie). Cliquez sur la ligne du commentaire qui indique où ajouter du code pour éviter la boucle infinie.",
-      "code": "progression = 0\nwhile progression < 100:\n    print(\"Chargement...\")\n    # Il manque quelque chose ici !",
+      "question": "Ce code a un bug grave. Clique sur la ligne problématique.",
+      "code": "progression = 0\nwhile progression < 100:\n    progression = progression +0\n    print(\"Chargement...\")\n",
       "correctAnswer": 3,
-      "explanation": "La variable `progression` reste à 0 pour l'éternité. La condition `0 < 100` sera toujours vraie. Il manque une ligne comme `progression = progression + 10` pour avancer vers la sortie.",
+      "explanation": "La variable `progression` reste à 0 pour l'éternité. La condition `0 < 100` sera toujours vraie. Il faudrait par exemple `progression = progression + 10` pour avancer vers la sortie.",
       "highlightedLines": [3],
       "xpGain": 15
     }

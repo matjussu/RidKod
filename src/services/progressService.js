@@ -95,6 +95,8 @@ export const initializeProgress = async (userId) => {
       completedLevels: [],           // Aucun niveau complété
       levelStats: {},                // Pas de stats de niveau encore
       lessonProgress: {},            // Progression des leçons (vide au départ)
+      xpNodesCollected: {},          // Nœuds XP collectés (ex: { "xp_1": true, "xp_2": false })
+      bossCompleted: {},             // Boss complétés (ex: { "py_mod_001": { completed: true, errors: 1 } })
       streak: {
         current: 0,
         longest: 0,
@@ -777,6 +779,9 @@ export const getLocalProgress = () => {
         currentLevel: 1,
         completedLevels: [],
         levelStats: {},
+        lessonProgress: {},
+        xpNodesCollected: {},
+        bossCompleted: {},
         streak: { current: 0, longest: 0 },
         stats: { totalExercises: 0, correctAnswers: 0, incorrectAnswers: 0 },
         dailyActivity: {}
@@ -791,6 +796,9 @@ export const getLocalProgress = () => {
       currentLevel: 1,
       completedLevels: [],
       levelStats: {},
+      lessonProgress: {},
+      xpNodesCollected: {},
+      bossCompleted: {},
       streak: { current: 0, longest: 0 },
       stats: { totalExercises: 0, correctAnswers: 0, incorrectAnswers: 0 },
       dailyActivity: {}

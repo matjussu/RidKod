@@ -1,0 +1,107 @@
+{
+  "bossId": "boss_py_mod_001",
+  "moduleId": "py_mod_001",
+  "title": "Boss Final - Module 1",
+  "subtitle": "Prédire ce que Fait le Code",
+  "description": "7 questions pour tester ta maîtrise du module 1. Maximum 2 erreurs autorisées !",
+  "maxErrors": 2,
+  "xpReward": 100,
+  "questions": [
+    {
+      "id": "boss_1_q1",
+      "lessonRef": "py_les_1_1",
+      "type": "predict_output",
+      "question": "Quelle est la valeur finale de `resultat` ?",
+      "code": "x = 5\ny = 10\nz = x + y\nx = z - y\nresultat = x + z",
+      "inputType": "free_input",
+      "keyboardType": "numeric",
+      "correctAnswer": "20",
+      "explanation": "Le code s'exécute ligne par ligne :\n1. `x = 5` → x vaut 5\n2. `y = 10` → y vaut 10\n3. `z = x + y` → z vaut 15\n4. `x = z - y` → x vaut 5 (15 - 10)\n5. `resultat = x + z` → resultat vaut 20 (5 + 15)",
+      "xpGain": 15,
+      "tags": ["execution", "variables", "lecture_haut_bas"]
+    },
+    {
+      "id": "boss_1_q2",
+      "lessonRef": "py_les_1_2",
+      "type": "predict_output",
+      "question": "Que renvoie cette ligne complexe ?",
+      "code": "resultat = str(len([1, 2, 3]) * 2) + str(10 // 3)",
+      "inputType": "options",
+      "options": ["63", "6.03", "33", "603"],
+      "correctAnswer": 0,
+      "explanation": "Décomposons l'expression :\n1. `len([1, 2, 3])` → 3 (longueur de la liste)\n2. `len([1, 2, 3]) * 2` → 6\n3. `10 // 3` → 3 (division entière)\n4. `str(6)` → \"6\"\n5. `str(3)` → \"3\"\n6. `\"6\" + \"3\"` → \"63\" (concaténation de strings)",
+      "xpGain": 15,
+      "tags": ["decomposition", "expressions_complexes", "types"]
+    },
+    {
+      "id": "boss_1_q3",
+      "lessonRef": "py_les_1_3",
+      "type": "predict_output",
+      "question": "Quelle valeur sera affichée ?",
+      "code": "age = 17\nif age >= 18:\n    message = \"majeur\"\nelif age >= 16:\n    message = \"presque majeur\"\nelse:\n    message = \"mineur\"\n\nprint(message)",
+      "inputType": "options",
+      "options": ["majeur", "presque majeur", "mineur", "Erreur"],
+      "correctAnswer": 1,
+      "explanation": "Le code teste les conditions dans l'ordre :\n1. `age >= 18` → False (17 < 18)\n2. `age >= 16` → True (17 >= 16)\n\nDonc `message = \"presque majeur\"` est exécuté, et c'est ce qui sera affiché.",
+      "xpGain": 15,
+      "tags": ["conditions", "if_elif_else", "comparaisons"]
+    },
+    {
+      "id": "boss_1_q4",
+      "lessonRef": "py_les_1_4",
+      "type": "predict_output",
+      "question": "Combien de fois \"*\" sera affiché ?",
+      "code": "for i in range(1, 8, 2):\n    print(\"*\")",
+      "inputType": "free_input",
+      "keyboardType": "numeric",
+      "correctAnswer": "4",
+      "explanation": "`range(1, 8, 2)` génère : 1, 3, 5, 7\nCe sont 4 valeurs, donc la boucle s'exécute 4 fois.\nLe print affiche \"*\" 4 fois au total.",
+      "xpGain": 15,
+      "tags": ["boucles", "range", "for_loop"]
+    },
+    {
+      "id": "boss_1_q5",
+      "lessonRef": "py_les_1_5",
+      "type": "predict_output",
+      "question": "Quelle est la valeur finale de `compteur` ?",
+      "code": "compteur = 0\ni = 5\nwhile i > 0:\n    compteur += i\n    i -= 2",
+      "inputType": "free_input",
+      "keyboardType": "numeric",
+      "correctAnswer": "9",
+      "explanation": "La boucle while s'exécute tant que `i > 0` :\n1. Itération 1 : compteur = 0 + 5 = 5, i = 3\n2. Itération 2 : compteur = 5 + 3 = 8, i = 1\n3. Itération 3 : compteur = 8 + 1 = 9, i = -1\n4. i = -1, condition False → arrêt\n\nValeur finale : 9",
+      "xpGain": 15,
+      "tags": ["while", "boucles", "incrementation"]
+    },
+    {
+      "id": "boss_1_q6",
+      "lessonRef": "py_les_1_6",
+      "type": "predict_output",
+      "question": "Que sera affiché à l'écran ?",
+      "code": "for num in [1, 2, 3, 4, 5]:\n    if num == 3:\n        continue\n    if num == 5:\n        break\n    print(num)",
+      "inputType": "options",
+      "options": ["1 2", "1 2 3 4", "1 2 4", "1 2 3"],
+      "correctAnswer": 2,
+      "explanation": "La boucle parcourt la liste :\n1. num = 1 → affiché\n2. num = 2 → affiché\n3. num = 3 → `continue` → skip le print\n4. num = 4 → affiché\n5. num = 5 → `break` → arrêt de la boucle\n\nAffichage final : 1 2 4",
+      "xpGain": 15,
+      "tags": ["break", "continue", "controle_flux"]
+    },
+    {
+      "id": "boss_1_q7",
+      "lessonRef": "py_les_1_7",
+      "type": "predict_output",
+      "question": "Que sera affiché dans le cas d'une erreur de division par zéro ?",
+      "code": "try:\n    resultat = 10 / 0\n    print(\"Succès\")\nexcept ZeroDivisionError:\n    print(\"Division impossible\")\nexcept ValueError:\n    print(\"Valeur incorrecte\")\nfinally:\n    print(\"Fin\")",
+      "inputType": "options",
+      "options": [
+        "Succès Fin",
+        "Division impossible Fin",
+        "Valeur incorrecte Fin",
+        "Division impossible"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Le code génère une `ZeroDivisionError` :\n1. `10 / 0` → erreur\n2. Le bloc `except ZeroDivisionError` est exécuté → \"Division impossible\"\n3. Le bloc `finally` est TOUJOURS exécuté → \"Fin\"\n\nAffichage : \"Division impossible\" puis \"Fin\"",
+      "xpGain": 15,
+      "tags": ["exceptions", "try_except", "finally"]
+    }
+  ]
+}

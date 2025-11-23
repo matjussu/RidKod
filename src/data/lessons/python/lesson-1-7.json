@@ -39,7 +39,7 @@
       "id": "py_les_1_7_ex1",
       "type": "predict_output",
       "inputType": "options",
-      "question": "Et si tout se passe bien ?",
+      "question": "Qu'affiche ce code ?",
       "code": "try:\n    print(\"A\")\nexcept:\n    print(\"B\")\nprint(\"C\")",
       "options": [
         "A\nB\nC",
@@ -50,16 +50,16 @@
       "correctAnswer": 1,
       "explanation": "Il n'y a aucune erreur dans le `try`. Donc le code affiche \"A\", ignore totalement le bloc `except` (le plan B n'est pas nécessaire), puis affiche \"C\".",
       "highlightedLines": [2, 5],
-      "xpGain": 10
+      "xpGain": 15
     },
     {
       "id": "py_les_1_7_ex2",
-      "type": "predict_output",
-      "inputType": "free_input",
-      "question": "Simulation de perte de connexion.",
-      "code": "status = \"En ligne\"\ntry:\n    # Simulation erreur connexion\n    x = 1 / 0 \n    status = \"Connecté\"\nexcept:\n    status = \"Hors ligne\"\n\nprint(status)",
+      "type": "find error",
+      "inputType": "clickable_lines",
+      "question": "Lequel des print va s'afficher ?",
+      "code": "status = \"En ligne\"\ntry:\n    x = 1 / 0 \n    status = \"Connecté\"\n    print(status)\nexcept:\n    status = \"Hors ligne\"\n    print(status)\n",
       "predefinedAnswers": ["En ligne", "Connecté", "Hors ligne", "Erreur"],
-      "correctAnswer": "Hors ligne",
+      "correctAnswer": 8,
       "explanation": "L'erreur survient avant que `status` ne devienne \"Connecté\". On saute dans l'except, où `status` devient \"Hors ligne\".",
       "highlightedLines": [4, 7],
       "xpGain": 15

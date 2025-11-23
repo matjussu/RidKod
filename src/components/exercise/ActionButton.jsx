@@ -1,15 +1,15 @@
 import React from "react";
 
-const ActionButton = ({ isSubmitted, isCorrect, isDisabled, onClick }) => {
+const ActionButton = ({ isSubmitted, isCorrect, isDisabled, onClick, continueText = "Continuer" }) => {
   let className = "action-button ";
-  
+
   if (!isSubmitted) {
     className += isDisabled ? "disabled" : "enabled";
   } else {
     className += isCorrect ? "enabled" : "incorrect-state";
   }
 
-  const buttonText = isSubmitted ? "Continuer" : "Valider";
+  const buttonText = isSubmitted ? continueText : "Valider";
 
   return (
     <button

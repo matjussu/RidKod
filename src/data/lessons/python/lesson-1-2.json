@@ -50,7 +50,7 @@
       "correctAnswer": 2,
       "explanation": "L'ordre est : 1. Scan (avant l'appel) -> 2. ALERTE (pendant le saut) -> 3. Clean (après le retour).",
       "highlightedLines": [4, 2, 5, 6],
-      "xpGain": 10
+      "xpGain": 15
     },
     {
       "id": "py_les_1_2_ex2",
