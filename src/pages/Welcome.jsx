@@ -13,15 +13,21 @@ const Welcome = () => {
     return !localStorage.getItem('hasSeenWelcomeAnimation');
   });
 
+  // Transition state for smooth fade
+  const [isTransitioning, setIsTransitioning] = useState(true);
+
   const handleAnimationComplete = () => {
     localStorage.setItem('hasSeenWelcomeAnimation', 'true');
-    setShowAnimation(false);
-  };
 
-  // If animation should be shown, display it
-  if (showAnimation) {
-    return <WelcomeAnimation onComplete={handleAnimationComplete} />;
-  }
+    // Trigger smooth transition
+    setIsTransitioning(true);
+
+    // Delay hiding animation to allow fade out
+    setTimeout(() => {
+      setShowAnimation(false);
+      // Keep isTransitioning true for Welcome fade in animations
+    }, 100);
+  };
 
   const handleLogin = () => {
     navigate('/login');
@@ -37,8 +43,16 @@ const Welcome = () => {
   };
 
   return (
-    <div className="welcome-container">
-      <style>{`
+    <div className="welcome-wrapper">
+      {/* Show animation on first visit */}
+      {showAnimation && (
+        <WelcomeAnimation onComplete={handleAnimationComplete} />
+      )}
+
+      {/* Welcome content - fades in after animation */}
+      {!showAnimation && (
+        <div className={`welcome-container ${isTransitioning ? 'transitioning' : ''}`}>
+          <style>{`
         /* Reset global */
         * {
           margin: 0;
@@ -57,6 +71,13 @@ const Welcome = () => {
           -webkit-text-size-adjust: 100%;
           -ms-text-size-adjust: 100%;
           touch-action: manipulation;
+        }
+
+        /* Wrapper with persistent background for smooth transition */
+        .welcome-wrapper {
+          position: fixed;
+          inset: 0;
+          background: #1A1919;
         }
 
         .welcome-container {
@@ -80,12 +101,23 @@ const Welcome = () => {
           box-sizing: border-box;
           overflow-x: hidden;
           opacity: 0;
-          animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+          transform: translateY(20px);
         }
 
-        @keyframes fadeIn {
-          0% { opacity: 0; transform: translateY(20px); }
-          100% { opacity: 1; transform: translateY(0); }
+        /* Smooth fade in animation when transitioning from logo */
+        .welcome-container.transitioning {
+          animation: smoothFadeIn 800ms cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        @keyframes smoothFadeIn {
+          0% {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
 
         /* Top Section */
@@ -96,14 +128,14 @@ const Welcome = () => {
           width: 100%;
         }
 
-        /* Logo container */
+        /* Logo container - Stagger delay: 0ms */
         .welcome-logo-container {
           width: 280px;
           height: auto;
           margin-bottom: 40px;
           opacity: 0;
           transform: scale(0.9);
-          animation: scaleIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+          animation: scaleIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0ms forwards;
         }
 
         @keyframes scaleIn {
@@ -115,14 +147,6 @@ const Welcome = () => {
           width: 100%;
           height: auto;
           object-fit: contain;
-        }
-
-        /* Welcome Text */
-        .welcome-text {
-          text-align: center;
-          margin-bottom: 60px;
-          opacity: 0;
-          animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
         }
 
         @keyframes slideUp {
@@ -154,14 +178,14 @@ const Welcome = () => {
           margin: 0 auto;
         }
 
-        /* Buttons Section */
+        /* Buttons Section - Stagger delay: 300ms */
         .welcome-buttons {
           width: 100%;
           display: flex;
           flex-direction: column;
           gap: 16px;
           opacity: 0;
-          animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s forwards;
+          animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 300ms forwards;
         }
 
         /* Primary Button (Signup) */
@@ -227,7 +251,7 @@ const Welcome = () => {
           transform: scale(0.98);
         }
 
-        /* Skip Button */
+        /* Skip Button - Stagger delay: 450ms */
         .welcome-skip {
           background: none;
           border: none;
@@ -240,7 +264,12 @@ const Welcome = () => {
           text-align: center;
           transition: all 0.2s ease;
           opacity: 0;
-          animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.8s forwards;
+          animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 450ms forwards;
+        }
+
+        @keyframes fadeIn {
+          0% { opacity: 0; }
+          100% { opacity: 1; }
         }
 
         .welcome-skip:hover {
@@ -323,6 +352,18 @@ const Welcome = () => {
             min-height: -webkit-fill-available;
           }
         }
+
+        /* Accessibility: Reduced Motion Support */
+        @media (prefers-reduced-motion: reduce) {
+          .welcome-container,
+          .welcome-logo-container,
+          .welcome-text,
+          .welcome-buttons,
+          .welcome-skip {
+            animation-duration: 0.01ms !important;
+            animation-delay: 0ms !important;
+          }
+        }
       `}</style>
 
       {/* Top Section */}
@@ -334,11 +375,6 @@ const Welcome = () => {
 
         {/* Welcome Text */}
         <div className="welcome-text">
-          <h1 className="welcome-title">
-            <span className="welcome-title-bracket">{"<"}</span>
-            Bienvenue
-            <span className="welcome-title-bracket">{"/>"}</span>
-          </h1>
           <p className="welcome-subtitle">
             Apprends à lire du code comme un pro. Sauvegarde ta progression et accède à ton profil partout.
           </p>
@@ -359,6 +395,8 @@ const Welcome = () => {
           Continuer sans compte
         </button>
       </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useProgress } from '../context/ProgressContext';
 import DifficultyCard from '../components/difficulty/DifficultyCard';
 import useHaptic from '../hooks/useHaptic';
 import '../styles/Layout.css';
@@ -9,7 +10,25 @@ const Difficulty = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { triggerLight, triggerSuccess } = useHaptic();
+  const { progress } = useProgress();
   const [selectedLanguage, setSelectedLanguage] = useState('PYTHON');
+
+  // Récupérer la progression
+  const currentProgress = progress || {};
+
+  // Fonction pour calculer le niveau d'exercice actuel pour une difficulté donnée
+  const getCurrentExerciseLevel = (difficultyValue) => {
+    const completedLevels = currentProgress.completedLevels || [];
+
+    // Filtrer les niveaux complétés pour cette difficulté (ex: "1_1", "1_2" pour difficulty=1)
+    const completedForDifficulty = completedLevels.filter(level => {
+      const levelString = String(level);
+      return levelString.startsWith(`${difficultyValue}_`);
+    });
+
+    // Le prochain niveau = nombre de niveaux complétés + 1
+    return completedForDifficulty.length + 1;
+  };
 
   // Récupérer le langage sélectionné depuis la navigation
   useEffect(() => {
@@ -113,6 +132,7 @@ const Difficulty = () => {
             xpInfo={diff.xpInfo}
             backgroundColor={diff.backgroundColor}
             onClick={() => handleDifficultySelect(diff.difficultyValue)}
+            userLevel={getCurrentExerciseLevel(diff.difficultyValue)}
           />
         ))}
       </div>

@@ -4,7 +4,8 @@ const DifficultyCard = ({
   difficulty,
   xpInfo,
   backgroundColor,
-  onClick
+  onClick,
+  userLevel
 }) => {
   return (
     <button
@@ -15,8 +16,16 @@ const DifficultyCard = ({
       }}
     >
       <div className="difficulty-card-content">
+        {/* Titre difficulté */}
         <span className="difficulty-title">{difficulty}</span>
-        <span className="xp-badge">{xpInfo}</span>
+
+        {/* Container badges centrés sous le titre */}
+        <div className="badges-container">
+          <div className="user-level-badge">
+            Niveau {userLevel}
+          </div>
+          <span className="xp-badge">{xpInfo}</span>
+        </div>
       </div>
 
       <style>{`
@@ -82,13 +91,15 @@ const DifficultyCard = ({
 
         .difficulty-card-content {
           display: flex;
+          flex-direction: column;
           align-items: center;
-          justify-content: space-between;
+          justify-content: center;
           height: 100%;
-          width: 110%;
-          padding: 0 24px;
+          width: 100%;
+          padding: 16px 24px;
           position: relative;
           z-index: 1;
+          gap: 16px;
         }
 
         .difficulty-title {
@@ -110,6 +121,16 @@ const DifficultyCard = ({
           transform: skewX(-5deg) scale(1.05);
         }
 
+        /* Container badges sous le titre */
+        .badges-container {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          width: 100%;
+        }
+
         .xp-badge {
           background: rgba(0, 0, 0, 0.3);
           backdrop-filter: blur(10px);
@@ -125,6 +146,29 @@ const DifficultyCard = ({
           text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
           white-space: nowrap;
           transform: skewX(0deg);
+        }
+
+        /* User level badge (centré sous titre) */
+        .user-level-badge {
+          background: rgba(0, 0, 0, 0.4);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          color: rgba(255, 255, 255, 0.85);
+          font-size: 11px;
+          font-weight: 600;
+          font-style: italic;
+          padding: 6px 10px;
+          border-radius: 8px;
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+          white-space: nowrap;
+          transition: all 0.3s ease;
+        }
+
+        .difficulty-card:hover .user-level-badge {
+          background: rgba(0, 0, 0, 0.5);
+          border-color: rgba(255, 255, 255, 0.25);
         }
 
         /* Responsive adjustments */
@@ -148,6 +192,12 @@ const DifficultyCard = ({
             padding: 6px 12px;
             border-radius: 10px;
           }
+
+          .user-level-badge {
+            font-size: 10px;
+            padding: 5px 9px;
+            border-radius: 7px;
+          }
         }
 
         @media (max-width: 320px) {
@@ -169,6 +219,12 @@ const DifficultyCard = ({
             font-size: 10px;
             padding: 5px 10px;
             border-radius: 8px;
+          }
+
+          .user-level-badge {
+            font-size: 9px;
+            padding: 4px 8px;
+            border-radius: 6px;
           }
         }
 
@@ -192,6 +248,12 @@ const DifficultyCard = ({
             font-size: 10px;
             padding: 5px 10px;
             border-radius: 8px;
+          }
+
+          .user-level-badge {
+            font-size: 9px;
+            padding: 4px 8px;
+            border-radius: 6px;
           }
         }
       `}</style>

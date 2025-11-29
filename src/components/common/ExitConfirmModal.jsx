@@ -19,13 +19,13 @@ const ExitConfirmModal = ({ isVisible, onContinue, onExit }) => {
           {/* Title */}
           <h3 className="modal-title">
             <span className="title-brace">{"{"}</span>
-            Quitter l'entraînement ?
+            Quitter le niveau ?
             <span className="title-brace">{"}"}</span>
           </h3>
 
           {/* Message */}
           <p className="modal-message">
-            Ton progression sera sauvegardée mais tu vas perdre ta série actuelle.
+            Seul les niveaux terminés seront sauvegardés.
           </p>
 
           {/* Action Buttons */}
