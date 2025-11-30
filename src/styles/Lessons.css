@@ -549,7 +549,7 @@ LessonContent========================================*/
 /* Container principal LessonContent */
 .lesson-content-container {
   min-height: 100vh;
-  min-height: 100dvh;
+  min-height: -webkit-fill-available;
   /* Dynamic viewport height pour mobile */
   background: #1A1919;
   color: #FFFFFF;
@@ -559,7 +559,6 @@ LessonContent========================================*/
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-  height: 100%;
 }
 
 /* Sticky Progress Bar */

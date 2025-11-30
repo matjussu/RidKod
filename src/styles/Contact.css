@@ -6,8 +6,8 @@
 /* Container */
 .contact-container {
   min-height: 100vh;
-  height: 100vh;
-  background: #0d0d0d;
+  min-height: -webkit-fill-available;
+  background: #1A1919;
   padding: 20px;
   display: flex;
   flex-direction: column;
