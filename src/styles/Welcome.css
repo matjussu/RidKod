@@ -1,0 +1,591 @@
+/* ========================================
+   WELCOME.CSS - Page d'accueil/onboarding
+   ======================================== */
+
+/* ===== 1. CSS VARIABLES ===== */
+:root {
+  --welcome-bg: #1A1919;
+  --welcome-text-primary: #FFFFFF;
+  --welcome-text-secondary: #8E8E93;
+
+  /* Code blocks */
+  --code-bg: #000000;
+  --code-border-radius: 12px;
+  --code-comment-color: #6A9955;
+
+  /* Buttons */
+  --button-green-start: #30D158;
+  --button-green-end: #088201;
+  --button-gray-start: #3A3A3C;
+  --button-gray-end: #2C2C2E;
+  --button-radius: 16px;
+  --button-height: 56px;
+
+  /* Glow effects */
+  --glow-green: rgba(48, 209, 88, 0.4);
+  --glow-orange: rgba(255, 149, 0, 0.25);
+
+  /* Spacing */
+  --space-logo-bottom: 40px;
+  --space-tagline-bottom: 32px;
+  --space-snippet-bottom: 48px;
+  --space-button-gap: 16px;
+
+  /* Animation */
+  --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ===== 2. GLOBAL RESET (scoped) ===== */
+.welcome-wrapper * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ===== 3. WRAPPER & CONTAINER ===== */
+
+/* Wrapper with persistent background for smooth transition */
+.welcome-wrapper {
+  position: fixed;
+  inset: 0;
+  background: var(--welcome-bg);
+}
+
+.welcome-container {
+  height: 100vh;
+  height: 100%;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  background: var(--welcome-bg);
+  color: var(--welcome-text-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: max(env(safe-area-inset-top), 60px);
+  padding-left: max(20px, env(safe-area-inset-left));
+  padding-right: max(20px, env(safe-area-inset-right));
+  padding-bottom: max(env(safe-area-inset-bottom), 40px);
+  max-width: min(428px, 100vw);
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Smooth fade in animation when transitioning from logo animation */
+.welcome-container.transitioning {
+  animation: smoothFadeIn 800ms var(--ease-smooth) forwards;
+}
+
+/* Top Section (Logo + Text) */
+.welcome-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* ===== 4. ANIMATIONS (@keyframes) ===== */
+
+@keyframes smoothFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* ===== 5. LOGO ===== */
+
+.welcome-logo-container {
+  width: 280px;
+  height: auto;
+  margin-bottom: var(--space-logo-bottom);
+  opacity: 0;
+  transform: scale(0.9);
+  animation: scaleIn 0.8s var(--ease-smooth) 200ms forwards;
+}
+
+.welcome-logo-container img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* ===== 6. CODE TAGLINE (NEW) ===== */
+
+.code-tagline-container {
+  width: 100%;
+  max-width: 360px;
+  margin-bottom: var(--space-tagline-bottom);
+  opacity: 0;
+  animation: slideUp 0.8s var(--ease-smooth) 350ms forwards;
+}
+
+.code-tagline-block {
+  background: var(--code-bg);
+  border-radius: var(--code-border-radius);
+  padding: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.code-tagline-block pre {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  overflow: hidden !important;
+}
+
+.code-tagline-block code {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace !important;
+  font-size: 13px !important;
+  line-height: 1.6 !important;
+  font-weight: 700 !important;
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
+}
+
+/* ===== 7. CODE SNIPPET (NEW) ===== */
+
+.code-snippet-container {
+  width: 100%;
+  max-width: 360px;
+  margin-bottom: var(--space-snippet-bottom);
+  min-height: 200px; /* Reserve space to prevent layout shift */
+  opacity: 0;
+  animation: slideUp 0.8s var(--ease-smooth) 500ms forwards;
+}
+
+.code-snippet-block {
+  background: var(--code-bg);
+  border-radius: var(--code-border-radius);
+  padding: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  position: relative;
+}
+
+.code-snippet-block pre {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  overflow: hidden !important;
+}
+
+.code-snippet-block code {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace !important;
+  font-size: 12px !important;
+  line-height: 1.6 !important;
+  font-weight: 700 !important;
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
+}
+
+/* Highlighted line effects */
+.code-snippet-line {
+  display: block;
+  padding: 2px 0;
+  border-radius: 4px;
+  transition: all 0.3s var(--ease-smooth);
+}
+
+.code-snippet-line.highlight-green {
+  background: rgba(48, 209, 88, 0.1);
+  box-shadow: 0 0 10px rgba(48, 209, 88, 0.3);
+  padding: 2px 8px;
+  margin: 0 -8px;
+}
+
+.code-snippet-line.highlight-orange {
+  background: rgba(255, 149, 0, 0.1);
+  box-shadow: 0 0 10px rgba(255, 149, 0, 0.3);
+  padding: 2px 8px;
+  margin: 0 -8px;
+}
+
+/* Animation stages */
+.snippet-stage-0 .code-snippet-line {
+  opacity: 0;
+  transform: translateY(5px);
+}
+
+.snippet-stage-1 .code-snippet-line:nth-child(-n+4) {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s var(--ease-smooth), transform 0.5s var(--ease-smooth);
+}
+
+.snippet-stage-2 .code-snippet-line:nth-child(-n+7) {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s var(--ease-smooth), transform 0.3s var(--ease-smooth);
+}
+
+.snippet-stage-3 .code-snippet-line {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s var(--ease-smooth), transform 0.3s var(--ease-smooth);
+}
+
+/* GPU optimization */
+.code-snippet-container,
+.code-tagline-container {
+  will-change: transform, opacity;
+}
+
+/* ===== 8. WELCOME TEXT (Legacy - à remplacer par code tagline) ===== */
+
+.welcome-text {
+  text-align: center;
+  margin-bottom: 60px;
+  opacity: 0;
+  animation: slideUp 0.8s var(--ease-smooth) 150ms forwards;
+}
+
+.welcome-title {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--welcome-text-primary);
+  margin: 0 0 16px 0;
+  line-height: 1.2;
+}
+
+.welcome-title-bracket {
+  color: #FF9500;
+  font-size: 30px;
+}
+
+.welcome-subtitle {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--welcome-text-secondary);
+  line-height: 1.5;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+/* ===== 9. BUTTONS ===== */
+
+.welcome-buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-button-gap);
+  opacity: 0;
+  animation: slideUp 0.8s var(--ease-smooth) 650ms forwards;
+}
+
+/* Primary Button (Signup) - Glassmorphism */
+.welcome-button-primary {
+  /* Glassmorphism effect */
+  background: linear-gradient(135deg,
+    rgba(48, 209, 88, 0.25) 0%,
+    rgba(8, 130, 1, 0.35) 100%
+  );
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(48, 209, 88, 0.4);
+
+  /* Multi-layer glow (subtil) */
+  box-shadow:
+    0 0 15px rgba(48, 209, 88, 0.15),
+    0 8px 32px rgba(48, 209, 88, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+  /* Layout */
+  border-radius: var(--button-radius);
+  width: 100%;
+  height: var(--button-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-smooth);
+
+  /* Typography */
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--welcome-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  /* Touch optimization */
+  position: relative;
+  overflow: hidden;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.welcome-button-primary:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 0 20px rgba(48, 209, 88, 0.25),
+    0 12px 48px rgba(48, 209, 88, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.welcome-button-primary:active {
+  transform: translateY(-2px) scale(0.98);
+}
+
+/* Fallback for browsers without backdrop-filter */
+@supports not (backdrop-filter: blur(20px)) {
+  .welcome-button-primary {
+    background: linear-gradient(135deg, var(--button-green-start) 0%, var(--button-green-end) 100%);
+  }
+}
+
+/* Secondary Button (Login) - Glassmorphism */
+.welcome-button-secondary {
+  /* Glassmorphism effect */
+  background: linear-gradient(135deg,
+    rgba(58, 58, 60, 0.5) 0%,
+    rgba(44, 44, 46, 0.6) 100%
+  );
+  backdrop-filter: blur(15px) saturate(150%);
+  -webkit-backdrop-filter: blur(15px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
+  /* Subtle orange glow */
+  box-shadow:
+    0 4px 20px rgba(255, 149, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+  /* Layout */
+  border-radius: var(--button-radius);
+  width: 100%;
+  height: var(--button-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-smooth);
+
+  /* Typography */
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--welcome-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  /* Touch optimization */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.welcome-button-secondary:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 6px 30px rgba(255, 149, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.welcome-button-secondary:active {
+  transform: translateY(-2px) scale(0.98);
+}
+
+/* Fallback for browsers without backdrop-filter */
+@supports not (backdrop-filter: blur(15px)) {
+  .welcome-button-secondary {
+    background: linear-gradient(135deg, var(--button-gray-start) 0%, var(--button-gray-end) 100%);
+  }
+}
+
+/* Skip Button */
+.welcome-skip {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 16px;
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--welcome-text-secondary);
+  text-align: center;
+  transition: all 0.2s ease;
+  opacity: 0;
+  animation: fadeIn 0.8s var(--ease-smooth) 800ms forwards;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.welcome-skip:hover {
+  color: var(--welcome-text-primary);
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.welcome-skip:active {
+  transform: scale(0.95);
+}
+
+/* ===== 10. RESPONSIVE ===== */
+
+/* iPhone SE (375px and below) */
+@media (max-width: 375px) {
+  .welcome-container {
+    padding-top: max(env(safe-area-inset-top), 50px);
+    padding-bottom: max(env(safe-area-inset-bottom), 30px);
+  }
+
+  .welcome-logo-container {
+    width: 240px;
+    margin-bottom: 30px;
+  }
+
+  .code-tagline-container,
+  .code-snippet-container {
+    max-width: 320px;
+  }
+
+  .code-tagline-block code,
+  .code-snippet-block code {
+    font-size: 13px !important;
+  }
+
+  .welcome-text {
+    margin-bottom: 50px;
+  }
+
+  .welcome-title {
+    font-size: 24px;
+  }
+
+  .welcome-title-bracket {
+    font-size: 26px;
+  }
+
+  .welcome-subtitle {
+    font-size: 14px;
+    max-width: 280px;
+  }
+
+  .welcome-button-primary,
+  .welcome-button-secondary {
+    height: 52px;
+    font-size: 15px;
+  }
+
+  .welcome-skip {
+    font-size: 13px;
+  }
+}
+
+/* iPhone SE 1st gen (320px) */
+@media (max-width: 320px) {
+  .welcome-logo-container {
+    width: 220px;
+    margin-bottom: 25px;
+  }
+
+  .code-tagline-container,
+  .code-snippet-container {
+    max-width: 280px;
+  }
+
+  .code-tagline-block code,
+  .code-snippet-block code {
+    font-size: 12px !important;
+  }
+
+  .welcome-title {
+    font-size: 22px;
+  }
+
+  .welcome-title-bracket {
+    font-size: 24px;
+  }
+
+  .welcome-subtitle {
+    font-size: 13px;
+  }
+
+  .welcome-button-primary,
+  .welcome-button-secondary {
+    height: 50px;
+    font-size: 14px;
+  }
+}
+
+/* ===== 11. BROWSER-SPECIFIC FIXES ===== */
+
+/* Fix Safari iOS height issue */
+@supports (-webkit-touch-callout: none) {
+  .welcome-container {
+    height: -webkit-fill-available;
+    min-height: -webkit-fill-available;
+  }
+}
+
+/* ===== 12. ACCESSIBILITY ===== */
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .welcome-container,
+  .welcome-logo-container,
+  .welcome-text,
+  .welcome-buttons,
+  .welcome-skip,
+  .code-tagline-container,
+  .code-snippet-container {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+  }
+
+  /* Show code snippet in final state immediately */
+  .code-snippet-line {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+}
+
+/* Focus styles for keyboard navigation */
+.welcome-button-primary:focus-visible,
+.welcome-button-secondary:focus-visible,
+.welcome-skip:focus-visible {
+  outline: 2px solid var(--button-green-start);
+  outline-offset: 4px;
+}

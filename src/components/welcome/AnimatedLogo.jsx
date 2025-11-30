@@ -87,7 +87,7 @@ const AnimatedLogo = ({ stage }) => {
   };
 
   const subtitleContainerStyle = {
-    marginTop: '1rem',
+    marginTop: '0.5rem',
     opacity: stage >= 4 ? 1 : 0,
     maxHeight: stage >= 4 ? '5rem' : 0,
     transform: stage >= 4 ? 'translateY(0)' : 'translateY(1rem)',
@@ -157,7 +157,7 @@ const AnimatedLogo = ({ stage }) => {
         {/* "ode" part - Appears at stage 3 */}
         <span style={{
           ...textPartStyle,
-          marginLeft: '-0.5rem'
+          marginLeft: '-0.25rem'
         }}>
           ode
         </span>

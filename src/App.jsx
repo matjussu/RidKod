@@ -19,6 +19,8 @@ import XPCollectLessons from './pages/lessons/XPCollectLessons';
 import BossFightContent from './pages/lessons/BossFightContent';
 import BossXPCollect from './pages/lessons/BossXPCollect';
 import LevelComplete from './pages/LevelComplete';
+import AIHome from './pages/ai/AIHome';
+import AIContent from './pages/ai/AIContent';
 
 // Composant pour gérer la route principale "/"
 const RootRoute = () => {
@@ -61,9 +63,13 @@ const App = () => {
           <Route path="/lessons/:language/:moduleId/boss" element={<BossFightContent />} />
           <Route path="/lessons/:language/:moduleId/boss-xp" element={<BossXPCollect />} />
 
+          {/* Routes AI Understanding */}
+          <Route path="/ai-understanding" element={<AIHome />} />
+          <Route path="/ai-understanding/:topicId" element={<AIContent />} />
+
           {/* Routes en développement */}
           <Route path="/challenges" element={<div style={{color: 'white', padding: '20px', textAlign: 'center'}}>Challenges - En cours de développement</div>} />
-          <Route path="/ai-understanding" element={<div style={{color: 'white', padding: '20px', textAlign: 'center'}}>Comprendre l'IA - En cours de développement</div>} />
+
 
           {/* Contact page */}
           <Route path="/contact" element={<Contact />} />

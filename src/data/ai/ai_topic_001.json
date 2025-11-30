@@ -1,0 +1,201 @@
+{
+  "topicId": "ai_topic_001",
+  "title": "Script d'Automatisation Python",
+  "subtitle": "Comment l'IA crée un script pour renommer automatiquement tes fichiers",
+  "sections": [
+    {
+      "id": "section_1",
+      "type": "text",
+      "title": "📝 Introduction",
+      "content": "Imagine : tu as 200 photos dans un dossier, et tu veux toutes les renommer avec la date du jour.\n\nPlutôt que de le faire à la main pendant 2 heures, tu demandes à ChatGPT :\n\n**\"Écris-moi un script Python qui renomme tous les fichiers d'un dossier en ajoutant la date\"**\n\nEn 5 secondes, ChatGPT te génère un script de 30 lignes. Mais... **que fait vraiment ce code ?**\n\nC'est ce qu'on va découvrir ensemble !"
+    },
+    {
+      "id": "section_2",
+      "type": "prompt_example",
+      "prompt": "Écris-moi un script Python qui renomme automatiquement tous les fichiers .jpg d'un dossier en ajoutant la date du jour au début du nom",
+      "aiModel": "ChatGPT 4",
+      "tip": "C'est un prompt typique qu'on donne à ChatGPT pour automatiser une tâche répétitive"
+    },
+    {
+      "id": "section_3",
+      "type": "code_example",
+      "title": "🤖 Code Généré par ChatGPT",
+      "code": "import os\nfrom datetime import datetime\n\n# Chemin du dossier\nfolder_path = './photos'\n\n# Date du jour au format YYYY-MM-DD\ntoday = datetime.now().strftime('%Y-%m-%d')\n\n# Parcourir tous les fichiers du dossier\nfor filename in os.listdir(folder_path):\n    if filename.endswith('.jpg'):\n        # Créer le nouveau nom\n        new_name = f\"{today}_{filename}\"\n        \n        # Chemin complet ancien et nouveau\n        old_path = os.path.join(folder_path, filename)\n        new_path = os.path.join(folder_path, new_name)\n        \n        # Renommer le fichier\n        os.rename(old_path, new_path)\n        print(f\"Renommé : {filename} → {new_name}\")",
+      "language": "python",
+      "highlight": {
+        "style": "info",
+        "content": "Ce code semble simple, mais il fait beaucoup de choses ! On va décortiquer chaque ligne."
+      }
+    },
+    {
+      "id": "section_4",
+      "type": "text",
+      "title": "🔍 Décortiquons le Code",
+      "content": "Le script fait **4 grandes étapes** :\n\n1. **Importer les outils** (lignes 1-2)\n2. **Préparer les informations** (lignes 5-8)\n3. **Parcourir les fichiers** (ligne 11)\n4. **Renommer chaque fichier** (lignes 12-22)\n\nOn va voir chaque étape en détail."
+    },
+    {
+      "id": "section_5",
+      "type": "text",
+      "title": "📦 Étape 1 : Importer les Outils",
+      "content": "```python\nimport os\nfrom datetime import datetime\n```\n\n**import os** - Le module `os` permet d'interagir avec le système d'exploitation (Operating System). Ici, on l'utilise pour :\n- Lister les fichiers d'un dossier avec `os.listdir()`\n- Renommer les fichiers avec `os.rename()`\n- Construire les chemins de fichiers avec `os.path.join()`\n\n**from datetime import datetime** - Le module `datetime` permet de manipuler les dates. On l'utilise pour :\n- Obtenir la date du jour avec `datetime.now()`\n- Formater la date en texte avec `.strftime()`"
+    },
+    {
+      "id": "section_6",
+      "type": "exercise",
+      "exerciseId": "auto_ex_001"
+    },
+    {
+      "id": "section_7",
+      "type": "text",
+      "title": "⚙️ Étape 2 : Préparer les Informations",
+      "content": "```python\nfolder_path = './photos'\ntoday = datetime.now().strftime('%Y-%m-%d')\n```\n\n**folder_path = './photos'** - On crée une variable qui contient le chemin du dossier.\n- `./` signifie \"dossier actuel\"\n- Donc `./photos` = le dossier 'photos' à côté du script\n\n**datetime.now()** - Récupère la date et l'heure actuelles\n- Exemple : `2025-01-10 14:30:00`\n\n**.strftime('%Y-%m-%d')** - Formate la date en texte\n- `%Y` = année sur 4 chiffres (2025)\n- `%m` = mois sur 2 chiffres (01)\n- `%d` = jour sur 2 chiffres (10)\n- Résultat : `'2025-01-10'`"
+    },
+    {
+      "id": "section_8",
+      "type": "exercise",
+      "exerciseId": "auto_ex_002"
+    },
+    {
+      "id": "section_9",
+      "type": "exercise",
+      "exerciseId": "auto_ex_003"
+    },
+    {
+      "id": "section_10",
+      "type": "text",
+      "title": "🔁 Étape 3 : Parcourir les Fichiers",
+      "content": "```python\nfor filename in os.listdir(folder_path):\n    if filename.endswith('.jpg'):\n```\n\n**os.listdir(folder_path)** - Retourne une liste de tous les fichiers dans le dossier\n- Exemple : `['photo1.jpg', 'photo2.jpg', 'document.pdf']`\n\n**for filename in ...** - Boucle qui parcourt chaque fichier un par un\n- À chaque tour, `filename` prend la valeur d'un fichier\n\n**if filename.endswith('.jpg')** - Vérifie si le nom du fichier se termine par `.jpg`\n- Permet de **filtrer** uniquement les photos\n- `document.pdf` sera ignoré"
+    },
+    {
+      "id": "section_11",
+      "type": "exercise",
+      "exerciseId": "auto_ex_004"
+    },
+    {
+      "id": "section_12",
+      "type": "exercise",
+      "exerciseId": "auto_ex_005"
+    },
+    {
+      "id": "section_13",
+      "type": "text",
+      "title": "✏️ Étape 4 : Renommer les Fichiers",
+      "content": "```python\nnew_name = f\"{today}_{filename}\"\nold_path = os.path.join(folder_path, filename)\nnew_path = os.path.join(folder_path, new_name)\nos.rename(old_path, new_path)\n```\n\n**f\"{today}_{filename}\"** - Crée le nouveau nom en combinant la date et le nom original\n- Si `today = '2025-01-10'` et `filename = 'photo.jpg'`\n- Résultat : `'2025-01-10_photo.jpg'`\n\n**os.path.join()** - Construit le chemin complet du fichier\n- Combine `'./photos'` + `'photo.jpg'` → `'./photos/photo.jpg'`\n\n**os.rename()** - Renomme le fichier\n- Prend l'ancien chemin et le nouveau chemin\n- Effectue le renommage sur le disque"
+    },
+    {
+      "id": "section_14",
+      "type": "exercise",
+      "exerciseId": "auto_ex_006"
+    },
+    {
+      "id": "section_15",
+      "type": "exercise",
+      "exerciseId": "auto_ex_007"
+    },
+    {
+      "id": "section_16",
+      "type": "text",
+      "title": "🎉 Félicitations !",
+      "content": "Tu viens de comprendre comment l'IA génère un script d'automatisation !\n\n**Ce que tu as appris :**\n- ✅ Comment importer des modules Python (`os`, `datetime`)\n- ✅ Comment manipuler des dates (`.now()`, `.strftime()`)\n- ✅ Comment parcourir des fichiers (`os.listdir()`, boucle `for`)\n- ✅ Comment filtrer avec `if` (`.endswith()`)\n- ✅ Comment renommer des fichiers (`os.rename()`)\n\n**Prochaine étape :** Maintenant que tu comprends ce script, tu peux le **modifier** !\n- Change le format de date (`%d-%m-%Y` pour jour-mois-année)\n- Renomme d'autres types de fichiers (`.png`, `.pdf`)\n- Ajoute un préfixe différent (ex: `vacation_`)\n\n**L'important :** Tu n'as plus peur du code généré par l'IA. Tu sais le lire et le comprendre ! 💪"
+    }
+  ],
+  "exercises": [
+    {
+      "id": "auto_ex_001",
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Pourquoi doit-on importer `os` au début du script ?",
+      "options": [
+        "Pour créer des dossiers",
+        "Pour interagir avec les fichiers du système",
+        "Pour afficher du texte",
+        "Pour calculer des dates"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Le module `os` permet d'interagir avec le système d'exploitation (Operating System). Il fournit des fonctions pour lister, renommer, supprimer des fichiers, créer des dossiers, etc. C'est indispensable pour toute opération sur les fichiers !",
+      "xpGain": 15
+    },
+    {
+      "id": "auto_ex_002",
+      "type": "predict_behavior",
+      "inputType": "free_input",
+      "question": "Si on est le 15 janvier 2025, quelle sera la valeur de la variable `today` ?",
+      "hint": "Regarde le format '%Y-%m-%d'",
+      "correctAnswer": "2025-01-15",
+      "acceptedAnswers": ["2025-01-15", "2025-1-15"],
+      "explanation": "datetime.now().strftime('%Y-%m-%d') va formater la date comme ceci : année (4 chiffres) - mois (2 chiffres) - jour (2 chiffres). Le 15 janvier 2025 devient donc '2025-01-15'.",
+      "xpGain": 15
+    },
+    {
+      "id": "auto_ex_003",
+      "type": "what_if",
+      "inputType": "options",
+      "question": "Si je change `folder_path = './photos'` en `folder_path = './images'`, que se passe-t-il ?",
+      "options": [
+        "Le script ne fonctionne plus",
+        "Le script renomme les fichiers du dossier 'images' au lieu de 'photos'",
+        "Le script renomme les deux dossiers",
+        "Rien ne change"
+      ],
+      "correctAnswer": 1,
+      "explanation": "folder_path est une variable qui indique quel dossier utiliser. Si on la change en './images', le script va chercher les fichiers dans le dossier 'images' au lieu de 'photos'. C'est un bon exemple de pourquoi les variables sont utiles : on peut changer le comportement en changeant une seule ligne !",
+      "xpGain": 15
+    },
+    {
+      "id": "auto_ex_004",
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que retourne `os.listdir('./photos')` ?",
+      "options": [
+        "Le nombre de fichiers dans le dossier",
+        "Une liste de tous les fichiers et sous-dossiers",
+        "Seulement les fichiers .jpg",
+        "Le chemin du dossier"
+      ],
+      "correctAnswer": 1,
+      "explanation": "`os.listdir()` retourne une liste contenant les noms de TOUS les fichiers et sous-dossiers présents dans le dossier spécifié. Par exemple : ['photo1.jpg', 'photo2.png', 'document.pdf', 'sous_dossier']. C'est ensuite le `if filename.endswith('.jpg')` qui filtre uniquement les .jpg.",
+      "xpGain": 15
+    },
+    {
+      "id": "auto_ex_005",
+      "type": "what_if",
+      "inputType": "options",
+      "question": "Si je change `.endswith('.jpg')` en `.endswith('.png')`, que se passera-t-il ?",
+      "options": [
+        "Le script renommera les fichiers .png au lieu des .jpg",
+        "Le script plantera",
+        "Le script renommera tous les fichiers",
+        "Rien ne change"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Le `if filename.endswith('.png')` va filtrer uniquement les fichiers dont le nom se termine par '.png'. Donc le script renommera tous les fichiers PNG du dossier au lieu des JPG. C'est facile de modifier un script IA une fois qu'on comprend ce que fait chaque ligne !",
+      "xpGain": 15
+    },
+    {
+      "id": "auto_ex_006",
+      "type": "predict_behavior",
+      "inputType": "free_input",
+      "question": "Si `today = '2025-01-10'` et `filename = 'vacances.jpg'`, quel sera le `new_name` ?",
+      "hint": "Regarde la f-string : f\"{today}_{filename}\"",
+      "correctAnswer": "2025-01-10_vacances.jpg",
+      "acceptedAnswers": ["2025-01-10_vacances.jpg"],
+      "explanation": "La f-string `f\"{today}_{filename}\"` combine la valeur de `today`, un underscore `_`, et la valeur de `filename`. Résultat : '2025-01-10_vacances.jpg'. Les f-strings permettent d'insérer des variables dans du texte facilement !",
+      "xpGain": 15
+    },
+    {
+      "id": "auto_ex_007",
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Pourquoi utilise-t-on `os.path.join()` au lieu de simplement écrire `'./photos/photo.jpg'` ?",
+      "options": [
+        "C'est plus rapide",
+        "Ça fonctionne sur tous les systèmes (Windows, Mac, Linux)",
+        "C'est obligatoire en Python",
+        "Ça vérifie que le fichier existe"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Windows utilise des backslashes (\\) pour les chemins, tandis que Mac/Linux utilisent des slashes (/). `os.path.join()` construit automatiquement le bon chemin selon le système d'exploitation. C'est une bonne pratique pour rendre le code portable !",
+      "xpGain": 15
+    }
+  ]
+}

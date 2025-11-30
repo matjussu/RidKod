@@ -1,0 +1,46 @@
+{
+  "topics": [
+    {
+      "id": "ai_topic_001",
+      "title": "Script d'Automatisation Python",
+      "description": "Apprends ce que fait l'IA quand tu lui demandes un script pour automatiser une tâche",
+      "difficulty": 1,
+      "estimatedTime": 20,
+      "order": 1,
+      "category": "demystify",
+      "icon": "🤖",
+      "totalSections": 9,
+      "totalExercises": 7,
+      "xpReward": 105,
+      "tags": ["python", "automation", "files", "beginner"]
+    },
+    {
+      "id": "ai_topic_002",
+      "title": "Site Web E-commerce",
+      "description": "Comprends comment l'IA construit un site complet avec frontend, backend et base de données",
+      "difficulty": 3,
+      "estimatedTime": 60,
+      "order": 2,
+      "category": "demystify",
+      "icon": "🛒",
+      "totalSections": 15,
+      "totalExercises": 12,
+      "xpReward": 180,
+      "tags": ["web", "flask", "database", "advanced"]
+    },
+    {
+      "id": "ai_topic_003",
+      "title": "Détecter les Erreurs de l'IA",
+      "description": "Apprends à repérer les bugs, hallucinations et failles de sécurité dans le code généré",
+      "difficulty": 2,
+      "estimatedTime": 30,
+      "order": 3,
+      "category": "auditor",
+      "icon": "🔍",
+      "totalSections": 10,
+      "totalExercises": 8,
+      "xpReward": 160,
+      "tags": ["debugging", "security", "best-practices"]
+    }
+  ]
+}
