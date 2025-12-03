@@ -188,7 +188,7 @@ const XPCollectLessons = () => {
           flex-direction: column;
           align-items: center;
           justify-content: space-between;
-          padding: max(env(safe-area-inset-top), 40px) max(20px, env(safe-area-inset-left)) max(env(safe-area-inset-bottom), 40px);
+          padding: max(env(safe-area-inset-top), 40px) max(20px, env(safe-area-inset-left)) max(env(safe-area-inset-bottom), 8px) max(20px, env(safe-area-inset-right));
           max-width: min(428px, 100vw);
           margin: 0 auto;
           width: 100%;

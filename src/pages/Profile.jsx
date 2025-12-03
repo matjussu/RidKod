@@ -92,7 +92,7 @@ const Profile = () => {
           color: #FFFFFF;
           display: flex;
           flex-direction: column;
-          padding: max(env(safe-area-inset-top), 20px) max(20px, env(safe-area-inset-left)) max(env(safe-area-inset-bottom), 30px);
+          padding: max(env(safe-area-inset-top), 20px) max(20px, env(safe-area-inset-left)) max(env(safe-area-inset-bottom), 8px) max(20px, env(safe-area-inset-right));
           max-width: min(428px, 100vw);
           margin: 0 auto;
           width: 100%;
