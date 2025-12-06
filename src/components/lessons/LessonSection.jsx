@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CodeBlock from '../exercise/CodeBlock';
+import Mascot from '../common/Mascot';
 
 /**
  * LessonSection - Composant pour rendre dynamiquement chaque section de leçon
@@ -16,16 +17,23 @@ const LessonSection = ({
     switch (section.type) {
       case 'text':
         return (
-          <div className="lesson-section lesson-section-text">
-            {section.title && (
-              <h3 className="lesson-section-title">{section.title}</h3>
-            )}
-            <div className="lesson-section-content">
-              {section.content.split('\n\n').map((paragraph, index) => (
-                <p key={index} className="lesson-paragraph">
-                  {formatText(paragraph)}
-                </p>
-              ))}
+          <div className="lesson-section lesson-section-with-mascot">
+            {/* Bulle de dialogue */}
+            <div className="lesson-speech-bubble">
+              {section.title && (
+                <h3 className="lesson-section-title">{section.title}</h3>
+              )}
+              <div className="lesson-section-content">
+                {section.content.split('\n\n').map((paragraph, index) => (
+                  <p key={index} className="lesson-paragraph">
+                    {formatText(paragraph)}
+                  </p>
+                ))}
+              </div>
+            </div>
+            {/* Mascotte en bas à gauche */}
+            <div className="lesson-mascot-container">
+              <Mascot mood="neutral" size={100} color="#ffffffff" beakColor="#D26812" />
             </div>
           </div>
         );
@@ -187,7 +195,50 @@ const styles = `
     margin-bottom: 24px;
   }
 
-  .lesson-section-text {
+  /* Layout avec mascotte (bulle + canard en dessous) */
+  .lesson-section-with-mascot {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Bulle de dialogue */
+  .lesson-speech-bubble {
+    background: #FFFFFF;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+    width: 100%;
+    position: relative;
+    /* Variables personnalisables pour le triangle */
+    --triangle-left: 100px;        /* Position horizontale du triangle */
+    --triangle-size: 20px;        /* Taille du triangle */
+  }
+
+  /* Triangle de la bulle pointant vers le bas (vers la mascotte) */
+  .lesson-speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: calc(-1 * var(--triangle-size));
+    left: var(--triangle-left);
+    width: 0;
+    height: 0;
+    border-left: var(--triangle-size) solid transparent;
+    border-right: var(--triangle-size) solid transparent;
+    border-top: calc(var(--triangle-size) + 2px) solid #FFFFFF;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.08));
+  }
+
+  /* Mascotte en bas à gauche */
+  .lesson-mascot-container {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 8px;
+    margin-left: 12px;
+  }
+
+  /* Fallback pour section text sans mascotte (si besoin) */
+  .lesson-section-text:not(.lesson-section-with-mascot) {
     background: #FFFFFF;
     border-radius: 16px;
     padding: 20px;
@@ -382,7 +433,19 @@ const styles = `
 
   /* Responsive */
   @media (max-width: 375px) {
-    .lesson-section-text {
+    .lesson-speech-bubble {
+      padding: 16px;
+      /* Variables personnalisables pour 375px */
+      --triangle-left: 100px;
+      --triangle-size: 20px;
+    }
+
+    .lesson-mascot-container {
+      margin-top: 6px;
+      margin-left: 8px;
+    }
+
+    .lesson-section-text:not(.lesson-section-with-mascot) {
       padding: 16px;
     }
 
@@ -421,7 +484,19 @@ const styles = `
   }
 
   @media (max-width: 320px) {
-    .lesson-section-text {
+    .lesson-speech-bubble {
+      padding: 14px;
+      /* Variables personnalisables pour 320px */
+      --triangle-left: 100px;
+      --triangle-size: 15px;
+    }
+
+    .lesson-mascot-container {
+      margin-top: 4px;
+      margin-left: 6px;
+    }
+
+    .lesson-section-text:not(.lesson-section-with-mascot) {
       padding: 14px;
     }
 
@@ -460,12 +535,15 @@ const styles = `
   }
 `;
 
-// Injecter les styles
-if (typeof document !== 'undefined' && !document.getElementById('lesson-section-styles')) {
-  const styleSheet = document.createElement('style');
-  styleSheet.id = 'lesson-section-styles';
+// Injecter les styles (mise à jour automatique lors du hot-reload)
+if (typeof document !== 'undefined') {
+  let styleSheet = document.getElementById('lesson-section-styles');
+  if (!styleSheet) {
+    styleSheet = document.createElement('style');
+    styleSheet.id = 'lesson-section-styles';
+    document.head.appendChild(styleSheet);
+  }
   styleSheet.textContent = styles;
-  document.head.appendChild(styleSheet);
 }
 
 export default React.memo(LessonSection);
