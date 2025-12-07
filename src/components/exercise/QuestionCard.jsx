@@ -1,5 +1,7 @@
 import React from "react";
 import { Lightbulb, BookOpen, ChevronDown } from 'lucide-react';
+import MascotHappy from '../common/MascotHappy';
+import MascotDead from '../common/MascotDead';
 
 const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain, explanation, onExplanationToggle, isExplanationExpanded }) => {
   const renderContent = () => {
@@ -17,16 +19,23 @@ const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain, explanation, o
     // Après validation, affiche feedback + bouton explication
     return (
       <div className="feedback-section">
-        {/* Feedback principal */}
-        <div className="feedback-content">
-          <span className="feedback-text">
-            <span className="feedback-brace">{"{"}</span>
-            {isCorrect ? 'Bravo !' : 'Bien essayé !'}
-            <span className="feedback-brace">{"}"}</span>
-          </span>
-          {isCorrect && (
-            <span className="feedback-xp">+{xpGain} EXP</span>
-          )}
+        {/* Feedback principal avec mascotte */}
+        <div className="feedback-row">
+          {/* Mascotte à gauche */}
+          <div className="feedback-mascot">
+            {isCorrect ? <MascotHappy size={70} /> : <MascotDead size={70} />}
+          </div>
+          {/* Texte à droite */}
+          <div className="feedback-content">
+            <span className="feedback-text">
+              <span className="feedback-brace">{"{"}</span>
+              {isCorrect ? 'Bravo !' : 'Bien essayé !'}
+              <span className="feedback-brace">{"}"}</span>
+            </span>
+            {isCorrect && (
+              <span className="feedback-xp">+{xpGain} EXP</span>
+            )}
+          </div>
         </div>
 
         {/* Bouton toggle explication */}
@@ -96,13 +105,30 @@ const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain, explanation, o
           animation: contentChange 0.3s ease;
         }
 
-        .feedback-content {
+        /* Layout 2 colonnes : mascotte + texte */
+        .feedback-row {
           display: flex;
-          justify-content: space-between;
           align-items: center;
+          gap: 12px;
+          margin-bottom: 12px;
+        }
+
+        .feedback-mascot {
+          flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .feedback-content {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: flex-start;
+          gap: 4px;
           padding: 0;
           min-height: 0;
-          margin-bottom: 12px;
         }
 
         .feedback-text {
@@ -270,6 +296,14 @@ const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain, explanation, o
           .feedback-xp {
             font-size: 14px;
           }
+
+          .feedback-row {
+            gap: 10px;
+          }
+
+          .feedback-mascot {
+            transform: scale(0.85);
+          }
         }
 
         @media (max-width: 320px) {
@@ -298,6 +332,14 @@ const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain, explanation, o
           .feedback-text,
           .feedback-xp {
             font-size: 13px;
+          }
+
+          .feedback-row {
+            gap: 8px;
+          }
+
+          .feedback-mascot {
+            transform: scale(0.75);
           }
         }
 
