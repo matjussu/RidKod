@@ -17,11 +17,15 @@
       "language": "python",
       "title": "Exemple : Division par Zéro",
       "code": "print(\"Calcul...\")\ntry:\n    valeur = 10 / 0  # Impossible !\n    print(\"Réussi\")  # Jamais atteint\nexcept:\n    print(\"Erreur mathématique\")\n\nprint(\"Fin programme\")",
-      "tip": {
-        "title": "⚡ Le Décodeur",
-        "content": "**Le Crash :** Sans `try/except`, une erreur arrête le programme avec un message rouge effrayant. Avec `try/except`, le programme reste en vie."
-      },
-      "caption": "1. Le `try` commence.\n2. La division par 0 provoque une erreur immédiate.\n3. Le reste du `try` est abandonné (pas de \"Réussi\").\n4. L'ordinateur saute dans `except`.\n5. Affiche \"Erreur mathématique\".\n6. Le programme survit et affiche \"Fin programme\"."
+      "lineExplanations": {
+        "1": "🖨️ Affiche `\"Calcul...\"` avant d'entrer dans la zone protégée.",
+        "2": "🛡️ `try` démarre la **zone protégée**. Si une erreur arrive ici, on ne crash pas.",
+        "3": "💥 **ERREUR !** Division par 0 impossible. L'exécution s'arrête immédiatement dans le `try`.",
+        "4": "🚫 Cette ligne n'est **jamais atteinte** car l'erreur arrive avant. Le `\"Réussi\"` ne s'affiche pas.",
+        "5": "🆘 `except` = **plan de secours**. On saute ici uniquement si une erreur s'est produite dans le `try`.",
+        "6": "🖨️ Affiche `\"Erreur mathématique\"` pour gérer la crise proprement.",
+        "8": "✅ Le programme **survit** ! Sans `try/except`, il aurait crashé. Ici il affiche `\"Fin programme\"`."
+      }
     },
     {
       "id": "section_3",

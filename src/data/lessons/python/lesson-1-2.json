@@ -17,11 +17,15 @@
       "language": "python",
       "title": "Exemple : Flux d'Authentification",
       "code": "def verifier_user():\n    print(\"Vérification en cours...\")\n    print(\"OK\")\n\nprint(\"1. Start\")\n\n# L'appel (Le Saut)\nverifier_user()\n\nprint(\"2. End\")",
-      "tip": {
-        "title": "⚡ Le Décodeur",
-        "content": "**1. `def` :** Signifie \"Je définis une action pour plus tard\". Ce code ne s'exécute PAS tout de suite.\n\n**2. `()` :** Les parenthèses sont le déclencheur. `login` est le nom, `login()` est l'action d'exécuter.\n\n**3. Indentation :** Le décalage vers la droite indique quelles lignes appartiennent à la fonction."
-      },
-      "caption": "1. Lit la définition (ne fait rien).\n2. Affiche \"1. Start\".\n3. Voit `verifier_user()`. **SAUTE** ligne 1.\n4. Affiche \"Vérification...\" puis \"OK\".\n5. La fonction finit. **REVIENT** ligne 8.\n6. Affiche \"2. End\"."
+      "lineExplanations": {
+        "1": "🏷️ `def` signifie **\"Je définis une action pour plus tard\"**. Ce code ne s'exécute PAS tout de suite !",
+        "2": "↪️ L'**indentation** (décalage) montre que cette ligne appartient à la fonction. Elle attend d'être appelée.",
+        "3": "↪️ Même chose : fait partie de la fonction et attend l'appel.",
+        "5": "🖨️ **Première ligne exécutée !** L'ordinateur passe les lignes 1-3 (juste une définition) et arrive ici.",
+        "7": "💬 Commentaire ignoré. Il nous prévient qu'un **saut** va se produire.",
+        "8": "🚀 **L'APPEL !** Les parenthèses `()` déclenchent la fonction. L'ordinateur **saute** à la ligne 1.",
+        "10": "🔙 Après le retour de la fonction, l'exécution reprend ici."
+      }
     },
     {
       "id": "section_3",

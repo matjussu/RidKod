@@ -17,11 +17,14 @@
       "language": "python",
       "title": "Exemple : Accès Admin",
       "code": "role = \"user\"\n\nif role == \"admin\":\n    print(\"Accès complet\")\nelse:\n    print(\"Accès limité\")\n\nprint(\"Journalisation\")",
-      "tip": {
-        "title": "⚡ Le Décodeur",
-        "content": "**1. `==` vs `=` :** Attention ! `=` assigne une valeur. `==` compare deux valeurs (Est-ce égal ?).\n\n**2. `else` :** Signifie \"Dans tous les autres cas\". C'est le filet de sécurité si le `if` est faux."
-      },
-      "caption": "1. `role` vaut \"user\".\n2. Test : Est-ce que \"user\" est égal à \"admin\" ? -> **Non (False)**.\n3. Le bloc `if` est sauté.\n4. Le bloc `else` est exécuté : affiche \"Accès limité\".\n5. On sort de l'aiguillage et affiche \"Journalisation\"."
+      "lineExplanations": {
+        "1": "📦 On crée une variable `role` avec la valeur `\"user\"`.",
+        "3": "❓ **Test !** `==` compare deux valeurs. Est-ce que `\"user\"` est égal à `\"admin\"` ? → **Non (False)**.",
+        "4": "🚫 Cette ligne est **ignorée** car la condition est fausse. Le bloc `if` est sauté.",
+        "5": "✅ `else` signifie **\"dans tous les autres cas\"**. Comme le `if` était faux, on entre ici.",
+        "6": "🖨️ Affiche `\"Accès limité\"` car on est dans le bloc `else`.",
+        "8": "🖨️ Cette ligne est **en dehors** de l'aiguillage. Elle s'exécute toujours, peu importe le chemin pris."
+      }
     },
     {
       "id": "section_3",

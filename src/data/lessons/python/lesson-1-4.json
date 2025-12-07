@@ -17,11 +17,13 @@
       "language": "python",
       "title": "Exemple : Traitement de fichiers",
       "code": "fichiers = [\"img1.jpg\", \"img2.jpg\"]\n\nprint(\"Début traitement\")\n\nfor f in fichiers:\n    print(\"Compression de : \" + f)\n\nprint(\"Terminé\")",
-      "tip": {
-        "title": "⚡ Le Décodeur",
-        "content": "**1. `for X in Y:`** Se lit \"Pour chaque élément X dans la liste Y\".\n\n**2. `range(3)` :** Un raccourci courant qui crée une liste virtuelle `[0, 1, 2]`. Utile pour répéter une action X fois."
-      },
-      "caption": "1. La liste contient 2 éléments. La boucle fera 2 tours.\n2. **Tour 1 :** la variable `f` vaut \"img1.jpg\".\n3. **Tour 2 :** la variable `f` vaut \"img2.jpg\".\n4. Plus d'éléments ? La boucle s'arrête.\n5. Affiche \"Terminé\"."
+      "lineExplanations": {
+        "1": "📋 On crée une **liste** avec 2 éléments. Les crochets `[]` délimitent la liste.",
+        "3": "🖨️ Affiche `\"Début traitement\"` avant de commencer la boucle.",
+        "5": "🔄 `for f in fichiers:` se lit **\"Pour chaque élément f dans la liste fichiers\"**. La boucle fera 2 tours.",
+        "6": "↪️ **Tour 1 :** `f` vaut `\"img1.jpg\"`. **Tour 2 :** `f` vaut `\"img2.jpg\"`. Cette ligne s'exécute à chaque tour.",
+        "8": "🖨️ Plus d'éléments ? La boucle s'arrête et on affiche `\"Terminé\"`."
+      }
     },
     {
       "id": "section_3",

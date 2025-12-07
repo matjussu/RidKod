@@ -17,11 +17,14 @@
       "language": "python",
       "title": "Exemple : Tentative de Connexion",
       "code": "essais = 0\n\n# On autorise 3 essais max (0, 1, 2)\nwhile essais < 3:\n    print(\"Tentative connexion...\")\n    essais = essais + 1\n\nprint(\"Compte bloqué\")",
-      "tip": {
-        "title": "⚡ Le Décodeur",
-        "content": "**1. `while condition:`** Se lit \"Tant que la condition est Vraie, continue\".\n\n**2. Incrémentation (`i = i + 1`) :** C'est souvent ce qui permet de sortir de la boucle. Si on oublie d'augmenter le compteur, on reste bloqué."
-      },
-      "caption": "Chaque tour augmente `essais` de 1.\n- Quand `essais` arrive à 3, la condition `3 < 3` devient **Fausse**.\n- La boucle s'arrête juste à temps."
+      "lineExplanations": {
+        "1": "📦 On initialise un compteur `essais` à `0`. C'est notre variable de contrôle.",
+        "3": "💬 Commentaire explicatif. On veut 3 essais maximum (0, 1, 2).",
+        "4": "🔄 `while` se lit **\"Tant que\"**. Tant que `essais < 3` est vrai, on continue.",
+        "5": "🖨️ Affiche une tentative. Cette ligne s'exécute à chaque tour.",
+        "6": "⚠️ **CRUCIAL !** On augmente `essais` de 1. Sans cette ligne, la boucle serait **infinie** !",
+        "8": "🛑 Quand `essais` atteint 3, la condition `3 < 3` devient **Fausse**. On sort et affiche `\"Compte bloqué\"`."
+      }
     },
     {
       "id": "section_3",

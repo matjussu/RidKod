@@ -17,11 +17,14 @@
       "language": "python",
       "title": "Exemple : Assignation vs Comparaison",
       "code": "# ASSIGNATION (=)\nage = 18\nprint(age)  # Affiche 18\n\n# COMPARAISON (==)\nprint(age == 18)  # Affiche True\nprint(age == 20)  # Affiche False",
-      "tip": {
-        "title": "⚡ Le Décodeur",
-        "content": "**`=` (Un seul signe) :** \"Mets cette valeur dans cette boîte\". C'est une **action**.\n\n**`==` (Deux signes) :** \"Ces deux valeurs sont-elles identiques ?\". C'est une **question** qui renvoie True ou False.\n\n**Astuce :** Lisez `=` comme \"devient\" et `==` comme \"est égal à\"."
-      },
-      "caption": "• Ligne 2 : `age = 18` → La variable age **reçoit** la valeur 18\n• Ligne 5 : `age == 18` → On **teste** si age vaut 18 (réponse : True)\n• Ligne 6 : `age == 20` → On **teste** si age vaut 20 (réponse : False)"
+      "lineExplanations": {
+        "1": "💬 Ce commentaire indique qu'on va utiliser le signe `=` pour **assigner** une valeur.",
+        "2": "📦 **Assignation !** On crée une boîte appelée `age` et on y met la valeur `18`. Le signe `=` signifie \"**devient**\".",
+        "3": "🖨️ On affiche la valeur de `age`. Résultat : `18`.",
+        "5": "💬 Ce commentaire indique qu'on passe à la **comparaison** avec `==`.",
+        "6": "❓ **Comparaison !** On demande : \"Est-ce que `age` est égal à `18` ?\" → La réponse est `True` (vrai).",
+        "7": "❓ Même question mais avec `20`. Comme `age` vaut `18`, la réponse est `False` (faux)."
+      }
     },
     {
       "id": "section_3",

@@ -12,6 +12,9 @@ const LessonSection = ({
   exerciseComponent = null,
   isExerciseCompleted = false
 }) => {
+  // État pour la ligne de code sélectionnée (pour les annotations)
+  const [selectedLine, setSelectedLine] = React.useState(null);
+
   // Rendu selon le type de section
   const renderSection = () => {
     switch (section.type) {
@@ -38,44 +41,87 @@ const LessonSection = ({
           </div>
         );
 
-      case 'code_example':
+      case 'code_example': {
+        const hasExplanations = section.lineExplanations && Object.keys(section.lineExplanations).length > 0;
+        // Lignes cliquables = celles qui ont une explication
+        const clickableLines = hasExplanations
+          ? Object.keys(section.lineExplanations).map(Number)
+          : [];
+
         return (
-          <div className="lesson-section lesson-section-code">
-            <div className="lesson-code-wrapper">
-              <CodeBlock
-                code={section.code}
-                language={section.language || 'python'}
-                isCompact={false}
-              />
+          <div className="lesson-section lesson-section-code-interactive">
+            {/* Titre optionnel */}
+            {section.title && (
+              <h3 className="lesson-code-title">{section.title}</h3>
+            )}
+
+            {/* Bloc de code avec CodeBlock existant */}
+            <div className="lesson-code-container">
+              <div className="lesson-code-block">
+                <CodeBlock
+                  code={section.code || ''}
+                  language={section.language || 'python'}
+                  clickableLines={clickableLines}
+                  selectedLine={selectedLine}
+                  onLineClick={(lineNumber) => {
+                    setSelectedLine(selectedLine === lineNumber ? null : lineNumber);
+                  }}
+                />
+              </div>
+
+              {/* Hint pour cliquer - disparaît quand une ligne est sélectionnée */}
+              {hasExplanations && !selectedLine && (
+                <p className="lesson-code-hint">Clique sur une ligne pour avoir les explications</p>
+              )}
+
+              {/* Bulle d'explication avec mascotte */}
+              {selectedLine && section.lineExplanations && section.lineExplanations[selectedLine] && (
+                <div className="lesson-decoder-container">
+                  <div className="lesson-decoder-bubble">
+                    <button
+                      className="lesson-decoder-close"
+                      onClick={() => setSelectedLine(null)}
+                      aria-label="Fermer"
+                    >
+                      ✕
+                    </button>
+                    <div className="lesson-decoder-content">
+                      {formatText(section.lineExplanations[selectedLine])}
+                    </div>
+                  </div>
+                  <div className="lesson-decoder-mascot">
+                    <Mascot mood="neutral" size={80} color="#F3ECEC" beakColor="#D26812" />
+                  </div>
+                </div>
+              )}
             </div>
-            {/* Décodeur intégré sous le code si présent */}
-            {section.tip && (
+
+            {/* Caption optionnel */}
+            {section.caption && (
+              <p className="lesson-code-caption">{section.caption}</p>
+            )}
+
+            {/* Fallback: ancien système de tip si pas de lineExplanations */}
+            {!hasExplanations && section.tip && (
               <div className="lesson-section-tip-inline">
                 {section.tip.title && (
                   <h4 className="lesson-tip-title">{section.tip.title}</h4>
                 )}
                 <div className="lesson-tip-content">
-                  {section.tip.content.split('\n\n').map((paragraph, index) => (
-                    <p key={index} className="lesson-tip-paragraph">
+                  {section.tip.content.split('\n\n').map((paragraph, idx) => (
+                    <p key={idx} className="lesson-tip-paragraph">
                       {formatText(paragraph)}
                     </p>
                   ))}
                 </div>
-              </div>
-            )}
-            {section.caption && (
-              <p className="lesson-code-caption">{section.caption}</p>
-            )}
-            {/* Highlight intégré si présent */}
-            {section.highlight && (
-              <div className={`lesson-section-highlight lesson-highlight-${section.highlight.style || 'info'}`}>
-                <div className="lesson-highlight-content">
-                  {formatText(section.highlight.content)}
+                <div className="lesson-tip-mascot">
+                  <Mascot mood="neutral" size={70} color="#F3ECEC" beakColor="#D26812" />
                 </div>
               </div>
             )}
           </div>
         );
+      }
 
       case 'highlight':
         return (
@@ -290,7 +336,142 @@ const styles = `
     margin-bottom: 6px;
   }
 
-  /* Code Section */
+  /* Code Section - Interactive */
+  .lesson-section-code-interactive {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .lesson-code-title {
+    font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+    font-size: 16px;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin: 0;
+  }
+
+  .lesson-code-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .lesson-code-block {
+    background: #1A1919;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    padding: 8px 0;
+  }
+
+  .lesson-code-hint {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: #8E8E93;
+    text-align: center;
+    margin: 8px 0 0 0;
+    padding: 0;
+    font-style: italic;
+  }
+
+  /* Decoder bubble with mascot - Style Premium visible */
+  .lesson-decoder-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    animation: fadeInUp 0.3s ease;
+    margin-top: 4px;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .lesson-decoder-bubble {
+    background: linear-gradient(135deg, #2C2C2E 0%, #1A1919 100%);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    width: 100%;
+    position: relative;
+    border: 1px solid rgba(255, 149, 0, 0.3);
+  }
+
+  .lesson-decoder-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 30px;
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 14px solid #1A1919;
+  }
+
+  .lesson-decoder-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    font-size: 14px;
+    color: #8E8E93;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .lesson-decoder-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #FFFFFF;
+  }
+
+  .lesson-decoder-content {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 16px;
+    font-weight: 600;
+    color: #FFFFFF;
+    line-height: 1.7;
+    padding-right: 40px;
+  }
+
+  .lesson-decoder-content .lesson-inline-code {
+    background: rgba(255, 149, 0, 0.2);
+    color: #FF9500;
+    border: 1px solid rgba(255, 149, 0, 0.3);
+  }
+
+  .lesson-decoder-mascot {
+    margin-top: 10px;
+    margin-left: 12px;
+  }
+
+  /* Tip section with mascot */
+  .lesson-section-tip-inline {
+    position: relative;
+    padding-bottom: 60px;
+  }
+
+  .lesson-tip-mascot {
+    position: absolute;
+    bottom: -20px;
+    left: 10px;
+  }
+
+  /* Old code section styles (fallback) */
   .lesson-section-code {
     display: flex;
     flex-direction: column;

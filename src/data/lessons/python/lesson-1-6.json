@@ -17,11 +17,14 @@
       "language": "python",
       "title": "Exemple : Scanner de Sécurité",
       "code": "files = [\"image.png\", \"virus.exe\", \"texte.txt\"]\n\nfor f in files:\n    if f == \"virus.exe\":\n        print(\"Danger ! Arrêt.\")\n        break\n    print(\"Fichier OK : \" + f)",
-      "tip": {
-        "title": "⚡ Le Décodeur",
-        "content": "**Usage typique :**\n- `break` : J'ai trouvé ce que je cherchais (ex: un virus), inutile de scanner le reste.\n- `continue` : Cet élément ne m'intéresse pas (ex: fichier vide), je passe au suivant."
-      },
-      "caption": "1. \"image.png\" n'est pas un virus. Affiche \"Fichier OK\".\n2. \"virus.exe\" EST un virus. Affiche \"Danger !\".\n3. **BREAK activé.** La boucle est tuée instantanément.\n4. \"texte.txt\" n'est jamais scanné."
+      "lineExplanations": {
+        "1": "📋 Liste de 3 fichiers à scanner. On va les parcourir un par un.",
+        "3": "🔄 Boucle `for` : on examine chaque fichier `f` dans la liste.",
+        "4": "❓ **Test :** Est-ce que ce fichier est `\"virus.exe\"` ?",
+        "5": "⚠️ Si oui, on affiche une alerte de danger.",
+        "6": "🛑 **BREAK !** Arrêt d'urgence. On sort **totalement** de la boucle. `\"texte.txt\"` ne sera jamais scanné.",
+        "7": "✅ Si le fichier n'est pas un virus, on affiche `\"Fichier OK\"`. Cette ligne est ignorée si `break` est atteint."
+      }
     },
     {
       "id": "section_3",

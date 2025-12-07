@@ -17,11 +17,14 @@
       "language": "python",
       "title": "Exemple : Démarrage Serveur",
       "code": "print(\"Initialisation...\")\n\nstatut = \"OFF\"\nprint(statut)\n\n# On active le serveur\nstatut = \"ON\"\nprint(statut)",
-      "tip": {
-        "title": "⚡ Le Décodeur",
-        "content": "**1. `print(...)` :** La commande pour afficher du texte à l'écran. C'est votre seule fenêtre pour voir ce qui se passe.\n\n**2. `\"texte\"` :** Les guillemets indiquent que c'est du texte brut (String).\n\n**3. `#` (Commentaire) :** Tout ce qui suit ce symbole est ignoré par l'ordinateur. C'est une note pour les humains."
-      },
-      "caption": "Suivez la chronologie :\n1. Affiche \"Initialisation...\"\n2. La mémoire `statut` reçoit \"OFF\".\n3. Affiche \"OFF\".\n4. La mémoire `statut` est écrasée et reçoit \"ON\".\n5. Affiche \"ON\".\n\nLa variable a changé au cours du temps. L'ordre compte."
+      "lineExplanations": {
+        "1": "🖨️ `print()` affiche du texte à l'écran. Les **guillemets** indiquent que c'est du texte brut (String).",
+        "3": "📦 On crée une variable `statut` et on y met la valeur `\"OFF\"`. C'est comme une boîte étiquetée.",
+        "4": "🖨️ On affiche le contenu de `statut`. À ce moment, elle vaut `\"OFF\"`.",
+        "6": "💬 Le `#` crée un **commentaire**. L'ordinateur ignore tout ce qui suit. C'est une note pour les humains.",
+        "7": "📦 On **écrase** l'ancienne valeur. `statut` passe de `\"OFF\"` à `\"ON\"`. L'ancien contenu est perdu.",
+        "8": "🖨️ On affiche `statut`. Maintenant elle vaut `\"ON\"`. L'ordre des lignes a tout changé !"
+      }
     },
     {
       "id": "section_3",
