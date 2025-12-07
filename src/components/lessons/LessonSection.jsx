@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CodeBlock from '../exercise/CodeBlock';
 import Mascot from '../common/Mascot';
+import MascotAnalyse from '../common/MascotAnalyse';
 
 /**
  * LessonSection - Composant pour rendre dynamiquement chaque section de leçon
@@ -90,7 +91,7 @@ const LessonSection = ({
                     </div>
                   </div>
                   <div className="lesson-decoder-mascot">
-                    <Mascot mood="neutral" size={80} color="#F3ECEC" beakColor="#D26812" />
+                    <MascotAnalyse size={120} />
                   </div>
                 </div>
               )}
@@ -412,12 +413,12 @@ const styles = `
     content: '';
     position: absolute;
     bottom: -12px;
-    left: 30px;
+    left: 110px;
     width: 0;
     height: 0;
     border-left: 12px solid transparent;
     border-right: 12px solid transparent;
-    border-top: 14px solid #1A1919;
+    border-top: 12px solid rgba(255, 149, 0, 1);
   }
 
   .lesson-decoder-close {
