@@ -47,9 +47,14 @@
 
 /* Wrapper with persistent background for smooth transition */
 .welcome-wrapper {
-  min-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: var(--welcome-bg);
   overflow-y: auto;
+  z-index: 1;
 }
 
 .welcome-container {
