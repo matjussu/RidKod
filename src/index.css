@@ -43,6 +43,19 @@ body {
   overflow-x: hidden;
 }
 
+/* iOS PWA safe-area background fix - covers entire screen including home indicator area */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #1A1919;
+  z-index: -1;
+  pointer-events: none;
+}
+
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
