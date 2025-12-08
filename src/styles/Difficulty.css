@@ -18,7 +18,7 @@
   margin: 0 auto;
   width: 100%;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow-x: hidden;
   opacity: 0;
   transform: scale(1.05);
   animation: fadeInScale 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;

@@ -450,8 +450,7 @@ input, textarea, select {
   font-size: 16px;
 }
 
-/* Prevent overscroll bounce */
+/* iOS smooth scrolling */
 body {
-  overscroll-behavior-y: none;
   -webkit-overflow-scrolling: touch;
 }
