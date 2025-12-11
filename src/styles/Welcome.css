@@ -57,6 +57,19 @@
   z-index: 1;
 }
 
+/* iOS PWA safe-area fix - covers home indicator area */
+.welcome-wrapper::after {
+  content: '';
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: env(safe-area-inset-bottom);
+  background: var(--welcome-bg);
+  z-index: 2;
+  pointer-events: none;
+}
+
 .welcome-container {
   min-height: 100vh;
   min-height: -webkit-fill-available;

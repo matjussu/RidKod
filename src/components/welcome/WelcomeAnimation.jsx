@@ -304,8 +304,21 @@ const WelcomeAnimation = ({ onComplete }) => {
         aria-hidden="true"
       />
 
-      {/* Accessibility Styles */}
+      {/* Accessibility Styles + iOS Safe Area Fix */}
       <style>{`
+        /* iOS PWA safe-area fix - covers home indicator area with black */
+        [role="main"]::after {
+          content: '';
+          position: fixed;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          height: env(safe-area-inset-bottom);
+          background: #000000;
+          z-index: 10000;
+          pointer-events: none;
+        }
+
         /* Ensure smooth transitions */
         * {
           -webkit-font-smoothing: antialiased;
