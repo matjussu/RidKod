@@ -11,60 +11,91 @@
     },
     {
       "id": "section_2",
-      "type": "prompt_example",
+      "type": "chatgpt_simulation",
       "prompt": "Écris-moi un script Python qui renomme automatiquement tous les fichiers .jpg d'un dossier en ajoutant la date du jour au début du nom",
-      "aiModel": "ChatGPT 4",
-      "tip": "C'est un prompt typique qu'on donne à ChatGPT pour automatiser une tâche répétitive"
+      "response": {
+        "code": "import os\nfrom datetime import datetime\n\nfolder_path = './photos'\ntoday = datetime.now().strftime('%Y-%m-%d')\n\nfor filename in os.listdir(folder_path):\n    if filename.endswith('.jpg'):\n        new_name = f\"{today}_{filename}\"\n        old_path = os.path.join(folder_path, filename)\n        new_path = os.path.join(folder_path, new_name)\n        os.rename(old_path, new_path)\n        print(f\"Renommé : {filename} → {new_name}\")",
+        "language": "python"
+      },
+      "aiModel": "ChatGPT 4"
     },
     {
       "id": "section_3",
-      "type": "code_example",
-      "title": "🤖 Code Généré par ChatGPT",
-      "code": "import os\nfrom datetime import datetime\n\n# Chemin du dossier\nfolder_path = './photos'\n\n# Date du jour au format YYYY-MM-DD\ntoday = datetime.now().strftime('%Y-%m-%d')\n\n# Parcourir tous les fichiers du dossier\nfor filename in os.listdir(folder_path):\n    if filename.endswith('.jpg'):\n        # Créer le nouveau nom\n        new_name = f\"{today}_{filename}\"\n        \n        # Chemin complet ancien et nouveau\n        old_path = os.path.join(folder_path, filename)\n        new_path = os.path.join(folder_path, new_name)\n        \n        # Renommer le fichier\n        os.rename(old_path, new_path)\n        print(f\"Renommé : {filename} → {new_name}\")",
-      "language": "python",
-      "highlight": {
-        "style": "info",
-        "content": "Ce code semble simple, mais il fait beaucoup de choses ! On va décortiquer chaque ligne."
-      }
+      "type": "text",
+      "title": "🔍 Vue d'ensemble",
+      "content": "Le script fait **4 grandes étapes** :\n\n1. **Importer les outils** (lignes 1-2)\n2. **Préparer les informations** (lignes 4-5)\n3. **Parcourir les fichiers** (lignes 7-8)\n4. **Renommer chaque fichier** (lignes 9-13)\n\nOn va voir chaque étape en détail."
     },
     {
       "id": "section_4",
-      "type": "text",
-      "title": "🔍 Décortiquons le Code",
-      "content": "Le script fait **4 grandes étapes** :\n\n1. **Importer les outils** (lignes 1-2)\n2. **Préparer les informations** (lignes 5-8)\n3. **Parcourir les fichiers** (ligne 11)\n4. **Renommer chaque fichier** (lignes 12-22)\n\nOn va voir chaque étape en détail."
+      "type": "code_example",
+      "title": "📦 Les Imports",
+      "code": "import os\nfrom datetime import datetime",
+      "language": "python",
+      "startLine": 1,
+      "lineExplanations": {
+        "0": "**os** = Operating System. Ce module permet de lister, renommer et supprimer des fichiers.",
+        "1": "**datetime** permet de manipuler les dates. On importe la classe `datetime` du module `datetime`."
+      }
     },
     {
       "id": "section_5",
-      "type": "text",
-      "title": "📦 Étape 1 : Importer les Outils",
-      "content": "```python\nimport os\nfrom datetime import datetime\n```\n\n**import os** - Le module `os` permet d'interagir avec le système d'exploitation (Operating System). Ici, on l'utilise pour :\n- Lister les fichiers d'un dossier avec `os.listdir()`\n- Renommer les fichiers avec `os.rename()`\n- Construire les chemins de fichiers avec `os.path.join()`\n\n**from datetime import datetime** - Le module `datetime` permet de manipuler les dates. On l'utilise pour :\n- Obtenir la date du jour avec `datetime.now()`\n- Formater la date en texte avec `.strftime()`"
-    },
-    {
-      "id": "section_6",
       "type": "exercise",
       "exerciseId": "auto_ex_001"
     },
     {
+      "id": "section_6",
+      "type": "code_example",
+      "title": "📁 Le Chemin du Dossier",
+      "code": "# Chemin du dossier contenant les photos\nfolder_path = './photos'",
+      "language": "python",
+      "startLine": 3,
+      "lineExplanations": {
+        "1": "**folder_path** stocke le chemin. `./` = dossier actuel, donc `./photos` = le dossier 'photos' à côté du script."
+      },
+      "highlight": {
+        "style": "info",
+        "content": "Tu peux changer ce chemin pour cibler un autre dossier !"
+      }
+    },
+    {
       "id": "section_7",
-      "type": "text",
-      "title": "⚙️ Étape 2 : Préparer les Informations",
-      "content": "```python\nfolder_path = './photos'\ntoday = datetime.now().strftime('%Y-%m-%d')\n```\n\n**folder_path = './photos'** - On crée une variable qui contient le chemin du dossier.\n- `./` signifie \"dossier actuel\"\n- Donc `./photos` = le dossier 'photos' à côté du script\n\n**datetime.now()** - Récupère la date et l'heure actuelles\n- Exemple : `2025-01-10 14:30:00`\n\n**.strftime('%Y-%m-%d')** - Formate la date en texte\n- `%Y` = année sur 4 chiffres (2025)\n- `%m` = mois sur 2 chiffres (01)\n- `%d` = jour sur 2 chiffres (10)\n- Résultat : `'2025-01-10'`"
-    },
-    {
-      "id": "section_8",
-      "type": "exercise",
-      "exerciseId": "auto_ex_002"
-    },
-    {
-      "id": "section_9",
       "type": "exercise",
       "exerciseId": "auto_ex_003"
     },
     {
+      "id": "section_8",
+      "type": "code_example",
+      "title": "📅 La Date du Jour",
+      "code": "# Récupérer et formater la date du jour\ntoday = datetime.now().strftime('%Y-%m-%d')\n\n# Exemple : '2025-01-15'",
+      "language": "python",
+      "startLine": 4,
+      "lineExplanations": {
+        "1": "**datetime.now()** = date et heure actuelles. **strftime('%Y-%m-%d')** = formate en 'AAAA-MM-JJ'."
+      },
+      "highlight": {
+        "style": "info",
+        "content": "%Y = année (2025), %m = mois (01), %d = jour (15)"
+      }
+    },
+    {
+      "id": "section_9",
+      "type": "exercise",
+      "exerciseId": "auto_ex_002"
+    },
+    {
       "id": "section_10",
-      "type": "text",
-      "title": "🔁 Étape 3 : Parcourir les Fichiers",
-      "content": "```python\nfor filename in os.listdir(folder_path):\n    if filename.endswith('.jpg'):\n```\n\n**os.listdir(folder_path)** - Retourne une liste de tous les fichiers dans le dossier\n- Exemple : `['photo1.jpg', 'photo2.jpg', 'document.pdf']`\n\n**for filename in ...** - Boucle qui parcourt chaque fichier un par un\n- À chaque tour, `filename` prend la valeur d'un fichier\n\n**if filename.endswith('.jpg')** - Vérifie si le nom du fichier se termine par `.jpg`\n- Permet de **filtrer** uniquement les photos\n- `document.pdf` sera ignoré"
+      "type": "code_example",
+      "title": "🔁 Parcourir les Fichiers",
+      "code": "# Parcourir tous les fichiers du dossier\nfor filename in os.listdir(folder_path):",
+      "language": "python",
+      "startLine": 6,
+      "lineExplanations": {
+        "1": "**os.listdir()** retourne la liste de TOUS les fichiers du dossier. La boucle **for** les parcourt un par un."
+      },
+      "highlight": {
+        "style": "info",
+        "content": "Exemple : ['photo1.jpg', 'photo2.jpg', 'document.pdf']"
+      }
     },
     {
       "id": "section_11",
@@ -73,27 +104,57 @@
     },
     {
       "id": "section_12",
+      "type": "code_example",
+      "title": "🔍 Filtrer les JPG",
+      "code": "    # Vérifier si c'est un fichier .jpg\n    if filename.endswith('.jpg'):",
+      "language": "python",
+      "startLine": 7,
+      "lineExplanations": {
+        "1": "**endswith('.jpg')** vérifie si le nom se termine par '.jpg'. Les autres fichiers (PDF, PNG...) sont ignorés."
+      }
+    },
+    {
+      "id": "section_13",
       "type": "exercise",
       "exerciseId": "auto_ex_005"
     },
     {
-      "id": "section_13",
-      "type": "text",
-      "title": "✏️ Étape 4 : Renommer les Fichiers",
-      "content": "```python\nnew_name = f\"{today}_{filename}\"\nold_path = os.path.join(folder_path, filename)\nnew_path = os.path.join(folder_path, new_name)\nos.rename(old_path, new_path)\n```\n\n**f\"{today}_{filename}\"** - Crée le nouveau nom en combinant la date et le nom original\n- Si `today = '2025-01-10'` et `filename = 'photo.jpg'`\n- Résultat : `'2025-01-10_photo.jpg'`\n\n**os.path.join()** - Construit le chemin complet du fichier\n- Combine `'./photos'` + `'photo.jpg'` → `'./photos/photo.jpg'`\n\n**os.rename()** - Renomme le fichier\n- Prend l'ancien chemin et le nouveau chemin\n- Effectue le renommage sur le disque"
-    },
-    {
       "id": "section_14",
-      "type": "exercise",
-      "exerciseId": "auto_ex_006"
+      "type": "code_example",
+      "title": "✏️ Créer le Nouveau Nom",
+      "code": "        # Combiner date + nom original\n        new_name = f\"{today}_{filename}\"",
+      "language": "python",
+      "startLine": 8,
+      "lineExplanations": {
+        "1": "**f-string** : les `{}` insèrent les variables. '2025-01-15' + '_' + 'photo.jpg' → '2025-01-15_photo.jpg'"
+      }
     },
     {
       "id": "section_15",
       "type": "exercise",
-      "exerciseId": "auto_ex_007"
+      "exerciseId": "auto_ex_006"
     },
     {
       "id": "section_16",
+      "type": "code_example",
+      "title": "💾 Renommer le Fichier",
+      "code": "        # Construire les chemins complets\n        old_path = os.path.join(folder_path, filename)\n        new_path = os.path.join(folder_path, new_name)\n        os.rename(old_path, new_path)\n        print(f\"Renommé : {filename} → {new_name}\")",
+      "language": "python",
+      "startLine": 9,
+      "lineExplanations": {
+        "1": "**os.path.join()** construit le chemin. Windows utilise `\\`, Mac/Linux `/`. Cette fonction choisit automatiquement !",
+        "2": "Pareil pour le nouveau chemin avec le nouveau nom.",
+        "3": "**os.rename()** renomme physiquement le fichier sur le disque dur.",
+        "4": "Affiche un message de confirmation pour chaque fichier."
+      }
+    },
+    {
+      "id": "section_17",
+      "type": "exercise",
+      "exerciseId": "auto_ex_007"
+    },
+    {
+      "id": "section_18",
       "type": "text",
       "title": "🎉 Félicitations !",
       "content": "Tu viens de comprendre comment l'IA génère un script d'automatisation !\n\n**Ce que tu as appris :**\n- ✅ Comment importer des modules Python (`os`, `datetime`)\n- ✅ Comment manipuler des dates (`.now()`, `.strftime()`)\n- ✅ Comment parcourir des fichiers (`os.listdir()`, boucle `for`)\n- ✅ Comment filtrer avec `if` (`.endswith()`)\n- ✅ Comment renommer des fichiers (`os.rename()`)\n\n**Prochaine étape :** Maintenant que tu comprends ce script, tu peux le **modifier** !\n- Change le format de date (`%d-%m-%Y` pour jour-mois-année)\n- Renomme d'autres types de fichiers (`.png`, `.pdf`)\n- Ajoute un préfixe différent (ex: `vacation_`)\n\n**L'important :** Tu n'as plus peur du code généré par l'IA. Tu sais le lire et le comprendre ! 💪"
@@ -118,12 +179,16 @@
     {
       "id": "auto_ex_002",
       "type": "predict_behavior",
-      "inputType": "free_input",
-      "question": "Si on est le 15 janvier 2025, quelle sera la valeur de la variable `today` ?",
-      "hint": "Regarde le format '%Y-%m-%d'",
-      "correctAnswer": "2025-01-15",
-      "acceptedAnswers": ["2025-01-15", "2025-1-15"],
-      "explanation": "datetime.now().strftime('%Y-%m-%d') va formater la date comme ceci : année (4 chiffres) - mois (2 chiffres) - jour (2 chiffres). Le 15 janvier 2025 devient donc '2025-01-15'.",
+      "inputType": "options",
+      "question": "Si on est le 15 janvier 2025, quelle sera la valeur de `today` ?",
+      "options": [
+        "2025-01-15",
+        "15-01-2025",
+        "2025/01/15",
+        "15/01/2025"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Le format '%Y-%m-%d' donne : année (4 chiffres) - mois (2 chiffres) - jour (2 chiffres). Résultat : '2025-01-15'.",
       "xpGain": 15
     },
     {
@@ -174,12 +239,16 @@
     {
       "id": "auto_ex_006",
       "type": "predict_behavior",
-      "inputType": "free_input",
-      "question": "Si `today = '2025-01-10'` et `filename = 'vacances.jpg'`, quel sera le `new_name` ?",
-      "hint": "Regarde la f-string : f\"{today}_{filename}\"",
-      "correctAnswer": "2025-01-10_vacances.jpg",
-      "acceptedAnswers": ["2025-01-10_vacances.jpg"],
-      "explanation": "La f-string `f\"{today}_{filename}\"` combine la valeur de `today`, un underscore `_`, et la valeur de `filename`. Résultat : '2025-01-10_vacances.jpg'. Les f-strings permettent d'insérer des variables dans du texte facilement !",
+      "inputType": "options",
+      "question": "Si `today = '2025-01-10'` et `filename = 'vacances.jpg'`, quel sera `new_name` ?",
+      "options": [
+        "2025-01-10_vacances.jpg",
+        "vacances_2025-01-10.jpg",
+        "2025-01-10-vacances.jpg",
+        "vacances.jpg_2025-01-10"
+      ],
+      "correctAnswer": 0,
+      "explanation": "La f-string `f\"{today}_{filename}\"` combine : '2025-01-10' + '_' + 'vacances.jpg' = '2025-01-10_vacances.jpg'",
       "xpGain": 15
     },
     {

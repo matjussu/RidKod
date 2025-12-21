@@ -12,7 +12,8 @@ const CodeBlock = ({
   selectedLine = null,
   onLineClick = null,
   isSubmitted = false,
-  correctAnswer = null
+  correctAnswer = null,
+  startLine = 1
 }) => {
   // Protection : ne rien afficher si pas de code
   if (!code) return null;
@@ -24,7 +25,7 @@ const CodeBlock = ({
     <div className={`code-container ${isCompact ? 'compact' : ''}`}>
       <div className="code-wrapper">
         {lines.map((line, index) => {
-          const lineNumber = index + 1;
+          const lineNumber = index + startLine;
           const isHighlighted = isHighlightActive && highlightedLines.includes(lineNumber);
           const isClickable = clickableLines.includes(lineNumber);
           const isSelected = selectedLine === lineNumber;
@@ -81,7 +82,7 @@ const CodeBlock = ({
         }
 
         .code-line {
-          padding: 2px 4px 2px 28px;
+          padding: 2px 4px 2px 36px;
           margin: 0;
           border-radius: 4px;
           transition: all 0.3s ease;
@@ -98,11 +99,11 @@ const CodeBlock = ({
 
         .line-number {
           position: absolute;
-          left: 2px;
+          left: 4px;
           color: #6A9955;
           font-size: 12px;
           font-weight: 500;
-          width: 22px;
+          width: 26px;
           text-align: right;
           user-select: none;
           font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
@@ -170,14 +171,14 @@ const CodeBlock = ({
         .code-line.clickable:hover {
           background: rgba(255, 149, 0, 0.1);
           border-left: 3px solid #FF9500;
-          padding-left: calc(28px - 3px);
+          padding-left: calc(36px - 3px);
         }
 
         /* Selected Line (orange when clicked, before submit) */
         .code-line.selected {
           background: rgba(255, 149, 0, 0.25);
           border-left: 3px solid #FF9500;
-          padding-left: calc(28px - 3px);
+          padding-left: calc(36px - 3px);
           box-shadow: 0 0 0 2px rgba(255, 149, 0, 0.4);
         }
 
@@ -185,7 +186,7 @@ const CodeBlock = ({
         .code-line.correct {
           background: rgba(48, 209, 88, 0.25);
           border-left: 3px solid #30D158;
-          padding-left: calc(28px - 3px);
+          padding-left: calc(36px - 3px);
           box-shadow: 0 0 0 2px rgba(48, 209, 88, 0.5);
           animation: correctPulse 0.6s ease-out;
         }
@@ -194,7 +195,7 @@ const CodeBlock = ({
         .code-line.incorrect {
           background: rgba(255, 69, 58, 0.25);
           border-left: 3px solid #FF453A;
-          padding-left: calc(28px - 3px);
+          padding-left: calc(36px - 3px);
           box-shadow: 0 0 0 2px rgba(255, 69, 58, 0.5);
           animation: incorrectShake 0.5s ease-out;
         }
@@ -275,14 +276,14 @@ const CodeBlock = ({
         /* iPhone SE, iPhone 12/13 mini */
         @media (max-width: 375px) {
           .code-line {
-            padding: 2px 3px 2px 26px;
+            padding: 2px 3px 2px 34px;
             min-height: 22px;
           }
 
           .line-number {
-            left: 2px;
+            left: 3px;
             font-size: 11px;
-            width: 20px;
+            width: 24px;
           }
 
           .code-line.highlighted::before {
@@ -294,14 +295,14 @@ const CodeBlock = ({
         /* iPhone SE 1ère génération */
         @media (max-width: 320px) {
           .code-line {
-            padding: 1px 2px 1px 24px;
+            padding: 1px 2px 1px 32px;
             min-height: 20px;
           }
 
           .line-number {
-            left: 1px;
+            left: 2px;
             font-size: 10px;
-            width: 18px;
+            width: 24px;
           }
 
           .code-line.highlighted::before {
@@ -317,12 +318,13 @@ const CodeBlock = ({
         /* Mode paysage */
         @media (orientation: landscape) {
           .code-line {
-            padding: 1px 3px 1px 25px;
+            padding: 1px 3px 1px 34px;
             min-height: 20px;
           }
 
           .line-number {
             font-size: 11px;
+            width: 26px;
           }
 
           .code-line.highlighted::before {
