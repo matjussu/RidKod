@@ -1,0 +1,693 @@
+/* ========================================
+   CHALLENGES.CSS - Section Compétitive
+   Style Gaming/Arena distinct
+   ======================================== */
+
+/* ========================================
+   1. CONTAINER PRINCIPAL
+   ======================================== */
+
+.challenges-container {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  background: #0D0D0F;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  padding-top: max(calc(env(safe-area-inset-top) + 20px), 40px);
+  padding-left: max(20px, env(safe-area-inset-left));
+  padding-right: max(20px, env(safe-area-inset-right));
+  padding-bottom: max(env(safe-area-inset-bottom), 24px);
+  max-width: min(428px, 100vw);
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  position: relative;
+  opacity: 0;
+  animation: challengesFadeIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Background subtle grid pattern */
+.challenges-container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes challengesFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   2. BACK BUTTON
+   ======================================== */
+
+.challenges-back-button {
+  position: absolute;
+  top: max(env(safe-area-inset-top), 8px);
+  left: max(16px, env(safe-area-inset-left));
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.challenges-back-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.challenges-back-button:active {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(0.95);
+}
+
+.challenges-back-button svg {
+  color: #FFFFFF;
+  width: 24px;
+  height: 24px;
+}
+
+/* ========================================
+   3. HEADER SECTION - ARENA STYLE
+   ======================================== */
+
+.challenges-header {
+  text-align: center;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s forwards;
+}
+
+/* Glow effect behind header */
+.challenges-header-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 150px;
+  background: radial-gradient(ellipse, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+  filter: blur(40px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.challenges-title-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.challenges-title-icon {
+  font-size: 40px;
+  filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.5));
+  animation: iconFloat 3s ease-in-out infinite;
+}
+
+@keyframes iconFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.challenges-title {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 36px;
+  font-weight: 900;
+  color: #FFFFFF;
+  margin: 0;
+  line-height: 1;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  position: relative;
+}
+
+.challenges-title-accent {
+  color: #8B5CF6;
+  font-weight: 900;
+  text-shadow: 0 0 20px rgba(139, 92, 246, 0.6);
+}
+
+.challenges-subtitle {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 16px 0 0 0;
+  letter-spacing: 0.5px;
+}
+
+/* ========================================
+   4. MODES GRID
+   ======================================== */
+
+.challenges-modes-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  z-index: 1;
+}
+
+/* ========================================
+   5. MODE CARDS
+   ======================================== */
+
+.challenge-mode-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(30, 30, 35, 0.9) 0%, rgba(20, 20, 25, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  overflow: hidden;
+  text-align: left;
+  font-family: inherit;
+  color: inherit;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  opacity: 0;
+  animation: cardSlideIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes cardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Glow effect on cards */
+.mode-card-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.challenge-mode-card:hover .mode-card-glow,
+.challenge-mode-card:active .mode-card-glow {
+  opacity: 1;
+}
+
+.challenge-mode-card:hover {
+  transform: translateX(4px);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.challenge-mode-card:active {
+  transform: scale(0.98);
+}
+
+/* ========================================
+   6. MODE CARD VARIANTS
+   ======================================== */
+
+/* DUEL - Violet/Cyan */
+.challenge-mode-card.duel .mode-card-glow {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(6, 182, 212, 0.05) 100%);
+}
+
+.challenge-mode-card.duel .mode-icon-container {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(6, 182, 212, 0.1) 100%);
+  border-color: rgba(139, 92, 246, 0.3);
+  color: #8B5CF6;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+}
+
+.challenge-mode-card.duel:hover .mode-icon-container {
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
+}
+
+.challenge-mode-card.duel .mode-title {
+  background: linear-gradient(135deg, #8B5CF6 0%, #06B6D4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.challenge-mode-card.duel .mode-subtitle {
+  color: #8B5CF6;
+}
+
+/* DAILY - Orange/Gold */
+.challenge-mode-card.daily .mode-card-glow {
+  background: linear-gradient(135deg, rgba(251, 146, 60, 0.1) 0%, rgba(250, 204, 21, 0.05) 100%);
+}
+
+.challenge-mode-card.daily .mode-icon-container {
+  background: linear-gradient(135deg, rgba(251, 146, 60, 0.2) 0%, rgba(250, 204, 21, 0.1) 100%);
+  border-color: rgba(251, 146, 60, 0.3);
+  color: #FB923C;
+  box-shadow: 0 0 20px rgba(251, 146, 60, 0.2);
+}
+
+.challenge-mode-card.daily:hover .mode-icon-container {
+  box-shadow: 0 0 30px rgba(251, 146, 60, 0.4);
+}
+
+.challenge-mode-card.daily .mode-title {
+  background: linear-gradient(135deg, #FB923C 0%, #FACC15 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.challenge-mode-card.daily .mode-subtitle {
+  color: #FB923C;
+}
+
+/* LEADERBOARD - Gold/Silver */
+.challenge-mode-card.leaderboard .mode-card-glow {
+  background: linear-gradient(135deg, rgba(250, 204, 21, 0.1) 0%, rgba(156, 163, 175, 0.05) 100%);
+}
+
+.challenge-mode-card.leaderboard .mode-icon-container {
+  background: linear-gradient(135deg, rgba(250, 204, 21, 0.2) 0%, rgba(234, 179, 8, 0.1) 100%);
+  border-color: rgba(250, 204, 21, 0.3);
+  color: #FACC15;
+  box-shadow: 0 0 20px rgba(250, 204, 21, 0.2);
+}
+
+.challenge-mode-card.leaderboard:hover .mode-icon-container {
+  box-shadow: 0 0 30px rgba(250, 204, 21, 0.4);
+}
+
+.challenge-mode-card.leaderboard .mode-title {
+  background: linear-gradient(135deg, #FACC15 0%, #F59E0B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.challenge-mode-card.leaderboard .mode-subtitle {
+  color: #FACC15;
+}
+
+/* ========================================
+   7. MODE CARD ELEMENTS
+   ======================================== */
+
+.mode-icon-container {
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.mode-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.mode-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  z-index: 1;
+}
+
+.mode-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mode-title {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 18px;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.mode-subtitle {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mode-description {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Status Badge */
+.mode-status-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  background: #8B5CF6;
+  border-radius: 50%;
+  animation: statusPulse 2s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4);
+  }
+  50% {
+    opacity: 0.6;
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0);
+  }
+}
+
+/* Arrow */
+.mode-arrow {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  color: rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.challenge-mode-card:hover .mode-arrow {
+  color: rgba(255, 255, 255, 0.6);
+  transform: translateX(4px);
+}
+
+/* ========================================
+   8. STATS PREVIEW
+   ======================================== */
+
+.challenges-stats-preview {
+  margin-top: 32px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(30, 30, 35, 0.8) 0%, rgba(20, 20, 25, 0.9) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  animation: cardSlideIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards;
+}
+
+.stats-preview-title {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stats-icon {
+  font-size: 16px;
+}
+
+.stats-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.stat-value {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 24px;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1;
+}
+
+.stat-label {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* ========================================
+   9. FOOTER
+   ======================================== */
+
+.challenges-footer {
+  margin-top: auto;
+  padding-top: 24px;
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.3);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* ========================================
+   10. ANIMATIONS
+   ======================================== */
+
+@keyframes slideInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   11. RESPONSIVE
+   ======================================== */
+
+/* iPhone 14/15 Pro Max */
+@media (max-width: 430px) {
+  .challenges-container {
+    padding-left: max(18px, env(safe-area-inset-left));
+    padding-right: max(18px, env(safe-area-inset-right));
+  }
+}
+
+/* iPhone 14/15 Pro */
+@media (max-width: 393px) {
+  .challenges-title {
+    font-size: 32px;
+    letter-spacing: 1px;
+  }
+
+  .challenges-title-icon {
+    font-size: 36px;
+  }
+}
+
+/* iPhone SE, iPhone 12/13 mini - 375px */
+@media (max-width: 375px) {
+  .challenges-container {
+    padding-left: max(14px, env(safe-area-inset-left));
+    padding-right: max(14px, env(safe-area-inset-right));
+    padding-top: max(env(safe-area-inset-top), 16px);
+  }
+
+  .challenges-back-button {
+    left: max(14px, env(safe-area-inset-left));
+    top: max(env(safe-area-inset-top), 6px);
+    padding: 10px;
+  }
+
+  .challenges-title {
+    font-size: 28px;
+  }
+
+  .challenges-title-icon {
+    font-size: 32px;
+  }
+
+  .challenges-header {
+    margin-bottom: 32px;
+  }
+
+  .challenge-mode-card {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .mode-icon-container {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    border-radius: 14px;
+  }
+
+  .mode-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .mode-title {
+    font-size: 16px;
+  }
+
+  .mode-description {
+    font-size: 11px;
+  }
+
+  .stats-preview-grid {
+    gap: 8px;
+  }
+
+  .stat-value {
+    font-size: 20px;
+  }
+
+  .stat-label {
+    font-size: 9px;
+  }
+}
+
+/* Très petits écrans - iPhone SE 1ère gen */
+@media (max-width: 320px) {
+  .challenges-container {
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+    padding-top: max(env(safe-area-inset-top), 14px);
+  }
+
+  .challenges-title {
+    font-size: 24px;
+  }
+
+  .challenges-title-icon {
+    font-size: 28px;
+  }
+
+  .mode-icon-container {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+  }
+
+  .mode-title {
+    font-size: 14px;
+  }
+
+  .mode-subtitle {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+}
+
+/* Mode paysage */
+@media (orientation: landscape) {
+  .challenges-header {
+    margin-bottom: 24px;
+  }
+
+  .challenges-title {
+    font-size: 28px;
+  }
+
+  .challenges-title-icon {
+    font-size: 32px;
+  }
+
+  .challenges-modes-grid {
+    gap: 12px;
+  }
+
+  .challenge-mode-card {
+    padding: 16px;
+  }
+
+  .challenges-stats-preview {
+    margin-top: 20px;
+  }
+}
