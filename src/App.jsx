@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ProgressProvider } from './context/ProgressContext';
+import ErrorBoundary from './components/common/ErrorBoundary';
 import Welcome from './pages/Welcome';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -46,6 +47,7 @@ const App = () => {
     <Router>
       <AuthProvider>
         <ProgressProvider>
+          <ErrorBoundary>
           <Routes>
             {/* Route principale avec redirection intelligente */}
             <Route path="/" element={<RootRoute />} />
@@ -95,6 +97,7 @@ const App = () => {
           {/* Contact page */}
           <Route path="/contact" element={<Contact />} />
         </Routes>
+          </ErrorBoundary>
         </ProgressProvider>
       </AuthProvider>
     </Router>

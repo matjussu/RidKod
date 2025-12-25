@@ -249,12 +249,14 @@ html, body {
 .options-container {
   transition: all 0.3s ease;
   overflow: hidden;
+  margin: 0;
+  padding: 6px 4px;
 }
 
 .options-container.visible {
   opacity: 1;
   max-height: none;
-  margin-bottom: var(--space-md);
+  margin: 0;
 }
 
 .options-container.hidden {

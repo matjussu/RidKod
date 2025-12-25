@@ -5,9 +5,9 @@ service cloud.firestore {
 
     // Collection de profils utilisateur
     match /users/{userId} {
-      // Autoriser la lecture pour tous les utilisateurs authentifiés (leaderboard)
-      // Écriture uniquement pour le propriétaire
-      allow read: if request.auth != null;
+      // Autoriser la lecture uniquement pour le propriétaire du profil
+      // (Pour un leaderboard, créer une collection /leaderboard séparée avec données publiques limitées)
+      allow read: if request.auth != null && request.auth.uid == userId;
 
       // Autoriser la création uniquement si :
       // 1. L'utilisateur est authentifié
@@ -37,9 +37,9 @@ service cloud.firestore {
 
     // Collection de progression utilisateur
     match /progress/{userId} {
-      // Autoriser la lecture pour tous les utilisateurs authentifiés (leaderboard)
-      // Écriture uniquement pour le propriétaire
-      allow read: if request.auth != null;
+      // Autoriser la lecture uniquement pour le propriétaire
+      // (Pour un leaderboard, créer une collection /leaderboard séparée avec données publiques limitées)
+      allow read: if request.auth != null && request.auth.uid == userId;
 
       // Autoriser la création uniquement si :
       // 1. L'utilisateur est authentifié

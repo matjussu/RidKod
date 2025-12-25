@@ -571,12 +571,12 @@
 /* iPhone 14/15 Pro */
 @media (max-width: 393px) {
   .challenges-title {
-    font-size: 32px;
+    font-size: 50px;
     letter-spacing: 1px;
   }
 
   .challenges-title-icon {
-    font-size: 36px;
+    font-size: 45px;
   }
 }
 
@@ -595,7 +595,7 @@
   }
 
   .challenges-title {
-    font-size: 28px;
+    font-size: 45px;
   }
 
   .challenges-title-icon {
@@ -653,7 +653,7 @@
   }
 
   .challenges-title {
-    font-size: 24px;
+    font-size: 45px;
   }
 
   .challenges-title-icon {
@@ -683,7 +683,7 @@
   }
 
   .challenges-title {
-    font-size: 28px;
+    font-size: 45px;
   }
 
   .challenges-title-icon {

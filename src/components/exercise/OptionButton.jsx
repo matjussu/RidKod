@@ -37,6 +37,7 @@ const OptionButton = ({ value, isSelected, isCorrect, isSubmitted, onClick }) =>
           cursor: pointer;
           transition: all 0.2s ease;
           display: flex;
+          flex-direction: row;
           align-items: center;
           justify-content: center;
           text-align: center;
@@ -46,7 +47,8 @@ const OptionButton = ({ value, isSelected, isCorrect, isSubmitted, onClick }) =>
           box-sizing: border-box;
           touch-action: manipulation;
           -webkit-tap-highlight-color: transparent;
-          padding: 12px 8px;
+          margin: 0;
+          padding: 0px 6px;
           word-wrap: break-word;
           overflow-wrap: break-word;
           hyphens: auto;
@@ -100,7 +102,7 @@ const OptionButton = ({ value, isSelected, isCorrect, isSubmitted, onClick }) =>
           .option-button {
             font-size: 15px;
             min-height: 50px;
-            padding: 10px 8px;
+            padding: 0px 6px;
           }
         }
 
@@ -109,7 +111,7 @@ const OptionButton = ({ value, isSelected, isCorrect, isSubmitted, onClick }) =>
           .option-button {
             font-size: 15px;
             min-height: 50px;
-            padding: 10px 8px;
+            padding: 0px 6px;
           }
         }
 
@@ -117,7 +119,7 @@ const OptionButton = ({ value, isSelected, isCorrect, isSubmitted, onClick }) =>
           .option-button {
             font-size: 14px;
             min-height: 48px;
-            padding: 10px 6px;
+            padding: 0px 6px;
           }
         }
 
@@ -125,7 +127,7 @@ const OptionButton = ({ value, isSelected, isCorrect, isSubmitted, onClick }) =>
           .option-button {
             font-size: 13px;
             min-height: 46px;
-            padding: 8px 6px;
+            padding: 0px 6px;
           }
         }
 
@@ -134,7 +136,7 @@ const OptionButton = ({ value, isSelected, isCorrect, isSubmitted, onClick }) =>
           .option-button {
             min-height: 44px;
             font-size: 14px;
-            padding: 8px 6px;
+            padding: 0px 6px;
           }
         }
       `}</style>

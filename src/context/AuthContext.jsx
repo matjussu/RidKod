@@ -7,6 +7,7 @@ import {
 } from 'firebase/auth';
 import { auth } from '../config/firebase';
 import { createUserProfile, getUserProfile } from '../services/userService';
+import { checkRateLimit, recordAttempt } from '../utils/authRateLimiter';
 
 // Création du contexte
 const AuthContext = createContext({});
@@ -45,9 +46,9 @@ export const AuthProvider = ({ children }) => {
           setUser(currentUser);
         }
 
-        // Sauvegarder dans localStorage pour persistance
+        // Sauvegarder dans localStorage pour persistance (sans données sensibles)
         localStorage.setItem('hasAccount', 'true');
-        localStorage.setItem('userEmail', currentUser.email);
+        // Note: userEmail supprimé pour raison de sécurité (accessible via XSS)
       } else {
         setUser(null);
       }
@@ -102,31 +103,45 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Connexion
+  // Connexion avec rate limiting
   const login = async (email, password) => {
     try {
       setError(null);
+
+      // Vérifier le rate limit avant la tentative
+      const rateLimitCheck = checkRateLimit(email);
+      if (!rateLimitCheck.allowed) {
+        setError(rateLimitCheck.message);
+        return { success: false, error: rateLimitCheck.message };
+      }
+
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
+
+      // Connexion réussie : réinitialiser le compteur
+      recordAttempt(email, true);
       return { success: true, user: userCredential.user };
     } catch (err) {
+      // Enregistrer l'échec pour le rate limiting
+      recordAttempt(email, false);
+
       let errorMessage = 'Une erreur est survenue lors de la connexion.';
 
-      // Messages d'erreur en français
+      // Messages d'erreur en français (génériques pour éviter l'énumération d'utilisateurs)
       switch (err.code) {
         case 'auth/user-not-found':
-          errorMessage = 'Aucun compte trouvé avec cet email.';
-          break;
         case 'auth/wrong-password':
-          errorMessage = 'Mot de passe incorrect.';
-          break;
-        case 'auth/invalid-email':
-          errorMessage = 'Email invalide.';
-          break;
         case 'auth/invalid-credential':
+          // Message générique pour ne pas révéler si l'email existe
           errorMessage = 'Email ou mot de passe incorrect.';
           break;
+        case 'auth/invalid-email':
+          errorMessage = 'Format d\'email invalide.';
+          break;
+        case 'auth/too-many-requests':
+          errorMessage = 'Trop de tentatives. Réessayez plus tard.';
+          break;
         default:
-          errorMessage = err.message;
+          errorMessage = 'Une erreur est survenue. Veuillez réessayer.';
       }
 
       setError(errorMessage);
@@ -138,7 +153,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await signOut(auth);
-      localStorage.removeItem('userEmail');
+      // Note: userEmail n'est plus stocké (supprimé pour sécurité)
       return { success: true };
     } catch (err) {
       setError('Erreur lors de la déconnexion.');

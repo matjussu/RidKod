@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import DOMPurify from 'dompurify';
 import { useProgress } from '../../context/ProgressContext';
 import useHaptic from '../../hooks/useHaptic';
 import AIPromptExample from '../../components/ai/AIPromptExample';
@@ -206,12 +207,12 @@ const AIContent = () => {
     navigate('/ai-understanding');
   };
 
-  // Format text with bold and inline code
+  // Format text with bold and inline code (sanitized against XSS)
   const formatText = (text) => {
     if (!text) return null;
     let formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     formatted = formatted.replace(/`([^`]+)`/g, '<code class="ai-inline-code">$1</code>');
-    return <span dangerouslySetInnerHTML={{ __html: formatted }} />;
+    return <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(formatted) }} />;
   };
 
   if (!topicData) {

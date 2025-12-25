@@ -270,7 +270,7 @@ const Contact = () => {
 
     try {
       // FormSubmit.co endpoint
-      const response = await fetch('https://formsubmit.co/ajax/matteolepietre@gmail.com', {
+      const response = await fetch(`https://formsubmit.co/ajax/${import.meta.env.VITE_CONTACT_EMAIL}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

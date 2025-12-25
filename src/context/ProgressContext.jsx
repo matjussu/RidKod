@@ -18,6 +18,7 @@ import {
 } from '../services/progressService';
 import { exerciseRateLimiter, lessonRateLimiter } from '../utils/throttle';
 import { getQueueSize } from '../utils/debounce';
+import { getUserFriendlyMessage, logError, isRetryable } from '../utils/errorHandler';
 
 // Création du contexte
 const ProgressContext = createContext({});
@@ -79,12 +80,14 @@ export const ProgressProvider = ({ children }) => {
           setProgress(localProgress);
         }
       } catch (err) {
-        console.error('Erreur lors du chargement de la progression:', err);
-        setError(err.message);
+        logError('loadProgress', err, { userId: user?.uid });
+        const friendlyMessage = getUserFriendlyMessage(err);
+        setError(friendlyMessage);
 
-        // En cas d'erreur, utiliser la progression locale
+        // En cas d'erreur, utiliser la progression locale comme fallback
         const localProgress = getLocalProgress();
         setProgress(localProgress);
+        console.log('📱 Fallback vers progression locale');
       } finally {
         setLoading(false);
       }
@@ -217,9 +220,10 @@ export const ProgressProvider = ({ children }) => {
         };
       }
     } catch (err) {
-      console.error('Erreur lors de la sauvegarde de l\'exercice:', err);
-      setError(err.message);
-      throw err;
+      logError('completeExercise', err, { userId: user?.uid });
+      const friendlyMessage = getUserFriendlyMessage(err);
+      setError(friendlyMessage);
+      throw new Error(friendlyMessage);
     }
   };
 
@@ -265,9 +269,10 @@ export const ProgressProvider = ({ children }) => {
         return updatedProgress;
       }
     } catch (err) {
-      console.error('Erreur lors de la complétion du niveau:', err);
-      setError(err.message);
-      throw err;
+      logError('completeLevel', err, { userId: user?.uid, exerciseLevel });
+      const friendlyMessage = getUserFriendlyMessage(err);
+      setError(friendlyMessage);
+      throw new Error(friendlyMessage);
     }
   };
 
@@ -348,9 +353,10 @@ export const ProgressProvider = ({ children }) => {
         };
       }
     } catch (err) {
-      console.error('Erreur lors de la complétion du niveau batch:', err);
-      setError(err.message);
-      throw err;
+      logError('completeLevelWithBatch', err, { userId: user?.uid, exerciseLevel, levelStats });
+      const friendlyMessage = getUserFriendlyMessage(err);
+      setError(friendlyMessage);
+      throw new Error(friendlyMessage);
     }
   };
 
@@ -463,9 +469,10 @@ export const ProgressProvider = ({ children }) => {
         return updatedProgress;
       }
     } catch (err) {
-      console.error('Erreur lors de la mise à jour de la progression:', err);
-      setError(err.message);
-      throw err;
+      logError('updateProgress', err, { userId: user?.uid });
+      const friendlyMessage = getUserFriendlyMessage(err);
+      setError(friendlyMessage);
+      throw new Error(friendlyMessage);
     }
   };
 
