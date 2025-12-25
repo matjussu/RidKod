@@ -23,6 +23,14 @@ import AIHome from './pages/ai/AIHome';
 import AIContent from './pages/ai/AIContent';
 import ChallengesHome from './pages/challenges/ChallengesHome';
 import Leaderboard from './pages/challenges/Leaderboard';
+import DailyChallenge from './pages/challenges/DailyChallenge';
+import DailyResult from './pages/challenges/DailyResult';
+import DuelHome from './pages/challenges/DuelHome';
+import DuelBot from './pages/challenges/DuelBot';
+import DuelCreate from './pages/challenges/DuelCreate';
+import DuelJoin from './pages/challenges/DuelJoin';
+import DuelGame from './pages/challenges/DuelGame';
+import DuelResult from './pages/challenges/DuelResult';
 
 // Composant pour gérer la route principale "/"
 const RootRoute = () => {
@@ -72,6 +80,16 @@ const App = () => {
           {/* Routes Challenges */}
           <Route path="/challenges" element={<ChallengesHome />} />
           <Route path="/challenges/leaderboard" element={<Leaderboard />} />
+          <Route path="/challenges/daily" element={<DailyChallenge />} />
+          <Route path="/challenges/daily/result" element={<DailyResult />} />
+
+          {/* Routes Duel */}
+          <Route path="/challenges/duel" element={<DuelHome />} />
+          <Route path="/challenges/duel/bot" element={<DuelBot />} />
+          <Route path="/challenges/duel/create" element={<DuelCreate />} />
+          <Route path="/challenges/duel/join/:code" element={<DuelJoin />} />
+          <Route path="/challenges/duel/game/:code" element={<DuelGame />} />
+          <Route path="/challenges/duel/result" element={<DuelResult />} />
 
 
           {/* Contact page */}

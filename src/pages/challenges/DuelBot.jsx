@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { useProgress } from '../../context/ProgressContext';
 import useHaptic from '../../hooks/useHaptic';
 import CodeBlock from '../../components/exercise/CodeBlock';
 import OptionButton from '../../components/exercise/OptionButton';
@@ -10,34 +9,25 @@ import QuestionCard from '../../components/exercise/QuestionCard';
 import CustomKeyboard from '../../components/exercise/CustomKeyboard';
 import FeedbackGlow from '../../components/common/FeedbackGlow';
 import {
-  getDailyChallengeExercises,
-  hasCompletedDailyChallenge,
-  saveDailyChallengeScore,
-  getTodayDateString
-} from '../../services/dailyChallengeService';
-import { getUserProfile } from '../../services/userService';
-import {
-  incrementDailyChallengeCompleted,
+  incrementDuelStats,
   saveLocalChallengeStats,
   getLocalChallengeStats
 } from '../../services/challengeStatsService';
 import '../../styles/Challenges.css';
 
-const DailyChallenge = () => {
+const DuelBot = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { completeExercise } = useProgress();
   const { triggerSuccess, triggerError, triggerLight } = useHaptic();
 
-  // États principaux
+  // Etats du jeu
   const [loading, setLoading] = useState(true);
-  const [alreadyCompleted, setAlreadyCompleted] = useState(false);
-  const [previousScore, setPreviousScore] = useState(null);
   const [exercises, setExercises] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [dateString, setDateString] = useState('');
+  const [gameStarted, setGameStarted] = useState(false);
+  const [countdown, setCountdown] = useState(3);
 
-  // États de l'exercice en cours
+  // Etats du joueur
   const [selectedOption, setSelectedOption] = useState(null);
   const [userInput, setUserInput] = useState('');
   const [selectedLine, setSelectedLine] = useState(null);
@@ -45,80 +35,129 @@ const DailyChallenge = () => {
   const [isCorrect, setIsCorrect] = useState(false);
   const [showExplanation, setShowExplanation] = useState(false);
 
-  // États du feedback
+  // Stats joueur
+  const [playerStats, setPlayerStats] = useState({
+    score: 0,
+    correctAnswers: 0,
+    currentQuestion: 0
+  });
+
+  // Stats bot
+  const [botStats, setBotStats] = useState({
+    score: 0,
+    correctAnswers: 0,
+    currentQuestion: 0,
+    isAnswering: false
+  });
+
+  // Feedback
   const [showGlow, setShowGlow] = useState(false);
   const [glowType, setGlowType] = useState('success');
-
-  // Stats de la session
-  const [stats, setStats] = useState({
-    correctAnswers: 0,
-    incorrectAnswers: 0,
-    totalXP: 0
-  });
 
   // Timer
   const [startTime, setStartTime] = useState(null);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const timerRef = useRef(null);
+  const botTimeoutRef = useRef(null);
 
-  // Charger le défi du jour
+  // Difficulte du bot (0 = facile, 1 = moyen, 2 = difficile)
+  const [botDifficulty] = useState(1);
+
+  // Charger les exercices
   useEffect(() => {
-    const loadDailyChallenge = async () => {
-      setLoading(true);
-
+    const loadExercises = async () => {
       try {
-        // Vérifier si déjà complété
-        if (user?.uid) {
-          const completion = await hasCompletedDailyChallenge(user.uid);
-          if (completion.completed) {
-            setAlreadyCompleted(true);
-            setPreviousScore(completion);
-            setLoading(false);
-            return;
-          }
-        }
+        const [easyModule, mediumModule, hardModule] = await Promise.all([
+          import('../../data/exercises-easy.json'),
+          import('../../data/exercises-medium.json'),
+          import('../../data/exercises-hard.json')
+        ]);
 
-        // Charger les exercices du jour
-        const { success, exercises: dailyExercises, date } = await getDailyChallengeExercises();
+        const allExercises = [
+          ...easyModule.default,
+          ...mediumModule.default,
+          ...hardModule.default
+        ];
 
-        if (!success || !dailyExercises.length) {
-          navigate('/challenges');
-          return;
-        }
-
-        setExercises(dailyExercises);
-        setDateString(date);
-        setStartTime(Date.now());
-      } catch (error) {
-        console.error('Error loading daily challenge:', error);
-        navigate('/challenges');
-      } finally {
+        // Melanger et prendre 5 exercices
+        const shuffled = allExercises.sort(() => Math.random() - 0.5);
+        setExercises(shuffled.slice(0, 5));
         setLoading(false);
+      } catch (error) {
+        console.error('Error loading exercises:', error);
+        navigate('/challenges/duel');
       }
     };
 
-    loadDailyChallenge();
-  }, [user, navigate]);
+    loadExercises();
 
-  // Timer
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+      if (botTimeoutRef.current) clearTimeout(botTimeoutRef.current);
+    };
+  }, [navigate]);
+
+  // Countdown avant le debut
   useEffect(() => {
-    if (startTime && !alreadyCompleted) {
+    if (!loading && !gameStarted && countdown > 0) {
+      const timer = setTimeout(() => {
+        setCountdown(c => c - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else if (countdown === 0 && !gameStarted) {
+      setGameStarted(true);
+      setStartTime(Date.now());
+    }
+  }, [loading, gameStarted, countdown]);
+
+  // Timer du jeu
+  useEffect(() => {
+    if (gameStarted && startTime) {
       timerRef.current = setInterval(() => {
         setElapsedSeconds(Math.floor((Date.now() - startTime) / 1000));
       }, 1000);
     }
 
     return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
+      if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [startTime, alreadyCompleted]);
+  }, [gameStarted, startTime]);
+
+  // Simuler le bot qui repond
+  useEffect(() => {
+    if (!gameStarted || isSubmitted || botStats.currentQuestion > currentIndex) return;
+
+    // Delai base sur la difficulte
+    const baseDelay = botDifficulty === 0 ? 8000 : botDifficulty === 1 ? 5000 : 3000;
+    const randomDelay = baseDelay + Math.random() * 4000;
+
+    // Probabilite de bonne reponse basee sur la difficulte
+    const correctProbability = botDifficulty === 0 ? 0.5 : botDifficulty === 1 ? 0.7 : 0.85;
+
+    setBotStats(prev => ({ ...prev, isAnswering: true }));
+
+    botTimeoutRef.current = setTimeout(() => {
+      const botCorrect = Math.random() < correctProbability;
+      const xpGain = botCorrect ? (exercises[currentIndex]?.xpGain || 10) : 0;
+
+      setBotStats(prev => ({
+        ...prev,
+        isAnswering: false,
+        correctAnswers: prev.correctAnswers + (botCorrect ? 1 : 0),
+        score: prev.score + xpGain,
+        currentQuestion: currentIndex + 1
+      }));
+    }, randomDelay);
+
+    return () => {
+      if (botTimeoutRef.current) clearTimeout(botTimeoutRef.current);
+    };
+  }, [gameStarted, currentIndex, isSubmitted, botDifficulty, exercises, botStats.currentQuestion]);
 
   const currentExercise = exercises[currentIndex];
   const inputType = currentExercise?.inputType || 'options';
 
-  // Vérifier la réponse
+  // Verifier la reponse
   const checkAnswer = useCallback(() => {
     if (!currentExercise) return false;
 
@@ -135,7 +174,7 @@ const DailyChallenge = () => {
     return false;
   }, [currentExercise, inputType, selectedOption, userInput, selectedLine]);
 
-  // Valider la réponse
+  // Valider la reponse
   const handleValidate = useCallback(() => {
     if (isSubmitted) return;
 
@@ -143,32 +182,29 @@ const DailyChallenge = () => {
     setIsCorrect(correct);
     setIsSubmitted(true);
 
-    // Feedback visuel
     setGlowType(correct ? 'success' : 'error');
     setShowGlow(true);
     setTimeout(() => setShowGlow(false), 600);
 
-    // Haptic
     if (correct) {
       triggerSuccess();
     } else {
       triggerError();
     }
 
-    // Mettre à jour les stats
     const xpGain = correct ? (currentExercise.xpGain || 10) : 0;
-    setStats(prev => ({
+    setPlayerStats(prev => ({
+      ...prev,
       correctAnswers: prev.correctAnswers + (correct ? 1 : 0),
-      incorrectAnswers: prev.incorrectAnswers + (correct ? 0 : 1),
-      totalXP: prev.totalXP + xpGain
+      score: prev.score + xpGain,
+      currentQuestion: currentIndex + 1
     }));
-  }, [isSubmitted, checkAnswer, currentExercise, triggerSuccess, triggerError]);
+  }, [isSubmitted, checkAnswer, currentExercise, currentIndex, triggerSuccess, triggerError]);
 
-  // Continuer à l'exercice suivant
+  // Continuer
   const handleContinue = useCallback(async () => {
     triggerLight();
 
-    // Reset état
     setSelectedOption(null);
     setUserInput('');
     setSelectedLine(null);
@@ -176,55 +212,48 @@ const DailyChallenge = () => {
     setIsCorrect(false);
     setShowExplanation(false);
 
-    // Vérifier si c'est le dernier exercice
     if (currentIndex >= exercises.length - 1) {
-      // Arrêter le timer
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
+      if (timerRef.current) clearInterval(timerRef.current);
+      if (botTimeoutRef.current) clearTimeout(botTimeoutRef.current);
 
       const finalTime = Math.floor((Date.now() - startTime) / 1000);
 
-      // Sauvegarder le score et incrémenter les stats
+      // Determiner si le joueur a gagne
+      const playerWins = playerStats.score > botStats.score ||
+        (playerStats.score === botStats.score && finalTime < botStats.timeSeconds);
+
+      // Incrementer les stats de duel
       if (user?.uid) {
-        const profile = await getUserProfile(user.uid);
-        await saveDailyChallengeScore(
-          user.uid,
-          profile?.profile?.username || 'Joueur',
-          {
-            score: stats.totalXP,
-            correctAnswers: stats.correctAnswers,
-            incorrectAnswers: stats.incorrectAnswers,
-            timeSeconds: finalTime
-          }
-        );
-        // Incrémenter le compteur de défis complétés
-        await incrementDailyChallengeCompleted(user.uid, dateString);
+        await incrementDuelStats(user.uid, playerWins);
       } else {
-        // Utilisateur non connecté - sauvegarder en local
         const localStats = getLocalChallengeStats();
         saveLocalChallengeStats({
-          dailyChallengesCompleted: (localStats.dailyChallengesCompleted || 0) + 1
+          duelsWon: (localStats.duelsWon || 0) + (playerWins ? 1 : 0)
         });
       }
 
-      // Naviguer vers les résultats
-      navigate('/challenges/daily/result', {
+      navigate('/challenges/duel/result', {
         state: {
-          stats: {
-            ...stats,
+          mode: 'bot',
+          player: {
+            username: user?.displayName || 'Toi',
+            ...playerStats,
             timeSeconds: finalTime
           },
-          date: dateString,
+          opponent: {
+            username: 'Bot',
+            ...botStats,
+            isBot: true
+          },
           exerciseCount: exercises.length
         }
       });
     } else {
       setCurrentIndex(prev => prev + 1);
     }
-  }, [currentIndex, exercises.length, startTime, stats, user, dateString, navigate, triggerLight]);
+  }, [currentIndex, exercises.length, startTime, playerStats, botStats, user, navigate, triggerLight]);
 
-  // Handlers de sélection
+  // Handlers
   const handleOptionSelect = (index) => {
     if (isSubmitted) return;
     triggerLight();
@@ -251,24 +280,21 @@ const DailyChallenge = () => {
 
   const handleBackClick = () => {
     triggerLight();
-    navigate('/challenges');
+    navigate('/challenges/duel');
   };
 
-  // Formater le temps
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // Déterminer si on peut valider
   const canValidate = inputType === 'options'
     ? selectedOption !== null
     : inputType === 'free_input'
     ? userInput.trim().length > 0
     : selectedLine !== null;
 
-  // Styles
   const styles = {
     container: {
       minHeight: '100vh',
@@ -283,8 +309,8 @@ const DailyChallenge = () => {
       top: 0,
       background: 'rgba(13, 13, 15, 0.95)',
       backdropFilter: 'blur(10px)',
-      padding: '16px 20px',
-      paddingTop: 'max(calc(env(safe-area-inset-top) + 16px), 32px)',
+      padding: '12px 20px',
+      paddingTop: 'max(calc(env(safe-area-inset-top) + 12px), 28px)',
       zIndex: 100,
       borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
     },
@@ -302,13 +328,12 @@ const DailyChallenge = () => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      borderRadius: '8px',
     },
     headerTitle: {
       fontFamily: '"JetBrains Mono", monospace',
       fontSize: '14px',
       fontWeight: 700,
-      color: '#FB923C',
+      color: '#A78BFA',
       display: 'flex',
       alignItems: 'center',
       gap: '8px',
@@ -322,15 +347,60 @@ const DailyChallenge = () => {
       padding: '6px 12px',
       borderRadius: '8px',
     },
+    scoreComparison: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      gap: '12px',
+    },
+    playerScore: {
+      flex: 1,
+      background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(99, 102, 241, 0.05) 100%)',
+      border: '1px solid rgba(139, 92, 246, 0.2)',
+      borderRadius: '12px',
+      padding: '10px 12px',
+      textAlign: 'center',
+    },
+    botScore: {
+      flex: 1,
+      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%)',
+      border: '1px solid rgba(255, 255, 255, 0.1)',
+      borderRadius: '12px',
+      padding: '10px 12px',
+      textAlign: 'center',
+    },
+    scoreName: {
+      fontFamily: '"JetBrains Mono", monospace',
+      fontSize: '11px',
+      color: 'rgba(255, 255, 255, 0.5)',
+      display: 'block',
+      marginBottom: '4px',
+    },
+    scoreValue: {
+      fontFamily: '"JetBrains Mono", monospace',
+      fontSize: '20px',
+      fontWeight: 800,
+      color: '#FFFFFF',
+    },
+    scoreValuePlayer: {
+      color: '#A78BFA',
+    },
+    vsText: {
+      fontFamily: '"JetBrains Mono", monospace',
+      fontSize: '12px',
+      fontWeight: 700,
+      color: 'rgba(255, 255, 255, 0.3)',
+    },
     progressBar: {
       height: '4px',
       background: 'rgba(255, 255, 255, 0.1)',
       borderRadius: '2px',
       overflow: 'hidden',
+      marginTop: '12px',
     },
     progressFill: {
       height: '100%',
-      background: 'linear-gradient(90deg, #FB923C 0%, #FACC15 100%)',
+      background: 'linear-gradient(90deg, #8B5CF6 0%, #A78BFA 100%)',
       transition: 'width 0.3s ease',
     },
     content: {
@@ -341,6 +411,33 @@ const DailyChallenge = () => {
       width: '100%',
       boxSizing: 'border-box',
     },
+    countdownOverlay: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: 'rgba(13, 13, 15, 0.95)',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 1000,
+    },
+    countdownNumber: {
+      fontFamily: '"JetBrains Mono", monospace',
+      fontSize: '120px',
+      fontWeight: 900,
+      color: '#A78BFA',
+      textShadow: '0 0 40px rgba(139, 92, 246, 0.5)',
+      animation: 'pulse 1s ease-in-out infinite',
+    },
+    countdownText: {
+      fontFamily: '"JetBrains Mono", monospace',
+      fontSize: '18px',
+      color: 'rgba(255, 255, 255, 0.6)',
+      marginTop: '16px',
+    },
     loadingContainer: {
       flex: 1,
       display: 'flex',
@@ -348,73 +445,14 @@ const DailyChallenge = () => {
       alignItems: 'center',
       justifyContent: 'center',
       gap: '16px',
-      padding: '40px',
     },
     loadingSpinner: {
       width: '40px',
       height: '40px',
       border: '3px solid rgba(255, 255, 255, 0.1)',
-      borderTopColor: '#FB923C',
+      borderTopColor: '#A78BFA',
       borderRadius: '50%',
       animation: 'spin 1s linear infinite',
-    },
-    completedContainer: {
-      flex: 1,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: '24px',
-      padding: '40px 20px',
-      textAlign: 'center',
-    },
-    completedIcon: {
-      fontSize: '64px',
-    },
-    completedTitle: {
-      fontFamily: '"JetBrains Mono", monospace',
-      fontSize: '24px',
-      fontWeight: 800,
-      color: '#FFFFFF',
-      margin: 0,
-    },
-    completedText: {
-      fontFamily: '"JetBrains Mono", monospace',
-      fontSize: '14px',
-      color: 'rgba(255, 255, 255, 0.6)',
-      margin: 0,
-    },
-    completedScore: {
-      background: 'linear-gradient(135deg, rgba(251, 146, 60, 0.1) 0%, rgba(250, 204, 21, 0.05) 100%)',
-      border: '1px solid rgba(251, 146, 60, 0.2)',
-      borderRadius: '16px',
-      padding: '20px',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '8px',
-    },
-    scoreValue: {
-      fontFamily: '"JetBrains Mono", monospace',
-      fontSize: '32px',
-      fontWeight: 800,
-      color: '#FACC15',
-    },
-    scoreLabel: {
-      fontFamily: '"JetBrains Mono", monospace',
-      fontSize: '12px',
-      color: 'rgba(255, 255, 255, 0.5)',
-    },
-    backButtonLarge: {
-      background: 'linear-gradient(135deg, #FB923C 0%, #F97316 100%)',
-      border: 'none',
-      borderRadius: '12px',
-      padding: '16px 32px',
-      fontFamily: '"JetBrains Mono", monospace',
-      fontSize: '14px',
-      fontWeight: 700,
-      color: '#FFFFFF',
-      cursor: 'pointer',
-      marginTop: '16px',
     },
     optionsGrid: {
       display: 'grid',
@@ -425,53 +463,60 @@ const DailyChallenge = () => {
     actionButtonContainer: {
       marginTop: '20px',
     },
+    botIndicator: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '4px',
+    },
+    botDot: {
+      width: '8px',
+      height: '8px',
+      borderRadius: '50%',
+      background: '#30D158',
+      animation: 'pulse 1.5s ease-in-out infinite',
+    },
   };
 
-  // Loading state
   if (loading) {
     return (
       <div style={styles.container}>
-        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+        <style>{`
+          @keyframes spin { to { transform: rotate(360deg); } }
+          @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        `}</style>
         <div style={styles.loadingContainer}>
           <div style={styles.loadingSpinner}></div>
           <p style={{ fontFamily: '"JetBrains Mono", monospace', color: 'rgba(255, 255, 255, 0.5)' }}>
-            Chargement du défi du jour...
+            Preparation du duel...
           </p>
         </div>
       </div>
     );
   }
 
-  // Already completed state
-  if (alreadyCompleted && previousScore) {
+  if (!gameStarted) {
     return (
       <div style={styles.container}>
-        <div style={styles.completedContainer}>
-          <span style={styles.completedIcon}>{"🎯"}</span>
-          <h1 style={styles.completedTitle}>Défi déjà complété !</h1>
-          <p style={styles.completedText}>
-            Tu as déjà terminé le défi du jour. Reviens demain pour un nouveau challenge !
-          </p>
-          <div style={styles.completedScore}>
-            <span style={styles.scoreValue}>{previousScore.score} XP</span>
-            <span style={styles.scoreLabel}>
-              {previousScore.correctAnswers}/5 bonnes réponses
-            </span>
-          </div>
-          <button style={styles.backButtonLarge} onClick={handleBackClick}>
-            Retour aux challenges
-          </button>
+        <style>{`
+          @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        `}</style>
+        <div style={styles.countdownOverlay}>
+          <div style={styles.countdownNumber}>{countdown}</div>
+          <p style={styles.countdownText}>Le duel commence...</p>
         </div>
       </div>
     );
   }
 
-  if (!currentExercise) {
-    return null;
-  }
+  if (!currentExercise) return null;
 
   return (
     <div style={styles.container}>
+      <style>{`
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+      `}</style>
+
       <FeedbackGlow type={glowType} visible={showGlow} />
 
       {/* Header */}
@@ -483,10 +528,30 @@ const DailyChallenge = () => {
             </svg>
           </button>
           <span style={styles.headerTitle}>
-            {"📅"} Défi du jour
+            {"🤖"} vs Bot
           </span>
           <span style={styles.timer}>{formatTime(elapsedSeconds)}</span>
         </div>
+
+        {/* Score Comparison */}
+        <div style={styles.scoreComparison}>
+          <div style={styles.playerScore}>
+            <span style={styles.scoreName}>Toi</span>
+            <span style={{ ...styles.scoreValue, ...styles.scoreValuePlayer }}>
+              {playerStats.score}
+            </span>
+          </div>
+          <span style={styles.vsText}>VS</span>
+          <div style={styles.botScore}>
+            <span style={styles.scoreName}>
+              <span style={styles.botIndicator}>
+                Bot {botStats.isAnswering && <span style={styles.botDot}></span>}
+              </span>
+            </span>
+            <span style={styles.scoreValue}>{botStats.score}</span>
+          </div>
+        </div>
+
         <div style={styles.progressBar}>
           <div
             style={{
@@ -499,7 +564,6 @@ const DailyChallenge = () => {
 
       {/* Content */}
       <div style={styles.content}>
-        {/* Question Card */}
         <QuestionCard
           question={currentExercise.question}
           isSubmitted={isSubmitted}
@@ -510,7 +574,6 @@ const DailyChallenge = () => {
           xpGain={currentExercise.xpGain || 10}
         />
 
-        {/* Code Block */}
         <CodeBlock
           code={currentExercise.code}
           language={currentExercise.language}
@@ -522,7 +585,6 @@ const DailyChallenge = () => {
           highlightedLines={showExplanation ? (currentExercise.highlightedLines || []) : []}
         />
 
-        {/* Options (Multiple Choice) */}
         {inputType === 'options' && currentExercise.options && (
           <div style={styles.optionsGrid}>
             {currentExercise.options.map((option, index) => (
@@ -538,7 +600,6 @@ const DailyChallenge = () => {
           </div>
         )}
 
-        {/* Free Input */}
         {inputType === 'free_input' && (
           <CustomKeyboard
             value={userInput}
@@ -550,7 +611,6 @@ const DailyChallenge = () => {
           />
         )}
 
-        {/* Action Button */}
         <div style={styles.actionButtonContainer}>
           <ActionButton
             isSubmitted={isSubmitted}
@@ -564,4 +624,4 @@ const DailyChallenge = () => {
   );
 };
 
-export default DailyChallenge;
+export default DuelBot;

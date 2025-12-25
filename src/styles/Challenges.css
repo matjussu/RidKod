@@ -63,8 +63,8 @@
   position: absolute;
   top: max(env(safe-area-inset-top), 8px);
   left: max(16px, env(safe-area-inset-left));
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: none;
+  border: none;
   cursor: pointer;
   padding: 12px;
   display: flex;
@@ -73,10 +73,8 @@
   z-index: 100;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-  border-radius: 12px;
+  border-radius: 50%;
   transition: all 0.2s ease;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
 }
 
 .challenges-back-button:hover {
@@ -101,7 +99,8 @@
 
 .challenges-header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-top: 20px;
+  margin-bottom: 48px;
   position: relative;
   z-index: 1;
   opacity: 0;
@@ -146,12 +145,14 @@
 
 .challenges-title {
   font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
-  font-size: 36px;
+  font-size: 50px;
   font-weight: 900;
+  font-style: italic;
   color: #FFFFFF;
   margin: 0;
   line-height: 1;
-  letter-spacing: 2px;
+  transform: skewX(-5deg);
+  letter-spacing: 0px;
   text-transform: uppercase;
   position: relative;
 }
@@ -162,12 +163,22 @@
   text-shadow: 0 0 20px rgba(139, 92, 246, 0.6);
 }
 
+.challenges-title-divider {
+  width: 500px;
+  height: 4px;
+  background: #8B5CF6;
+  border-radius: 2px;
+  transform: translateX(-5%);
+  margin: 10px auto 0;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+}
+
 .challenges-subtitle {
   font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
   font-size: 14px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.6);
-  margin: 16px 0 0 0;
+  margin: 12px 0 0 0;
   letter-spacing: 0.5px;
 }
 

@@ -1,10 +1,46 @@
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import useHaptic from '../../hooks/useHaptic';
+import { getChallengeStats, getLocalChallengeStats } from '../../services/challengeStatsService';
 import '../../styles/Challenges.css';
 
 const ChallengesHome = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { triggerLight } = useHaptic();
+
+  const [stats, setStats] = useState({
+    duelsWon: 0,
+    dailyChallengesCompleted: 0,
+    rank: null
+  });
+  const [loadingStats, setLoadingStats] = useState(true);
+
+  // Charger les statistiques
+  useEffect(() => {
+    const loadStats = async () => {
+      setLoadingStats(true);
+      try {
+        if (user?.uid) {
+          const result = await getChallengeStats(user.uid);
+          if (result.success) {
+            setStats(result.stats);
+          }
+        } else {
+          // Utilisateur non connecté - stats locales
+          const localStats = getLocalChallengeStats();
+          setStats(localStats);
+        }
+      } catch (error) {
+        console.error('Error loading challenge stats:', error);
+      } finally {
+        setLoadingStats(false);
+      }
+    };
+
+    loadStats();
+  }, [user]);
 
   const handleBackClick = () => {
     triggerLight();
@@ -15,8 +51,11 @@ const ChallengesHome = () => {
     triggerLight();
     if (mode === 'leaderboard') {
       navigate('/challenges/leaderboard');
+    } else if (mode === 'daily') {
+      navigate('/challenges/daily');
+    } else if (mode === 'duel') {
+      navigate('/challenges/duel');
     }
-    // Les autres modes seront implémentés plus tard
   };
 
   const modes = [
@@ -32,13 +71,13 @@ const ChallengesHome = () => {
           <path d="M6 24H12M36 24H42M24 6V12M24 36V42" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
         </svg>
       ),
-      status: 'coming_soon',
+      status: 'available',
       accentClass: 'duel'
     },
     {
       id: 'daily',
       title: 'DÉFI DU JOUR',
-      subtitle: 'Quotidien',
+      subtitle: null,
       description: 'Un nouveau challenge chaque jour. Compare tes scores !',
       icon: (
         <svg viewBox="0 0 48 48" fill="none" className="mode-icon">
@@ -49,7 +88,7 @@ const ChallengesHome = () => {
           <path d="M24 29V32L26 33" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       ),
-      status: 'coming_soon',
+      status: 'available',
       accentClass: 'daily'
     },
     {
@@ -84,13 +123,12 @@ const ChallengesHome = () => {
       <div className="challenges-header">
         <div className="challenges-header-glow"></div>
         <div className="challenges-title-wrapper">
-          <span className="challenges-title-icon">{"⚔️"}</span>
           <h1 className="challenges-title">
-            <span className="challenges-title-accent">{"<"}</span>
+            <span className="challenges-title-accent">{"//"}</span>
             CHALLENGES
-            <span className="challenges-title-accent">{">"}</span>
           </h1>
         </div>
+        <div className="challenges-title-divider"></div>
         <p className="challenges-subtitle">
           Prouve ta maîtrise du code face aux autres
         </p>
@@ -117,7 +155,7 @@ const ChallengesHome = () => {
             <div className="mode-content">
               <div className="mode-title-row">
                 <h2 className="mode-title">{mode.title}</h2>
-                <span className="mode-subtitle">{mode.subtitle}</span>
+                {mode.subtitle && <span className="mode-subtitle">{mode.subtitle}</span>}
               </div>
               <p className="mode-description">{mode.description}</p>
             </div>
@@ -143,29 +181,30 @@ const ChallengesHome = () => {
       {/* Stats Preview */}
       <div className="challenges-stats-preview">
         <div className="stats-preview-title">
-          <span className="stats-icon">📊</span>
           Tes statistiques
         </div>
         <div className="stats-preview-grid">
           <div className="stat-item">
-            <span className="stat-value">0</span>
+            <span className="stat-value">
+              {loadingStats ? '-' : stats.duelsWon}
+            </span>
             <span className="stat-label">Duels gagnés</span>
           </div>
           <div className="stat-item">
-            <span className="stat-value">0</span>
+            <span className="stat-value">
+              {loadingStats ? '-' : stats.dailyChallengesCompleted}
+            </span>
             <span className="stat-label">Défis complétés</span>
           </div>
           <div className="stat-item">
-            <span className="stat-value">--</span>
+            <span className="stat-value">
+              {loadingStats ? '-' : (stats.rank ? `#${stats.rank}` : '--')}
+            </span>
             <span className="stat-label">Classement</span>
           </div>
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="challenges-footer">
-        Compétition arrive bientôt
-      </div>
     </div>
   );
 };

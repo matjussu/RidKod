@@ -71,6 +71,53 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    // Collection des scores quotidiens (Défi du jour)
+    match /daily_scores/{date} {
+      // Lecture publique du document parent (pour les requêtes de collection)
+      allow read: if true;
+
+      // Sous-collection des scores
+      match /scores/{oderId} {
+        // Lecture publique pour afficher le classement (données non sensibles)
+        allow read: if true;
+
+        // Création uniquement si l'utilisateur crée son propre score
+        allow create: if request.auth != null
+                      && request.auth.uid == oderId
+                      && request.resource.data.userId == request.auth.uid
+                      && request.resource.data.score is number
+                      && request.resource.data.correctAnswers is number;
+
+        // Pas de mise à jour (un seul essai par jour)
+        allow update: if false;
+
+        // Pas de suppression
+        allow delete: if false;
+      }
+    }
+
+    // Collection des duels (Mode Duel)
+    match /duels/{duelCode} {
+      // Lecture pour tous les utilisateurs authentifiés (pour rejoindre un duel)
+      allow read: if request.auth != null;
+
+      // Création uniquement par un utilisateur authentifié
+      allow create: if request.auth != null
+                    && request.resource.data.host.oderId == request.auth.uid
+                    && request.resource.data.code is string
+                    && request.resource.data.status == 'waiting';
+
+      // Mise à jour par les participants du duel
+      allow update: if request.auth != null
+                    && (resource.data.host.oderId == request.auth.uid
+                        || (resource.data.guest != null && resource.data.guest.oderId == request.auth.uid)
+                        || (resource.data.guest == null && request.resource.data.guest.oderId == request.auth.uid));
+
+      // Suppression uniquement par l'hôte
+      allow delete: if request.auth != null
+                    && resource.data.host.oderId == request.auth.uid;
+    }
+
     // Bloquer tout accès aux autres collections
     match /{document=**} {
       allow read, write: if false;
