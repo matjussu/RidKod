@@ -45,24 +45,33 @@ const ActionButton = ({ isSubmitted, isCorrect, isDisabled, onClick, continueTex
           transform: scale(0.98);
         }
 
+        /* DOJO THEME Styles */
         .action-button.disabled {
-          background: #484848;
-          color: #FFFFFF;
+          background: rgba(0, 221, 179, 0.15);
+          color: rgba(255, 255, 255, 0.4);
           cursor: not-allowed;
+          border: 1px solid rgba(0, 221, 179, 0.2);
         }
 
         .action-button.enabled {
-          background: #088201;
-          color: #FFFFFF;
+          background: linear-gradient(135deg, #00DDB3 0%, #00A888 100%);
+          color: #000000;
+          font-weight: 700;
+          box-shadow: 0 0 20px rgba(0, 221, 179, 0.4);
+          text-transform: uppercase;
+          letter-spacing: 1px;
         }
 
         .action-button.incorrect-state {
-          background: #FF383C;
+          background: linear-gradient(135deg, #FF453A 0%, #DC2626 100%);
           color: #FFFFFF;
+          font-weight: 700;
+          box-shadow: 0 0 20px rgba(255, 69, 58, 0.4);
         }
 
         .action-button:hover:not(:disabled) {
           filter: brightness(1.1);
+          box-shadow: 0 0 30px rgba(0, 221, 179, 0.5);
         }
 
         /* iPhone 14/15 Pro Max */

@@ -26,7 +26,7 @@ import '../../styles/Challenges.css';
 const DailyChallenge = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { completeExercise } = useProgress();
+  const { completeExercise, recordDailyActivity } = useProgress();
   const { triggerSuccess, triggerError, triggerLight } = useHaptic();
 
   // États principaux
@@ -207,6 +207,9 @@ const DailyChallenge = () => {
           dailyChallengesCompleted: (localStats.dailyChallengesCompleted || 0) + 1
         });
       }
+
+      // ✅ Enregistrer l'activité challenge pour le calendrier
+      recordDailyActivity('challenges', 1);
 
       // Naviguer vers les résultats
       navigate('/challenges/daily/result', {

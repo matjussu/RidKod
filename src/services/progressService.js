@@ -65,6 +65,66 @@ export const getXPForNextLevel = (currentLevel) => {
   return levels[currentLevel - 1] || 15000;
 };
 
+// ============================================
+// DAILY ACTIVITY HELPERS (pour calendrier)
+// ============================================
+
+/**
+ * Normalise dailyActivity pour la rétrocompatibilité
+ * Ancien format: { "2025-12-26": 5 } (nombre)
+ * Nouveau format: { "2025-12-26": { total: 5, training: 5, lessons: 0, ai: 0, challenges: 0 } }
+ */
+export const normalizeDailyActivity = (dailyActivity) => {
+  if (!dailyActivity) return {};
+
+  const normalized = {};
+  Object.entries(dailyActivity).forEach(([date, value]) => {
+    if (typeof value === 'number') {
+      // Ancien format -> nouveau format (assume training)
+      normalized[date] = {
+        total: value,
+        training: value,
+        lessons: 0,
+        ai: 0,
+        challenges: 0
+      };
+    } else if (typeof value === 'object' && value !== null) {
+      // Nouveau format - garder tel quel
+      normalized[date] = value;
+    }
+  });
+  return normalized;
+};
+
+/**
+ * Met à jour dailyActivity par type d'activité
+ * @param {Object} currentDailyActivity - L'objet dailyActivity actuel
+ * @param {string} type - 'training' | 'lessons' | 'ai' | 'challenges'
+ * @param {number} increment - Nombre à ajouter (default: 1)
+ * @returns {Object} - Le nouvel objet dailyActivity mis à jour
+ */
+export const updateDailyActivityByType = (currentDailyActivity, type, increment = 1) => {
+  const today = new Date().toISOString().split('T')[0]; // Format: "YYYY-MM-DD"
+  const normalized = normalizeDailyActivity(currentDailyActivity);
+
+  const todayData = normalized[today] || {
+    total: 0,
+    training: 0,
+    lessons: 0,
+    ai: 0,
+    challenges: 0
+  };
+
+  return {
+    ...normalized,
+    [today]: {
+      ...todayData,
+      total: todayData.total + increment,
+      [type]: (todayData[type] || 0) + increment
+    }
+  };
+};
+
 // ✅ CORRECTION: Renommé calculateStreak → getDaysSinceLastActivity (plus explicite)
 // Retourne le nombre de jours écoulés depuis la dernière activité (0 = même jour, 1 = hier, etc.)
 const getDaysSinceLastActivity = (lastActivityDate) => {
@@ -229,13 +289,11 @@ export const saveExerciseCompletion = async (userId, exerciseData) => {
     };
 
     // Mettre à jour l'activité quotidienne (pour le calendrier GitHub-style)
-    const today = new Date().toISOString().split('T')[0]; // Format: "YYYY-MM-DD"
-    const currentDailyActivity = currentProgress.dailyActivity || {};
-    const todayCount = currentDailyActivity[today] || 0;
-    const updatedDailyActivity = {
-      ...currentDailyActivity,
-      [today]: todayCount + 1
-    };
+    const updatedDailyActivity = updateDailyActivityByType(
+      currentProgress.dailyActivity,
+      'training',
+      1
+    );
 
     // Préparer les données mises à jour
     const updatedData = {
@@ -425,13 +483,12 @@ const writeBatchToFirestore = async (userId, exerciseLevel, aggregated) => {
     };
 
     // Mettre à jour l'activité quotidienne
-    const today = new Date().toISOString().split('T')[0];
-    const currentDailyActivity = currentProgress.dailyActivity || {};
-    const todayCount = currentDailyActivity[today] || 0;
-    const updatedDailyActivity = {
-      ...currentDailyActivity,
-      [today]: todayCount + aggregated.correct + aggregated.incorrect
-    };
+    const totalExercisesInBatch = aggregated.correct + aggregated.incorrect;
+    const updatedDailyActivity = updateDailyActivityByType(
+      currentProgress.dailyActivity,
+      'training',
+      totalExercisesInBatch
+    );
 
     // Préparer les données mises à jour
     const updatedData = {
@@ -610,13 +667,11 @@ export const completeLevelBatch = async (userId, exerciseLevel, levelStats) => {
     };
 
     // Mettre à jour l'activité quotidienne
-    const today = new Date().toISOString().split('T')[0];
-    const currentDailyActivity = currentProgress.dailyActivity || {};
-    const todayCount = currentDailyActivity[today] || 0;
-    const updatedDailyActivity = {
-      ...currentDailyActivity,
-      [today]: todayCount + totalExercises
-    };
+    const updatedDailyActivity = updateDailyActivityByType(
+      currentProgress.dailyActivity,
+      'training',
+      totalExercises
+    );
 
     // Ajouter le niveau aux niveaux complétés
     const updatedCompletedLevels = [...(currentProgress.completedLevels || []), exerciseLevel];

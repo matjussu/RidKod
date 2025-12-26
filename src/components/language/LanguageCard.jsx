@@ -27,44 +27,47 @@ const LanguageCard = ({
       </div>
 
       <style>{`
-        /* Language Card Component */
+        /* Language Card Component - DOJO THEME */
         .language-card {
           width: 100%;
           height: 90px;
           border-radius: 20px;
-          border: none;
+          border: 2px solid rgba(0, 221, 179, 0.15);
           cursor: pointer;
           transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-         font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+          font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
           touch-action: manipulation;
           -webkit-tap-highlight-color: transparent;
           position: relative;
           overflow: hidden;
           box-shadow:
-            0 4px 20px rgba(0, 0, 0, 0.15),
-            0 1px 3px rgba(0, 0, 0, 0.1);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
+            0 4px 24px rgba(0, 0, 0, 0.2),
+            0 0 0 1px rgba(0, 221, 179, 0.1);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
         }
 
         .language-card:not(.coming-soon):hover {
           transform: translateY(-4px) scale(1.02);
+          border-color: rgba(0, 221, 179, 0.4);
           box-shadow:
-            0 12px 40px rgba(0, 0, 0, 0.25),
-            0 4px 12px rgba(0, 0, 0, 0.15);
+            0 12px 40px rgba(0, 0, 0, 0.3),
+            0 0 30px rgba(0, 221, 179, 0.2),
+            0 0 0 1px rgba(0, 221, 179, 0.3);
         }
 
         .language-card:not(.coming-soon):active {
           transform: translateY(-2px) scale(0.98);
           box-shadow:
-            0 6px 25px rgba(0, 0, 0, 0.2),
-            0 2px 8px rgba(0, 0, 0, 0.15);
+            0 6px 25px rgba(0, 0, 0, 0.25),
+            0 0 15px rgba(0, 221, 179, 0.15);
         }
 
         .language-card.coming-soon {
-          opacity: 0.6;
+          opacity: 0.5;
           cursor: not-allowed;
-          filter: saturate(0.7);
+          filter: saturate(0.5) brightness(0.8);
+          border-color: rgba(255, 255, 255, 0.05);
         }
 
         .language-card-content {

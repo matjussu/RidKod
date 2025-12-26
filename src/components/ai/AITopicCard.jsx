@@ -107,10 +107,10 @@ const AITopicCard = ({
       </div>
 
       <style>{`
-        /* AI Topic Card High-Tech */
+        /* AI Topic Card High-Tech - NEON WHITE Theme */
         .ai-topic-card-hightech {
           width: 100%;
-          background: linear-gradient(135deg, #0A0A0A 0%, #0D0D0D 100%);
+          background: linear-gradient(135deg, #0F0F12 0%, #1A1A1E 100%);
           border: 1px solid rgba(255, 255, 255, 0.15);
           border-radius: 12px;
           padding: 32px 28px;
@@ -198,21 +198,21 @@ const AITopicCard = ({
           transform: translateY(-3px);
         }
 
-        /* Completed State */
+        /* Completed State - ChatGPT Green */
         .ai-topic-card-hightech.completed {
-          background: linear-gradient(135deg, #001a1a 0%, #002020 100%);
-          border-color: rgba(0, 255, 128, 0.3);
+          background: linear-gradient(135deg, #0a1f1a 0%, #0f2a24 100%);
+          border-color: rgba(16, 163, 127, 0.4);
         }
 
         .ai-topic-card-hightech.completed:hover {
-          border-color: rgba(0, 255, 128, 0.5);
+          border-color: rgba(16, 163, 127, 0.6);
           box-shadow:
-            0 8px 32px rgba(0, 255, 128, 0.2),
-            0 0 20px rgba(0, 255, 128, 0.1);
+            0 8px 32px rgba(16, 163, 127, 0.25),
+            0 0 20px rgba(16, 163, 127, 0.15);
         }
 
         .ai-topic-card-hightech.completed .corner-accent {
-          border-color: rgba(0, 255, 128, 0.4);
+          border-color: rgba(16, 163, 127, 0.5);
         }
 
         /* Icon SVG */
@@ -241,13 +241,13 @@ const AITopicCard = ({
         }
 
         .ai-topic-card-hightech.completed .topic-icon-svg {
-          background: rgba(0, 255, 128, 0.08);
-          border-color: rgba(0, 255, 128, 0.3);
+          background: rgba(16, 163, 127, 0.1);
+          border-color: rgba(16, 163, 127, 0.4);
         }
 
         .ai-topic-card-hightech.completed .topic-icon-svg svg {
-          stroke: #00FF80;
-          filter: drop-shadow(0 0 8px rgba(0, 255, 128, 0.4));
+          stroke: #10A37F;
+          filter: drop-shadow(0 0 8px rgba(16, 163, 127, 0.5));
         }
 
         /* Content */
@@ -294,13 +294,14 @@ const AITopicCard = ({
           border-top: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        /* Difficulty Text */
+        /* Difficulty Text - NEON WHITE */
         .topic-difficulty-hightech {
           font-size: 11px;
           font-weight: 700;
           letter-spacing: 0.8px;
-          color: #FF9500;
+          color: #FFFFFF;
           line-height: 1;
+          text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
         /* XP Badge */
@@ -320,9 +321,9 @@ const AITopicCard = ({
         }
 
         .ai-topic-card-hightech.completed .topic-xp-badge-hightech {
-          background: rgba(0, 255, 128, 0.1);
-          border-color: rgba(0, 255, 128, 0.3);
-          color: #00FF80;
+          background: rgba(16, 163, 127, 0.15);
+          border-color: rgba(16, 163, 127, 0.4);
+          color: #10A37F;
         }
 
         .xp-icon {

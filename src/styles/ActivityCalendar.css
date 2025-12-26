@@ -10,6 +10,7 @@
   padding: 20px;
   margin: 20px 0;
   width: 100%;
+  position: relative;
 }
 
 /* ============================================
@@ -327,4 +328,202 @@
 
 .activity-calendar {
   animation: fadeIn 0.3s ease;
+}
+
+/* ============================================
+   CLICKABLE DAYS - Jours avec activité
+   ============================================ */
+.activity-day.clickable {
+  cursor: pointer;
+}
+
+.activity-day.clickable:active {
+  transform: scale(0.95);
+}
+
+/* ============================================
+   DAY TOOLTIP - Compact tooltip style
+   ============================================ */
+
+/* Overlay transparent pour fermer le tooltip */
+.tooltip-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99;
+}
+
+/* Tooltip container */
+.day-tooltip {
+  position: absolute;
+  background: linear-gradient(135deg, #2C2C2E 0%, #1A1919 100%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 12px;
+  min-width: 180px;
+  max-width: 200px;
+  z-index: 100;
+  transform: translate(-50%, -100%);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  animation: tooltipFadeInCenter 0.2s ease;
+}
+
+@keyframes tooltipFadeInCenter {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -90%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -100%);
+  }
+}
+
+@keyframes tooltipFadeInLeft {
+  from {
+    opacity: 0;
+    transform: translate(0, -90%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, -100%);
+  }
+}
+
+@keyframes tooltipFadeInRight {
+  from {
+    opacity: 0;
+    transform: translate(-100%, -90%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-100%, -100%);
+  }
+}
+
+/* Flèche vers la case */
+.tooltip-arrow {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid #1A1919;
+}
+
+.tooltip-arrow::before {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: -9px;
+  width: 0;
+  height: 0;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-top: 9px solid rgba(255, 255, 255, 0.15);
+  z-index: -1;
+}
+
+/* Alignement gauche (cases à gauche du calendrier) */
+.day-tooltip.align-left {
+  transform: translate(0, -100%);
+  animation: tooltipFadeInLeft 0.2s ease;
+}
+
+.day-tooltip.align-left .tooltip-arrow {
+  left: 20px;
+  transform: none;
+}
+
+.day-tooltip.align-left .tooltip-arrow::before {
+  left: -9px;
+}
+
+/* Alignement droite (cases à droite du calendrier) */
+.day-tooltip.align-right {
+  transform: translate(-100%, -100%);
+  animation: tooltipFadeInRight 0.2s ease;
+}
+
+.day-tooltip.align-right .tooltip-arrow {
+  left: auto;
+  right: 20px;
+  transform: none;
+}
+
+.day-tooltip.align-right .tooltip-arrow::before {
+  left: auto;
+  right: -9px;
+}
+
+/* Total en haut */
+.tooltip-total {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 14px;
+  font-weight: 800;
+  color: #30D158;
+  text-align: center;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Liste des catégories */
+.tooltip-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tooltip-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "JetBrains Mono", monospace;
+}
+
+.tooltip-row span:first-child {
+  font-size: 12px;
+  width: 18px;
+  text-align: center;
+}
+
+.tooltip-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #8E8E93;
+  flex: 1;
+}
+
+.tooltip-value {
+  font-size: 13px;
+  font-weight: 800;
+  color: #FFFFFF;
+  min-width: 16px;
+  text-align: right;
+}
+
+/* Responsive */
+@media (max-width: 375px) {
+  .day-tooltip {
+    padding: 10px;
+    min-width: 160px;
+  }
+
+  .tooltip-total {
+    font-size: 12px;
+  }
+
+  .tooltip-label {
+    font-size: 10px;
+  }
+
+  .tooltip-value {
+    font-size: 11px;
+  }
 }

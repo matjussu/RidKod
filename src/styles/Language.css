@@ -1,12 +1,24 @@
 /* ========================================
    LANGUAGE.CSS - Page sélection langage
+   THEME: CODE DOJO - Teal accent
    ======================================== */
+
+/* CSS Variables - Dojo Theme */
+:root {
+  --training-primary: #00DDB3;
+  --training-primary-light: #5DFFE0;
+  --training-primary-dark: #00A888;
+  --training-primary-glow: rgba(0, 221, 179, 0.4);
+  --training-bg: #0F0F12;
+  --training-surface: #1E1E24;
+  --training-surface-elevated: #2A2A32;
+}
 
 /* Container principal Language */
 .language-container {
   min-height: 100vh;
   min-height: -webkit-fill-available;
-  background: #0D0D0F;
+  background: var(--training-bg);
   color: #FFFFFF;
   display: flex;
   flex-direction: column;
@@ -20,21 +32,51 @@
   box-sizing: border-box;
   overflow-x: hidden;
   opacity: 0;
-  transform: scale(1.05);
-  animation: fadeInScale 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  transform: scale(0.95) translateY(20px);
+  filter: blur(10px);
+  animation: dojoEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
 }
 
+/* Tatami Grid Pattern - Background */
+.language-container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 39px,
+      rgba(0, 221, 179, 0.03) 39px,
+      rgba(0, 221, 179, 0.03) 40px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 39px,
+      rgba(0, 221, 179, 0.03) 39px,
+      rgba(0, 221, 179, 0.03) 40px
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+
 /* Animations */
-@keyframes fadeInScale {
+@keyframes dojoEnter {
   0% {
     opacity: 0;
-    transform: scale(1.05);
+    transform: scale(0.95) translateY(20px);
+    filter: blur(10px);
   }
   100% {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) translateY(0);
+    filter: blur(0);
   }
 }
 
@@ -46,6 +88,16 @@
   100% {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes energyPulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 20px var(--training-primary-glow);
   }
 }
 
@@ -86,7 +138,7 @@
 /* Header Section */
 .header-section {
   text-align: center;
-  margin-top: 20px;
+  margin-top: 80px;
   margin-bottom: 48px;
   align-self: center;
   opacity: 0;
@@ -116,17 +168,18 @@
   transform: translateX(-50%);
   width: 500px;
   height: 4px;
-  background: linear-gradient(90deg, #FF9500 0%, #FFB340 100%);
+  background: linear-gradient(90deg, var(--training-primary) 0%, var(--training-primary-light) 100%);
   border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(255, 149, 0, 0.4);
+  box-shadow: 0 2px 12px var(--training-primary-glow);
+  animation: energyPulse 3s ease-in-out infinite;
 }
 
 .title-hash {
-  color: #FF9500;
+  color: var(--training-primary);
   font-weight: 900;
   font-size: 60px;
-  text-shadow: 2px 2px 8px rgba(255, 149, 0, 0.6);
-  -webkit-text-fill-color: #FF9500;
+  text-shadow: 0 0 20px var(--training-primary-glow), 2px 2px 8px rgba(0, 0, 0, 0.6);
+  -webkit-text-fill-color: var(--training-primary);
   margin-right: 8px;
 }
 

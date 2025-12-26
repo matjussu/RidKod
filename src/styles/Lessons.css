@@ -927,3 +927,58 @@ LessonContent========================================*/
     gap: 20px;
   }
 }
+
+/* ========================================
+   6. LESSONS THEME OVERRIDES
+   White selection + Green validation
+   ======================================== */
+
+/* Override Option Button selected state in Lessons - WHITE instead of teal */
+.lesson-content-container .option-button.selected {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 2px solid #FFFFFF !important;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3) !important;
+}
+
+.lesson-content-container .option-button.default:hover {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.lesson-content-container .option-button.selected:hover {
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Correct state - GREEN */
+.lesson-content-container .option-button.correct {
+  background: #30D158 !important;
+  border: 2px solid #30D158 !important;
+}
+
+/* Override Action Button in Lessons */
+/* Disabled state - WHITE dimmed */
+.lesson-content-container .action-button.disabled {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: rgba(255, 255, 255, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Enabled state - GREEN (Valider/Continuer) */
+.lesson-content-container .action-button.enabled {
+  background: linear-gradient(135deg, #30D158 0%, #28A745 100%) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  box-shadow: 0 0 20px rgba(48, 209, 88, 0.4) !important;
+}
+
+.lesson-content-container .action-button.enabled:hover:not(:disabled) {
+  box-shadow: 0 0 30px rgba(48, 209, 88, 0.5) !important;
+  filter: brightness(1.1);
+}
+
+/* Incorrect state stays RED */
+.lesson-content-container .action-button.incorrect-state {
+  background: linear-gradient(135deg, #FF453A 0%, #DC2626 100%) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 0 20px rgba(255, 69, 58, 0.4) !important;
+}

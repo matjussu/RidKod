@@ -1,13 +1,75 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
+import { normalizeDailyActivity } from '../../services/progressService';
 import '../../styles/ActivityCalendar.css';
 
 /**
+ * DayTooltip - Tooltip compact affichant le détail d'activité
+ */
+const DayTooltip = ({ dayData, onClose, position, alignment = 'center' }) => {
+  const { breakdown } = dayData;
+
+  return (
+    <>
+      {/* Overlay transparent pour fermer */}
+      <div className="tooltip-overlay" onClick={onClose} />
+
+      {/* Tooltip positionné */}
+      <div
+        className={`day-tooltip${alignment !== 'center' ? ` align-${alignment}` : ''}`}
+        style={{
+          left: position.x,
+          top: position.y
+        }}
+      >
+        <div className="tooltip-total">
+          {breakdown.total} activité{breakdown.total > 1 ? 's' : ''}
+        </div>
+
+        <div className="tooltip-breakdown">
+          <div className="tooltip-row">
+            <span>🏋️</span>
+            <span className="tooltip-label">Entraînements</span>
+            <span className="tooltip-value">{breakdown.training || 0}</span>
+          </div>
+          <div className="tooltip-row">
+            <span>📚</span>
+            <span className="tooltip-label">Leçons</span>
+            <span className="tooltip-value">{breakdown.lessons || 0}</span>
+          </div>
+          <div className="tooltip-row">
+            <span>🤖</span>
+            <span className="tooltip-label">IA</span>
+            <span className="tooltip-value">{breakdown.ai || 0}</span>
+          </div>
+          <div className="tooltip-row">
+            <span>⚔️</span>
+            <span className="tooltip-label">Challenges</span>
+            <span className="tooltip-value">{breakdown.challenges || 0}</span>
+          </div>
+        </div>
+
+        {/* Flèche vers le bas */}
+        <div className="tooltip-arrow" />
+      </div>
+    </>
+  );
+};
+
+/**
  * ActivityCalendar - GitHub-style contribution graph
- * Affiche l'activité quotidienne (exercices complétés) sur un mois
- * Scroll horizontal pour voir les mois précédents
+ * Affiche l'activité quotidienne sur un mois avec détail par catégorie
  */
 const ActivityCalendar = ({ dailyActivity = {} }) => {
   const [currentMonthOffset, setCurrentMonthOffset] = useState(0);
+  const [selectedDay, setSelectedDay] = useState(null);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+  const calendarRef = useRef(null);
+
+  // Normaliser les données (rétrocompatibilité ancien format)
+  const normalizedActivity = useMemo(() =>
+    normalizeDailyActivity(dailyActivity),
+    [dailyActivity]
+  );
 
   // Obtenir le mois à afficher (0 = mois actuel, -1 = mois précédent, etc.)
   const getMonthData = (offset) => {
@@ -51,13 +113,20 @@ const ActivityCalendar = ({ dailyActivity = {} }) => {
     // Ajouter les jours du mois
     for (let day = 1; day <= daysInMonth; day++) {
       const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-      const exerciseCount = dailyActivity[dateKey] || 0;
+      const dayActivity = normalizedActivity[dateKey] || {
+        total: 0,
+        training: 0,
+        lessons: 0,
+        ai: 0,
+        challenges: 0
+      };
 
       days.push({
         day,
         dateKey,
-        exerciseCount,
-        level: getActivityLevel(exerciseCount),
+        exerciseCount: dayActivity.total,
+        breakdown: dayActivity,
+        level: getActivityLevel(dayActivity.total),
         key: dateKey
       });
     }
@@ -74,7 +143,7 @@ const ActivityCalendar = ({ dailyActivity = {} }) => {
     return 4;                        // 11+ exercices (super actif)
   };
 
-  const calendarDays = useMemo(() => generateCalendarDays(), [monthData, dailyActivity]);
+  const calendarDays = useMemo(() => generateCalendarDays(), [monthData, normalizedActivity]);
 
   // Navigation mois précédent/suivant
   const goToPreviousMonth = () => {
@@ -90,8 +159,43 @@ const ActivityCalendar = ({ dailyActivity = {} }) => {
 
   const canGoNext = currentMonthOffset < 0;
 
+  // Handler pour clic sur un jour
+  const handleDayClick = (event, dayData) => {
+    if (dayData.exerciseCount > 0) {
+      const rect = event.currentTarget.getBoundingClientRect();
+      const calendarRect = calendarRef.current?.getBoundingClientRect();
+
+      if (calendarRect) {
+        // Position relative au calendrier
+        const x = rect.left - calendarRect.left + rect.width / 2;
+        const y = rect.top - calendarRect.top - 8;
+
+        // Détection des bords pour éviter le dépassement
+        const tooltipWidth = 200;
+        const halfTooltip = tooltipWidth / 2;
+
+        let alignment = 'center';
+        let adjustedX = x;
+
+        // Dépassement à gauche ?
+        if (x < halfTooltip) {
+          alignment = 'left';
+          adjustedX = Math.max(10, rect.left - calendarRect.left);
+        }
+        // Dépassement à droite ?
+        else if (x > calendarRect.width - halfTooltip) {
+          alignment = 'right';
+          adjustedX = Math.min(calendarRect.width - 10, rect.right - calendarRect.left);
+        }
+
+        setTooltipPosition({ x: adjustedX, y, alignment });
+        setSelectedDay(dayData);
+      }
+    }
+  };
+
   return (
-    <div className="activity-calendar">
+    <div className="activity-calendar" ref={calendarRef}>
       {/* Header avec navigation */}
       <div className="activity-header">
         <button
@@ -139,10 +243,11 @@ const ActivityCalendar = ({ dailyActivity = {} }) => {
           return (
             <div
               key={dayData.key}
-              className={`activity-day activity-level-${dayData.level}`}
+              className={`activity-day activity-level-${dayData.level}${dayData.exerciseCount > 0 ? ' clickable' : ''}`}
               data-date={dayData.dateKey}
               data-count={dayData.exerciseCount}
-              title={`${dayData.day} - ${dayData.exerciseCount} exercice${dayData.exerciseCount > 1 ? 's' : ''}`}
+              title={`${dayData.day} - ${dayData.exerciseCount} activité${dayData.exerciseCount > 1 ? 's' : ''}`}
+              onClick={(e) => handleDayClick(e, dayData)}
             >
               <span className="activity-day-number">{dayData.day}</span>
             </div>
@@ -154,14 +259,24 @@ const ActivityCalendar = ({ dailyActivity = {} }) => {
       <div className="activity-legend">
         <span className="activity-legend-label">Moins</span>
         <div className="activity-legend-squares">
-          <div className="activity-legend-square activity-level-0" title="0 exercice"></div>
-          <div className="activity-legend-square activity-level-1" title="1-2 exercices"></div>
-          <div className="activity-legend-square activity-level-2" title="3-5 exercices"></div>
-          <div className="activity-legend-square activity-level-3" title="6-10 exercices"></div>
-          <div className="activity-legend-square activity-level-4" title="11+ exercices"></div>
+          <div className="activity-legend-square activity-level-0" title="0 activité"></div>
+          <div className="activity-legend-square activity-level-1" title="1-2 activités"></div>
+          <div className="activity-legend-square activity-level-2" title="3-5 activités"></div>
+          <div className="activity-legend-square activity-level-3" title="6-10 activités"></div>
+          <div className="activity-legend-square activity-level-4" title="11+ activités"></div>
         </div>
         <span className="activity-legend-label">Plus</span>
       </div>
+
+      {/* Tooltip détail du jour */}
+      {selectedDay && (
+        <DayTooltip
+          dayData={selectedDay}
+          position={tooltipPosition}
+          alignment={tooltipPosition.alignment}
+          onClose={() => setSelectedDay(null)}
+        />
+      )}
     </div>
   );
 };

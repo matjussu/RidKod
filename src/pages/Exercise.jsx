@@ -10,7 +10,7 @@ import FeedbackGlow from "../components/common/FeedbackGlow";
 import ExitConfirmModal from "../components/common/ExitConfirmModal";
 import CustomKeyboard from "../components/exercise/CustomKeyboard";
 import useHaptic from "../hooks/useHaptic";
-import { isBlockComplete, EXERCISES_PER_LEVEL } from '../constants/exerciseLayout';
+import { isBlockComplete, EXERCISES_PER_LEVEL, getMaxLevelsForDifficulty } from '../constants/exerciseLayout';
 import '../styles/Exercise.css';
 
 const Exercise = () => {
@@ -73,13 +73,14 @@ const Exercise = () => {
           let nextLevelId = `${difficulty}_${nextLevelNumber}`;
 
           // Chercher le premier niveau non complété
-          while (isLevelCompleted(nextLevelId) && nextLevelNumber <= 10) {
+          const maxLevels = getMaxLevelsForDifficulty(difficulty);
+          while (isLevelCompleted(nextLevelId) && nextLevelNumber <= maxLevels) {
             nextLevelNumber++;
             nextLevelId = `${difficulty}_${nextLevelNumber}`;
           }
 
           // Si tous les niveaux sont complétés, rediriger vers home
-          if (nextLevelNumber > 10) {
+          if (nextLevelNumber > maxLevels) {
             console.log(`Tous les niveaux de difficulté ${difficulty} sont complétés !`);
             navigate('/home');
             return;

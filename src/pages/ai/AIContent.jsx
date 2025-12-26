@@ -23,7 +23,7 @@ const TOPIC_DATA = {
 const AIContent = () => {
   const navigate = useNavigate();
   const { topicId } = useParams();
-  const { progress, updateProgress } = useProgress();
+  const { progress, updateProgress, recordDailyActivity } = useProgress();
   const { triggerLight, triggerSuccess, triggerError } = useHaptic();
   const contentRef = useRef(null);
 
@@ -187,6 +187,10 @@ const AIContent = () => {
         }
       }
     });
+
+    // ✅ Enregistrer l'activité AI pour le calendrier
+    recordDailyActivity('ai', 1);
+
     setShowCompleteModal(false);
     navigate('/ai-understanding');
   };
@@ -522,7 +526,7 @@ const AIContent = () => {
   };
 
   return (
-    <div className="lesson-content-container" ref={contentRef}>
+    <div className="ai-content-container" ref={contentRef}>
       {/* Sticky Progress Bar avec Story Bars Instagram */}
       <div className="lesson-progress-bar">
         <button className="lesson-progress-bar-back" onClick={handleBackClick} aria-label="Retour">
@@ -579,6 +583,159 @@ const AIContent = () => {
       )}
 
       <style>{`
+        /* AI Content Container - NEON WHITE Theme */
+        .ai-content-container {
+          min-height: 100vh;
+          min-height: -webkit-fill-available;
+          background: #0F0F12;
+          position: relative;
+          overflow-x: hidden;
+          overflow-y: auto;
+          opacity: 0;
+          transform: scale(0.95) translateY(20px);
+          filter: blur(10px);
+          animation: dojoEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Tatami Grid Pattern - White */
+        .ai-content-container::before {
+          content: '';
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-image:
+            repeating-linear-gradient(
+              0deg,
+              transparent,
+              transparent 39px,
+              rgba(255, 255, 255, 0.02) 39px,
+              rgba(255, 255, 255, 0.02) 40px
+            ),
+            repeating-linear-gradient(
+              90deg,
+              transparent,
+              transparent 39px,
+              rgba(255, 255, 255, 0.02) 39px,
+              rgba(255, 255, 255, 0.02) 40px
+            );
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        @keyframes dojoEnter {
+          0% {
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+            filter: blur(10px);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            filter: blur(0);
+          }
+        }
+
+        /* Progress Bar - NEON WHITE */
+        .lesson-progress-bar {
+          position: sticky;
+          top: 0;
+          left: 0;
+          right: 0;
+          z-index: 100;
+          background: rgba(15, 15, 18, 0.95);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          padding: 16px 20px;
+          padding-top: max(env(safe-area-inset-top), 16px);
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .lesson-progress-bar-back {
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          border-radius: 10px;
+          padding: 8px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .lesson-progress-bar-back:hover {
+          background: rgba(255, 255, 255, 0.1);
+          border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .lesson-progress-bar-back svg {
+          color: #FFFFFF;
+          display: block;
+        }
+
+        .lesson-progress-info {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .lesson-progress-text {
+          font-family: "JetBrains Mono", monospace;
+          font-size: 12px;
+          font-weight: 600;
+          color: rgba(255, 255, 255, 0.6);
+          margin: 0;
+        }
+
+        /* Story Bars */
+        .story-bars-container {
+          display: flex;
+          gap: 4px;
+          width: 100%;
+        }
+
+        .story-bar {
+          flex: 1;
+          height: 3px;
+          background: rgba(255, 255, 255, 0.15);
+          border-radius: 2px;
+          overflow: hidden;
+        }
+
+        .story-bar-fill {
+          height: 100%;
+          width: 0;
+          background: #FFFFFF;
+          border-radius: 2px;
+          transition: width 0.3s ease;
+        }
+
+        .story-bar.completed .story-bar-fill {
+          width: 100%;
+        }
+
+        .story-bar.active .story-bar-fill {
+          width: 50%;
+          animation: storyProgress 0.5s ease forwards;
+        }
+
+        @keyframes storyProgress {
+          to { width: 100%; }
+        }
+
+        /* Content Wrapper */
+        .lesson-content-wrapper {
+          padding: 20px;
+          padding-bottom: max(env(safe-area-inset-bottom), 40px);
+          position: relative;
+          z-index: 1;
+        }
+
         /* Tap Zones - Instagram Style */
         .tap-zone {
           position: fixed;
@@ -596,10 +753,10 @@ const AIContent = () => {
         .tap-zone-left { left: 0; }
         .tap-zone-right { right: 0; }
 
-        /* AI Section Text - Minimalist Elegant */
+        /* AI Section Text - NEON WHITE Theme */
         .ai-section-text {
-          background: linear-gradient(135deg, rgba(44, 44, 46, 0.8) 0%, rgba(26, 25, 25, 0.9) 100%);
-          border: 1px solid rgba(255, 149, 0, 0.15);
+          background: linear-gradient(135deg, rgba(30, 30, 36, 0.9) 0%, rgba(15, 15, 18, 0.95) 100%);
+          border: 1px solid rgba(255, 255, 255, 0.15);
           border-radius: 16px;
           padding: 24px;
           position: relative;
@@ -613,7 +770,7 @@ const AIContent = () => {
           left: 0;
           right: 0;
           height: 2px;
-          background: linear-gradient(90deg, transparent, rgba(255, 149, 0, 0.5), transparent);
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
         }
 
         .ai-section-header {
@@ -651,24 +808,26 @@ const AIContent = () => {
           margin-bottom: 0;
         }
 
-        /* Important words highlighted with orange border */
+        /* Important words highlighted with white neon */
         .ai-section-text strong {
-          background: rgba(255, 149, 0, 0.15);
-          color: #FF9500;
+          background: rgba(255, 255, 255, 0.1);
+          color: #FFFFFF;
           padding: 2px 8px;
           border-radius: 4px;
-          border: 1px solid rgba(255, 149, 0, 0.3);
+          border: 1px solid rgba(255, 255, 255, 0.25);
           font-weight: 600;
+          text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
         }
 
         .ai-inline-code {
-          background: rgba(255, 149, 0, 0.15);
-          color: #FF9500;
+          background: rgba(255, 255, 255, 0.1);
+          color: #FFFFFF;
           padding: 2px 8px;
           border-radius: 4px;
           font-family: "JetBrains Mono", monospace;
           font-size: 14px;
-          border: 1px solid rgba(255, 149, 0, 0.2);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
         }
 
         .ai-code-wrapper {
@@ -807,20 +966,20 @@ const AIContent = () => {
           padding: 8px;
         }
 
-        /* AI Decoder Bubble */
+        /* AI Decoder Bubble - NEON WHITE */
         .ai-decoder-container {
           margin-top: 16px;
           animation: aiSlideUp 0.3s ease;
         }
 
         .ai-decoder-bubble {
-          background: linear-gradient(135deg, #1A1919 0%, #0D0D0D 100%);
-          border: 1px solid rgba(255, 149, 0, 0.4);
+          background: linear-gradient(135deg, #0F0F12 0%, #1A1A1E 100%);
+          border: 1px solid rgba(255, 255, 255, 0.25);
           border-radius: 12px;
           padding: 20px;
           padding-top: 28px;
           position: relative;
-          box-shadow: 0 8px 32px rgba(255, 149, 0, 0.1);
+          box-shadow: 0 8px 32px rgba(255, 255, 255, 0.08);
         }
 
         .ai-decoder-icon {
@@ -859,11 +1018,12 @@ const AIContent = () => {
         }
 
         .ai-decoder-content strong {
-          color: #FF9500;
+          color: #FFFFFF;
+          text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
         }
 
         .ai-decoder-content .ai-inline-code {
-          background: rgba(255, 149, 0, 0.2);
+          background: rgba(255, 255, 255, 0.12);
         }
 
         /* AI Section Highlight */
@@ -886,8 +1046,8 @@ const AIContent = () => {
         }
 
         .ai-section-highlight.warning {
-          background: rgba(255, 149, 0, 0.1);
-          border: 1px solid rgba(255, 149, 0, 0.3);
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.2);
           color: rgba(255, 255, 255, 0.9);
         }
 
@@ -938,7 +1098,7 @@ const AIContent = () => {
           }
         }
 
-        /* Return to Menu Button */
+        /* Return to Menu Button - NEON WHITE */
         .ai-return-menu-button {
           display: flex;
           align-items: center;
@@ -947,8 +1107,8 @@ const AIContent = () => {
           width: 100%;
           margin-top: 32px;
           padding: 16px 24px;
-          background: linear-gradient(135deg, #30D158 0%, #28A745 100%);
-          border: none;
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.1) 100%);
+          border: 1px solid rgba(255, 255, 255, 0.3);
           border-radius: 12px;
           font-family: "JetBrains Mono", monospace;
           font-size: 16px;
@@ -958,21 +1118,164 @@ const AIContent = () => {
           transition: all 0.3s ease;
           touch-action: manipulation;
           -webkit-tap-highlight-color: transparent;
-          box-shadow: 0 4px 16px rgba(48, 209, 88, 0.3);
+          box-shadow: 0 4px 16px rgba(255, 255, 255, 0.1);
+          text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
         }
 
         .ai-return-menu-button:hover {
           transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(48, 209, 88, 0.4);
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.15) 100%);
+          border-color: rgba(255, 255, 255, 0.5);
+          box-shadow: 0 6px 24px rgba(255, 255, 255, 0.2);
         }
 
         .ai-return-menu-button:active {
           transform: translateY(0);
-          box-shadow: 0 2px 10px rgba(48, 209, 88, 0.3);
+          box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
         }
 
         .ai-return-menu-button svg {
           stroke: #FFFFFF;
+        }
+
+        /* Modal Styles - NEON WHITE */
+        .modal-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.8);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+          padding: 20px;
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+          background: linear-gradient(135deg, #0F0F12 0%, #1A1A1E 100%);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          border-radius: 20px;
+          padding: 32px;
+          max-width: 360px;
+          width: 100%;
+          text-align: center;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-icon {
+          font-size: 56px;
+          margin-bottom: 20px;
+        }
+
+        .modal-title {
+          font-family: "JetBrains Mono", monospace;
+          font-size: 24px;
+          font-weight: 800;
+          color: #FFFFFF;
+          margin: 0 0 12px 0;
+          text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-description {
+          font-family: "JetBrains Mono", monospace;
+          font-size: 15px;
+          color: rgba(255, 255, 255, 0.7);
+          line-height: 1.5;
+          margin: 0 0 16px 0;
+        }
+
+        .modal-xp {
+          font-family: "JetBrains Mono", monospace;
+          font-size: 18px;
+          font-weight: 700;
+          color: #10A37F;
+          margin: 0 0 24px 0;
+          text-shadow: 0 0 15px rgba(16, 163, 127, 0.4);
+        }
+
+        .modal-button {
+          width: 100%;
+          padding: 16px 24px;
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.1) 100%);
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          border-radius: 12px;
+          font-family: "JetBrains Mono", monospace;
+          font-size: 16px;
+          font-weight: 700;
+          color: #FFFFFF;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-button:hover {
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.15) 100%);
+          border-color: rgba(255, 255, 255, 0.5);
+          box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
+        }
+
+        /* ========================================
+           AI CONTENT THEME OVERRIDES
+           White selection + ChatGPT Green validation
+           ======================================== */
+
+        /* Override Option Button - Default state */
+        .ai-exercise-options .option-button.default {
+          background: #1E1E24 !important;
+          color: #FFFFFF !important;
+          border: 2px solid rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .ai-exercise-options .option-button.default:hover {
+          border-color: rgba(255, 255, 255, 0.3) !important;
+          background: rgba(255, 255, 255, 0.05) !important;
+        }
+
+        /* Override Option Button - Selected state - WHITE */
+        .ai-exercise-options .option-button.selected {
+          background: rgba(255, 255, 255, 0.1) !important;
+          color: #FFFFFF !important;
+          border: 2px solid #FFFFFF !important;
+          box-shadow: 0 0 20px rgba(255, 255, 255, 0.3) !important;
+        }
+
+        .ai-exercise-options .option-button.selected:hover {
+          box-shadow: 0 0 25px rgba(255, 255, 255, 0.4) !important;
+        }
+
+        /* Override Option Button - Correct state - ChatGPT GREEN */
+        .ai-exercise-options .option-button.correct {
+          background: #01aa09ff !important;
+          color: #FFFFFF !important;
+          border: 2px solid #01aa09ff !important;
+        }
+
+        /* Override Action Button - Disabled state - WHITE dimmed */
+        .ai-exercise-section .action-button.disabled {
+          background: rgba(255, 255, 255, 0.1) !important;
+          color: rgba(255, 255, 255, 0.4) !important;
+          border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        }
+
+        /* Override Action Button - Enabled state - ChatGPT GREEN */
+        .ai-exercise-section .action-button.enabled {
+          background: linear-gradient(135deg, #01aa09ff 0%, #01aa09ff 100%) !important;
+          color: #FFFFFF !important;
+          border: none !important;
+          box-shadow: 0 0 20px rgba(16, 163, 127, 0.4) !important;
+        }
+
+        .ai-exercise-section .action-button.enabled:hover:not(:disabled) {
+          box-shadow: 0 0 30px rgba(16, 163, 127, 0.5) !important;
+          filter: brightness(1.1);
+        }
+
+        /* Override Action Button - Incorrect state - RED */
+        .ai-exercise-section .action-button.incorrect-state {
+          background: linear-gradient(135deg, #FF453A 0%, #DC2626 100%) !important;
+          color: #FFFFFF !important;
+          box-shadow: 0 0 20px rgba(255, 69, 58, 0.4) !important;
         }
 
         /* Responsive */

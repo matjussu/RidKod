@@ -60,7 +60,7 @@ const LessonContent = () => {
   const navigate = useNavigate();
   const { language, moduleId, lessonId } = useParams();
   const { triggerLight, triggerSuccess, triggerError } = useHaptic();
-  const { progress, updateProgress } = useProgress();
+  const { progress, updateProgress, recordDailyActivity } = useProgress();
 
   const [lessonData, setLessonData] = useState(null);
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
@@ -358,6 +358,9 @@ const LessonContent = () => {
     if (allExercisesCompleted) {
       // XP sera collecté via les nœuds XP entre les leçons (30 XP par nœud)
       triggerSuccess();
+
+      // ✅ Enregistrer l'activité leçon pour le calendrier
+      recordDailyActivity('lessons', 1);
 
       // Vérifier si le module entier est terminé
       const moduleComplete = isModuleComplete();
@@ -702,6 +705,69 @@ const LessonContent = () => {
           .finish-text {
             font-size: 15px;
           }
+        }
+
+        /* ========================================
+           LESSONS THEME OVERRIDES
+           White selection + Green validation
+           ======================================== */
+
+        /* Override Option Button - Default state */
+        .lesson-exercise-options .option-button.default {
+          background: #1E1E24 !important;
+          color: #FFFFFF !important;
+          border: 2px solid rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .lesson-exercise-options .option-button.default:hover {
+          border-color: rgba(255, 255, 255, 0.3) !important;
+          background: rgba(255, 255, 255, 0.05) !important;
+        }
+
+        /* Override Option Button - Selected state - WHITE */
+        .lesson-exercise-options .option-button.selected {
+          background: rgba(255, 255, 255, 0.1) !important;
+          color: #FFFFFF !important;
+          border: 2px solid #FFFFFF !important;
+          box-shadow: 0 0 20px rgba(255, 255, 255, 0.3) !important;
+        }
+
+        .lesson-exercise-options .option-button.selected:hover {
+          box-shadow: 0 0 25px rgba(255, 255, 255, 0.4) !important;
+        }
+
+        /* Override Option Button - Correct state - GREEN */
+        .lesson-exercise-options .option-button.correct {
+          background: #30D158 !important;
+          color: #FFFFFF !important;
+          border: 2px solid #30D158 !important;
+        }
+
+        /* Override Action Button - Disabled state - WHITE dimmed */
+        .lesson-section-exercise .action-button.disabled {
+          background: rgba(255, 255, 255, 0.1) !important;
+          color: rgba(255, 255, 255, 0.4) !important;
+          border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        }
+
+        /* Override Action Button - Enabled state - GREEN */
+        .lesson-section-exercise .action-button.enabled {
+          background: linear-gradient(135deg, #30D158 0%, #28A745 100%) !important;
+          color: #FFFFFF !important;
+          border: none !important;
+          box-shadow: 0 0 20px rgba(48, 209, 88, 0.4) !important;
+        }
+
+        .lesson-section-exercise .action-button.enabled:hover:not(:disabled) {
+          box-shadow: 0 0 30px rgba(48, 209, 88, 0.5) !important;
+          filter: brightness(1.1);
+        }
+
+        /* Override Action Button - Incorrect state - RED */
+        .lesson-section-exercise .action-button.incorrect-state {
+          background: linear-gradient(135deg, #FF453A 0%, #DC2626 100%) !important;
+          color: #FFFFFF !important;
+          box-shadow: 0 0 20px rgba(255, 69, 58, 0.4) !important;
         }
       `}</style>
 

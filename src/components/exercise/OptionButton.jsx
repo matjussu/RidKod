@@ -58,39 +58,49 @@ const OptionButton = ({ value, isSelected, isCorrect, isSubmitted, onClick }) =>
           transform: scale(0.98);
         }
 
-        /* Option States - Not Submitted */
+        /* Option States - Not Submitted - DOJO THEME */
         .option-button.default {
-          background: #000000;
+          background: #1E1E24;
           color: #FFFFFF;
+          border: 2px solid rgba(255, 255, 255, 0.1);
         }
 
         .option-button.selected {
-          background: #484848;
+          background: rgba(0, 221, 179, 0.1);
           color: #FFFFFF;
-          box-shadow: 0 0 0 2px #088201;
+          border: 2px solid #00DDB3;
+          box-shadow: 0 0 20px rgba(0, 221, 179, 0.3);
         }
 
-        .option-button.default:hover,
+        .option-button.default:hover {
+          border-color: rgba(0, 221, 179, 0.3);
+          background: rgba(0, 221, 179, 0.05);
+        }
+
         .option-button.selected:hover {
-          filter: brightness(1.1);
+          box-shadow: 0 0 25px rgba(0, 221, 179, 0.4);
         }
 
         /* Option States - Submitted */
         .option-button.correct {
-          background: #088201;
-          color: #FFFFFF;
+          background: #00DDB3;
+          color: #000000;
+          border: 2px solid #00DDB3;
+          font-weight: 700;
         }
 
         .option-button.incorrect {
           background: #FF383C;
           color: #FFFFFF;
+          border: 2px solid #FF383C;
         }
 
         .option-button.faded {
-          background: #2C2C2E;
+          background: #1E1E24;
           color: #FFFFFF;
-          opacity: 0.5;
+          opacity: 0.4;
           cursor: not-allowed;
+          border: 2px solid rgba(255, 255, 255, 0.05);
         }
 
         .option-button.disabled {

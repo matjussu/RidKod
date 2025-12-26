@@ -45,13 +45,13 @@ const AIPromptExample = ({ prompt, aiModel, tip }) => {
           gap: 16px;
         }
 
-        /* AI Model Badge */
+        /* AI Model Badge - ChatGPT Green */
         .ai-model-badge {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          background: rgba(255, 153, 0, 0.15);
-          border: 1px solid rgba(255, 153, 0, 0.3);
+          background: rgba(16, 163, 127, 0.15);
+          border: 1px solid rgba(16, 163, 127, 0.4);
           border-radius: 8px;
           padding: 8px 16px;
           align-self: flex-start;
@@ -65,8 +65,9 @@ const AIPromptExample = ({ prompt, aiModel, tip }) => {
         .ai-model-text {
           font-size: 14px;
           font-weight: 700;
-          color: #FF9500;
+          color: #10A37F;
           letter-spacing: 0.5px;
+          text-shadow: 0 0 10px rgba(16, 163, 127, 0.4);
         }
 
         /* Prompt Box */

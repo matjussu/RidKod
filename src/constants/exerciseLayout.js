@@ -8,8 +8,24 @@
 // ============================================
 // EXERCISES & PROGRESSION
 // ============================================
-export const EXERCISES_PER_LEVEL = 10;
+export const EXERCISES_PER_LEVEL = 5;
 export const TOTAL_DIFFICULTY_LEVELS = 3;
+
+// Nombre d'exercices par difficulté
+export const EXERCISES_COUNT = {
+  1: 30,  // Easy
+  2: 10,  // Medium
+  3: 10   // Hard
+};
+
+/**
+ * Calculer le nombre max de niveaux pour une difficulté
+ * @param {number} difficulty - Niveau de difficulté (1-3)
+ * @returns {number} Nombre max de niveaux
+ */
+export const getMaxLevelsForDifficulty = (difficulty) => {
+  return Math.ceil((EXERCISES_COUNT[difficulty] || 30) / EXERCISES_PER_LEVEL);
+};
 
 // ============================================
 // COMPONENT HEIGHTS (px)

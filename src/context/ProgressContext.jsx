@@ -14,7 +14,8 @@ import {
   EXERCISES_PER_LEVEL,
   updateUserProgress,
   processQueueOnLoad,
-  flushExerciseQueue
+  flushExerciseQueue,
+  updateDailyActivityByType  // ✅ Helper calendrier
 } from '../services/progressService';
 import { exerciseRateLimiter, lessonRateLimiter } from '../utils/throttle';
 import { getQueueSize } from '../utils/debounce';
@@ -200,12 +201,20 @@ export const ProgressProvider = ({ children }) => {
           incorrectAnswers: currentProgress.stats.incorrectAnswers + (isCorrect ? 0 : 1)
         };
 
+        // ✅ Mettre à jour l'activité quotidienne (pour le calendrier)
+        const updatedDailyActivity = updateDailyActivityByType(
+          currentProgress.dailyActivity,
+          'training',
+          1
+        );
+
         const updatedProgress = {
           ...currentProgress,
           totalXP: newTotalXP,
           userLevel: newUserLevel,
           levelStats: updatedLevelStats,
-          stats: updatedStats
+          stats: updatedStats,
+          dailyActivity: updatedDailyActivity
         };
 
         saveProgressLocally(updatedProgress);
@@ -476,6 +485,40 @@ export const ProgressProvider = ({ children }) => {
     }
   };
 
+  // ✅ Enregistrer une activité quotidienne par type (pour le calendrier)
+  // Types: 'training' | 'lessons' | 'ai' | 'challenges'
+  const recordDailyActivity = async (type, count = 1) => {
+    try {
+      const currentProgress = progress || getLocalProgress();
+      const updatedDailyActivity = updateDailyActivityByType(
+        currentProgress.dailyActivity,
+        type,
+        count
+      );
+
+      if (isAuthenticated && user) {
+        // Mode connecté - sauvegarder dans Firestore
+        await updateUserProgress(user.uid, { dailyActivity: updatedDailyActivity });
+      } else {
+        // Mode invité - sauvegarder localement
+        const updatedProgress = {
+          ...currentProgress,
+          dailyActivity: updatedDailyActivity
+        };
+        saveProgressLocally(updatedProgress);
+      }
+
+      // Mettre à jour l'état local
+      setProgress(prev => ({
+        ...prev,
+        dailyActivity: updatedDailyActivity
+      }));
+    } catch (err) {
+      console.error('Erreur enregistrement activité quotidienne:', err);
+      // Ne pas throw - l'activité n'est pas critique
+    }
+  };
+
   const value = {
     progress,
     loading,
@@ -487,7 +530,8 @@ export const ProgressProvider = ({ children }) => {
     getLevelStats,
     getStats,
     getProgressToNextLevel,
-    updateProgress
+    updateProgress,
+    recordDailyActivity  // ✅ Nouvelle fonction pour le calendrier
   };
 
   return (

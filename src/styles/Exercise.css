@@ -1,4 +1,4 @@
-/* CSS Variables for Exercise Page */
+/* CSS Variables for Exercise Page - DOJO THEME */
 :root {
   /* Spacing System */
   --space-xs: 4px;
@@ -26,13 +26,21 @@
   --options-max-height: 500px;
   --options-grid-gap: 10px;
 
+  /* Dojo Theme Colors */
+  --training-primary: #00DDB3;
+  --training-primary-light: #5DFFE0;
+  --training-primary-dark: #00A888;
+  --training-primary-glow: rgba(0, 221, 179, 0.4);
+  --training-bg: #0F0F12;
+
   /* Colors */
-  --bg-primary: #1A1919;
+  --bg-primary: #0F0F12;
   --bg-code: #030303ff;
   --bg-card: #FFFFFF;
-  --bg-progress: #3A3A3C;
+  --bg-progress: #1E1E24;
   --bg-scrollbar: #3A3A3C;
-  --color-success: #088201;
+  --color-success: #00DDB3;
+  --color-success-dark: #00A888;
   --color-error: #FF453A;
   --text-primary: #FFFFFF;
 
@@ -100,19 +108,58 @@ html, body {
   width: 100%;
   overflow-x: hidden;
   opacity: 0;
-  transform: scale(1.05);
-  animation: fadeInScale 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  transform: scale(0.95) translateY(20px);
+  filter: blur(10px);
+  animation: dojoEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-@keyframes fadeInScale {
+/* Tatami Grid Pattern - Background */
+.exercise-app::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 39px,
+      rgba(0, 221, 179, 0.02) 39px,
+      rgba(0, 221, 179, 0.02) 40px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 39px,
+      rgba(0, 221, 179, 0.02) 39px,
+      rgba(0, 221, 179, 0.02) 40px
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes dojoEnter {
   0% {
     opacity: 0;
-    transform: scale(1.05);
+    transform: scale(0.95) translateY(20px);
+    filter: blur(10px);
   }
   100% {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes energyPulse {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--training-primary-glow);
+  }
+  50% {
+    box-shadow: 0 0 15px var(--training-primary-glow), 0 0 25px var(--training-primary-glow);
   }
 }
 
@@ -183,12 +230,15 @@ html, body {
   border-radius: var(--progress-bar-height);
   overflow: hidden;
   width: 100%;
+  border: 1px solid rgba(0, 221, 179, 0.1);
 }
 
 .progress-fill {
   height: 100%;
-  background: var(--color-success);
+  background: linear-gradient(90deg, var(--training-primary-dark) 0%, var(--training-primary) 50%, var(--training-primary-light) 100%);
   transition: width 0.3s ease;
+  box-shadow: 0 0 10px var(--training-primary-glow);
+  animation: energyPulse 2s ease-in-out infinite;
 }
 
 /* Content scrollable */

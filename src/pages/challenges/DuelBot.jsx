@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useProgress } from '../../context/ProgressContext';
 import useHaptic from '../../hooks/useHaptic';
 import CodeBlock from '../../components/exercise/CodeBlock';
 import OptionButton from '../../components/exercise/OptionButton';
@@ -18,6 +19,7 @@ import '../../styles/Challenges.css';
 const DuelBot = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { recordDailyActivity } = useProgress();
   const { triggerSuccess, triggerError, triggerLight } = useHaptic();
 
   // Etats du jeu
@@ -231,6 +233,9 @@ const DuelBot = () => {
           duelsWon: (localStats.duelsWon || 0) + (playerWins ? 1 : 0)
         });
       }
+
+      // ✅ Enregistrer l'activité challenge pour le calendrier
+      recordDailyActivity('challenges', 1);
 
       navigate('/challenges/duel/result', {
         state: {
