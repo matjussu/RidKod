@@ -37,8 +37,8 @@
   right: 0;
   bottom: 0;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    linear-gradient(rgba(139, 92, 246, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 92, 246, 0.05) 1px, transparent 1px);
   background-size: 40px 40px;
   pointer-events: none;
   z-index: 0;
@@ -99,7 +99,7 @@
 
 .challenges-header {
   text-align: center;
-  margin-top: 20px;
+  margin-top: 40px;
   margin-bottom: 48px;
   position: relative;
   z-index: 1;

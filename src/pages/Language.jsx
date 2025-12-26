@@ -11,6 +11,7 @@ import htmlIcon from '../assets/html-5_5968267.png';
 import cssIcon from '../assets/css-3_5968242.png';
 import javaIcon from '../assets/java_5968282.png';
 import cppIcon from '../assets/c_6132222.png';
+import rIcon from '../assets/R_logo.svg.png';
 
 const Language = () => {
   const navigate = useNavigate();
@@ -87,6 +88,13 @@ const Language = () => {
       name: 'C++',
       icon: cppIcon,
       backgroundColor: 'linear-gradient(135deg, #00599C 0%, #004482 100%)',
+      isComingSoon: true
+    },
+    {
+      id: 'r',
+      name: 'STATS',
+      icon: rIcon,
+      backgroundColor: 'linear-gradient(135deg, #276DC3 0%, #8A9BA8 100%)',
       isComingSoon: true
     }
   ];

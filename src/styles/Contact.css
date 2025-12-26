@@ -36,15 +36,15 @@ animation: dojoEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       0deg,
       transparent,
       transparent 39px,
-      rgba(255, 255, 255, 0.03) 39px,
-      rgba(255, 255, 255, 0.03) 40px
+      rgba(236, 59, 0, 0.03) 39px,
+      rgba(236, 59, 59, 0.03) 40px
     ),
     repeating-linear-gradient(
       90deg,
       transparent,
       transparent 39px,
-      rgba(255, 255, 255, 0.03) 39px,
-      rgba(255, 255, 255, 0.03) 40px
+      rgba(236, 236, 0, 0.03) 39px,
+      rgba(236, 236, 0, 0.03) 40px
     );
   pointer-events: none;
   z-index: -1;
@@ -63,6 +63,7 @@ animation: dojoEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   display: flex;
   flex-direction: column;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 150px;
 }
 
 
@@ -111,20 +112,6 @@ animation: dojoEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   background: #27c93f;
 }
 
-/* Symbol inside buttons (hidden by default) */
-.terminal-button-symbol {
-  display: none;
-  font-size: 9px;
-  font-weight: bold;
-  color: rgba(0, 0, 0, 0.7);
-  line-height: 1;
-  user-select: none;
-}
-
-/* Show symbols on parent hover */
-.terminal-buttons:hover .terminal-button-symbol {
-  display: block;
-}
 
 /* Hover effects */
 .terminal-button:hover {
@@ -350,7 +337,7 @@ animation: dojoEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .command-card:hover {
-  background: rgba(255, 255, 255, 0.15);  /* ← Aussi au hover */
+  background: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 1)), rgba(255, 255, 255, 0.05);
   border-color: rgba(255, 255, 255, 0.2);
   transform: translateY(-2px);
 }

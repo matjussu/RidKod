@@ -39,15 +39,15 @@ top: 0;
               0deg,
               transparent,
               transparent 39px,
-              rgba(255, 255, 255, 0.02) 39px,
-              rgba(255, 255, 255, 0.02) 40px
+              rgba(236, 236, 0, 0.03) 39px,
+              rgba(236, 236, 0, 0.03) 40px
             ),
             repeating-linear-gradient(
               90deg,
               transparent,
               transparent 39px,
-              rgba(255, 255, 255, 0.02) 39px,
-              rgba(255, 255, 255, 0.02) 40px
+              rgba(236, 236, 0, 0.03) 39px,
+              rgba(236, 236, 0, 0.03) 40px
             );
           pointer-events: none;
           z-index: 0;
@@ -102,7 +102,7 @@ top: 0;
 /* Header Section - Racing Style */
 .lesson-header-section {
   text-align: center;
-  margin-top: 20px;
+  margin-top: 40px;
   margin-bottom: 48px;
   align-self: center;
   opacity: 0;
@@ -255,15 +255,15 @@ top: 0;
               0deg,
               transparent,
               transparent 39px,
-              rgba(255, 255, 255, 0.02) 39px,
-              rgba(255, 255, 255, 0.02) 40px
+              rgba(236, 236, 0, 0.03) 39px,
+              rgba(236, 236, 0, 0.03) 40px
             ),
             repeating-linear-gradient(
               90deg,
               transparent,
               transparent 39px,
-              rgba(255, 255, 255, 0.02) 39px,
-              rgba(255, 255, 255, 0.02) 40px
+              rgba(236, 236, 0, 0.03) 39px,
+              rgba(236, 236, 0, 0.03) 40px
             );
           pointer-events: none;
           z-index: 0;
@@ -361,15 +361,15 @@ top: 0;
               0deg,
               transparent,
               transparent 39px,
-              rgba(255, 255, 255, 0.02) 39px,
-              rgba(255, 255, 255, 0.02) 40px
+              rgba(236, 236, 0, 0.03) 39px,
+              rgba(236, 236, 0, 0.03) 40px
             ),
             repeating-linear-gradient(
               90deg,
               transparent,
               transparent 39px,
-              rgba(255, 255, 255, 0.02) 39px,
-              rgba(255, 255, 255, 0.02) 40px
+              rgba(236, 236, 0, 0.03) 39px,
+              rgba(236, 236, 0, 0.03) 40px
             );
           pointer-events: none;
           z-index: 0;
@@ -492,15 +492,15 @@ top: 0;
               0deg,
               transparent,
               transparent 39px,
-              rgba(255, 255, 255, 0.02) 39px,
-              rgba(255, 255, 255, 0.02) 40px
+              rgba(236, 236, 0, 0.03) 39px,
+              rgba(236, 236, 0, 0.03) 40px
             ),
             repeating-linear-gradient(
               90deg,
               transparent,
               transparent 39px,
-              rgba(255, 255, 255, 0.02) 39px,
-              rgba(255, 255, 255, 0.02) 40px
+              rgba(236, 236, 0, 0.03) 39px,
+              rgba(236, 236, 0, 0.03) 40px
             );
           pointer-events: none;
           z-index: 0;

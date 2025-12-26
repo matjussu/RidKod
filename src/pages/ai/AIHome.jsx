@@ -176,7 +176,7 @@ const AIHome = () => {
           font-weight: 900;
           color: #FFFFFF;
           text-align: center;
-          margin: 0;
+          margin: 30px 0 8px 0;
           font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
           text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
           position: relative;
