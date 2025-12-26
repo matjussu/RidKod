@@ -9,28 +9,62 @@ LessonContent========================================*/
 
 /* Container principal LessonLanguage */
 .lesson-language-container {
-  min-height: 100vh;
-  min-height: -webkit-fill-available;
-  background: #1A1919;
-  color: #FFFFFF;
-  display: flex;
-  flex-direction: column;
-  padding-top: max(env(safe-area-inset-top), 20px);
-  padding-left: max(20px, env(safe-area-inset-left));
-  padding-right: max(20px, env(safe-area-inset-right));
-  padding-bottom: max(env(safe-area-inset-bottom), 8px);
-  max-width: min(428px, 100vw);
-  margin: 0 auto;
-  width: 100%;
-  box-sizing: border-box;
-  overflow-x: hidden;
-  opacity: 0;
-  transform: scale(1.05);
-  animation: fadeInScale 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  position: relative;
+ min-height: 100vh;
+min-height: -webkit-fill-available;
+background: #0F0F12;
+padding: 20px;
+padding-top: max(env(safe-area-inset-top), 20px);
+padding-bottom: max(env(safe-area-inset-bottom), 40px);
+padding-left: max(env(safe-area-inset-left), 20px);
+padding-right: max(env(safe-area-inset-right), 20px);
+display: flex;
+flex-direction: column;
+align-items: center;
+position: relative;
+opacity: 0;
+transform: scale(0.95) translateY(20px);
+filter: blur(10px);
+animation: dojoEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+.lesson-language-container::before {
+content: '';
+position: fixed;
+top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-image:
+            repeating-linear-gradient(
+              0deg,
+              transparent,
+              transparent 39px,
+              rgba(255, 255, 255, 0.02) 39px,
+              rgba(255, 255, 255, 0.02) 40px
+            ),
+            repeating-linear-gradient(
+              90deg,
+              transparent,
+              transparent 39px,
+              rgba(255, 255, 255, 0.02) 39px,
+              rgba(255, 255, 255, 0.02) 40px
+            );
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        @keyframes dojoEnter {
+          0% {
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+            filter: blur(10px);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            filter: blur(0);
+          }
+        }
 /* Back Button */
 .lesson-back-button {
   position: absolute;
@@ -191,27 +225,62 @@ LessonContent========================================*/
 
 /* Container principal LessonModules */
 .modules-container {
-  min-height: 100vh;
-  min-height: -webkit-fill-available;
-  background: #1A1919;
-  color: #FFFFFF;
-  display: flex;
-  flex-direction: column;
-  padding-top: max(calc(env(safe-area-inset-top) + 20px), 40px);
-  padding-left: max(20px, env(safe-area-inset-left));
-  padding-right: max(20px, env(safe-area-inset-right));
-  padding-bottom: max(env(safe-area-inset-bottom), 24px);
-  max-width: min(428px, 100vw);
-  margin: 0 auto;
-  width: 100%;
-  box-sizing: border-box;
-  overflow-x: hidden;
-  opacity: 0;
-  transform: scale(1.05);
-  animation: fadeInScale 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  position: relative;
+min-height: 100vh;
+min-height: -webkit-fill-available;
+background: #0F0F12;
+padding: 20px;
+padding-top: max(env(safe-area-inset-top), 20px);
+padding-bottom: max(env(safe-area-inset-bottom), 40px);
+padding-left: max(env(safe-area-inset-left), 20px);
+padding-right: max(env(safe-area-inset-right), 20px);
+display: flex;
+flex-direction: column;
+align-items: center;
+position: relative;
+opacity: 0;
+transform: scale(0.95) translateY(20px);
+filter: blur(10px);
+animation: dojoEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+.modules-container::before {
+content: '';
+position: fixed;
+top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-image:
+            repeating-linear-gradient(
+              0deg,
+              transparent,
+              transparent 39px,
+              rgba(255, 255, 255, 0.02) 39px,
+              rgba(255, 255, 255, 0.02) 40px
+            ),
+            repeating-linear-gradient(
+              90deg,
+              transparent,
+              transparent 39px,
+              rgba(255, 255, 255, 0.02) 39px,
+              rgba(255, 255, 255, 0.02) 40px
+            );
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        @keyframes dojoEnter {
+          0% {
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+            filter: blur(10px);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            filter: blur(0);
+          }
+        }
 
 /* Modules Header */
 .modules-header {
@@ -262,27 +331,62 @@ LessonContent========================================*/
 
 /* Container principal LessonList */
 .lessons-container {
-  min-height: 100vh;
-  min-height: -webkit-fill-available;
-  background: #1A1919;
-  color: #FFFFFF;
-  display: flex;
-  flex-direction: column;
-  padding-top: max(calc(env(safe-area-inset-top) + 20px), 40px);
-  padding-left: max(20px, env(safe-area-inset-left));
-  padding-right: max(20px, env(safe-area-inset-right));
-  padding-bottom: max(env(safe-area-inset-bottom), 24px);
-  max-width: min(428px, 100vw);
-  margin: 0 auto;
-  width: 100%;
-  box-sizing: border-box;
-  overflow-x: hidden;
-  opacity: 0;
-  transform: scale(1.05);
-  animation: fadeInScale 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  position: relative;
+min-height: 100vh;
+min-height: -webkit-fill-available;
+background: #0F0F12;
+padding: 20px;
+padding-top: max(env(safe-area-inset-top), 20px);
+padding-bottom: max(env(safe-area-inset-bottom), 40px);
+padding-left: max(env(safe-area-inset-left), 20px);
+padding-right: max(env(safe-area-inset-right), 20px);
+display: flex;
+flex-direction: column;
+align-items: center;
+position: relative;
+opacity: 0;
+transform: scale(0.95) translateY(20px);
+filter: blur(10px);
+animation: dojoEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+.lessons-container::before {
+content: '';
+position: fixed;
+top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-image:
+            repeating-linear-gradient(
+              0deg,
+              transparent,
+              transparent 39px,
+              rgba(255, 255, 255, 0.02) 39px,
+              rgba(255, 255, 255, 0.02) 40px
+            ),
+            repeating-linear-gradient(
+              90deg,
+              transparent,
+              transparent 39px,
+              rgba(255, 255, 255, 0.02) 39px,
+              rgba(255, 255, 255, 0.02) 40px
+            );
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        @keyframes dojoEnter {
+          0% {
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+            filter: blur(10px);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            filter: blur(0);
+          }
+        }
 
 /* Lessons Header */
 .lessons-header {
@@ -358,26 +462,62 @@ LessonContent========================================*/
 
 /* Container principal Path */
 .path-container {
-  min-height: 100vh;
-  min-height: -webkit-fill-available;
-  background: #1A1919;
-  color: #FFFFFF;
-  display: flex;
-  flex-direction: column;
-  padding-top: max(calc(env(safe-area-inset-top) + 20px), 40px);
-  padding-left: 0;
-  padding-right: 0;
-  padding-bottom: max(env(safe-area-inset-bottom), 20px);
-  max-width: min(428px, 100vw);
-  margin: 0 auto;
-  width: 100%;
-  box-sizing: border-box;
-  overflow-x: hidden;
-  opacity: 0;
-  transform: scale(1.05);
-  animation: fadeInScale 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  position: relative;
+min-height: 100vh;
+min-height: -webkit-fill-available;
+background: #0F0F12;
+padding: 20px;
+padding-top: max(env(safe-area-inset-top), 20px);
+padding-bottom: max(env(safe-area-inset-bottom), 40px);
+padding-left: max(env(safe-area-inset-left), 20px);
+padding-right: max(env(safe-area-inset-right), 20px);
+display: flex;
+flex-direction: column;
+align-items: center;
+position: relative;
+opacity: 0;
+transform: scale(0.95) translateY(20px);
+filter: blur(10px);
+animation: dojoEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+.path-container::before {
+content: '';
+position: fixed;
+top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-image:
+            repeating-linear-gradient(
+              0deg,
+              transparent,
+              transparent 39px,
+              rgba(255, 255, 255, 0.02) 39px,
+              rgba(255, 255, 255, 0.02) 40px
+            ),
+            repeating-linear-gradient(
+              90deg,
+              transparent,
+              transparent 39px,
+              rgba(255, 255, 255, 0.02) 39px,
+              rgba(255, 255, 255, 0.02) 40px
+            );
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        @keyframes dojoEnter {
+          0% {
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+            filter: blur(10px);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            filter: blur(0);
+          }
+        }
 
 /* Path Header */
 .path-header {
