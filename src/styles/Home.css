@@ -120,7 +120,7 @@ top: 0;
 
 /* Menu Cards */
 .menu-card {
-  background: linear-gradient(135deg, #080808 0%, #0f0f10 100%);
+  background: linear-gradient(135deg, #202020 0%, #0f0f10 100%);
   border-radius: 20px;
   aspect-ratio: 1;
   display: flex;

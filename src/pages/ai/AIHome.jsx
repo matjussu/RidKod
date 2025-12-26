@@ -74,6 +74,9 @@ const AIHome = () => {
             />
           );
         })}
+        <div className="footer">
+        By M/E
+      </div>
       </div>
 
       <style>{`
@@ -142,8 +145,8 @@ const AIHome = () => {
           position: absolute;
           top: max(env(safe-area-inset-top), 20px);
           left: max(env(safe-area-inset-left), 20px);
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.15);
+          
+          
           border-radius: 12px;
           padding: 10px;
           cursor: pointer;
@@ -191,7 +194,7 @@ const AIHome = () => {
           transform: translateX(-50%);
           width: 500px;
           height: 3px;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 1), transparent);
           border-radius: 2px;
         }
 

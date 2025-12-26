@@ -465,6 +465,9 @@ const Contact = () => {
           </button>
         </div>
       </div>
+      <div className="footer">
+        By M/E
+      </div>
     </div>
   );
 };

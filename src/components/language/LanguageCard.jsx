@@ -31,8 +31,8 @@ const LanguageCard = ({
         .language-card {
           width: 100%;
           height: 90px;
+          border: none;
           border-radius: 20px;
-          border: 2px solid rgba(0, 221, 179, 0.15);
           cursor: pointer;
           transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
@@ -49,7 +49,6 @@ const LanguageCard = ({
 
         .language-card:not(.coming-soon):hover {
           transform: translateY(-4px) scale(1.02);
-          border-color: rgba(0, 221, 179, 0.4);
           box-shadow:
             0 12px 40px rgba(0, 0, 0, 0.3),
             0 0 30px rgba(0, 221, 179, 0.2),
@@ -86,7 +85,8 @@ const LanguageCard = ({
           width: 56px;
           height: 56px;
           object-fit: contain;
-          margin: 0;
+          margin-left: -10px;
+          margin-right: 5px;
           transition: transform 0.3s ease;
           flex-shrink: 0;
         }

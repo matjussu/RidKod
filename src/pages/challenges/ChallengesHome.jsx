@@ -204,6 +204,10 @@ const ChallengesHome = () => {
           </div>
         </div>
       </div>
+      {/* Footer */}
+      <div className="footer">
+        By M/E
+      </div>
 
     </div>
   );
