@@ -41,10 +41,13 @@ const DuelGame = () => {
   const [isCorrect, setIsCorrect] = useState(false);
   const [showExplanation, setShowExplanation] = useState(false);
 
+  // Constante de pénalité (10 secondes par erreur)
+  const PENALTY_SECONDS = 10;
+
   // Stats
-  const [playerScore, setPlayerScore] = useState(0);
+  const [playerErrors, setPlayerErrors] = useState(0);
   const [playerCorrect, setPlayerCorrect] = useState(0);
-  const [opponentScore, setOpponentScore] = useState(0);
+  const [opponentErrors, setOpponentErrors] = useState(0);
   const [opponentQuestion, setOpponentQuestion] = useState(0);
 
   // Feedback
@@ -79,10 +82,10 @@ const DuelGame = () => {
         setExercises(data.exercises);
       }
 
-      // Mettre a jour les scores de l'adversaire
+      // Mettre a jour les stats de l'adversaire
       const opponent = isHost ? data.guest : data.host;
       if (opponent) {
-        setOpponentScore(opponent.score || 0);
+        setOpponentErrors(opponent.errors || 0);
         setOpponentQuestion(opponent.currentQuestion || 0);
       }
 
@@ -94,9 +97,12 @@ const DuelGame = () => {
         const playerTimeSeconds = player.finishedAt ? Math.floor((new Date(player.finishedAt).getTime() - new Date(data.startedAt?.toDate?.() || Date.now()).getTime()) / 1000) : 0;
         const opponentTimeSeconds = opponentData.finishedAt ? Math.floor((new Date(opponentData.finishedAt).getTime() - new Date(data.startedAt?.toDate?.() || Date.now()).getTime()) / 1000) : 0;
 
-        // Determiner si le joueur a gagne
-        const playerWins = player.score > opponentData.score ||
-          (player.score === opponentData.score && playerTimeSeconds < opponentTimeSeconds);
+        // Calculer les temps totaux avec pénalités
+        const playerTotalTime = playerTimeSeconds + ((player.errors || 0) * PENALTY_SECONDS);
+        const opponentTotalTime = opponentTimeSeconds + ((opponentData.errors || 0) * PENALTY_SECONDS);
+
+        // Determiner si le joueur a gagne (le plus petit temps gagne)
+        const playerWins = playerTotalTime < opponentTotalTime;
 
         // Incrementer les stats de duel (une seule fois)
         if (!statsUpdatedRef.current) {
@@ -109,7 +115,7 @@ const DuelGame = () => {
               duelsWon: (localStats.duelsWon || 0) + (playerWins ? 1 : 0)
             });
           }
-          // ✅ Enregistrer l'activité challenge pour le calendrier
+          // Enregistrer l'activité challenge pour le calendrier
           recordDailyActivity('challenges', 1);
         }
 
@@ -118,17 +124,20 @@ const DuelGame = () => {
             mode: 'friend',
             player: {
               username: player.username,
-              score: player.score,
               correctAnswers: player.correctAnswers,
-              timeSeconds: playerTimeSeconds
+              errors: player.errors || 0,
+              timeSeconds: playerTimeSeconds,
+              totalTime: playerTotalTime
             },
             opponent: {
               username: opponentData.username,
-              score: opponentData.score,
               correctAnswers: opponentData.correctAnswers,
-              timeSeconds: opponentTimeSeconds
+              errors: opponentData.errors || 0,
+              timeSeconds: opponentTimeSeconds,
+              totalTime: opponentTotalTime
             },
-            exerciseCount: data.exerciseCount || 5
+            exerciseCount: data.exerciseCount || 5,
+            penaltySeconds: PENALTY_SECONDS
           }
         });
       }
@@ -193,22 +202,21 @@ const DuelGame = () => {
       triggerError();
     }
 
-    const xpGain = correct ? (currentExercise.xpGain || 10) : 0;
-    const newScore = playerScore + xpGain;
+    const newErrors = playerErrors + (correct ? 0 : 1);
     const newCorrect = playerCorrect + (correct ? 1 : 0);
 
-    setPlayerScore(newScore);
+    setPlayerErrors(newErrors);
     setPlayerCorrect(newCorrect);
 
     // Mettre a jour Firestore
     if (user?.uid && code) {
       await updatePlayerScore(code, user.uid, {
-        score: newScore,
+        errors: newErrors,
         correctAnswers: newCorrect,
         currentQuestion: currentIndex + 1
       });
     }
-  }, [isSubmitted, checkAnswer, currentExercise, currentIndex, playerScore, playerCorrect, user, code, triggerSuccess, triggerError]);
+  }, [isSubmitted, checkAnswer, currentIndex, playerErrors, playerCorrect, user, code, triggerSuccess, triggerError]);
 
   // Continuer
   const handleContinue = useCallback(async () => {
@@ -447,21 +455,30 @@ const DuelGame = () => {
           <span style={styles.timer}>{formatTime(elapsedSeconds)}</span>
         </div>
 
-        {/* Score Comparison */}
+        {/* Time Comparison */}
         <div style={styles.scoreComparison}>
           <div style={styles.playerScoreCard}>
             <span style={styles.scoreName}>Toi</span>
             <span style={{ ...styles.scoreValue, ...styles.scoreValuePlayer }}>
-              {playerScore}
+              {formatTime(elapsedSeconds)}
+              {playerErrors > 0 && (
+                <span style={{ fontSize: '12px', color: '#FF453A', marginLeft: '4px' }}>
+                  +{playerErrors * PENALTY_SECONDS}s
+                </span>
+              )}
             </span>
           </div>
           <span style={styles.vsText}>VS</span>
           <div style={styles.opponentScoreCard}>
             <span style={styles.scoreName}>{opponentName || 'Adversaire'}</span>
-            <span style={styles.scoreValue}>{opponentScore}</span>
-            <div style={styles.opponentProgress}>
+            <span style={styles.scoreValue}>
               Q{opponentQuestion}/{exercises.length}
-            </div>
+              {opponentErrors > 0 && (
+                <span style={{ fontSize: '10px', color: '#FF453A', marginLeft: '4px' }}>
+                  +{opponentErrors * PENALTY_SECONDS}s
+                </span>
+              )}
+            </span>
           </div>
         </div>
 
@@ -481,10 +498,10 @@ const DuelGame = () => {
           question={currentExercise.question}
           isSubmitted={isSubmitted}
           isCorrect={isCorrect}
-          showExplanation={showExplanation}
+          isExplanationExpanded={showExplanation}
           explanation={currentExercise.explanation}
-          onToggleExplanation={() => setShowExplanation(!showExplanation)}
-          xpGain={currentExercise.xpGain || 10}
+          onExplanationToggle={() => setShowExplanation(!showExplanation)}
+          hideXp={true}
         />
 
         <CodeBlock

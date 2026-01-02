@@ -11,6 +11,7 @@ import ExitConfirmModal from "../components/common/ExitConfirmModal";
 import CustomKeyboard from "../components/exercise/CustomKeyboard";
 import useHaptic from "../hooks/useHaptic";
 import { isBlockComplete, EXERCISES_PER_LEVEL, getMaxLevelsForDifficulty } from '../constants/exerciseLayout';
+import { loadExercisesByDifficulty } from '../data/loaders/trainingLoader';
 import '../styles/Exercise.css';
 
 const Exercise = () => {
@@ -40,19 +41,8 @@ const Exercise = () => {
     const loadExercises = async () => {
       setIsLoading(true);
       try {
-        // Map difficulty to filename
-        const difficultyMap = {
-          1: 'easy',
-          2: 'medium',
-          3: 'hard'
-        };
-        const difficultyName = difficultyMap[difficulty] || 'easy';
-
-        // Dynamic import for code splitting
-        const { default: exercisesData } = await import(
-          `../data/exercises-${difficultyName}.json`
-        );
-
+        // Charger les exercices via le loader centralisé
+        const exercisesData = await loadExercisesByDifficulty(difficulty);
         setExercises(exercisesData);
 
         // ⏳ Attendre que la progression soit chargée avant de vérifier les niveaux

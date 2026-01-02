@@ -1,0 +1,72 @@
+{
+  "language": "python",
+  "displayName": "Python",
+  "icon": "python",
+  "totalExercises": 600,
+  "categories": [
+    {
+      "id": "basics",
+      "file": "basics.json",
+      "displayName": "Les Bases",
+      "description": "Variables, types, opérations arithmétiques",
+      "order": 1
+    },
+    {
+      "id": "control-flow",
+      "file": "control-flow.json",
+      "displayName": "Structures de Contrôle",
+      "description": "Conditions, boucles for/while, range",
+      "order": 2
+    },
+    {
+      "id": "functions",
+      "file": "functions.json",
+      "displayName": "Fonctions",
+      "description": "Définition, paramètres, retour, lambda",
+      "order": 3
+    },
+    {
+      "id": "data-structures",
+      "file": "data-structures.json",
+      "displayName": "Structures de Données",
+      "description": "Listes, dictionnaires, méthodes",
+      "order": 4
+    },
+    {
+      "id": "strings",
+      "file": "strings.json",
+      "displayName": "Chaînes de Caractères",
+      "description": "Manipulation, concaténation, slicing",
+      "order": 5
+    },
+    {
+      "id": "advanced",
+      "file": "advanced.json",
+      "displayName": "Concepts Avancés",
+      "description": "Classes, exceptions, pièges courants",
+      "order": 6
+    }
+  ],
+  "exerciseTypes": {
+    "find-error": {
+      "displayName": "Trouver l'Erreur",
+      "totalExercises": 102,
+      "categories": ["basics", "strings", "control-flow", "data-structures", "functions", "advanced"]
+    },
+    "free-input": {
+      "displayName": "Réponse Libre",
+      "totalExercises": 102,
+      "categories": ["basics", "strings", "control-flow", "data-structures", "functions", "advanced"]
+    },
+    "concept-understanding": {
+      "displayName": "Comprendre le Concept",
+      "totalExercises": 96,
+      "categories": ["basics", "strings", "control-flow", "data-structures", "functions", "advanced"]
+    }
+  },
+  "difficultyDistribution": {
+    "1": 204,
+    "2": 204,
+    "3": 192
+  }
+}

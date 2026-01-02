@@ -1,0 +1,328 @@
+{
+  "category": "advanced",
+  "type": "concept-understanding",
+  "language": "python",
+  "exerciseCount": 16,
+  "exercises": [
+    {
+      "id": "py_cu_adv_001",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Quelle est la différence entre __init__ et __new__ ?",
+      "code": "class MaClasse:\n    def __new__(cls):\n        return super().__new__(cls)\n    def __init__(self):\n        self.data = []",
+      "options": [
+        "__new__ crée l'instance, __init__ l'initialise",
+        "__init__ crée l'instance, __new__ l'initialise",
+        "Ils font la même chose",
+        "__new__ est pour les singletons uniquement"
+      ],
+      "correctAnswer": 0,
+      "explanation": "__new__ vs __init__ :\n\n• __new__ : constructeur, CRÉE l'objet\n• __init__ : initialiseur, CONFIGURE l'objet\n\n__new__ reçoit cls, retourne l'instance\n__init__ reçoit self (instance déjà créée)",
+      "xpGain": 10,
+      "tags": ["__new__", "__init__", "constructor"],
+      "category": "advanced"
+    },
+    {
+      "id": "py_cu_adv_002",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que sont les méthodes magiques (dunder) ?",
+      "code": "class Nombre:\n    def __add__(self, other):\n        return self.val + other.val\n    def __str__(self):\n        return str(self.val)",
+      "options": [
+        "Méthodes spéciales avec double underscore pour surcharger les opérateurs",
+        "Méthodes privées inaccessibles",
+        "Méthodes automatiquement appelées",
+        "Méthodes qui font de la magie"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Méthodes dunder (__xxx__) :\n\n• __add__ : opérateur +\n• __str__ : conversion en string\n• __len__ : fonction len()\n• __getitem__ : indexation []\n\nPermettent de personnaliser le comportement",
+      "xpGain": 10,
+      "tags": ["dunder", "magic-methods", "operators"],
+      "category": "advanced"
+    },
+    {
+      "id": "py_cu_adv_003",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Quelle est la différence entre @staticmethod et @classmethod ?",
+      "code": "class MaClasse:\n    @staticmethod\n    def statique():\n        pass\n    @classmethod\n    def de_classe(cls):\n        pass",
+      "options": [
+        "@staticmethod n'a pas accès à la classe, @classmethod reçoit cls",
+        "@classmethod est plus rapide",
+        "Ils sont identiques",
+        "@staticmethod est pour les méthodes privées"
+      ],
+      "correctAnswer": 0,
+      "explanation": "@staticmethod vs @classmethod :\n\n• @staticmethod : pas de self ni cls\n• @classmethod : reçoit cls (la classe)\n\nclassmethod peut créer des instances : cls()\nstaticmethod est une fonction rangée dans la classe",
+      "xpGain": 10,
+      "tags": ["staticmethod", "classmethod", "decorator"],
+      "category": "advanced"
+    },
+    {
+      "id": "py_cu_adv_004",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Comment fonctionne l'héritage en Python ?",
+      "code": "class Animal:\n    def parler(self):\n        return 'Son'\n\nclass Chien(Animal):\n    def parler(self):\n        return 'Wouf'",
+      "options": [
+        "La classe enfant hérite des attributs/méthodes et peut les surcharger",
+        "L'enfant remplace complètement le parent",
+        "Python ne supporte pas l'héritage",
+        "L'héritage ne fonctionne qu'avec une seule classe"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Héritage Python :\n\n• class Enfant(Parent) hérite de Parent\n• Peut surcharger (override) les méthodes\n• super() accède à la classe parente\n• Héritage multiple supporté",
+      "xpGain": 10,
+      "tags": ["inheritance", "override", "OOP"],
+      "category": "advanced"
+    },
+    {
+      "id": "py_cu_adv_005",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que fait super() en Python ?",
+      "code": "class B(A):\n    def __init__(self):\n        super().__init__()  # Appelle A.__init__",
+      "options": [
+        "Donne accès à la classe parente dans la hiérarchie MRO",
+        "Rend la classe plus puissante",
+        "Appelle toujours la méthode __init__",
+        "Crée une copie de la classe parente"
+      ],
+      "correctAnswer": 0,
+      "explanation": "super() :\n\n• Retourne un proxy vers la classe parente\n• Suit le MRO (Method Resolution Order)\n• super().__init__() : appelle le parent\n\n💡 Toujours utiliser super() plutôt que Parent.method()",
+      "xpGain": 10,
+      "tags": ["super", "inheritance", "MRO"],
+      "category": "advanced"
+    },
+    {
+      "id": "py_cu_adv_006",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Comment fonctionne try/except/finally ?",
+      "code": "try:\n    x = 1/0\nexcept ZeroDivisionError:\n    x = 0\nfinally:\n    print('Toujours exécuté')",
+      "options": [
+        "try teste, except attrape les erreurs, finally s'exécute toujours",
+        "finally remplace except",
+        "finally n'est exécuté que si pas d'erreur",
+        "except est optionnel"
+      ],
+      "correctAnswer": 0,
+      "explanation": "try/except/finally :\n\n• try : code qui peut échouer\n• except : gère l'exception\n• finally : s'exécute TOUJOURS\n\nfinally utile pour cleanup (fermer fichiers, etc.)",
+      "xpGain": 10,
+      "tags": ["try", "except", "finally"],
+      "category": "advanced"
+    },
+    {
+      "id": "py_cu_adv_007",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Qu'est-ce qu'un context manager ?",
+      "code": "with open('file.txt') as f:\n    data = f.read()\n# f est automatiquement fermé ici",
+      "options": [
+        "Objet avec __enter__ et __exit__ pour gérer des ressources",
+        "Un gestionnaire de contexte système",
+        "Une façon d'ouvrir des fichiers",
+        "Un décorateur spécial"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Context manager :\n\n• __enter__ : appelé au 'with'\n• __exit__ : appelé à la sortie (même si erreur)\n• Garantit le cleanup (fermeture fichiers, etc.)\n\nwith gère automatiquement les ressources",
+      "xpGain": 20,
+      "tags": ["context-manager", "with", "__enter__"],
+      "category": "advanced"
+    },
+    {
+      "id": "py_cu_adv_008",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Comment fonctionne @property ?",
+      "code": "class Cercle:\n    def __init__(self, rayon):\n        self._rayon = rayon\n    @property\n    def rayon(self):\n        return self._rayon",
+      "options": [
+        "Transforme une méthode en attribut accessible sans parenthèses",
+        "Rend l'attribut privé",
+        "Accélère l'accès à l'attribut",
+        "Copie l'attribut"
+      ],
+      "correctAnswer": 0,
+      "explanation": "@property :\n\n• Getter : c.rayon (sans ())\n• Setter : @rayon.setter\n• Deleter : @rayon.deleter\n\nPermet validation/calcul transparent",
+      "xpGain": 20,
+      "tags": ["property", "getter", "setter"],
+      "category": "advanced"
+    },
+    {
+      "id": "py_cu_adv_009",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Qu'est-ce que le MRO (Method Resolution Order) ?",
+      "code": "class A: pass\nclass B(A): pass\nclass C(A): pass\nclass D(B, C): pass\nprint(D.__mro__)",
+      "options": [
+        "L'ordre dans lequel Python cherche les méthodes dans l'héritage",
+        "L'ordre d'exécution des méthodes",
+        "La liste des méthodes d'une classe",
+        "L'ordre alphabétique des méthodes"
+      ],
+      "correctAnswer": 0,
+      "explanation": "MRO (Method Resolution Order) :\n\n• Ordre de recherche des méthodes\n• Algorithme C3 linearization\n• D → B → C → A → object\n\nRésout le problème du diamant en héritage multiple",
+      "xpGain": 20,
+      "tags": ["MRO", "inheritance", "diamond"],
+      "category": "advanced"
+    },
+    {
+      "id": "py_cu_adv_010",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que sont les slots en Python ?",
+      "code": "class Point:\n    __slots__ = ['x', 'y']\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y",
+      "options": [
+        "Réserve de la mémoire fixe pour les attributs, plus efficace",
+        "Limite le nombre d'instances",
+        "Rend les attributs privés",
+        "Accélère les méthodes"
+      ],
+      "correctAnswer": 0,
+      "explanation": "__slots__ :\n\n• Pas de __dict__ par instance\n• Moins de mémoire par instance\n• Plus rapide pour l'accès aux attributs\n• Pas d'ajout dynamique d'attributs\n\n💡 Utile pour beaucoup d'instances",
+      "xpGain": 20,
+      "tags": ["__slots__", "memory", "optimization"],
+      "category": "advanced"
+    },
+    {
+      "id": "py_cu_adv_011",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Qu'est-ce qu'une ABC (Abstract Base Class) ?",
+      "code": "from abc import ABC, abstractmethod\n\nclass Forme(ABC):\n    @abstractmethod\n    def aire(self):\n        pass",
+      "options": [
+        "Classe avec méthodes abstraites que les sous-classes doivent implémenter",
+        "Classe de base pour l'alphabet",
+        "Classe automatiquement créée",
+        "Classe qui ne peut pas avoir d'instances"
+      ],
+      "correctAnswer": 0,
+      "explanation": "ABC :\n\n• Définit une interface\n• @abstractmethod : doit être implémenté\n• Impossible d'instancier directement ABC\n• Sous-classes DOIVENT implémenter les méthodes abstraites\n\n💡 Contrat de programmation",
+      "xpGain": 20,
+      "tags": ["ABC", "abstractmethod", "interface"],
+      "category": "advanced"
+    },
+    {
+      "id": "py_cu_adv_012",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Comment fonctionne raise from ?",
+      "code": "try:\n    x = int('abc')\nexcept ValueError as e:\n    raise RuntimeError('Erreur conversion') from e",
+      "options": [
+        "Chaîne les exceptions en préservant la cause originale",
+        "Remplace l'exception",
+        "Ignore l'exception originale",
+        "Lève deux exceptions"
+      ],
+      "correctAnswer": 0,
+      "explanation": "raise ... from ... :\n\n• Préserve l'exception originale (__cause__)\n• Affiche la chaîne complète d'exceptions\n• raise ... from None : supprime le contexte\n\n💡 Meilleur debugging avec la cause visible",
+      "xpGain": 20,
+      "tags": ["raise", "exception", "chaining"],
+      "category": "advanced"
+    },
+    {
+      "id": "py_cu_adv_013",
+      "language": "python",
+      "difficulty": 3,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Qu'est-ce qu'une métaclasse ?",
+      "code": "class Meta(type):\n    def __new__(cls, name, bases, dct):\n        return super().__new__(cls, name, bases, dct)\n\nclass MaClasse(metaclass=Meta):\n    pass",
+      "options": [
+        "Une classe qui crée des classes",
+        "Une super-classe",
+        "Une classe abstraite",
+        "Une classe privée"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Métaclasse :\n\n• 'Classe de classe'\n• Contrôle la création des classes\n• type est la métaclasse par défaut\n• Permet de modifier les classes à leur création\n\n💡 Puissant mais rarement nécessaire",
+      "xpGain": 30,
+      "tags": ["metaclass", "type", "advanced"],
+      "category": "advanced"
+    },
+    {
+      "id": "py_cu_adv_014",
+      "language": "python",
+      "difficulty": 3,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Comment fonctionne un descripteur ?",
+      "code": "class Descripteur:\n    def __get__(self, obj, objtype):\n        return self._val\n    def __set__(self, obj, val):\n        self._val = val",
+      "options": [
+        "Objet qui personnalise l'accès aux attributs via __get__/__set__",
+        "Un décorateur pour les attributs",
+        "Une façon de décrire les classes",
+        "Un générateur de documentation"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Descripteur :\n\n• __get__ : lecture attribut\n• __set__ : écriture attribut\n• __delete__ : suppression\n\nproperty, classmethod, staticmethod sont des descripteurs\n💡 Contrôle fin de l'accès aux attributs",
+      "xpGain": 30,
+      "tags": ["descriptor", "__get__", "__set__"],
+      "category": "advanced"
+    },
+    {
+      "id": "py_cu_adv_015",
+      "language": "python",
+      "difficulty": 3,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que sont les annotations de type ?",
+      "code": "def saluer(nom: str) -> str:\n    return f'Bonjour {nom}'\n\nx: int = 5",
+      "options": [
+        "Indications de type pour documentation/outils, non vérifiées à l'exécution",
+        "Contraintes de type vérifiées à l'exécution",
+        "Commentaires spéciaux",
+        "Optimisations automatiques"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Type annotations :\n\n• nom: str = type attendu\n• -> str = type de retour\n• NON vérifiées par Python\n• Pour : documentation, mypy, IDE\n\n💡 Optionnelles mais recommandées",
+      "xpGain": 30,
+      "tags": ["type-hints", "annotations", "typing"],
+      "category": "advanced"
+    },
+    {
+      "id": "py_cu_adv_016",
+      "language": "python",
+      "difficulty": 3,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Comment fonctionne __getattr__ vs __getattribute__ ?",
+      "code": "class A:\n    def __getattr__(self, name):\n        return f'{name} non trouvé'\n    def __getattribute__(self, name):\n        return super().__getattribute__(name)",
+      "options": [
+        "__getattribute__ pour tout accès, __getattr__ seulement si attribut absent",
+        "Ils sont identiques",
+        "__getattr__ est appelé en premier",
+        "__getattribute__ ne fonctionne qu'avec des strings"
+      ],
+      "correctAnswer": 0,
+      "explanation": "__getattr__ vs __getattribute__ :\n\n• __getattribute__ : CHAQUE accès attribut\n• __getattr__ : seulement si AttributeError\n\n__getattr__ = fallback\n__getattribute__ = interception totale (dangereux)",
+      "xpGain": 30,
+      "tags": ["__getattr__", "__getattribute__", "attribute"],
+      "category": "advanced"
+    }
+  ]
+}

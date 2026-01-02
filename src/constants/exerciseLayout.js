@@ -11,11 +11,11 @@
 export const EXERCISES_PER_LEVEL = 5;
 export const TOTAL_DIFFICULTY_LEVELS = 3;
 
-// Nombre d'exercices par difficulté
+// Nombre d'exercices par difficulté (incluant find-error, free-input, concept-understanding)
 export const EXERCISES_COUNT = {
-  1: 30,  // Easy
-  2: 10,  // Medium
-  3: 10   // Hard
+  1: 204,  // Easy
+  2: 204,  // Medium
+  3: 192   // Hard
 };
 
 /**

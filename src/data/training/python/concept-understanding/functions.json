@@ -1,0 +1,328 @@
+{
+  "category": "functions",
+  "type": "concept-understanding",
+  "language": "python",
+  "exerciseCount": 16,
+  "exercises": [
+    {
+      "id": "py_cu_func_001",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Quelle est la différence entre paramètre et argument ?",
+      "code": "def saluer(nom):  # 'nom' est un paramètre\n    print(f'Bonjour {nom}')\n\nsaluer('Alice')  # 'Alice' est un argument",
+      "options": [
+        "Paramètre = dans la définition, Argument = dans l'appel",
+        "Ils sont identiques",
+        "Paramètre = variable, Argument = constante",
+        "Argument = dans la définition, Paramètre = dans l'appel"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Paramètre vs Argument :\n\n• Paramètre : variable dans def (nom)\n• Argument : valeur passée à l'appel ('Alice')\n\n💡 Les paramètres reçoivent les arguments",
+      "xpGain": 10,
+      "tags": ["function", "parameter", "argument"],
+      "category": "functions"
+    },
+    {
+      "id": "py_cu_func_002",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que retourne une fonction sans return explicite ?",
+      "code": "def afficher(x):\n    print(x)\n\nresultat = afficher(5)\nprint(resultat)",
+      "options": [
+        "None",
+        "0",
+        "Une erreur",
+        "La dernière valeur calculée"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Return implicite :\n\n• Sans return → retourne None\n• print() affiche mais ne retourne pas\n• resultat = None\n\n💡 Toujours return si valeur attendue",
+      "xpGain": 10,
+      "tags": ["function", "return", "None"],
+      "category": "functions"
+    },
+    {
+      "id": "py_cu_func_003",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que fait *args dans une fonction ?",
+      "code": "def somme(*args):\n    return sum(args)\n\nprint(somme(1, 2, 3, 4))  # 10",
+      "options": [
+        "Capture un nombre variable d'arguments positionnels en tuple",
+        "Multiplie les arguments",
+        "Rend les arguments optionnels",
+        "Crée une liste d'arguments"
+      ],
+      "correctAnswer": 0,
+      "explanation": "*args :\n\n• Capture tous les args positionnels supplémentaires\n• args devient un tuple : (1, 2, 3, 4)\n• Permet des fonctions à nombre variable d'arguments\n\n💡 Le nom 'args' est une convention",
+      "xpGain": 10,
+      "tags": ["*args", "variadic", "function"],
+      "category": "functions"
+    },
+    {
+      "id": "py_cu_func_004",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que fait **kwargs dans une fonction ?",
+      "code": "def info(**kwargs):\n    for k, v in kwargs.items():\n        print(f'{k}: {v}')\n\ninfo(nom='Alice', age=25)",
+      "options": [
+        "Capture les arguments nommés en dictionnaire",
+        "Double les arguments",
+        "Rend les arguments obligatoires",
+        "Crée une liste de tuples"
+      ],
+      "correctAnswer": 0,
+      "explanation": "**kwargs :\n\n• Capture les arguments nommés supplémentaires\n• kwargs devient un dict : {'nom': 'Alice', 'age': 25}\n• Permet des arguments nommés variables\n\n💡 Le nom 'kwargs' est une convention",
+      "xpGain": 10,
+      "tags": ["**kwargs", "variadic", "function"],
+      "category": "functions"
+    },
+    {
+      "id": "py_cu_func_005",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Qu'est-ce qu'une fonction lambda ?",
+      "code": "carre = lambda x: x ** 2\nprint(carre(5))  # 25",
+      "options": [
+        "Une fonction anonyme en une seule expression",
+        "Une fonction plus rapide",
+        "Une fonction récursive",
+        "Une fonction qui retourne None"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Lambda :\n\n• Fonction anonyme (sans nom)\n• Une seule expression (pas de bloc)\n• lambda args: expression\n\n💡 Utile pour fonctions simples/temporaires",
+      "xpGain": 10,
+      "tags": ["lambda", "anonymous", "function"],
+      "category": "functions"
+    },
+    {
+      "id": "py_cu_func_006",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Pourquoi les arguments mutables par défaut sont dangereux ?",
+      "code": "def ajouter(item, liste=[]):\n    liste.append(item)\n    return liste\n\nprint(ajouter(1))  # [1]\nprint(ajouter(2))  # [1, 2] ← Inattendu!",
+      "options": [
+        "La liste par défaut est créée une seule fois et réutilisée",
+        "Les listes ne peuvent pas être des défauts",
+        "C'est un bug de Python",
+        "La fonction est mal écrite"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Arguments mutables par défaut :\n\n• liste=[] créé UNE SEULE fois\n• Chaque appel modifie la MÊME liste\n• Solution : liste=None puis liste = liste or []\n\n💡 JAMAIS de mutable comme défaut",
+      "xpGain": 10,
+      "tags": ["default-argument", "mutable", "pitfall"],
+      "category": "functions"
+    },
+    {
+      "id": "py_cu_func_007",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Qu'est-ce qu'une closure ?",
+      "code": "def creer_compteur():\n    count = 0\n    def incrementer():\n        nonlocal count\n        count += 1\n        return count\n    return incrementer",
+      "options": [
+        "Une fonction qui capture des variables de son environnement englobant",
+        "Une fonction fermée qui ne peut pas être modifiée",
+        "Une fonction qui s'appelle elle-même",
+        "Une fonction sans paramètres"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Closure :\n\n• incrementer 'capture' count\n• count survit après creer_compteur()\n• La fonction 'se souvient' de son contexte\n\n💡 Fermeture lexicale sur les variables libres",
+      "xpGain": 20,
+      "tags": ["closure", "nested", "nonlocal"],
+      "category": "functions"
+    },
+    {
+      "id": "py_cu_func_008",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Quelle est la différence entre global et nonlocal ?",
+      "code": "x = 'global'\ndef outer():\n    x = 'outer'\n    def inner():\n        nonlocal x  # Modifie outer.x\n        x = 'inner'",
+      "options": [
+        "global = module, nonlocal = fonction englobante",
+        "Ils sont identiques",
+        "nonlocal = module, global = fonction englobante",
+        "global ne fonctionne pas dans les fonctions"
+      ],
+      "correctAnswer": 0,
+      "explanation": "global vs nonlocal :\n\n• global : variable du module\n• nonlocal : variable de la fonction englobante\n\nSans ces mots-clés, assigner crée une nouvelle variable locale",
+      "xpGain": 20,
+      "tags": ["global", "nonlocal", "scope"],
+      "category": "functions"
+    },
+    {
+      "id": "py_cu_func_009",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Qu'est-ce qu'une fonction de premier ordre ?",
+      "code": "def appliquer(func, x):\n    return func(x)\n\nresultat = appliquer(lambda x: x*2, 5)  # 10",
+      "options": [
+        "Les fonctions peuvent être passées comme arguments et retournées",
+        "Les fonctions s'exécutent en premier",
+        "Les fonctions ont une priorité spéciale",
+        "Les fonctions ne peuvent pas avoir d'arguments"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Fonctions de premier ordre :\n\n• Les fonctions sont des objets\n• Peuvent être passées en argument\n• Peuvent être retournées\n• Peuvent être stockées dans des variables\n\n💡 Python traite les fonctions comme des valeurs",
+      "xpGain": 20,
+      "tags": ["first-class", "higher-order", "function"],
+      "category": "functions"
+    },
+    {
+      "id": "py_cu_func_010",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Comment fonctionne un décorateur ?",
+      "code": "@mon_decorateur\ndef ma_fonction():\n    pass\n\n# Équivalent à :\nma_fonction = mon_decorateur(ma_fonction)",
+      "options": [
+        "Un décorateur enveloppe une fonction pour modifier son comportement",
+        "Un décorateur supprime une fonction",
+        "Un décorateur est un commentaire spécial",
+        "Un décorateur accélère l'exécution"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Décorateur :\n\n• @decorator = fonction = decorator(fonction)\n• Enveloppe la fonction originale\n• Peut ajouter du code avant/après\n• Peut modifier les arguments/résultats\n\n💡 Pattern très puissant pour DRY",
+      "xpGain": 20,
+      "tags": ["decorator", "wrapper", "pattern"],
+      "category": "functions"
+    },
+    {
+      "id": "py_cu_func_011",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que fait functools.partial ?",
+      "code": "from functools import partial\n\ndef puissance(base, exp):\n    return base ** exp\n\ncarre = partial(puissance, exp=2)\nprint(carre(5))  # 25",
+      "options": [
+        "Crée une nouvelle fonction avec certains arguments pré-remplis",
+        "Exécute partiellement une fonction",
+        "Divise une fonction en parties",
+        "Rend une fonction incomplète"
+      ],
+      "correctAnswer": 0,
+      "explanation": "partial() :\n\n• 'Fige' certains arguments\n• Crée une nouvelle fonction\n• carre = puissance avec exp=2 fixé\n\n💡 Utile pour créer des variantes de fonctions",
+      "xpGain": 20,
+      "tags": ["partial", "functools", "currying"],
+      "category": "functions"
+    },
+    {
+      "id": "py_cu_func_012",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Quelle est la différence entre map(), filter(), reduce() ?",
+      "code": "map(func, iterable)    # Applique func à chaque élément\nfilter(func, iterable) # Garde si func(elem) est True\nreduce(func, iterable) # Accumule avec func(acc, elem)",
+      "options": [
+        "map transforme, filter sélectionne, reduce accumule",
+        "Ils font tous la même chose",
+        "map et filter retournent des listes, reduce un itérateur",
+        "reduce est le plus rapide"
+      ],
+      "correctAnswer": 0,
+      "explanation": "map/filter/reduce :\n\n• map : transforme chaque élément\n• filter : sélectionne des éléments\n• reduce : combine tous en une valeur\n\n💡 Programmation fonctionnelle",
+      "xpGain": 20,
+      "tags": ["map", "filter", "reduce"],
+      "category": "functions"
+    },
+    {
+      "id": "py_cu_func_013",
+      "language": "python",
+      "difficulty": 3,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Pourquoi utiliser @functools.wraps dans un décorateur ?",
+      "code": "from functools import wraps\ndef mon_deco(func):\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        return func(*args, **kwargs)\n    return wrapper",
+      "options": [
+        "Préserve les métadonnées de la fonction originale (__name__, __doc__)",
+        "Accélère le décorateur",
+        "Rend le décorateur obligatoire",
+        "Permet d'empiler les décorateurs"
+      ],
+      "correctAnswer": 0,
+      "explanation": "@wraps(func) :\n\n• Copie __name__, __doc__, etc. de func vers wrapper\n• Sans @wraps : wrapper.__name__ = 'wrapper'\n• Avec @wraps : wrapper.__name__ = func.__name__\n\n💡 Toujours utiliser @wraps dans les décorateurs",
+      "xpGain": 30,
+      "tags": ["wraps", "decorator", "metadata"],
+      "category": "functions"
+    },
+    {
+      "id": "py_cu_func_014",
+      "language": "python",
+      "difficulty": 3,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Comment fonctionne un générateur ?",
+      "code": "def compteur(max):\n    n = 0\n    while n < max:\n        yield n\n        n += 1\n\nfor i in compteur(3):\n    print(i)  # 0, 1, 2",
+      "options": [
+        "yield suspend l'exécution et retourne une valeur, reprend au prochain next()",
+        "yield termine la fonction",
+        "yield est identique à return",
+        "Les générateurs sont plus lents que les listes"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Générateurs avec yield :\n\n• yield 'pause' la fonction\n• L'état est préservé entre les appels\n• Lazy evaluation : valeurs générées à la demande\n\n💡 Économe en mémoire pour grandes séquences",
+      "xpGain": 30,
+      "tags": ["generator", "yield", "lazy"],
+      "category": "functions"
+    },
+    {
+      "id": "py_cu_func_015",
+      "language": "python",
+      "difficulty": 3,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Qu'est-ce que la récursion terminale ?",
+      "code": "# Non terminale\ndef fact(n):\n    if n <= 1: return 1\n    return n * fact(n-1)\n\n# Terminale (avec accumulateur)\ndef fact_tail(n, acc=1):\n    if n <= 1: return acc\n    return fact_tail(n-1, n*acc)",
+      "options": [
+        "L'appel récursif est la dernière opération (optimisable en boucle)",
+        "La récursion s'arrête à la fin",
+        "Python optimise automatiquement",
+        "C'est la façon la plus lente"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Récursion terminale :\n\n• L'appel récursif est la DERNIÈRE opération\n• Peut être optimisé en boucle (tail call optimization)\n• Python ne l'optimise PAS automatiquement\n\n💡 Utile conceptuellement, pas en pratique Python",
+      "xpGain": 30,
+      "tags": ["recursion", "tail-call", "optimization"],
+      "category": "functions"
+    },
+    {
+      "id": "py_cu_func_016",
+      "language": "python",
+      "difficulty": 3,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Comment fonctionne @lru_cache ?",
+      "code": "from functools import lru_cache\n\n@lru_cache(maxsize=128)\ndef fib(n):\n    if n < 2: return n\n    return fib(n-1) + fib(n-2)",
+      "options": [
+        "Mémoïse les résultats pour éviter les recalculs",
+        "Limite la récursion",
+        "Rend la fonction plus lente",
+        "Stocke la fonction en cache"
+      ],
+      "correctAnswer": 0,
+      "explanation": "lru_cache (memoization) :\n\n• Cache les résultats des appels précédents\n• LRU = Least Recently Used\n• fib(n) calculé une seule fois\n\nfib(35) : sans cache ~3s, avec cache ~instant",
+      "xpGain": 30,
+      "tags": ["lru_cache", "memoization", "optimization"],
+      "category": "functions"
+    }
+  ]
+}

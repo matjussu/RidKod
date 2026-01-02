@@ -20,6 +20,7 @@ import XPCollectLessons from './pages/lessons/XPCollectLessons';
 import BossFightContent from './pages/lessons/BossFightContent';
 import BossXPCollect from './pages/lessons/BossXPCollect';
 import LevelComplete from './pages/LevelComplete';
+// XPCollectTraining est maintenant intégré dans LevelComplete
 import AIHome from './pages/ai/AIHome';
 import AIContent from './pages/ai/AIContent';
 import ChallengesHome from './pages/challenges/ChallengesHome';

@@ -9,15 +9,19 @@ const DuelResult = () => {
 
   const {
     mode = 'bot',
-    player = { username: 'Toi', score: 0, correctAnswers: 0, timeSeconds: 0 },
-    opponent = { username: 'Adversaire', score: 0, correctAnswers: 0, timeSeconds: 0, isBot: false },
-    exerciseCount = 5
+    player = { username: 'Toi', correctAnswers: 0, errors: 0, timeSeconds: 0, totalTime: 0 },
+    opponent = { username: 'Adversaire', correctAnswers: 0, errors: 0, timeSeconds: 0, totalTime: 0, isBot: false },
+    exerciseCount = 5,
+    penaltySeconds = 10
   } = location.state || {};
 
-  // Determiner le gagnant
-  const playerWins = player.score > opponent.score ||
-    (player.score === opponent.score && player.timeSeconds < opponent.timeSeconds);
-  const isDraw = player.score === opponent.score && player.timeSeconds === opponent.timeSeconds;
+  // Calculer les temps totaux si non fournis
+  const playerTotalTime = player.totalTime || (player.timeSeconds + (player.errors || 0) * penaltySeconds);
+  const opponentTotalTime = opponent.totalTime || (opponent.timeSeconds + (opponent.errors || 0) * penaltySeconds);
+
+  // Determiner le gagnant (le plus petit temps gagne)
+  const playerWins = playerTotalTime < opponentTotalTime;
+  const isDraw = playerTotalTime === opponentTotalTime;
 
   const handlePlayAgain = () => {
     triggerLight();
@@ -41,15 +45,51 @@ const DuelResult = () => {
 
   const getResultMessage = () => {
     if (isDraw) {
-      return { emoji: '🤝', title: 'Egalite !', subtitle: 'Match nul parfait' };
+      return { title: 'Egalite !', subtitle: 'Match nul parfait' };
     }
     if (playerWins) {
-      return { emoji: '🏆', title: 'Victoire !', subtitle: 'Tu as gagne le duel' };
+      return { title: 'Victoire !', subtitle: 'Tu as gagne le duel' };
     }
-    return { emoji: '😤', title: 'Defaite...', subtitle: 'Retente ta chance !' };
+    return { title: 'Defaite...', subtitle: 'Retente ta chance !' };
   };
 
   const result = getResultMessage();
+
+  // SVG Icons pour remplacer les emojis
+  const TrophyIcon = () => (
+    <svg viewBox="0 0 24 24" fill="none" style={{ width: '80px', height: '80px' }}>
+      <path d="M6 9H3C3 9 3 5 6 5V9Z" stroke="#FACC15" strokeWidth="2" strokeLinejoin="round"/>
+      <path d="M18 9H21C21 9 21 5 18 5V9Z" stroke="#FACC15" strokeWidth="2" strokeLinejoin="round"/>
+      <path d="M6 5H18V9C18 12.3137 15.3137 15 12 15C8.68629 15 6 12.3137 6 9V5Z" stroke="#FACC15" strokeWidth="2"/>
+      <path d="M12 15V18" stroke="#FACC15" strokeWidth="2"/>
+      <path d="M8 21H16" stroke="#FACC15" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M9 18H15V21H9V18Z" fill="#FACC15" fillOpacity="0.2" stroke="#FACC15" strokeWidth="2"/>
+    </svg>
+  );
+
+  const DefeatIcon = () => (
+    <svg viewBox="0 0 24 24" fill="none" style={{ width: '80px', height: '80px' }}>
+      <circle cx="12" cy="12" r="10" stroke="#FF453A" strokeWidth="2"/>
+      <path d="M8 9L10 11M10 9L8 11" stroke="#FF453A" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M14 9L16 11M16 9L14 11" stroke="#FF453A" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M8 16C8 16 9.5 14 12 14C14.5 14 16 16 16 16" stroke="#FF453A" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  );
+
+  const DrawIcon = () => (
+    <svg viewBox="0 0 24 24" fill="none" style={{ width: '80px', height: '80px' }}>
+      <circle cx="12" cy="12" r="10" stroke="#FACC15" strokeWidth="2"/>
+      <path d="M8 10V10.01" stroke="#FACC15" strokeWidth="3" strokeLinecap="round"/>
+      <path d="M16 10V10.01" stroke="#FACC15" strokeWidth="3" strokeLinecap="round"/>
+      <path d="M8 15H16" stroke="#FACC15" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  );
+
+  const ResultIcon = () => {
+    if (isDraw) return <DrawIcon />;
+    if (playerWins) return <TrophyIcon />;
+    return <DefeatIcon />;
+  };
 
   const styles = {
     container: {
@@ -71,9 +111,9 @@ const DuelResult = () => {
       textAlign: 'center',
       marginBottom: '32px',
     },
-    resultEmoji: {
-      fontSize: '80px',
-      display: 'block',
+    resultIcon: {
+      display: 'flex',
+      justifyContent: 'center',
       marginBottom: '16px',
       animation: 'bounce 0.6s ease-out',
     },
@@ -123,7 +163,6 @@ const DuelResult = () => {
       alignItems: 'center',
       justifyContent: 'center',
       margin: '0 auto 8px',
-      fontSize: '24px',
     },
     playerAvatarWinner: {
       background: 'linear-gradient(135deg, rgba(48, 209, 88, 0.2) 0%, rgba(52, 199, 89, 0.1) 100%)',
@@ -144,20 +183,26 @@ const DuelResult = () => {
       color: '#FFFFFF',
       margin: '0 0 4px 0',
     },
-    playerScore: {
+    playerTime: {
       fontFamily: '"JetBrains Mono", monospace',
-      fontSize: '28px',
+      fontSize: '24px',
       fontWeight: 900,
       margin: 0,
     },
-    playerScoreWinner: {
+    playerTimeWinner: {
       color: '#30D158',
     },
-    playerScoreLoser: {
+    playerTimeLoser: {
       color: 'rgba(255, 255, 255, 0.5)',
     },
-    playerScoreDraw: {
+    playerTimeDraw: {
       color: '#FACC15',
+    },
+    penaltyText: {
+      fontFamily: '"JetBrains Mono", monospace',
+      fontSize: '12px',
+      color: '#FF453A',
+      margin: '4px 0 0 0',
     },
     vsIcon: {
       fontFamily: '"JetBrains Mono", monospace',
@@ -170,9 +215,6 @@ const DuelResult = () => {
       display: 'grid',
       gridTemplateColumns: '1fr auto 1fr',
       gap: '8px',
-    },
-    statRow: {
-      display: 'contents',
     },
     statValue: {
       fontFamily: '"JetBrains Mono", monospace',
@@ -245,10 +287,37 @@ const DuelResult = () => {
     return isWinner ? styles.playerAvatarWinner : styles.playerAvatarLoser;
   };
 
-  const getScoreStyle = (isWinner) => {
-    if (isDraw) return styles.playerScoreDraw;
-    return isWinner ? styles.playerScoreWinner : styles.playerScoreLoser;
+  const getTimeStyle = (isWinner) => {
+    if (isDraw) return styles.playerTimeDraw;
+    return isWinner ? styles.playerTimeWinner : styles.playerTimeLoser;
   };
+
+  // SVG icons pour avatars
+  const UserIcon = () => (
+    <svg viewBox="0 0 24 24" fill="none" style={{ width: '28px', height: '28px' }}>
+      <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="2"/>
+      <path d="M4 20C4 16.6863 7.58172 14 12 14C16.4183 14 20 16.6863 20 20" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  );
+
+  const BotIcon = () => (
+    <svg viewBox="0 0 24 24" fill="none" style={{ width: '28px', height: '28px' }}>
+      <rect x="4" y="8" width="16" height="12" rx="2" stroke="currentColor" strokeWidth="2"/>
+      <circle cx="8" cy="14" r="1.5" fill="currentColor"/>
+      <circle cx="16" cy="14" r="1.5" fill="currentColor"/>
+      <path d="M9 4H15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M12 4V8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  );
+
+  const SwordsIcon = () => (
+    <svg viewBox="0 0 24 24" fill="none" style={{ width: '20px', height: '20px' }}>
+      <path d="M14.5 17.5L3 6V3H6L17.5 14.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M13 19L19 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M16 16L21 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M9.5 6.5L3 13V16L6 19H9L15.5 12.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
 
   return (
     <div style={styles.container}>
@@ -262,7 +331,9 @@ const DuelResult = () => {
 
       {/* Header */}
       <div style={styles.header}>
-        <span style={styles.resultEmoji}>{result.emoji}</span>
+        <div style={styles.resultIcon}>
+          <ResultIcon />
+        </div>
         <h1 style={{
           ...styles.resultTitle,
           ...(isDraw ? styles.resultTitleDraw : playerWins ? styles.resultTitleWin : styles.resultTitleLose)
@@ -278,13 +349,18 @@ const DuelResult = () => {
         <div style={styles.versusRow}>
           {/* Player */}
           <div style={styles.playerCard}>
-            <div style={{ ...styles.playerAvatar, ...getPlayerAvatarStyle(playerWins) }}>
-              {"👤"}
+            <div style={{ ...styles.playerAvatar, ...getPlayerAvatarStyle(playerWins), color: playerWins ? '#30D158' : 'rgba(255,255,255,0.5)' }}>
+              <UserIcon />
             </div>
             <p style={styles.playerName}>Toi</p>
-            <p style={{ ...styles.playerScore, ...getScoreStyle(playerWins) }}>
-              {player.score}
+            <p style={{ ...styles.playerTime, ...getTimeStyle(playerWins) }}>
+              {formatTime(playerTotalTime)}
             </p>
+            {(player.errors || 0) > 0 && (
+              <p style={styles.penaltyText}>
+                {formatTime(player.timeSeconds)} +{(player.errors || 0) * penaltySeconds}s
+              </p>
+            )}
             {playerWins && !isDraw && (
               <span style={styles.winnerBadge}>GAGNANT</span>
             )}
@@ -295,13 +371,18 @@ const DuelResult = () => {
 
           {/* Opponent */}
           <div style={styles.playerCard}>
-            <div style={{ ...styles.playerAvatar, ...getPlayerAvatarStyle(!playerWins && !isDraw) }}>
-              {opponent.isBot ? '🤖' : '👤'}
+            <div style={{ ...styles.playerAvatar, ...getPlayerAvatarStyle(!playerWins && !isDraw), color: !playerWins && !isDraw ? '#30D158' : 'rgba(255,255,255,0.5)' }}>
+              {opponent.isBot ? <BotIcon /> : <UserIcon />}
             </div>
             <p style={styles.playerName}>{opponent.username}</p>
-            <p style={{ ...styles.playerScore, ...getScoreStyle(!playerWins && !isDraw) }}>
-              {opponent.score}
+            <p style={{ ...styles.playerTime, ...getTimeStyle(!playerWins && !isDraw) }}>
+              {formatTime(opponentTotalTime)}
             </p>
+            {(opponent.errors || 0) > 0 && (
+              <p style={styles.penaltyText}>
+                {formatTime(opponent.timeSeconds)} +{(opponent.errors || 0) * penaltySeconds}s
+              </p>
+            )}
             {!playerWins && !isDraw && (
               <span style={styles.winnerBadge}>GAGNANT</span>
             )}
@@ -319,13 +400,22 @@ const DuelResult = () => {
             {opponent.correctAnswers}/{exerciseCount}
           </div>
 
-          {/* Temps */}
+          {/* Erreurs */}
           <div style={{ ...styles.statValue, ...styles.statValuePlayer }}>
-            {formatTime(player.timeSeconds)}
+            {player.errors || 0}
           </div>
-          <div style={styles.statLabel}>Temps</div>
+          <div style={styles.statLabel}>Erreurs</div>
           <div style={{ ...styles.statValue, ...styles.statValueOpponent }}>
-            {formatTime(opponent.timeSeconds)}
+            {opponent.errors || 0}
+          </div>
+
+          {/* Penalites */}
+          <div style={{ ...styles.statValue, color: (player.errors || 0) > 0 ? '#FF453A' : 'rgba(255,255,255,0.5)' }}>
+            +{(player.errors || 0) * penaltySeconds}s
+          </div>
+          <div style={styles.statLabel}>Penalites</div>
+          <div style={{ ...styles.statValue, color: (opponent.errors || 0) > 0 ? '#FF453A' : 'rgba(255,255,255,0.5)' }}>
+            +{(opponent.errors || 0) * penaltySeconds}s
           </div>
         </div>
       </div>
@@ -333,7 +423,7 @@ const DuelResult = () => {
       {/* Action Buttons */}
       <div style={styles.actionButtons}>
         <button style={styles.playAgainButton} onClick={handlePlayAgain}>
-          {"⚔️"} Rejouer
+          <SwordsIcon /> Rejouer
         </button>
         <button style={styles.backButton} onClick={handleBackToMenu}>
           Retour aux challenges

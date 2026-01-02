@@ -3,7 +3,7 @@ import { Lightbulb, BookOpen, ChevronDown } from 'lucide-react';
 import MascotHappy from '../common/MascotHappy';
 import MascotDead from '../common/MascotDead';
 
-const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain, explanation, onExplanationToggle, isExplanationExpanded }) => {
+const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain, explanation, onExplanationToggle, isExplanationExpanded, hideXp = false }) => {
   const renderContent = () => {
     if (!isSubmitted) {
       // Affiche la question normale avec accolades orange
@@ -32,7 +32,7 @@ const QuestionCard = ({ question, isSubmitted, isCorrect, xpGain, explanation, o
               {isCorrect ? 'Bravo !' : 'Bien essayé !'}
               <span className="feedback-brace">{"}"}</span>
             </span>
-            {isCorrect && (
+            {isCorrect && !hideXp && xpGain && (
               <span className="feedback-xp">+{xpGain} EXP</span>
             )}
           </div>

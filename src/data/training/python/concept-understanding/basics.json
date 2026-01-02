@@ -1,0 +1,328 @@
+{
+  "category": "basics",
+  "type": "concept-understanding",
+  "language": "python",
+  "exerciseCount": 16,
+  "exercises": [
+    {
+      "id": "py_cu_basics_001",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Quelle est la différence principale entre print() et return ?",
+      "code": "def exemple():\n    print('A')\n    return 'B'",
+      "options": [
+        "print() affiche à l'écran, return renvoie une valeur",
+        "return affiche à l'écran, print renvoie une valeur",
+        "Ils font exactement la même chose",
+        "print() est plus rapide que return"
+      ],
+      "correctAnswer": 0,
+      "explanation": "print() vs return :\n\n• print() affiche du texte à l'écran (console)\n• return renvoie une valeur au code appelant\n\nexemple() affiche 'A' ET retourne 'B'\nresultat = exemple()  # resultat = 'B'",
+      "xpGain": 10,
+      "tags": ["print", "return", "function"],
+      "category": "basics"
+    },
+    {
+      "id": "py_cu_basics_002",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Pourquoi Python est-il appelé un langage 'dynamiquement typé' ?",
+      "code": "x = 5\nx = 'hello'\nx = [1, 2, 3]",
+      "options": [
+        "Le type des variables est vérifié à l'exécution, pas à la compilation",
+        "Python est plus rapide que les autres langages",
+        "On doit déclarer le type avant d'utiliser une variable",
+        "Python ne supporte qu'un seul type de données"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Typage dynamique :\n\n• Pas besoin de déclarer le type\n• Le type peut changer pendant l'exécution\n• x peut être int, puis str, puis list\n\nContraire : typage statique (Java, C++)",
+      "xpGain": 10,
+      "tags": ["dynamic-typing", "variables", "types"],
+      "category": "basics"
+    },
+    {
+      "id": "py_cu_basics_003",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que signifie 'immutable' en Python ?",
+      "code": "s = 'hello'\n# s[0] = 'H'  # Erreur!",
+      "options": [
+        "L'objet ne peut pas être modifié après sa création",
+        "L'objet est très rapide",
+        "L'objet peut stocker beaucoup de données",
+        "L'objet est protégé par mot de passe"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Immutable = non modifiable :\n\n• Les strings sont immutables\n• s[0] = 'H' est interdit\n• Il faut créer une nouvelle string\n\nImmutables : str, int, float, tuple\nMutables : list, dict, set",
+      "xpGain": 10,
+      "tags": ["immutable", "mutable", "strings"],
+      "category": "basics"
+    },
+    {
+      "id": "py_cu_basics_004",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Quelle est la différence entre '==' et 'is' ?",
+      "code": "a = [1, 2, 3]\nb = [1, 2, 3]\nprint(a == b)  # True\nprint(a is b)  # False",
+      "options": [
+        "== compare les valeurs, is compare les identités (même objet en mémoire)",
+        "== compare les types, is compare les valeurs",
+        "Ils sont identiques",
+        "== est plus rapide que is"
+      ],
+      "correctAnswer": 0,
+      "explanation": "== vs is :\n\n• == : compare les VALEURS (contenu)\n• is : compare les IDENTITÉS (même objet)\n\na et b ont le même contenu (==)\nMais sont deux objets différents (is)",
+      "xpGain": 10,
+      "tags": ["equality", "identity", "operators"],
+      "category": "basics"
+    },
+    {
+      "id": "py_cu_basics_005",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Pourquoi l'indentation est-elle importante en Python ?",
+      "code": "if True:\n    print('A')  # indenté\nprint('B')      # non indenté",
+      "options": [
+        "Elle définit les blocs de code (structure du programme)",
+        "Elle rend le code plus joli uniquement",
+        "Python ne fonctionne pas sans espaces",
+        "Elle accélère l'exécution"
+      ],
+      "correctAnswer": 0,
+      "explanation": "L'indentation définit les blocs :\n\n• En Python, l'indentation remplace les accolades {}\n• Elle indique quel code appartient à quel bloc\n• Généralement 4 espaces par niveau\n\n'A' est dans le if, 'B' est hors du if",
+      "xpGain": 10,
+      "tags": ["indentation", "syntax", "blocks"],
+      "category": "basics"
+    },
+    {
+      "id": "py_cu_basics_006",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que sont les 'truthy' et 'falsy' values ?",
+      "code": "if '':\n    print('A')\nif 'hello':\n    print('B')",
+      "options": [
+        "Valeurs évaluées comme True ou False dans un contexte booléen",
+        "Des types spéciaux de Python",
+        "Des erreurs de programmation",
+        "Des variables non définies"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Truthy/Falsy :\n\n• Falsy : '', 0, None, [], {}, False\n• Truthy : tout le reste\n\n'' est falsy → 'A' pas affiché\n'hello' est truthy → 'B' affiché",
+      "xpGain": 10,
+      "tags": ["truthy", "falsy", "boolean"],
+      "category": "basics"
+    },
+    {
+      "id": "py_cu_basics_007",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que fait l'opérateur // en Python ?",
+      "code": "print(7 // 2)   # Résultat: 3\nprint(-7 // 2)  # Résultat: -4",
+      "options": [
+        "Division entière (floor division) - arrondit vers le bas",
+        "Division normale",
+        "Reste de la division (modulo)",
+        "Division puis multiplication"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Floor division (//) :\n\n• Divise et arrondit vers le BAS (floor)\n• 7 // 2 = 3 (pas 3.5)\n• -7 // 2 = -4 (pas -3, car floor(-3.5) = -4)\n\n💡 Toujours vers -∞, pas vers 0",
+      "xpGain": 20,
+      "tags": ["floor-division", "operators", "arithmetic"],
+      "category": "basics"
+    },
+    {
+      "id": "py_cu_basics_008",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Quelle est la différence entre une expression et une instruction ?",
+      "code": "x = 5 + 3      # instruction avec expression\nresult = x > 0  # instruction avec expression",
+      "options": [
+        "Une expression produit une valeur, une instruction exécute une action",
+        "Elles sont identiques",
+        "Les expressions sont plus longues",
+        "Les instructions contiennent toujours des mots-clés"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Expression vs Instruction :\n\n• Expression : produit une valeur (5+3, x>0)\n• Instruction : effectue une action (x = ..., print())\n\nx = 5 + 3 : instruction d'assignation\n5 + 3 : expression qui vaut 8",
+      "xpGain": 20,
+      "tags": ["expression", "statement", "syntax"],
+      "category": "basics"
+    },
+    {
+      "id": "py_cu_basics_009",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Pourquoi 0.1 + 0.2 != 0.3 en Python ?",
+      "code": "print(0.1 + 0.2)  # 0.30000000000000004\nprint(0.1 + 0.2 == 0.3)  # False",
+      "options": [
+        "Les nombres flottants ont une précision limitée en binaire",
+        "Python a un bug",
+        "Les nombres décimaux sont mal implémentés",
+        "Il faut utiliser des guillemets"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Précision des flottants :\n\n• 0.1 ne peut pas être représenté exactement en binaire\n• Comme 1/3 en décimal (0.333...)\n• Erreurs d'arrondi minuscules s'accumulent\n\n💡 Utiliser math.isclose() pour comparer",
+      "xpGain": 20,
+      "tags": ["float", "precision", "binary"],
+      "category": "basics"
+    },
+    {
+      "id": "py_cu_basics_010",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que signifie 'short-circuit evaluation' avec and/or ?",
+      "code": "def check():\n    print('Appelé')\n    return True\n\nFalse and check()  # check() pas appelé",
+      "options": [
+        "Python arrête l'évaluation dès que le résultat est déterminé",
+        "Python exécute les deux côtés en parallèle",
+        "Python ignore les fonctions dans les conditions",
+        "Python optimise le code automatiquement"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Short-circuit :\n\n• False and X → False (peu importe X)\n• True or X → True (peu importe X)\n\nPython n'évalue pas X si inutile\ncheck() n'est jamais appelé ici",
+      "xpGain": 20,
+      "tags": ["short-circuit", "and", "or"],
+      "category": "basics"
+    },
+    {
+      "id": "py_cu_basics_011",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Quelle est la portée (scope) d'une variable en Python ?",
+      "code": "x = 'global'\ndef f():\n    x = 'local'\n    print(x)  # 'local'\nf()\nprint(x)  # 'global'",
+      "options": [
+        "LEGB : Local, Enclosing, Global, Built-in",
+        "Toutes les variables sont globales",
+        "Les variables n'existent que dans les fonctions",
+        "Python n'a pas de système de portée"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Règle LEGB :\n\n• L : Local (dans la fonction)\n• E : Enclosing (fonction englobante)\n• G : Global (module)\n• B : Built-in (Python)\n\nPython cherche dans cet ordre",
+      "xpGain": 20,
+      "tags": ["scope", "LEGB", "variables"],
+      "category": "basics"
+    },
+    {
+      "id": "py_cu_basics_012",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Pourquoi utilise-t-on if __name__ == '__main__' ?",
+      "code": "def main():\n    print('Programme principal')\n\nif __name__ == '__main__':\n    main()",
+      "options": [
+        "Pour exécuter du code seulement quand le fichier est lancé directement",
+        "Pour rendre le code plus rapide",
+        "C'est obligatoire en Python",
+        "Pour créer une fonction main"
+      ],
+      "correctAnswer": 0,
+      "explanation": "__name__ == '__main__' :\n\n• __name__ vaut '__main__' si exécuté directement\n• __name__ vaut le nom du module si importé\n\nPermet d'avoir du code de test qui ne s'exécute pas à l'import",
+      "xpGain": 20,
+      "tags": ["__name__", "__main__", "module"],
+      "category": "basics"
+    },
+    {
+      "id": "py_cu_basics_013",
+      "language": "python",
+      "difficulty": 3,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que se passe-t-il lors d'une assignation multiple simultanée ?",
+      "code": "a = 1\na, b = a + 1, a\nprint(a, b)",
+      "options": [
+        "Le côté droit est évalué en entier AVANT l'assignation",
+        "Les assignations se font de gauche à droite",
+        "Python génère une erreur",
+        "Le résultat est imprévisible"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Assignation simultanée :\n\n• D'abord : évalue (a+1, a) = (2, 1)\n• Puis : a=2, b=1\n\nTout le côté droit utilise les anciennes valeurs\nb reçoit l'ancienne valeur de a (1)",
+      "xpGain": 30,
+      "tags": ["assignment", "tuple-unpacking", "simultaneous"],
+      "category": "basics"
+    },
+    {
+      "id": "py_cu_basics_014",
+      "language": "python",
+      "difficulty": 3,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Comment fonctionne la comparaison en chaîne ?",
+      "code": "x = 5\nprint(1 < x < 10)  # True\nprint(1 < x and x < 10)  # Équivalent",
+      "options": [
+        "Python évalue 1 < x ET x < 10 simultanément",
+        "C'est une syntaxe spéciale qui ne fonctionne qu'avec <",
+        "Python compare 1 < x puis compare le résultat avec 10",
+        "C'est invalide en Python"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Comparaison en chaîne :\n\n• 1 < x < 10 équivaut à (1 < x) and (x < 10)\n• Fonctionne avec tous les opérateurs de comparaison\n• x n'est évalué qu'une fois\n\nÉlégant et lisible !",
+      "xpGain": 30,
+      "tags": ["chained-comparison", "operators", "syntax"],
+      "category": "basics"
+    },
+    {
+      "id": "py_cu_basics_015",
+      "language": "python",
+      "difficulty": 3,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que fait l'opérateur walrus := ?",
+      "code": "if (n := len('hello')) > 3:\n    print(f'Long: {n}')",
+      "options": [
+        "Assigne une valeur ET retourne cette valeur dans une expression",
+        "Compare deux valeurs",
+        "Divise et assigne",
+        "Crée une référence à une variable"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Opérateur walrus (:=) :\n\n• Assigne ET retourne la valeur\n• n := len('hello') → n=5 et retourne 5\n• Permet d'assigner dans des expressions\n\nNouveau en Python 3.8",
+      "xpGain": 30,
+      "tags": ["walrus", "assignment-expression", "Python3.8"],
+      "category": "basics"
+    },
+    {
+      "id": "py_cu_basics_016",
+      "language": "python",
+      "difficulty": 3,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Pourquoi les entiers sont-ils immutables mais semblent modifiables ?",
+      "code": "x = 5\nprint(id(x))\nx += 1\nprint(id(x))  # ID différent !",
+      "options": [
+        "x += 1 crée un NOUVEL objet, x pointe vers ce nouvel objet",
+        "Python modifie l'entier en place",
+        "Les entiers ne sont pas vraiment immutables",
+        "id() donne des résultats aléatoires"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Immutabilité des int :\n\n• x = 5 : x pointe vers l'objet 5\n• x += 1 : crée un nouvel objet 6\n• x pointe maintenant vers 6\n\nL'objet 5 n'a pas changé, x a changé de cible",
+      "xpGain": 30,
+      "tags": ["immutable", "id", "integers"],
+      "category": "basics"
+    }
+  ]
+}

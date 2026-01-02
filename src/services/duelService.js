@@ -12,6 +12,7 @@ import {
   getDocs
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
+import { loadAllExercises, shuffleWithSeed as shuffleExercises } from '../data/loaders/trainingLoader';
 
 /**
  * Nettoie un objet en remplacant les valeurs undefined par null
@@ -101,19 +102,8 @@ const shuffleWithSeed = (array, seed) => {
  */
 const loadDuelExercises = async (seed) => {
   try {
-    const [easyModule, mediumModule, hardModule] = await Promise.all([
-      import('../data/exercises-easy.json'),
-      import('../data/exercises-medium.json'),
-      import('../data/exercises-hard.json')
-    ]);
-
-    const allExercises = [
-      ...easyModule.default,
-      ...mediumModule.default,
-      ...hardModule.default
-    ];
-
-    const shuffled = shuffleWithSeed(allExercises, seed);
+    const allExercises = await loadAllExercises('python');
+    const shuffled = shuffleExercises(allExercises, seed);
     return shuffled.slice(0, 5);
   } catch (error) {
     console.error('Error loading duel exercises:', error);
@@ -147,8 +137,8 @@ export const createDuel = async (hostId, hostUsername) => {
         oderId: hostId,
         username: hostUsername,
         ready: false,
-        score: 0,
         correctAnswers: 0,
+        errors: 0,
         currentQuestion: 0,
         finishedAt: null
       },
@@ -220,8 +210,8 @@ export const joinDuel = async (code, oderId, guestUsername) => {
         oderId: oderId,
         username: guestUsername,
         ready: false,
-        score: 0,
         correctAnswers: 0,
+        errors: 0,
         currentQuestion: 0,
         finishedAt: null
       },
@@ -281,7 +271,7 @@ export const setPlayerReady = async (code, oderId) => {
  * Mettre a jour le score d'un joueur
  * @param {string} code - Code du duel
  * @param {string} oderId - ID du joueur
- * @param {object} update - { score, correctAnswers, currentQuestion, finishedAt }
+ * @param {object} update - { correctAnswers, errors, currentQuestion, finishedAt }
  * @returns {Promise<object>} { success, error }
  */
 export const updatePlayerScore = async (code, oderId, update) => {
@@ -298,8 +288,8 @@ export const updatePlayerScore = async (code, oderId, update) => {
     const playerKey = isHost ? 'host' : 'guest';
 
     const updates = {};
-    if (update.score !== undefined) updates[`${playerKey}.score`] = update.score;
     if (update.correctAnswers !== undefined) updates[`${playerKey}.correctAnswers`] = update.correctAnswers;
+    if (update.errors !== undefined) updates[`${playerKey}.errors`] = update.errors;
     if (update.currentQuestion !== undefined) updates[`${playerKey}.currentQuestion`] = update.currentQuestion;
     if (update.finishedAt !== undefined) updates[`${playerKey}.finishedAt`] = update.finishedAt;
 

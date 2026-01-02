@@ -10,51 +10,8 @@ import CustomKeyboard from '../../components/exercise/CustomKeyboard';
 import ChapterCompleteModal from '../../components/lessons/ChapterCompleteModal';
 import ModuleCompleteModal from '../../components/lessons/ModuleCompleteModal';
 import useHaptic from '../../hooks/useHaptic';
+import { loadLesson } from '../../data/loaders/lessonLoader';
 import '../../styles/Lessons.css';
-
-// Import des données leçons - Module 1
-import lesson_1_1_Data from '../../data/lessons/python/lesson-1-1.json';
-import lesson_1_2_Data from '../../data/lessons/python/lesson-1-2.json';
-import lesson_1_3_Data from '../../data/lessons/python/lesson-1-3.json';
-import lesson_1_4_Data from '../../data/lessons/python/lesson-1-4.json';
-import lesson_1_5_Data from '../../data/lessons/python/lesson-1-5.json';
-import lesson_1_6_Data from '../../data/lessons/python/lesson-1-6.json';
-import lesson_1_7_Data from '../../data/lessons/python/lesson-1-7.json';
-// Module 2
-import lesson_2_1_Data from '../../data/lessons/python/lesson-2-1.json';
-import lesson_2_2_Data from '../../data/lessons/python/lesson-2-2.json';
-import lesson_2_3_Data from '../../data/lessons/python/lesson-2-3.json';
-import lesson_2_4_Data from '../../data/lessons/python/lesson-2-4.json';
-import lesson_2_5_Data from '../../data/lessons/python/lesson-2-5.json';
-import lesson_2_6_Data from '../../data/lessons/python/lesson-2-6.json';
-import lesson_2_7_Data from '../../data/lessons/python/lesson-2-7.json';
-// Module 3
-import lesson_3_1_Data from '../../data/lessons/python/lesson-3-1.json';
-import lesson_3_2_Data from '../../data/lessons/python/lesson-3-2.json';
-import lesson_3_3_Data from '../../data/lessons/python/lesson-3-3.json';
-import lesson_3_4_Data from '../../data/lessons/python/lesson-3-4.json';
-import lesson_3_5_Data from '../../data/lessons/python/lesson-3-5.json';
-// Module 4
-import lesson_4_1_Data from '../../data/lessons/python/lesson-4-1.json';
-import lesson_4_2_Data from '../../data/lessons/python/lesson-4-2.json';
-import lesson_4_3_Data from '../../data/lessons/python/lesson-4-3.json';
-import lesson_4_4_Data from '../../data/lessons/python/lesson-4-4.json';
-import lesson_4_5_Data from '../../data/lessons/python/lesson-4-5.json';
-import lesson_4_6_Data from '../../data/lessons/python/lesson-4-6.json';
-// Module 5
-import lesson_5_1_Data from '../../data/lessons/python/lesson-5-1.json';
-import lesson_5_2_Data from '../../data/lessons/python/lesson-5-2.json';
-import lesson_5_3_Data from '../../data/lessons/python/lesson-5-3.json';
-import lesson_5_4_Data from '../../data/lessons/python/lesson-5-4.json';
-import lesson_5_5_Data from '../../data/lessons/python/lesson-5-5.json';
-import lesson_5_6_Data from '../../data/lessons/python/lesson-5-6.json';
-// Module 6
-import lesson_6_1_Data from '../../data/lessons/python/lesson-6-1.json';
-import lesson_6_2_Data from '../../data/lessons/python/lesson-6-2.json';
-import lesson_6_3_Data from '../../data/lessons/python/lesson-6-3.json';
-import lesson_6_4_Data from '../../data/lessons/python/lesson-6-4.json';
-import lesson_6_5_Data from '../../data/lessons/python/lesson-6-5.json';
-import lesson_6_6_Data from '../../data/lessons/python/lesson-6-6.json';
 
 const LessonContent = () => {
   const navigate = useNavigate();
@@ -63,6 +20,7 @@ const LessonContent = () => {
   const { progress, updateProgress, recordDailyActivity } = useProgress();
 
   const [lessonData, setLessonData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [completedExercises, setCompletedExercises] = useState([]);
 
@@ -79,73 +37,36 @@ const LessonContent = () => {
 
   const contentRef = useRef(null);
 
-  // Charger les données de la leçon
+  // Charger les données de la leçon dynamiquement
   useEffect(() => {
-    const lessonMap = {
-      // Module 1
-      'py_les_1_1': lesson_1_1_Data,
-      'py_les_1_2': lesson_1_2_Data,
-      'py_les_1_3': lesson_1_3_Data,
-      'py_les_1_4': lesson_1_4_Data,
-      'py_les_1_5': lesson_1_5_Data,
-      'py_les_1_6': lesson_1_6_Data,
-      'py_les_1_7': lesson_1_7_Data,
-      // Module 2
-      'py_les_2_1': lesson_2_1_Data,
-      'py_les_2_2': lesson_2_2_Data,
-      'py_les_2_3': lesson_2_3_Data,
-      'py_les_2_4': lesson_2_4_Data,
-      'py_les_2_5': lesson_2_5_Data,
-      'py_les_2_6': lesson_2_6_Data,
-      'py_les_2_7': lesson_2_7_Data,
-      // Module 3
-      'py_les_3_1': lesson_3_1_Data,
-      'py_les_3_2': lesson_3_2_Data,
-      'py_les_3_3': lesson_3_3_Data,
-      'py_les_3_4': lesson_3_4_Data,
-      'py_les_3_5': lesson_3_5_Data,
-      // Module 4
-      'py_les_4_1': lesson_4_1_Data,
-      'py_les_4_2': lesson_4_2_Data,
-      'py_les_4_3': lesson_4_3_Data,
-      'py_les_4_4': lesson_4_4_Data,
-      'py_les_4_5': lesson_4_5_Data,
-      'py_les_4_6': lesson_4_6_Data,
-      // Module 5
-      'py_les_5_1': lesson_5_1_Data,
-      'py_les_5_2': lesson_5_2_Data,
-      'py_les_5_3': lesson_5_3_Data,
-      'py_les_5_4': lesson_5_4_Data,
-      'py_les_5_5': lesson_5_5_Data,
-      'py_les_5_6': lesson_5_6_Data,
-      // Module 6
-      'py_les_6_1': lesson_6_1_Data,
-      'py_les_6_2': lesson_6_2_Data,
-      'py_les_6_3': lesson_6_3_Data,
-      'py_les_6_4': lesson_6_4_Data,
-      'py_les_6_5': lesson_6_5_Data,
-      'py_les_6_6': lesson_6_6_Data,
+    const fetchLesson = async () => {
+      setIsLoading(true);
+      try {
+        const data = await loadLesson(language, lessonId);
+        setLessonData(data);
+      } catch (error) {
+        console.error('Error loading lesson:', error);
+        // Pour les leçons non encore implémentées, afficher message
+        setLessonData({
+          title: "Leçon en développement",
+          subtitle: "Cette leçon sera bientôt disponible !",
+          sections: [
+            {
+              id: "section_placeholder",
+              type: "text",
+              title: "Contenu à venir",
+              content: "Cette leçon est actuellement en cours de rédaction. Revenez bientôt pour découvrir ce nouveau contenu !"
+            }
+          ],
+          exercises: []
+        });
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    if (lessonMap[lessonId]) {
-      setLessonData(lessonMap[lessonId]);
-    } else {
-      // Pour les leçons non encore implémentées, afficher message
-      setLessonData({
-        title: "Leçon en développement",
-        subtitle: "Cette leçon sera bientôt disponible !",
-        sections: [
-          {
-            id: "section_placeholder",
-            type: "text",
-            title: "Contenu à venir",
-            content: "Cette leçon est actuellement en cours de rédaction. Pour le moment, seule la **Leçon 1.1 : La lecture de haut en bas** est disponible.\n\nRevenez bientôt pour découvrir ce nouveau contenu !"
-          }
-        ],
-        exercises: []
-      });
-    }
-  }, [lessonId]);
+    fetchLesson();
+  }, [language, lessonId]);
 
   // Charger la progression sauvegardée
   useEffect(() => {

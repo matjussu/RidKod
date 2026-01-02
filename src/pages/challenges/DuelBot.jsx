@@ -14,6 +14,7 @@ import {
   saveLocalChallengeStats,
   getLocalChallengeStats
 } from '../../services/challengeStatsService';
+import { getRandomExercises } from '../../data/loaders/trainingLoader';
 import '../../styles/Challenges.css';
 
 const DuelBot = () => {
@@ -37,19 +38,23 @@ const DuelBot = () => {
   const [isCorrect, setIsCorrect] = useState(false);
   const [showExplanation, setShowExplanation] = useState(false);
 
+  // Constante de pénalité (10 secondes par erreur)
+  const PENALTY_SECONDS = 10;
+
   // Stats joueur
   const [playerStats, setPlayerStats] = useState({
-    score: 0,
     correctAnswers: 0,
+    errors: 0,
     currentQuestion: 0
   });
 
   // Stats bot
   const [botStats, setBotStats] = useState({
-    score: 0,
     correctAnswers: 0,
+    errors: 0,
     currentQuestion: 0,
-    isAnswering: false
+    isAnswering: false,
+    timeSeconds: 0
   });
 
   // Feedback
@@ -69,21 +74,9 @@ const DuelBot = () => {
   useEffect(() => {
     const loadExercises = async () => {
       try {
-        const [easyModule, mediumModule, hardModule] = await Promise.all([
-          import('../../data/exercises-easy.json'),
-          import('../../data/exercises-medium.json'),
-          import('../../data/exercises-hard.json')
-        ]);
-
-        const allExercises = [
-          ...easyModule.default,
-          ...mediumModule.default,
-          ...hardModule.default
-        ];
-
-        // Melanger et prendre 5 exercices
-        const shuffled = allExercises.sort(() => Math.random() - 0.5);
-        setExercises(shuffled.slice(0, 5));
+        // Charger 5 exercices aléatoires via le loader centralisé
+        const randomExercises = await getRandomExercises(5, 'python');
+        setExercises(randomExercises);
         setLoading(false);
       } catch (error) {
         console.error('Error loading exercises:', error);
@@ -140,13 +133,14 @@ const DuelBot = () => {
 
     botTimeoutRef.current = setTimeout(() => {
       const botCorrect = Math.random() < correctProbability;
-      const xpGain = botCorrect ? (exercises[currentIndex]?.xpGain || 10) : 0;
+      const botTime = Math.floor(randomDelay / 1000); // Temps de réponse du bot
 
       setBotStats(prev => ({
         ...prev,
         isAnswering: false,
         correctAnswers: prev.correctAnswers + (botCorrect ? 1 : 0),
-        score: prev.score + xpGain,
+        errors: prev.errors + (botCorrect ? 0 : 1),
+        timeSeconds: prev.timeSeconds + botTime,
         currentQuestion: currentIndex + 1
       }));
     }, randomDelay);
@@ -194,14 +188,13 @@ const DuelBot = () => {
       triggerError();
     }
 
-    const xpGain = correct ? (currentExercise.xpGain || 10) : 0;
     setPlayerStats(prev => ({
       ...prev,
       correctAnswers: prev.correctAnswers + (correct ? 1 : 0),
-      score: prev.score + xpGain,
+      errors: prev.errors + (correct ? 0 : 1),
       currentQuestion: currentIndex + 1
     }));
-  }, [isSubmitted, checkAnswer, currentExercise, currentIndex, triggerSuccess, triggerError]);
+  }, [isSubmitted, checkAnswer, currentIndex, triggerSuccess, triggerError]);
 
   // Continuer
   const handleContinue = useCallback(async () => {
@@ -218,11 +211,12 @@ const DuelBot = () => {
       if (timerRef.current) clearInterval(timerRef.current);
       if (botTimeoutRef.current) clearTimeout(botTimeoutRef.current);
 
-      const finalTime = Math.floor((Date.now() - startTime) / 1000);
+      const playerTimeReal = Math.floor((Date.now() - startTime) / 1000);
+      const playerTotalTime = playerTimeReal + (playerStats.errors * PENALTY_SECONDS);
+      const botTotalTime = botStats.timeSeconds + (botStats.errors * PENALTY_SECONDS);
 
-      // Determiner si le joueur a gagne
-      const playerWins = playerStats.score > botStats.score ||
-        (playerStats.score === botStats.score && finalTime < botStats.timeSeconds);
+      // Determiner si le joueur a gagne (le plus petit temps gagne)
+      const playerWins = playerTotalTime < botTotalTime;
 
       // Incrementer les stats de duel
       if (user?.uid) {
@@ -234,7 +228,7 @@ const DuelBot = () => {
         });
       }
 
-      // ✅ Enregistrer l'activité challenge pour le calendrier
+      // Enregistrer l'activité challenge pour le calendrier
       recordDailyActivity('challenges', 1);
 
       navigate('/challenges/duel/result', {
@@ -243,14 +237,17 @@ const DuelBot = () => {
           player: {
             username: user?.displayName || 'Toi',
             ...playerStats,
-            timeSeconds: finalTime
+            timeSeconds: playerTimeReal,
+            totalTime: playerTotalTime
           },
           opponent: {
             username: 'Bot',
             ...botStats,
+            totalTime: botTotalTime,
             isBot: true
           },
-          exerciseCount: exercises.length
+          exerciseCount: exercises.length,
+          penaltySeconds: PENALTY_SECONDS
         }
       });
     } else {
@@ -538,12 +535,17 @@ const DuelBot = () => {
           <span style={styles.timer}>{formatTime(elapsedSeconds)}</span>
         </div>
 
-        {/* Score Comparison */}
+        {/* Time Comparison */}
         <div style={styles.scoreComparison}>
           <div style={styles.playerScore}>
             <span style={styles.scoreName}>Toi</span>
             <span style={{ ...styles.scoreValue, ...styles.scoreValuePlayer }}>
-              {playerStats.score}
+              {formatTime(elapsedSeconds)}
+              {playerStats.errors > 0 && (
+                <span style={{ fontSize: '12px', color: '#FF453A', marginLeft: '4px' }}>
+                  +{playerStats.errors * PENALTY_SECONDS}s
+                </span>
+              )}
             </span>
           </div>
           <span style={styles.vsText}>VS</span>
@@ -553,7 +555,14 @@ const DuelBot = () => {
                 Bot {botStats.isAnswering && <span style={styles.botDot}></span>}
               </span>
             </span>
-            <span style={styles.scoreValue}>{botStats.score}</span>
+            <span style={styles.scoreValue}>
+              {formatTime(botStats.timeSeconds)}
+              {botStats.errors > 0 && (
+                <span style={{ fontSize: '12px', color: '#FF453A', marginLeft: '4px' }}>
+                  +{botStats.errors * PENALTY_SECONDS}s
+                </span>
+              )}
+            </span>
           </div>
         </div>
 
@@ -573,10 +582,10 @@ const DuelBot = () => {
           question={currentExercise.question}
           isSubmitted={isSubmitted}
           isCorrect={isCorrect}
-          showExplanation={showExplanation}
+          isExplanationExpanded={showExplanation}
           explanation={currentExercise.explanation}
-          onToggleExplanation={() => setShowExplanation(!showExplanation)}
-          xpGain={currentExercise.xpGain || 10}
+          onExplanationToggle={() => setShowExplanation(!showExplanation)}
+          hideXp={true}
         />
 
         <CodeBlock

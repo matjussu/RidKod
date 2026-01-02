@@ -50,397 +50,147 @@ const DuelHome = () => {
     navigate(`/challenges/duel/join/${code}`);
   };
 
-  const styles = {
-    container: {
-      minHeight: '100vh',
-      background: '#0D0D0F',
-      color: '#FFFFFF',
-      display: 'flex',
-      flexDirection: 'column',
-      paddingTop: 'max(calc(env(safe-area-inset-top) + 20px), 40px)',
-      paddingLeft: 'max(20px, env(safe-area-inset-left))',
-      paddingRight: 'max(20px, env(safe-area-inset-right))',
-      paddingBottom: 'max(env(safe-area-inset-bottom), 24px)',
-      maxWidth: 'min(428px, 100vw)',
-      margin: '0 auto',
-      width: '100%',
-      boxSizing: 'border-box',
-    },
-    backButton: {
-      position: 'absolute',
-      top: 'max(calc(env(safe-area-inset-top) + 16px), 32px)',
-      left: '20px',
-      background: 'none',
-      border: 'none',
-      cursor: 'pointer',
-      padding: '8px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderRadius: '8px',
-      zIndex: 10,
-    },
-    header: {
-      textAlign: 'center',
-      marginBottom: '40px',
-      marginTop: '20px',
-    },
-    headerIcon: {
-      fontSize: '56px',
-      display: 'block',
-      marginBottom: '16px',
-    },
-    headerTitle: {
-      fontFamily: '"JetBrains Mono", monospace',
-      fontSize: '28px',
-      fontWeight: 900,
-      color: '#FFFFFF',
-      margin: '0 0 8px 0',
-    },
-    headerSubtitle: {
-      fontFamily: '"JetBrains Mono", monospace',
-      fontSize: '14px',
-      color: 'rgba(255, 255, 255, 0.6)',
-      margin: 0,
-    },
-    modesContainer: {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '16px',
-      marginBottom: '32px',
-    },
-    modeCard: {
-      background: 'linear-gradient(135deg, rgba(30, 30, 35, 0.9) 0%, rgba(20, 20, 25, 0.95) 100%)',
-      border: '1px solid rgba(255, 255, 255, 0.1)',
-      borderRadius: '20px',
-      padding: '24px',
-      cursor: 'pointer',
-      transition: 'all 0.3s ease',
-      position: 'relative',
-      overflow: 'hidden',
-    },
-    modeCardBot: {
-      borderColor: 'rgba(139, 92, 246, 0.3)',
-    },
-    modeCardFriend: {
-      borderColor: 'rgba(6, 182, 212, 0.3)',
-    },
-    modeCardGlow: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      height: '100%',
-      opacity: 0.1,
-      pointerEvents: 'none',
-    },
-    modeCardGlowBot: {
-      background: 'linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%)',
-    },
-    modeCardGlowFriend: {
-      background: 'linear-gradient(135deg, #06B6D4 0%, #0EA5E9 100%)',
-    },
-    modeHeader: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: '16px',
-      marginBottom: '12px',
-      position: 'relative',
-      zIndex: 1,
-    },
-    modeIcon: {
-      width: '48px',
-      height: '48px',
-      borderRadius: '14px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontSize: '24px',
-    },
-    modeIconBot: {
-      background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%)',
-    },
-    modeIconFriend: {
-      background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(14, 165, 233, 0.2) 100%)',
-    },
-    modeTitle: {
-      fontFamily: '"JetBrains Mono", monospace',
-      fontSize: '18px',
-      fontWeight: 800,
-      color: '#FFFFFF',
-      margin: 0,
-    },
-    modeTitleBot: {
-      color: '#A78BFA',
-    },
-    modeTitleFriend: {
-      color: '#22D3EE',
-    },
-    modeDescription: {
-      fontFamily: '"JetBrains Mono", monospace',
-      fontSize: '13px',
-      color: 'rgba(255, 255, 255, 0.6)',
-      margin: 0,
-      lineHeight: 1.5,
-      position: 'relative',
-      zIndex: 1,
-    },
-    modeArrow: {
-      position: 'absolute',
-      right: '20px',
-      top: '50%',
-      transform: 'translateY(-50%)',
-      opacity: 0.5,
-    },
-    divider: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: '16px',
-      margin: '8px 0',
-    },
-    dividerLine: {
-      flex: 1,
-      height: '1px',
-      background: 'rgba(255, 255, 255, 0.1)',
-    },
-    dividerText: {
-      fontFamily: '"JetBrains Mono", monospace',
-      fontSize: '12px',
-      color: 'rgba(255, 255, 255, 0.4)',
-      textTransform: 'uppercase',
-      letterSpacing: '1px',
-    },
-    friendActions: {
-      display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
-      gap: '12px',
-    },
-    friendButton: {
-      background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(14, 165, 233, 0.1) 100%)',
-      border: '1px solid rgba(6, 182, 212, 0.3)',
-      borderRadius: '14px',
-      padding: '16px',
-      cursor: 'pointer',
-      transition: 'all 0.3s ease',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      gap: '8px',
-    },
-    friendButtonIcon: {
-      fontSize: '24px',
-    },
-    friendButtonText: {
-      fontFamily: '"JetBrains Mono", monospace',
-      fontSize: '13px',
-      fontWeight: 600,
-      color: '#22D3EE',
-    },
-    infoCard: {
-      background: 'rgba(255, 255, 255, 0.03)',
-      border: '1px solid rgba(255, 255, 255, 0.06)',
-      borderRadius: '14px',
-      padding: '16px',
-      marginTop: 'auto',
-    },
-    infoTitle: {
-      fontFamily: '"JetBrains Mono", monospace',
-      fontSize: '12px',
-      fontWeight: 600,
-      color: 'rgba(255, 255, 255, 0.5)',
-      margin: '0 0 8px 0',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '6px',
-    },
-    infoText: {
-      fontFamily: '"JetBrains Mono", monospace',
-      fontSize: '12px',
-      color: 'rgba(255, 255, 255, 0.4)',
-      margin: 0,
-      lineHeight: 1.5,
-    },
-    // Modal styles
-    modalOverlay: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      background: 'rgba(0, 0, 0, 0.8)',
-      backdropFilter: 'blur(8px)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 1000,
-      padding: '20px',
-    },
-    modal: {
-      background: 'linear-gradient(135deg, #1A1A1F 0%, #0D0D0F 100%)',
-      border: '1px solid rgba(6, 182, 212, 0.3)',
-      borderRadius: '24px',
-      padding: '32px 24px',
-      maxWidth: '340px',
-      width: '100%',
-      textAlign: 'center',
-    },
-    modalTitle: {
-      fontFamily: '"JetBrains Mono", monospace',
-      fontSize: '20px',
-      fontWeight: 800,
-      color: '#FFFFFF',
-      margin: '0 0 8px 0',
-    },
-    modalSubtitle: {
-      fontFamily: '"JetBrains Mono", monospace',
-      fontSize: '13px',
-      color: 'rgba(255, 255, 255, 0.5)',
-      margin: '0 0 24px 0',
-    },
-    codeInput: {
-      width: '100%',
-      background: 'rgba(0, 0, 0, 0.3)',
-      border: '2px solid rgba(6, 182, 212, 0.3)',
-      borderRadius: '12px',
-      padding: '16px',
-      fontFamily: '"JetBrains Mono", monospace',
-      fontSize: '24px',
-      fontWeight: 700,
-      color: '#22D3EE',
-      textAlign: 'center',
-      letterSpacing: '8px',
-      textTransform: 'uppercase',
-      outline: 'none',
-      boxSizing: 'border-box',
-    },
-    errorText: {
-      fontFamily: '"JetBrains Mono", monospace',
-      fontSize: '12px',
-      color: '#FF453A',
-      margin: '8px 0 0 0',
-    },
-    modalActions: {
-      display: 'flex',
-      gap: '12px',
-      marginTop: '24px',
-    },
-    modalButton: {
-      flex: 1,
-      padding: '14px',
-      borderRadius: '12px',
-      fontFamily: '"JetBrains Mono", monospace',
-      fontSize: '14px',
-      fontWeight: 600,
-      cursor: 'pointer',
-      border: 'none',
-    },
-    modalButtonCancel: {
-      background: 'rgba(255, 255, 255, 0.1)',
-      color: 'rgba(255, 255, 255, 0.6)',
-    },
-    modalButtonJoin: {
-      background: 'linear-gradient(135deg, #06B6D4 0%, #0EA5E9 100%)',
-      color: '#FFFFFF',
-    },
-  };
+  // SVG Icons
+  const BotIcon = () => (
+    <svg viewBox="0 0 24 24" fill="none" className="mode-icon">
+      <rect x="3" y="8" width="18" height="12" rx="2" stroke="currentColor" strokeWidth="2"/>
+      <circle cx="8" cy="14" r="2" fill="currentColor"/>
+      <circle cx="16" cy="14" r="2" fill="currentColor"/>
+      <path d="M9 4H15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M12 4V8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M3 12H1M23 12H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  );
+
+  const FriendIcon = () => (
+    <svg viewBox="0 0 24 24" fill="none" className="mode-icon">
+      <circle cx="9" cy="7" r="3" stroke="currentColor" strokeWidth="2"/>
+      <circle cx="17" cy="7" r="3" stroke="currentColor" strokeWidth="2"/>
+      <path d="M3 19C3 15.6863 5.68629 13 9 13C10.0736 13 11.0907 13.2417 12 13.6736" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M15 19C15 16.2386 16.7909 14 19 14C21.2091 14 23 16.2386 23 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  );
+
+  const TargetIcon = () => (
+    <svg viewBox="0 0 24 24" fill="none" className="duel-action-icon">
+      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+      <circle cx="12" cy="12" r="6" stroke="currentColor" strokeWidth="2"/>
+      <circle cx="12" cy="12" r="2" fill="currentColor"/>
+    </svg>
+  );
+
+  const LinkIcon = () => (
+    <svg viewBox="0 0 24 24" fill="none" className="duel-action-icon">
+      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  );
+
+  const InfoIcon = () => (
+    <svg viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+      <path d="M12 16V12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <circle cx="12" cy="8" r="1" fill="currentColor"/>
+    </svg>
+  );
 
   return (
-    <div style={styles.container}>
+    <div className="challenges-container">
       {/* Back Button */}
-      <button style={styles.backButton} onClick={handleBackClick}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+      <button className="challenges-back-button" onClick={handleBackClick} aria-label="Retour">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="m15 18-6-6 6-6"/>
         </svg>
       </button>
 
       {/* Header */}
-      <div style={styles.header}>
-        <span style={styles.headerIcon}>{"⚔️"}</span>
-        <h1 style={styles.headerTitle}>Mode Duel</h1>
-        <p style={styles.headerSubtitle}>Affronte un adversaire en temps réel</p>
+      <div className="duel-header">
+        <div className="duel-header-glow"></div>
+        <h1 className="duel-title">
+          <span className="duel-title-accent">{"//"}</span>DUEL
+        </h1>
+        <p className="duel-subtitle">Affronte un adversaire en temps réel</p>
       </div>
 
       {/* Modes */}
-      <div style={styles.modesContainer}>
+      <div className="duel-modes-container">
         {/* Bot Duel */}
-        <button
-          style={{ ...styles.modeCard, ...styles.modeCardBot }}
-          onClick={handleBotDuel}
-        >
-          <div style={{ ...styles.modeCardGlow, ...styles.modeCardGlowBot }}></div>
-          <div style={styles.modeHeader}>
-            <div style={{ ...styles.modeIcon, ...styles.modeIconBot }}>
-              {"🤖"}
-            </div>
-            <h2 style={{ ...styles.modeTitle, ...styles.modeTitleBot }}>
-              Contre le Bot
-            </h2>
+        <button className="challenge-mode-card bot" onClick={handleBotDuel} style={{ animationDelay: '0.1s' }}>
+          <div className="mode-card-glow"></div>
+          <div className="mode-icon-container">
+            <BotIcon />
           </div>
-          <p style={styles.modeDescription}>
-            Entraîne-toi contre notre IA. Parfait pour t'améliorer avant d'affronter tes amis !
-          </p>
-          <div style={styles.modeArrow}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <div className="mode-content">
+            <div className="mode-title-row">
+              <h2 className="mode-title">CONTRE LE BOT</h2>
+            </div>
+            <p className="mode-description">
+              Entraîne-toi contre notre IA. Parfait pour progresser avant d'affronter tes amis !
+            </p>
+          </div>
+          <div className="mode-arrow">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="m9 18 6-6-6-6"/>
             </svg>
           </div>
         </button>
 
         {/* Divider */}
-        <div style={styles.divider}>
-          <div style={styles.dividerLine}></div>
-          <span style={styles.dividerText}>ou</span>
-          <div style={styles.dividerLine}></div>
+        <div className="duel-divider">
+          <div className="duel-divider-line"></div>
+          <span className="duel-divider-text">ou</span>
+          <div className="duel-divider-line"></div>
         </div>
 
         {/* Friend Duel */}
-        <div style={{ ...styles.modeCard, ...styles.modeCardFriend }}>
-          <div style={{ ...styles.modeCardGlow, ...styles.modeCardGlowFriend }}></div>
-          <div style={styles.modeHeader}>
-            <div style={{ ...styles.modeIcon, ...styles.modeIconFriend }}>
-              {"👥"}
-            </div>
-            <h2 style={{ ...styles.modeTitle, ...styles.modeTitleFriend }}>
-              Contre un ami
-            </h2>
+        <div className="challenge-mode-card friend" style={{ animationDelay: '0.2s' }}>
+          <div className="mode-card-glow"></div>
+          <div className="mode-icon-container">
+            <FriendIcon />
           </div>
-          <p style={styles.modeDescription}>
-            Défie un ami avec un code d'invitation. Qui sera le plus rapide ?
-          </p>
+          <div className="mode-content">
+            <div className="mode-title-row">
+              <h2 className="mode-title">CONTRE UN AMI</h2>
+            </div>
+            <p className="mode-description">
+              Défie un ami avec un code d'invitation. Qui sera le plus rapide ?
+            </p>
 
-          <div style={{ ...styles.friendActions, marginTop: '16px' }}>
-            <button style={styles.friendButton} onClick={handleCreateDuel}>
-              <span style={styles.friendButtonIcon}>{"🎯"}</span>
-              <span style={styles.friendButtonText}>Créer un duel</span>
-            </button>
-            <button style={styles.friendButton} onClick={handleJoinDuel}>
-              <span style={styles.friendButtonIcon}>{"🔗"}</span>
-              <span style={styles.friendButtonText}>Rejoindre</span>
-            </button>
+            <div className="duel-actions-grid">
+              <button className="duel-action-button" onClick={handleCreateDuel}>
+                <TargetIcon />
+                <span className="duel-action-text">Créer un duel</span>
+              </button>
+              <button className="duel-action-button" onClick={handleJoinDuel}>
+                <LinkIcon />
+                <span className="duel-action-text">Rejoindre</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Info Card */}
-      <div style={styles.infoCard}>
-        <p style={styles.infoTitle}>
-          <span>{"💡"}</span> Comment ça marche ?
+      <div className="duel-info-card">
+        <p className="duel-info-title">
+          <InfoIcon />
+          Comment ça marche ?
         </p>
-        <p style={styles.infoText}>
-          Chaque joueur répond aux mêmes 5 questions. Le score est basé sur la rapidité et la précision. Le plus rapide avec le meilleur score gagne !
+        <p className="duel-info-text">
+          Chaque joueur répond aux mêmes 5 questions. Le score est basé sur le temps total : le plus rapide gagne, mais chaque erreur ajoute 10 secondes de pénalité !
         </p>
       </div>
 
       {/* Join Modal */}
       {showJoinModal && (
-        <div style={styles.modalOverlay} onClick={() => setShowJoinModal(false)}>
-          <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
-            <h2 style={styles.modalTitle}>Rejoindre un duel</h2>
-            <p style={styles.modalSubtitle}>Entre le code à 6 caractères</p>
+        <div className="duel-modal-overlay" onClick={() => setShowJoinModal(false)}>
+          <div className="duel-modal" onClick={(e) => e.stopPropagation()}>
+            <h2 className="duel-modal-title">Rejoindre un duel</h2>
+            <p className="duel-modal-subtitle">Entre le code à 6 caractères</p>
 
             <input
               type="text"
-              style={styles.codeInput}
+              className="duel-code-input"
               value={joinCode}
               onChange={(e) => {
                 setJoinCode(e.target.value.slice(0, 6));
@@ -451,17 +201,17 @@ const DuelHome = () => {
               autoFocus
             />
 
-            {joinError && <p style={styles.errorText}>{joinError}</p>}
+            {joinError && <p className="duel-modal-error">{joinError}</p>}
 
-            <div style={styles.modalActions}>
+            <div className="duel-modal-actions">
               <button
-                style={{ ...styles.modalButton, ...styles.modalButtonCancel }}
+                className="duel-modal-button cancel"
                 onClick={() => setShowJoinModal(false)}
               >
                 Annuler
               </button>
               <button
-                style={{ ...styles.modalButton, ...styles.modalButtonJoin }}
+                className="duel-modal-button join"
                 onClick={handleJoinSubmit}
               >
                 Rejoindre

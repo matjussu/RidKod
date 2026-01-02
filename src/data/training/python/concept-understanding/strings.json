@@ -1,0 +1,328 @@
+{
+  "category": "strings",
+  "type": "concept-understanding",
+  "language": "python",
+  "exerciseCount": 16,
+  "exercises": [
+    {
+      "id": "py_cu_str_001",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Pourquoi les strings sont-elles immutables en Python ?",
+      "code": "s = 'hello'\n# s[0] = 'H'  # TypeError!",
+      "options": [
+        "Pour permettre le hashing et l'optimisation mémoire",
+        "Pour rendre le code plus difficile",
+        "C'est un bug de Python",
+        "Pour économiser de la mémoire uniquement"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Immutabilité des strings :\n\n• Permet d'utiliser les strings comme clés de dict\n• Python peut réutiliser les mêmes objets (interning)\n• Plus sûr pour le multithreading\n\nCompromis : créer une nouvelle string pour modifier",
+      "xpGain": 10,
+      "tags": ["strings", "immutable", "hashing"],
+      "category": "strings"
+    },
+    {
+      "id": "py_cu_str_002",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Quelle est la différence entre split() et split(' ') ?",
+      "code": "s = 'a  b   c'\nprint(s.split())     # ['a', 'b', 'c']\nprint(s.split(' '))  # ['a', '', 'b', '', '', 'c']",
+      "options": [
+        "split() ignore les espaces multiples, split(' ') les compte",
+        "split(' ') est plus rapide",
+        "Ils sont identiques",
+        "split() ne fonctionne qu'avec des lettres"
+      ],
+      "correctAnswer": 0,
+      "explanation": "split() vs split(' ') :\n\n• split() : divise sur tout whitespace, ignore les multiples\n• split(' ') : divise sur chaque espace unique\n\n'a  b' → split(): ['a','b'], split(' '): ['a','','b']",
+      "xpGain": 10,
+      "tags": ["split", "whitespace", "methods"],
+      "category": "strings"
+    },
+    {
+      "id": "py_cu_str_003",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que fait la méthode strip() ?",
+      "code": "s = '  hello  '\nprint(s.strip())  # 'hello'",
+      "options": [
+        "Supprime les espaces au début et à la fin",
+        "Supprime tous les espaces",
+        "Inverse la chaîne",
+        "Convertit en majuscules"
+      ],
+      "correctAnswer": 0,
+      "explanation": "strip() :\n\n• Supprime les espaces/whitespace aux extrémités\n• Ne touche pas les espaces internes\n• lstrip() : gauche seulement\n• rstrip() : droite seulement",
+      "xpGain": 10,
+      "tags": ["strip", "whitespace", "methods"],
+      "category": "strings"
+    },
+    {
+      "id": "py_cu_str_004",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Quelle est la différence entre find() et index() ?",
+      "code": "s = 'hello'\nprint(s.find('x'))   # -1\n# print(s.index('x'))  # ValueError!",
+      "options": [
+        "find() retourne -1 si non trouvé, index() lève une exception",
+        "index() est plus rapide",
+        "find() ne fonctionne qu'avec des caractères uniques",
+        "Ils sont identiques"
+      ],
+      "correctAnswer": 0,
+      "explanation": "find() vs index() :\n\n• find('x') → -1 si non trouvé\n• index('x') → ValueError si non trouvé\n\n💡 Utilisez find() si l'absence est possible\n💡 Utilisez index() si l'élément doit exister",
+      "xpGain": 10,
+      "tags": ["find", "index", "methods"],
+      "category": "strings"
+    },
+    {
+      "id": "py_cu_str_005",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que sont les f-strings en Python ?",
+      "code": "nom = 'Alice'\nage = 25\nprint(f'Je suis {nom}, j\\'ai {age} ans')",
+      "options": [
+        "Des chaînes formatées avec des expressions intégrées",
+        "Des chaînes plus rapides",
+        "Des chaînes en lecture seule",
+        "Des chaînes pour les fichiers"
+      ],
+      "correctAnswer": 0,
+      "explanation": "f-strings (Python 3.6+) :\n\n• Préfixe f devant la chaîne\n• {expression} est évaluée et insérée\n• Plus lisible que .format()\n• Peut contenir des calculs : {2+2}",
+      "xpGain": 10,
+      "tags": ["f-string", "formatting", "Python3.6"],
+      "category": "strings"
+    },
+    {
+      "id": "py_cu_str_006",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que fait le préfixe r devant une chaîne ?",
+      "code": "chemin = r'C:\\nouveau\\fichier'\nprint(chemin)  # C:\\nouveau\\fichier",
+      "options": [
+        "Crée une raw string où les backslashes sont littéraux",
+        "Rend la chaîne en lecture seule",
+        "Inverse la chaîne",
+        "Répète la chaîne"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Raw strings (r'...') :\n\n• Les \\ sont traités littéralement\n• \\n reste \\n (pas un saut de ligne)\n• Utile pour les regex et chemins Windows\n\nSans r: 'C:\\nouveau' → C: + newline + ouveau",
+      "xpGain": 10,
+      "tags": ["raw-string", "escape", "backslash"],
+      "category": "strings"
+    },
+    {
+      "id": "py_cu_str_007",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Pourquoi join() est-elle une méthode de string et pas de list ?",
+      "code": "mots = ['a', 'b', 'c']\nresultat = '-'.join(mots)  # 'a-b-c'",
+      "options": [
+        "Car le séparateur définit le résultat, pas la liste",
+        "C'est une erreur de conception",
+        "Pour des raisons de performance",
+        "Les listes n'ont pas de méthodes"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Design de join() :\n\n• '-'.join(liste) → le séparateur est central\n• On peut joindre n'importe quel itérable\n• Le résultat est une string\n\n💡 Logique : la string 'crée' le résultat",
+      "xpGain": 20,
+      "tags": ["join", "design", "methods"],
+      "category": "strings"
+    },
+    {
+      "id": "py_cu_str_008",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Comment fonctionne le slicing avec des indices négatifs ?",
+      "code": "s = 'Python'\nprint(s[-3:])   # 'hon'\nprint(s[:-2])   # 'Pyth'",
+      "options": [
+        "Les indices négatifs comptent depuis la fin",
+        "Ils inversent la chaîne",
+        "Ils suppriment des caractères",
+        "Ils sont invalides"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Indices négatifs :\n\n• -1 = dernier caractère\n• -2 = avant-dernier, etc.\n\n'Python'\n P  y  t  h  o  n\n 0  1  2  3  4  5\n-6 -5 -4 -3 -2 -1",
+      "xpGain": 20,
+      "tags": ["slicing", "negative-index", "strings"],
+      "category": "strings"
+    },
+    {
+      "id": "py_cu_str_009",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Quelle est la différence entre encode() et decode() ?",
+      "code": "texte = 'café'\noctets = texte.encode('utf-8')  # bytes\nretour = octets.decode('utf-8')  # str",
+      "options": [
+        "encode() convertit str→bytes, decode() convertit bytes→str",
+        "encode() compresse, decode() décompresse",
+        "Ils font la même chose",
+        "encode() crypte, decode() décrypte"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Encodage/Décodage :\n\n• str → bytes : encode('utf-8')\n• bytes → str : decode('utf-8')\n\nLes strings sont Unicode, les bytes sont des octets bruts",
+      "xpGain": 20,
+      "tags": ["encode", "decode", "unicode"],
+      "category": "strings"
+    },
+    {
+      "id": "py_cu_str_010",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Pourquoi ''.join(liste) est plus efficace que += dans une boucle ?",
+      "code": "# Inefficace\nresult = ''\nfor s in liste:\n    result += s\n\n# Efficace\nresult = ''.join(liste)",
+      "options": [
+        "join() crée une seule string, += crée une nouvelle string à chaque itération",
+        "join() utilise moins de mémoire",
+        "Ce n'est pas vrai, += est plus rapide",
+        "join() est compilé en C"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Performance de join() :\n\n• += : O(n²) car copie à chaque fois\n• join() : O(n) car calcule la taille totale d'abord\n\n💡 Toujours préférer join() pour concaténer plusieurs strings",
+      "xpGain": 20,
+      "tags": ["join", "performance", "concatenation"],
+      "category": "strings"
+    },
+    {
+      "id": "py_cu_str_011",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que fait la méthode partition() ?",
+      "code": "s = 'hello:world:test'\nprint(s.partition(':'))  # ('hello', ':', 'world:test')",
+      "options": [
+        "Divise en 3 parties : avant, séparateur, après",
+        "Divise sur tous les séparateurs",
+        "Supprime le séparateur",
+        "Inverse la chaîne"
+      ],
+      "correctAnswer": 0,
+      "explanation": "partition() :\n\n• Retourne un tuple de 3 éléments\n• (avant, séparateur, après)\n• Ne divise que sur la première occurrence\n\nVoir aussi rpartition() pour la dernière occurrence",
+      "xpGain": 20,
+      "tags": ["partition", "split", "tuple"],
+      "category": "strings"
+    },
+    {
+      "id": "py_cu_str_012",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Qu'est-ce que le string interning en Python ?",
+      "code": "a = 'hello'\nb = 'hello'\nprint(a is b)  # True (même objet!)",
+      "options": [
+        "Python réutilise les mêmes objets string pour économiser la mémoire",
+        "Python copie les strings automatiquement",
+        "Python crypte les strings",
+        "Python vérifie les strings à la compilation"
+      ],
+      "correctAnswer": 0,
+      "explanation": "String interning :\n\n• Python réutilise certaines strings identiques\n• 'hello' et 'hello' peuvent être le même objet\n• Économise la mémoire\n\n💡 Fonctionne pour les strings courtes/simples",
+      "xpGain": 20,
+      "tags": ["interning", "memory", "optimization"],
+      "category": "strings"
+    },
+    {
+      "id": "py_cu_str_013",
+      "language": "python",
+      "difficulty": 3,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Comment fonctionne le formatage avec des spécificateurs ?",
+      "code": "x = 3.14159\nprint(f'{x:.2f}')  # '3.14'\nprint(f'{x:10.2f}')  # '      3.14'",
+      "options": [
+        ".2f = 2 décimales, 10 = largeur totale, aligné à droite",
+        ".2f = 2 chiffres, 10 = décimales",
+        "Ces syntaxes sont invalides",
+        ".2f = pourcentage, 10 = exposant"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Spécificateurs de format :\n\n• .2f : 2 chiffres après la virgule\n• 10 : largeur minimale (padding)\n• Alignement par défaut : droite pour nombres\n\n{valeur:largeur.précision type}",
+      "xpGain": 30,
+      "tags": ["formatting", "f-string", "specifiers"],
+      "category": "strings"
+    },
+    {
+      "id": "py_cu_str_014",
+      "language": "python",
+      "difficulty": 3,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Quelle est la différence entre str et repr ?",
+      "code": "s = 'hello\\nworld'\nprint(str(s))   # hello\n                # world\nprint(repr(s))  # 'hello\\\\nworld'",
+      "options": [
+        "str() pour l'affichage humain, repr() pour la représentation Python",
+        "repr() est plus court",
+        "str() est pour le debug",
+        "Ils sont identiques"
+      ],
+      "correctAnswer": 0,
+      "explanation": "str() vs repr() :\n\n• str() : lisible par un humain\n• repr() : représentation Python valide\n\nrepr() montre les guillemets et caractères spéciaux\n💡 repr() devrait produire du code valide",
+      "xpGain": 30,
+      "tags": ["str", "repr", "__repr__"],
+      "category": "strings"
+    },
+    {
+      "id": "py_cu_str_015",
+      "language": "python",
+      "difficulty": 3,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Comment fonctionne translate() avec maketrans() ?",
+      "code": "table = str.maketrans('aeiou', '12345')\nprint('hello'.translate(table))  # 'h2ll4'",
+      "options": [
+        "maketrans() crée une table de correspondance, translate() l'applique",
+        "translate() traduit en une autre langue",
+        "maketrans() encode la chaîne",
+        "Ces méthodes sont dépréciées"
+      ],
+      "correctAnswer": 0,
+      "explanation": "translate() + maketrans() :\n\n• maketrans(from, to) : table de remplacement\n• translate(table) : applique les remplacements\n\na→1, e→2, i→3, o→4, u→5\n'hello' → 'h2ll4'",
+      "xpGain": 30,
+      "tags": ["translate", "maketrans", "replacement"],
+      "category": "strings"
+    },
+    {
+      "id": "py_cu_str_016",
+      "language": "python",
+      "difficulty": 3,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Pourquoi les strings supportent l'opérateur * mais pas + avec des int ?",
+      "code": "print('ab' * 3)  # 'ababab'\n# print('ab' + 3)  # TypeError!",
+      "options": [
+        "'ab' * 3 a un sens (répétition), 'ab' + 3 est ambigu",
+        "C'est un bug de Python",
+        "* est plus rapide que +",
+        "Les deux devraient fonctionner"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Design des opérateurs string :\n\n• 'ab' * 3 : répétition, sens clair\n• 'ab' + 3 : ambigu ('ab3' ? 'ab' répété ? concaténation ?)\n\nPython refuse l'ambiguïté\nUtilisez str(3) explicitement : 'ab' + str(3)",
+      "xpGain": 30,
+      "tags": ["operators", "multiplication", "design"],
+      "category": "strings"
+    }
+  ]
+}

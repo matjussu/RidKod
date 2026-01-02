@@ -716,3 +716,408 @@
     margin-top: 20px;
   }
 }
+
+/* ========================================
+   12. DUEL HOME - Styles spécifiques
+   ======================================== */
+
+/* Header Duel - Plus compact */
+.duel-header {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 32px;
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s forwards;
+}
+
+.duel-header-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 250px;
+  height: 120px;
+  background: radial-gradient(ellipse, rgba(139, 92, 246, 0.2) 0%, transparent 70%);
+  filter: blur(40px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.duel-title {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 36px;
+  font-weight: 900;
+  font-style: italic;
+  color: #FFFFFF;
+  margin: 0 0 8px 0;
+  line-height: 1;
+  transform: skewX(-5deg);
+  text-transform: uppercase;
+}
+
+.duel-title-accent {
+  color: #8B5CF6;
+  text-shadow: 0 0 20px rgba(139, 92, 246, 0.6);
+}
+
+.duel-subtitle {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+/* Mode Cards - Variantes Bot et Friend */
+.duel-modes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+  z-index: 1;
+}
+
+/* BOT - Violet */
+.challenge-mode-card.bot .mode-card-glow {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(99, 102, 241, 0.08) 100%);
+}
+
+.challenge-mode-card.bot .mode-icon-container {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(99, 102, 241, 0.15) 100%);
+  border-color: rgba(139, 92, 246, 0.4);
+  color: #A78BFA;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+}
+
+.challenge-mode-card.bot:hover .mode-icon-container {
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
+}
+
+.challenge-mode-card.bot .mode-title {
+  background: linear-gradient(135deg, #A78BFA 0%, #8B5CF6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* FRIEND - Cyan */
+.challenge-mode-card.friend {
+  cursor: default;
+}
+
+.challenge-mode-card.friend .mode-card-glow {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(14, 165, 233, 0.08) 100%);
+}
+
+.challenge-mode-card.friend .mode-icon-container {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(14, 165, 233, 0.15) 100%);
+  border-color: rgba(6, 182, 212, 0.4);
+  color: #22D3EE;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+}
+
+.challenge-mode-card.friend .mode-title {
+  background: linear-gradient(135deg, #22D3EE 0%, #06B6D4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Divider "ou" */
+.duel-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 8px 0;
+  z-index: 1;
+}
+
+.duel-divider-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.15) 50%, transparent 100%);
+}
+
+.duel-divider-text {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Actions Grid (Créer / Rejoindre) */
+.duel-actions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.duel-action-button {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.12) 0%, rgba(14, 165, 233, 0.08) 100%);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  border-radius: 14px;
+  padding: 16px 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.duel-action-button:hover {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(14, 165, 233, 0.15) 100%);
+  border-color: rgba(6, 182, 212, 0.5);
+  transform: translateY(-2px);
+}
+
+.duel-action-button:active {
+  transform: scale(0.98);
+}
+
+.duel-action-icon {
+  width: 32px;
+  height: 32px;
+  color: #22D3EE;
+}
+
+.duel-action-text {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: #22D3EE;
+}
+
+/* Info Card */
+.duel-info-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 16px;
+  margin-top: auto;
+  z-index: 1;
+  opacity: 0;
+  animation: cardSlideIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+}
+
+.duel-info-title {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.duel-info-title svg {
+  width: 16px;
+  height: 16px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.duel-info-text {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ========================================
+   13. MODAL JOIN DUEL
+   ======================================== */
+
+.duel-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  opacity: 0;
+  animation: modalFadeIn 0.3s ease forwards;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.duel-modal {
+  background: linear-gradient(135deg, #1A1A1F 0%, #0D0D0F 100%);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  border-radius: 24px;
+  padding: 32px 24px;
+  max-width: 340px;
+  width: 100%;
+  text-align: center;
+  transform: scale(0.9);
+  animation: modalScaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes modalScaleIn {
+  from {
+    transform: scale(0.9);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.duel-modal-title {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 20px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0 0 8px 0;
+}
+
+.duel-modal-subtitle {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 24px 0;
+}
+
+.duel-code-input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(6, 182, 212, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 24px;
+  font-weight: 700;
+  color: #22D3EE;
+  text-align: center;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.duel-code-input:focus {
+  border-color: rgba(6, 182, 212, 0.6);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+}
+
+.duel-code-input::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+  letter-spacing: 4px;
+}
+
+.duel-modal-error {
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 12px;
+  color: #FF453A;
+  margin: 8px 0 0 0;
+}
+
+.duel-modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.duel-modal-button {
+  flex: 1;
+  padding: 14px;
+  border-radius: 12px;
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.duel-modal-button.cancel {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.duel-modal-button.cancel:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.duel-modal-button.join {
+  background: linear-gradient(135deg, #06B6D4 0%, #0EA5E9 100%);
+  color: #FFFFFF;
+}
+
+.duel-modal-button.join:hover {
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+}
+
+.duel-modal-button:active {
+  transform: scale(0.98);
+}
+
+/* ========================================
+   14. DUEL HOME - RESPONSIVE
+   ======================================== */
+
+@media (max-width: 375px) {
+  .duel-title {
+    font-size: 28px;
+  }
+
+  .duel-actions-grid {
+    gap: 10px;
+  }
+
+  .duel-action-button {
+    padding: 14px 10px;
+  }
+
+  .duel-action-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .duel-action-text {
+    font-size: 12px;
+  }
+
+  .duel-modal {
+    padding: 24px 20px;
+  }
+
+  .duel-code-input {
+    font-size: 20px;
+    letter-spacing: 6px;
+  }
+}
+
+@media (max-width: 320px) {
+  .duel-title {
+    font-size: 24px;
+  }
+
+  .duel-action-text {
+    font-size: 11px;
+  }
+}

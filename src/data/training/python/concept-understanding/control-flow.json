@@ -1,0 +1,328 @@
+{
+  "category": "control-flow",
+  "type": "concept-understanding",
+  "language": "python",
+  "exerciseCount": 16,
+  "exercises": [
+    {
+      "id": "py_cu_cf_001",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Quelle est la différence entre for et while ?",
+      "code": "for i in range(5):  # itère sur une séquence\n    print(i)\n\ni = 0\nwhile i < 5:  # vérifie une condition\n    print(i)\n    i += 1",
+      "options": [
+        "for itère sur une séquence, while répète tant qu'une condition est vraie",
+        "while est plus rapide",
+        "for ne peut utiliser que des nombres",
+        "Ils sont identiques"
+      ],
+      "correctAnswer": 0,
+      "explanation": "for vs while :\n\n• for : parcourt un itérable (liste, range, etc.)\n• while : répète tant que condition vraie\n\n💡 for quand on connaît les éléments\n💡 while quand on a une condition d'arrêt",
+      "xpGain": 10,
+      "tags": ["for", "while", "loops"],
+      "category": "control-flow"
+    },
+    {
+      "id": "py_cu_cf_002",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Quelle est la différence entre break et continue ?",
+      "code": "for i in range(5):\n    if i == 2:\n        break  # Sort de la boucle\n\nfor i in range(5):\n    if i == 2:\n        continue  # Passe à l'itération suivante",
+      "options": [
+        "break sort de la boucle, continue passe à l'itération suivante",
+        "continue sort de la boucle, break passe à l'itération suivante",
+        "Ils arrêtent tous les deux la boucle",
+        "break est pour for, continue pour while"
+      ],
+      "correctAnswer": 0,
+      "explanation": "break vs continue :\n\n• break : sort COMPLÈTEMENT de la boucle\n• continue : saute à l'itération SUIVANTE\n\nbreak à i=2 → boucle terminée\ncontinue à i=2 → 2 sauté, continue avec 3,4...",
+      "xpGain": 10,
+      "tags": ["break", "continue", "loops"],
+      "category": "control-flow"
+    },
+    {
+      "id": "py_cu_cf_003",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Comment fonctionne range() ?",
+      "code": "range(5)      # 0, 1, 2, 3, 4\nrange(2, 5)   # 2, 3, 4\nrange(1, 10, 2)  # 1, 3, 5, 7, 9",
+      "options": [
+        "range(start, stop, step) génère des entiers de start à stop-1",
+        "range génère tous les entiers de start à stop inclus",
+        "range crée une liste en mémoire",
+        "range ne fonctionne qu'avec un argument"
+      ],
+      "correctAnswer": 0,
+      "explanation": "range(start, stop, step) :\n\n• start : début (inclus), défaut 0\n• stop : fin (EXCLU)\n• step : pas, défaut 1\n\nrange(5) = [0,1,2,3,4] (5 exclu)",
+      "xpGain": 10,
+      "tags": ["range", "for", "sequence"],
+      "category": "control-flow"
+    },
+    {
+      "id": "py_cu_cf_004",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que fait le else après une boucle for/while ?",
+      "code": "for i in range(5):\n    if i == 10:\n        break\nelse:\n    print('Pas de break')",
+      "options": [
+        "S'exécute si la boucle termine sans break",
+        "S'exécute si la boucle termine avec break",
+        "S'exécute toujours",
+        "C'est invalide en Python"
+      ],
+      "correctAnswer": 0,
+      "explanation": "else après boucle :\n\n• S'exécute si PAS de break\n• 'Pas de break' s'affiche ici\n• Si break avait été atteint, else ignoré\n\n💡 Utile pour les recherches : else = 'non trouvé'",
+      "xpGain": 10,
+      "tags": ["for-else", "while-else", "break"],
+      "category": "control-flow"
+    },
+    {
+      "id": "py_cu_cf_005",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Quelle est la différence entre if, elif et else ?",
+      "code": "if x > 10:\n    print('Grand')\nelif x > 5:\n    print('Moyen')\nelse:\n    print('Petit')",
+      "options": [
+        "if teste d'abord, elif teste si if est faux, else si tout est faux",
+        "Toutes les conditions sont testées",
+        "elif peut exister sans if",
+        "else est obligatoire"
+      ],
+      "correctAnswer": 0,
+      "explanation": "if/elif/else :\n\n• if : première condition testée\n• elif : testé seulement si if est False\n• else : exécuté si tout est False\n\nUNE SEULE branche s'exécute",
+      "xpGain": 10,
+      "tags": ["if", "elif", "else"],
+      "category": "control-flow"
+    },
+    {
+      "id": "py_cu_cf_006",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que fait pass en Python ?",
+      "code": "if True:\n    pass  # Ne fait rien\n\nfor i in range(5):\n    pass  # Boucle vide",
+      "options": [
+        "C'est une instruction qui ne fait rien (placeholder)",
+        "Elle saute l'itération suivante",
+        "Elle termine le programme",
+        "Elle affiche 'pass'"
+      ],
+      "correctAnswer": 0,
+      "explanation": "pass :\n\n• Instruction vide, ne fait rien\n• Utilisée quand syntaxe exige un bloc\n• Placeholder pour code à écrire plus tard\n\nDifférent de continue (qui passe à l'itération suivante)",
+      "xpGain": 10,
+      "tags": ["pass", "placeholder", "syntax"],
+      "category": "control-flow"
+    },
+    {
+      "id": "py_cu_cf_007",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Pourquoi ne pas modifier une liste pendant qu'on itère dessus ?",
+      "code": "liste = [1, 2, 3, 4]\nfor item in liste:\n    if item % 2 == 0:\n        liste.remove(item)  # Dangereux!",
+      "options": [
+        "Certains éléments peuvent être sautés ou l'itérateur devient invalide",
+        "Python refuse cette opération",
+        "C'est plus lent",
+        "La liste est verrouillée pendant l'itération"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Modification pendant itération :\n\n• L'itérateur interne est perturbé\n• Éléments sautés ou erreurs possibles\n• Résultats imprévisibles\n\n💡 Solution : itérer sur une copie\nfor item in liste.copy():",
+      "xpGain": 20,
+      "tags": ["iteration", "mutation", "list"],
+      "category": "control-flow"
+    },
+    {
+      "id": "py_cu_cf_008",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Comment fonctionne l'expression ternaire ?",
+      "code": "x = 10\nresult = 'pair' if x % 2 == 0 else 'impair'",
+      "options": [
+        "valeur_si_vrai if condition else valeur_si_faux",
+        "condition ? valeur_vraie : valeur_fausse",
+        "if condition then valeur else valeur",
+        "valeur if condition"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Expression ternaire Python :\n\n• Syntaxe : A if condition else B\n• Retourne A si condition vraie\n• Retourne B si condition fausse\n\nPlus concis qu'un if/else classique",
+      "xpGain": 20,
+      "tags": ["ternary", "expression", "conditional"],
+      "category": "control-flow"
+    },
+    {
+      "id": "py_cu_cf_009",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que fait enumerate() ?",
+      "code": "for i, val in enumerate(['a', 'b', 'c']):\n    print(i, val)\n# 0 a, 1 b, 2 c",
+      "options": [
+        "Retourne l'index et la valeur à chaque itération",
+        "Compte le nombre d'éléments",
+        "Trie la liste",
+        "Numérote les éléments définitivement"
+      ],
+      "correctAnswer": 0,
+      "explanation": "enumerate() :\n\n• Retourne (index, valeur) à chaque itération\n• Évite d'utiliser range(len(liste))\n• enumerate(liste, start=1) pour commencer à 1\n\nPlus pythonique que for i in range(len(liste)):",
+      "xpGain": 20,
+      "tags": ["enumerate", "iteration", "index"],
+      "category": "control-flow"
+    },
+    {
+      "id": "py_cu_cf_010",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que fait zip() ?",
+      "code": "noms = ['Alice', 'Bob']\nages = [25, 30]\nfor nom, age in zip(noms, ages):\n    print(nom, age)",
+      "options": [
+        "Combine plusieurs itérables en parallèle",
+        "Compresse les données",
+        "Fusionne deux listes en une seule",
+        "Inverse les listes"
+      ],
+      "correctAnswer": 0,
+      "explanation": "zip() :\n\n• Combine des itérables élément par élément\n• ('Alice', 25), ('Bob', 30)\n• S'arrête au plus court itérable\n\n💡 zip_longest() pour continuer avec None",
+      "xpGain": 20,
+      "tags": ["zip", "iteration", "parallel"],
+      "category": "control-flow"
+    },
+    {
+      "id": "py_cu_cf_011",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Comment fonctionne match/case (Python 3.10+) ?",
+      "code": "match commande:\n    case 'quit':\n        exit()\n    case 'save':\n        save()\n    case _:\n        print('Inconnu')",
+      "options": [
+        "Pattern matching structurel - compare la valeur à des patterns",
+        "C'est juste un switch/case classique",
+        "Évalue toutes les conditions",
+        "Fonctionne uniquement avec des strings"
+      ],
+      "correctAnswer": 0,
+      "explanation": "match/case (Python 3.10+) :\n\n• Pattern matching puissant\n• _ = pattern par défaut (wildcard)\n• Peut matcher des structures complexes\n\nPlus puissant qu'un switch classique",
+      "xpGain": 20,
+      "tags": ["match", "case", "pattern-matching"],
+      "category": "control-flow"
+    },
+    {
+      "id": "py_cu_cf_012",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Pourquoi range() retourne un objet et pas une liste ?",
+      "code": "r = range(1000000)\n# Ne crée pas 1 million d'éléments en mémoire\nprint(r[500000])  # Accès direct",
+      "options": [
+        "Pour économiser la mémoire - génère les valeurs à la demande",
+        "Pour être compatible avec Python 2",
+        "C'est un bug",
+        "Les listes ne peuvent pas être aussi grandes"
+      ],
+      "correctAnswer": 0,
+      "explanation": "range() est lazy :\n\n• Ne stocke pas tous les éléments\n• Calcule les valeurs à la demande\n• range(10**9) utilise très peu de mémoire\n\n💡 Générateur vs liste = économie mémoire",
+      "xpGain": 20,
+      "tags": ["range", "lazy", "memory"],
+      "category": "control-flow"
+    },
+    {
+      "id": "py_cu_cf_013",
+      "language": "python",
+      "difficulty": 3,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Comment fonctionne le déballage dans for ?",
+      "code": "points = [(1, 2), (3, 4), (5, 6)]\nfor x, y in points:\n    print(x, y)",
+      "options": [
+        "Chaque tuple est déballé en variables x et y automatiquement",
+        "x reçoit le tuple, y est ignoré",
+        "Cela génère une erreur",
+        "x et y reçoivent des listes"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Déballage (unpacking) dans for :\n\n• (1, 2) → x=1, y=2\n• Fonctionne avec tuples, listes, etc.\n• Nombre de variables doit correspondre\n\nÉlégant pour itérer sur des paires/triplets",
+      "xpGain": 30,
+      "tags": ["unpacking", "for", "tuple"],
+      "category": "control-flow"
+    },
+    {
+      "id": "py_cu_cf_014",
+      "language": "python",
+      "difficulty": 3,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Quelle est la complexité de 'in' selon le type ?",
+      "code": "5 in [1,2,3,4,5]     # O(n) - liste\n5 in {1,2,3,4,5}     # O(1) - set\n'a' in {'a': 1}      # O(1) - dict",
+      "options": [
+        "O(n) pour list, O(1) pour set et dict (hash table)",
+        "O(1) pour tous",
+        "O(n) pour tous",
+        "O(log n) pour tous"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Complexité de 'in' :\n\n• list/tuple : O(n) - parcours linéaire\n• set/dict : O(1) - lookup par hash\n\n💡 Utiliser set pour des recherches fréquentes",
+      "xpGain": 30,
+      "tags": ["in", "complexity", "set"],
+      "category": "control-flow"
+    },
+    {
+      "id": "py_cu_cf_015",
+      "language": "python",
+      "difficulty": 3,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Comment any() et all() fonctionnent-ils ?",
+      "code": "print(any([False, False, True]))  # True\nprint(all([True, True, False]))   # False",
+      "options": [
+        "any() : au moins un True, all() : tous True",
+        "any() : tous True, all() : au moins un True",
+        "Ils retournent le nombre de True",
+        "Ils modifient la liste"
+      ],
+      "correctAnswer": 0,
+      "explanation": "any() et all() :\n\n• any() : True si AU MOINS UN élément est truthy\n• all() : True si TOUS les éléments sont truthy\n\nany([]) = False (rien n'est True)\nall([]) = True (rien n'est False)",
+      "xpGain": 30,
+      "tags": ["any", "all", "boolean"],
+      "category": "control-flow"
+    },
+    {
+      "id": "py_cu_cf_016",
+      "language": "python",
+      "difficulty": 3,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Pourquoi éviter les conditions comme 'if x == True' ?",
+      "code": "x = True\n# Mauvais\nif x == True:\n    pass\n# Bon\nif x:\n    pass",
+      "options": [
+        "Redondant et peut échouer avec des valeurs truthy non-booléennes",
+        "C'est plus lent",
+        "Python ne comprend pas == True",
+        "C'est parfaitement correct"
+      ],
+      "correctAnswer": 0,
+      "explanation": "'if x' vs 'if x == True' :\n\n• if x accepte toutes les valeurs truthy\n• if x == True ne marche qu'avec True exactement\n\nif 1 == True → True (1 == True en Python)\nif [1] == True → False (mais [1] est truthy!)",
+      "xpGain": 30,
+      "tags": ["boolean", "truthy", "best-practice"],
+      "category": "control-flow"
+    }
+  ]
+}

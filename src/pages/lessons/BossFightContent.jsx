@@ -9,9 +9,7 @@ import CustomKeyboard from '../../components/exercise/CustomKeyboard';
 import BossGameOverModal from '../../components/lessons/BossGameOverModal';
 import BossSuccessModal from '../../components/lessons/BossSuccessModal';
 import useHaptic from '../../hooks/useHaptic';
-
-// Import boss data
-import bossMod001Data from '../../data/lessons/python/boss-mod-001.json';
+import { loadBoss } from '../../data/loaders/lessonLoader';
 
 const BossFightContent = () => {
   const navigate = useNavigate();
@@ -37,18 +35,20 @@ const BossFightContent = () => {
   const [showGameOverModal, setShowGameOverModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  // Load boss data
+  // Load boss data dynamiquement
   useEffect(() => {
-    const bossMap = {
-      'py_mod_001': bossMod001Data
+    const fetchBoss = async () => {
+      try {
+        const data = await loadBoss(language, moduleId);
+        setBossData(data);
+      } catch (error) {
+        console.error('Error loading boss:', error);
+        // Module pas encore implémenté
+        navigate(`/lessons/${language}/${moduleId}/lessons`);
+      }
     };
 
-    if (bossMap[moduleId]) {
-      setBossData(bossMap[moduleId]);
-    } else {
-      // Module pas encore implémenté
-      navigate(`/lessons/${language}/${moduleId}/lessons`);
-    }
+    fetchBoss();
   }, [moduleId, language, navigate]);
 
   // Handle back

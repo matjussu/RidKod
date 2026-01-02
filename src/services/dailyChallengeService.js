@@ -10,6 +10,7 @@ import {
   where
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
+import { loadAllExercises as loadExercisesFromLoader } from '../data/loaders/trainingLoader';
 
 /**
  * Génère un seed déterministe basé sur la date
@@ -72,17 +73,7 @@ export const getTodayDateString = () => {
  */
 const loadAllExercises = async () => {
   try {
-    const [easyModule, mediumModule, hardModule] = await Promise.all([
-      import('../data/exercises-easy.json'),
-      import('../data/exercises-medium.json'),
-      import('../data/exercises-hard.json')
-    ]);
-
-    return [
-      ...easyModule.default,
-      ...mediumModule.default,
-      ...hardModule.default
-    ];
+    return await loadExercisesFromLoader('python');
   } catch (error) {
     console.error('Error loading exercises:', error);
     return [];

@@ -1,0 +1,328 @@
+{
+  "category": "data-structures",
+  "type": "concept-understanding",
+  "language": "python",
+  "exerciseCount": 16,
+  "exercises": [
+    {
+      "id": "py_cu_ds_001",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Quelle est la différence principale entre list et tuple ?",
+      "code": "liste = [1, 2, 3]  # mutable\ntuple_ = (1, 2, 3)  # immutable",
+      "options": [
+        "Les listes sont mutables, les tuples sont immutables",
+        "Les tuples sont plus rapides",
+        "Les listes ne peuvent contenir que des nombres",
+        "Les tuples utilisent des crochets"
+      ],
+      "correctAnswer": 0,
+      "explanation": "list vs tuple :\n\n• list : mutable (modifiable)\n• tuple : immutable (non modifiable)\n\nTuple = plus léger, hashable\nListe = flexible, modifiable",
+      "xpGain": 10,
+      "tags": ["list", "tuple", "mutable"],
+      "category": "data-structures"
+    },
+    {
+      "id": "py_cu_ds_002",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Pourquoi un set ne peut-il pas contenir de listes ?",
+      "code": "s = {1, 2, [3, 4]}  # TypeError!",
+      "options": [
+        "Les éléments d'un set doivent être hashables (immutables)",
+        "Les sets ne peuvent contenir que des nombres",
+        "Les listes sont trop grandes",
+        "C'est un bug de Python"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Set et hashabilité :\n\n• Les sets utilisent le hashing pour la recherche O(1)\n• Les listes sont mutables → non hashables\n• Utilisez des tuples à la place\n\n{1, 2, (3, 4)} fonctionne",
+      "xpGain": 10,
+      "tags": ["set", "hashable", "list"],
+      "category": "data-structures"
+    },
+    {
+      "id": "py_cu_ds_003",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Comment fonctionne l'accès aux dictionnaires ?",
+      "code": "d = {'a': 1, 'b': 2}\nprint(d['a'])  # 1\nprint(d.get('c', 0))  # 0",
+      "options": [
+        "d[clé] lève KeyError si absent, get() retourne une valeur par défaut",
+        "get() est plus lent",
+        "Ils sont identiques",
+        "d[clé] retourne None si absent"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Accès dict :\n\n• d[clé] : KeyError si clé absente\n• d.get(clé, défaut) : retourne défaut si absent\n\n💡 get() plus sûr quand l'absence est possible",
+      "xpGain": 10,
+      "tags": ["dict", "get", "KeyError"],
+      "category": "data-structures"
+    },
+    {
+      "id": "py_cu_ds_004",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que garantit un set ?",
+      "code": "s = {1, 2, 2, 3, 3, 3}\nprint(s)  # {1, 2, 3}",
+      "options": [
+        "Unicité des éléments (pas de doublons)",
+        "Ordre des éléments",
+        "Éléments triés",
+        "Taille fixe"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Propriétés des sets :\n\n• Éléments uniques (pas de doublons)\n• Non ordonnés (ordre d'itération non garanti)\n• Recherche O(1) grâce au hashing\n\n💡 Parfait pour éliminer les doublons",
+      "xpGain": 10,
+      "tags": ["set", "unique", "duplicates"],
+      "category": "data-structures"
+    },
+    {
+      "id": "py_cu_ds_005",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Quelle est la différence entre append() et extend() ?",
+      "code": "a = [1, 2]\na.append([3, 4])  # [1, 2, [3, 4]]\n\nb = [1, 2]\nb.extend([3, 4])  # [1, 2, 3, 4]",
+      "options": [
+        "append() ajoute un élément, extend() ajoute chaque élément d'un itérable",
+        "extend() est plus rapide",
+        "append() ne fonctionne qu'avec des nombres",
+        "Ils sont identiques"
+      ],
+      "correctAnswer": 0,
+      "explanation": "append() vs extend() :\n\n• append(x) : ajoute x comme UN élément\n• extend(iterable) : ajoute CHAQUE élément\n\nappend([3,4]) → [1,2,[3,4]]\nextend([3,4]) → [1,2,3,4]",
+      "xpGain": 10,
+      "tags": ["list", "append", "extend"],
+      "category": "data-structures"
+    },
+    {
+      "id": "py_cu_ds_006",
+      "language": "python",
+      "difficulty": 1,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que sont les dict.keys(), dict.values(), dict.items() ?",
+      "code": "d = {'a': 1, 'b': 2}\nprint(d.keys())   # dict_keys(['a', 'b'])\nprint(d.values()) # dict_values([1, 2])\nprint(d.items())  # dict_items([('a', 1), ('b', 2)])",
+      "options": [
+        "Vues dynamiques sur les clés, valeurs, et paires clé-valeur",
+        "Copies des données du dictionnaire",
+        "Méthodes qui modifient le dictionnaire",
+        "Générateurs qui consomment le dictionnaire"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Vues de dictionnaire :\n\n• keys() : vue sur les clés\n• values() : vue sur les valeurs\n• items() : vue sur les paires (clé, valeur)\n\n💡 Vues dynamiques = reflètent les modifications",
+      "xpGain": 10,
+      "tags": ["dict", "keys", "values", "items"],
+      "category": "data-structures"
+    },
+    {
+      "id": "py_cu_ds_007",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Quelle est la différence entre shallow copy et deep copy ?",
+      "code": "import copy\noriginal = [[1, 2], [3, 4]]\nshallow = copy.copy(original)\ndeep = copy.deepcopy(original)",
+      "options": [
+        "Shallow copie la structure, deep copie aussi les objets imbriqués",
+        "Deep copy est plus rapide",
+        "Shallow copy crée des références",
+        "Ils sont identiques pour les listes"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Shallow vs Deep copy :\n\n• Shallow : copie le conteneur, pas le contenu\n• Deep : copie tout récursivement\n\nshallow[0][0] = 99 modifie original[0][0]\ndeep[0][0] = 99 ne modifie PAS original",
+      "xpGain": 20,
+      "tags": ["copy", "shallow", "deep"],
+      "category": "data-structures"
+    },
+    {
+      "id": "py_cu_ds_008",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Comment fonctionne le slicing avec un pas négatif ?",
+      "code": "liste = [0, 1, 2, 3, 4]\nprint(liste[::-1])  # [4, 3, 2, 1, 0]\nprint(liste[4:1:-1])  # [4, 3, 2]",
+      "options": [
+        "Parcourt la liste en sens inverse",
+        "Supprime les éléments",
+        "Trie en ordre décroissant",
+        "Inverse les indices"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Slicing avec pas négatif :\n\n• step=-1 : direction inversée\n• liste[::-1] : copie inversée\n• liste[4:1:-1] : de 4 à 2 (1 exclu)\n\n💡 Avec step négatif, start > stop",
+      "xpGain": 20,
+      "tags": ["slicing", "negative-step", "reverse"],
+      "category": "data-structures"
+    },
+    {
+      "id": "py_cu_ds_009",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Pourquoi les dictionnaires conservent-ils l'ordre d'insertion ?",
+      "code": "d = {'c': 3, 'a': 1, 'b': 2}\nfor k in d:\n    print(k)  # c, a, b (ordre d'insertion)",
+      "options": [
+        "Depuis Python 3.7, c'est garanti par le langage",
+        "Les dictionnaires trient par clé",
+        "C'est un hasard",
+        "Seulement pour les petits dictionnaires"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Ordre des dict (Python 3.7+) :\n\n• L'ordre d'insertion est préservé\n• Garanti par la spécification du langage\n• Implémentation efficace avec array compact\n\nAvant 3.7 : utilisez OrderedDict",
+      "xpGain": 20,
+      "tags": ["dict", "order", "Python3.7"],
+      "category": "data-structures"
+    },
+    {
+      "id": "py_cu_ds_010",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que sont les opérations ensemblistes sur les sets ?",
+      "code": "a = {1, 2, 3}\nb = {2, 3, 4}\nprint(a | b)  # Union {1,2,3,4}\nprint(a & b)  # Intersection {2,3}\nprint(a - b)  # Différence {1}",
+      "options": [
+        "Union (|), Intersection (&), Différence (-), Différence symétrique (^)",
+        "Ce sont des opérations mathématiques",
+        "Ces opérateurs ne fonctionnent pas sur les sets",
+        "Ils modifient les sets originaux"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Opérations sur sets :\n\n• a | b : éléments dans a OU b\n• a & b : éléments dans a ET b\n• a - b : éléments dans a mais pas b\n• a ^ b : éléments dans a XOR b\n\nRetournent de nouveaux sets",
+      "xpGain": 20,
+      "tags": ["set", "union", "intersection"],
+      "category": "data-structures"
+    },
+    {
+      "id": "py_cu_ds_011",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Comment fonctionne defaultdict ?",
+      "code": "from collections import defaultdict\nd = defaultdict(list)\nd['a'].append(1)  # Pas de KeyError!",
+      "options": [
+        "Crée automatiquement une valeur par défaut pour les clés absentes",
+        "Est plus rapide qu'un dict normal",
+        "Ne peut contenir que des listes",
+        "Est identique à un dict normal"
+      ],
+      "correctAnswer": 0,
+      "explanation": "defaultdict :\n\n• defaultdict(type) : crée automatiquement\n• d['nouvelle_clé'] crée une valeur du type\n• Évite les vérifications 'if key in d'\n\ndefaultdict(int) → 0, defaultdict(list) → []",
+      "xpGain": 20,
+      "tags": ["defaultdict", "collections", "dict"],
+      "category": "data-structures"
+    },
+    {
+      "id": "py_cu_ds_012",
+      "language": "python",
+      "difficulty": 2,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Quelle est la différence entre pop() et remove() sur une liste ?",
+      "code": "liste = [1, 2, 3, 2]\nliste.pop(1)     # Retire l'élément à l'index 1\nliste.remove(2)  # Retire la première occurrence de 2",
+      "options": [
+        "pop() utilise l'index, remove() utilise la valeur",
+        "pop() est plus rapide",
+        "remove() retourne l'élément",
+        "Ils sont identiques"
+      ],
+      "correctAnswer": 0,
+      "explanation": "pop() vs remove() :\n\n• pop(index) : retire et retourne par position\n• remove(value) : retire par valeur (première occurrence)\n\npop() retourne l'élément\nremove() ne retourne rien",
+      "xpGain": 20,
+      "tags": ["list", "pop", "remove"],
+      "category": "data-structures"
+    },
+    {
+      "id": "py_cu_ds_013",
+      "language": "python",
+      "difficulty": 3,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Pourquoi [[0]*3]*3 crée-t-il un piège ?",
+      "code": "matrix = [[0] * 3] * 3\nmatrix[0][0] = 1\nprint(matrix)  # [[1,0,0], [1,0,0], [1,0,0]] !",
+      "options": [
+        "Les 3 lignes sont des références au même objet liste",
+        "C'est un bug de Python",
+        "La multiplication ne fonctionne pas sur les listes",
+        "Le résultat est correct"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Piège de la multiplication de listes :\n\n• [x] * 3 crée 3 RÉFÉRENCES à x\n• Modifier une ligne modifie toutes les lignes\n\nSolution : [[0]*3 for _ in range(3)]\nChaque itération crée une NOUVELLE liste",
+      "xpGain": 30,
+      "tags": ["list", "reference", "multiplication"],
+      "category": "data-structures"
+    },
+    {
+      "id": "py_cu_ds_014",
+      "language": "python",
+      "difficulty": 3,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Comment fonctionne le dict comprehension ?",
+      "code": "carres = {x: x**2 for x in range(5)}\n# {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}",
+      "options": [
+        "Crée un dictionnaire avec une expression clé: valeur",
+        "Crée une liste de tuples",
+        "Modifie un dictionnaire existant",
+        "Est identique à une list comprehension"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Dict comprehension :\n\n• {clé: valeur for x in iterable}\n• Crée un dictionnaire en une ligne\n• Peut inclure des conditions if\n\n{x: x**2 for x in range(5) if x % 2 == 0}",
+      "xpGain": 30,
+      "tags": ["dict-comprehension", "dict", "expression"],
+      "category": "data-structures"
+    },
+    {
+      "id": "py_cu_ds_015",
+      "language": "python",
+      "difficulty": 3,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Que fait collections.Counter ?",
+      "code": "from collections import Counter\nc = Counter('abracadabra')\nprint(c.most_common(2))  # [('a', 5), ('b', 2)]",
+      "options": [
+        "Compte les occurrences et offre des méthodes utiles",
+        "Crée un compteur incrémental",
+        "Est identique à un dictionnaire",
+        "Ne fonctionne qu'avec des strings"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Counter :\n\n• Compte les occurrences automatiquement\n• most_common(n) : n plus fréquents\n• Supporte +, -, &, | entre Counters\n\nCounter([1,1,2,3,3,3]) → {3:3, 1:2, 2:1}",
+      "xpGain": 30,
+      "tags": ["Counter", "collections", "counting"],
+      "category": "data-structures"
+    },
+    {
+      "id": "py_cu_ds_016",
+      "language": "python",
+      "difficulty": 3,
+      "type": "concept_understanding",
+      "inputType": "options",
+      "question": "Quelle est la différence entre deque et list ?",
+      "code": "from collections import deque\nd = deque([1, 2, 3])\nd.appendleft(0)  # O(1)\nd.popleft()      # O(1)",
+      "options": [
+        "deque a des opérations O(1) aux deux extrémités",
+        "deque est identique à list",
+        "list est toujours plus rapide",
+        "deque ne peut pas être indexée"
+      ],
+      "correctAnswer": 0,
+      "explanation": "deque vs list :\n\n• list.insert(0, x) : O(n)\n• deque.appendleft(x) : O(1)\n\ndeque = optimisé pour les deux extrémités\n💡 Parfait pour files/piles",
+      "xpGain": 30,
+      "tags": ["deque", "list", "complexity"],
+      "category": "data-structures"
+    }
+  ]
+}
