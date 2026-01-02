@@ -15,7 +15,7 @@ import LessonLanguage from './pages/lessons/LessonLanguage';
 import LessonModules from './pages/lessons/LessonModules';
 import LessonList from './pages/lessons/LessonList';
 import LessonContent from './pages/lessons/LessonContent';
-import XPCollectTraining from './pages/XPCollect';
+// XPCollectTraining supprimé - intégré dans LevelComplete
 import XPCollectLessons from './pages/lessons/XPCollectLessons';
 import BossFightContent from './pages/lessons/BossFightContent';
 import BossXPCollect from './pages/lessons/BossXPCollect';
@@ -64,7 +64,8 @@ const App = () => {
           <Route path="/difficulty" element={<Difficulty />} />
           <Route path="/exercise" element={<Exercise />} />
           <Route path="/level-complete" element={<LevelComplete />} />
-          <Route path="/xp-collect" element={<XPCollectTraining />} />
+          {/* Redirection pour rétrocompatibilité - XPCollect est maintenant intégré dans LevelComplete */}
+          <Route path="/xp-collect" element={<Navigate to="/level-complete" replace />} />
 
           {/* Routes Lessons */}
           <Route path="/lessons" element={<Navigate to="/lessons/language" replace />} />

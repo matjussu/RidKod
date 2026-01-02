@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import useHaptic from '../hooks/useHaptic';
 import FeedbackGlow from '../components/common/FeedbackGlow';
 import { playTypingSound, playSuccessSound } from '../utils/soundEffects';
+import MascotteHappy from '../assets/Mascotte Happy.svg';
 
 const LevelComplete = () => {
   const location = useLocation();
@@ -18,16 +19,33 @@ const LevelComplete = () => {
   const sliderRef = useRef(null);
   const isDragging = useRef(false);
 
-  // XP Collection phase state
+  // XP Collection phase state - simplifié
   const [tapCount, setTapCount] = useState(0);
-  const [currentLine, setCurrentLine] = useState('$ ');
+  const [completedLines, setCompletedLines] = useState([]); // Lignes terminées
+  const [currentTyping, setCurrentTyping] = useState('$ '); // Ligne en cours de frappe
+  const [isTyping, setIsTyping] = useState(false);
   const [showGlow, setShowGlow] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [showCursor, setShowCursor] = useState(true);
   const [isComplete, setIsComplete] = useState(false);
+  const [showChoiceButtons, setShowChoiceButtons] = useState(false); // Afficher les boutons de choix
 
   // Récupérer les données depuis location.state
   const { stats, level, totalXP, difficulty, currentExerciseLevel } = location.state || {};
+
+  // Score ring state pour l'animation
+  const [scoreAnimated, setScoreAnimated] = useState(false);
+  const [animatedPercentage, setAnimatedPercentage] = useState(0);
+  const animationHasRun = useRef(false);
+
+  // Calculs pour le score ring (accuracy)
+  const total = stats ? stats.correctAnswers + stats.incorrectAnswers : 0;
+  const percentage = total > 0 ? Math.round((stats?.correctAnswers / total) * 100) : 0;
+  const circumference = 2 * Math.PI * 52; // radius = 52
+  const accuracyOffset = scoreAnimated ? circumference - (percentage / 100) * circumference : circumference;
+
+  // Calculs pour le time ring (horloge style - 0-60s)
+  const seconds = stats?.timeElapsed || 0;
+  const timeProgress = (seconds % 60) / 60; // 0 à 1 (recommence après 60s)
+  const timeOffset = scoreAnimated ? circumference - (timeProgress * circumference) : circumference;
 
   useEffect(() => {
     // Rediriger si pas de données
@@ -35,11 +53,52 @@ const LevelComplete = () => {
       navigate('/home');
       return;
     }
+
+    // Empêcher l'animation de se relancer
+    if (animationHasRun.current) return;
+    animationHasRun.current = true;
+
     triggerSuccess();
-  }, [stats, navigate, triggerSuccess]);
+
+    // Référence pour cleanup de l'intervalle
+    let countInterval = null;
+
+    // Calculer le pourcentage une seule fois
+    const totalExercises = stats.correctAnswers + stats.incorrectAnswers;
+    const targetPercentage = totalExercises > 0
+      ? Math.round((stats.correctAnswers / totalExercises) * 100)
+      : 0;
+
+    // Animation du score ring après un délai
+    const scoreTimer = setTimeout(() => {
+      setScoreAnimated(true);
+
+      // Animation count-up du pourcentage
+      let current = 0;
+      const increment = Math.max(targetPercentage / 30, 1); // Minimum 1 pour éviter les micro-incréments
+
+      countInterval = setInterval(() => {
+        current += increment;
+        if (current >= targetPercentage) {
+          setAnimatedPercentage(targetPercentage);
+          clearInterval(countInterval);
+        } else {
+          setAnimatedPercentage(Math.floor(current));
+        }
+      }, 50);
+    }, 800);
+
+    return () => {
+      clearTimeout(scoreTimer);
+      if (countInterval) clearInterval(countInterval);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stats, navigate]);
 
   // Extraire le numéro de niveau depuis le format "difficulty_levelNumber" (ex: "1_1" -> 1)
-  const levelNumber = typeof level === 'string' ? level.split('_')[1] : level;
+  const levelNumber = (typeof level === 'string' && level.includes('_'))
+    ? level.split('_')[1]
+    : (level || '1');
 
   // Formatter le temps en minutes:secondes
   const formatTime = (seconds) => {
@@ -140,85 +199,91 @@ const LevelComplete = () => {
 
   // ==================== XP COLLECTION PHASE ====================
 
-  // Typewriter effect pour un mot
-  const typeWord = useCallback((word, callback) => {
-    setIsAnimating(true);
-    let charIndex = 0;
+  // XP avec valeur par défaut
+  const xpValue = totalXP || 0;
 
-    const typeInterval = setInterval(() => {
-      if (charIndex < word.length) {
+  // Les 3 commandes à afficher (sans le prompt $, on l'ajoute séparément)
+  const commands = [
+    `git add Score_${levelNumber}`,
+    `git commit -m "+${xpValue}XP"`,
+    'git push origin'
+  ];
+
+  // Effet typewriter pour une commande
+  const typeCommand = useCallback((command, onComplete) => {
+    setIsTyping(true);
+    let index = 0;
+    const fullCommand = '$ ' + command;
+
+    // Commencer avec juste le prompt
+    setCurrentTyping('$ ');
+
+    const interval = setInterval(() => {
+      if (index < command.length) {
         playTypingSound();
-        setCurrentLine(prev => prev + word[charIndex]);
-        charIndex++;
+        setCurrentTyping('$ ' + command.substring(0, index + 1));
+        index++;
       } else {
-        clearInterval(typeInterval);
-        setIsAnimating(false);
-        if (callback) callback();
+        clearInterval(interval);
+        setIsTyping(false);
+        if (onComplete) onComplete(fullCommand);
       }
-    }, 50);
+    }, 40);
 
-    return () => clearInterval(typeInterval);
+    return () => clearInterval(interval);
   }, []);
 
-  // Calculer le prochain niveau (fix du bug string + 1)
-  const getNextLevel = useCallback(() => {
-    if (!currentExerciseLevel) return null;
-    const parts = currentExerciseLevel.split('_');
-    if (parts.length !== 2) return null;
-    const [diff, lvl] = parts;
-    return `${diff}_${parseInt(lvl, 10) + 1}`;
-  }, [currentExerciseLevel]);
-
-  // Animation finale après "push"
-  const handleFinalTap = useCallback(() => {
-    setTimeout(() => {
-      setCurrentLine(prev => prev + '\n[remote: Success]');
-      setShowCursor(false);
-      setIsComplete(true);
-
-      triggerSuccess();
-      playSuccessSound();
-      setShowGlow(true);
-
-      // Navigation vers le prochain niveau après 1.5s
-      // Note: PAS de completeLevel ici car déjà fait dans Exercise.jsx via completeLevelWithBatch
-      setTimeout(() => {
-        navigate('/exercise', {
-          state: {
-            difficulty,
-            language: 'PYTHON'
-          }
-        });
-      }, 1500);
-    }, 400);
-  }, [triggerSuccess, navigate, difficulty]);
-
-  // Gérer le tap pour XP collection (3 taps: add, commit, push)
+  // Gérer le tap
   const handleTap = useCallback(() => {
-    if (isAnimating || tapCount >= 3 || isComplete) return;
-
-    // Séquence réduite à 3 taps
-    const words = [
-      `>git add Score`,           // Tap 1
-      `\n$ >git commit -m "+${totalXP}XP"`, // Tap 2
-      `\n$ >git push`             // Tap 3
-    ];
-
-    const currentWord = words[tapCount];
-    if (!currentWord) return;
+    if (tapCount >= 3 || isComplete || isTyping) return;
 
     triggerLight();
-
     const currentTapIndex = tapCount;
 
-    typeWord(currentWord, () => {
-      setTapCount(prev => prev + 1);
+    // Lancer le typewriter pour la commande actuelle
+    typeCommand(commands[currentTapIndex], (fullLine) => {
+      // Commande terminée - l'ajouter aux lignes complétées
+      setCompletedLines(prev => [...prev, fullLine]);
+      setCurrentTyping('$ '); // Reset pour prochaine ligne
 
-      if (currentTapIndex === 2) {
-        handleFinalTap();
+      const newTapCount = currentTapIndex + 1;
+      setTapCount(newTapCount);
+
+      // Si c'était le dernier tap (3ème)
+      if (newTapCount === 3) {
+        setTimeout(() => {
+          setCompletedLines(prev => [...prev, '[remote: Success]']);
+          setCurrentTyping('');
+          setIsComplete(true);
+          triggerSuccess();
+          playSuccessSound();
+          setShowGlow(true);
+
+          // Afficher les boutons de choix après un court délai
+          setTimeout(() => {
+            setShowChoiceButtons(true);
+          }, 500);
+        }, 300);
       }
     });
-  }, [isAnimating, tapCount, isComplete, totalXP, triggerLight, typeWord, handleFinalTap]);
+  }, [tapCount, isComplete, isTyping, commands, typeCommand, triggerLight, triggerSuccess]);
+
+  // Navigation vers le niveau suivant
+  const handleNextLevel = useCallback(() => {
+    triggerLight();
+    navigate('/exercise', {
+      state: {
+        difficulty,
+        language: 'PYTHON'
+      }
+    });
+  }, [navigate, difficulty, triggerLight]);
+
+  // Retour au menu
+  const handleBackToMenu = useCallback(() => {
+    triggerLight();
+    navigate('/home');
+  }, [navigate, triggerLight]);
 
   // Ne rien afficher si pas de stats
   if (!stats) return null;
@@ -235,20 +300,52 @@ const LevelComplete = () => {
 
         .level-complete-container {
           min-height: 100vh;
-          background: #1A1919;
+          min-height: -webkit-fill-available;
+          background: var(--training-bg);
           color: #FFFFFF;
           display: flex;
           flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          padding: max(env(safe-area-inset-top), 20px) max(20px, env(safe-area-inset-left)) max(env(safe-area-inset-bottom), 30px);
+          padding-top: max(env(safe-area-inset-top), 20px);
+          padding-left: max(20px, env(safe-area-inset-left));
+          padding-right: max(20px, env(safe-area-inset-right));
+          padding-bottom: max(env(safe-area-inset-bottom), 8px);
           max-width: min(428px, 100vw);
           margin: 0 auto;
           width: 100%;
-          font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
-          font-weight: 800;
+          box-sizing: border-box;
+          overflow-x: hidden;
           opacity: 0;
-          animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+          transform: scale(0.95) translateY(20px);
+          filter: blur(10px);
+          animation: dojoEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          position: relative;
+}
+
+        .level-complete-container::before {
+          content: '';
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-image:
+            repeating-linear-gradient(
+              0deg,
+              transparent,
+              transparent 39px,
+              rgba(1, 182, 10, 0.03) 39px,
+              rgba(1, 182, 10, 0.03) 40px
+            ),
+            repeating-linear-gradient(
+              90deg,
+              transparent,
+              transparent 39px,
+              rgba(1, 182, 10, 0.03) 39px,
+              rgba(1, 182, 10, 0.03) 40px
+            );
+          pointer-events: none;
+          z-index: 0;
         }
 
         @keyframes fadeIn {
@@ -263,179 +360,251 @@ const LevelComplete = () => {
           display: flex;
           flex-direction: column;
           align-items: center;
+          padding-top: 20px;
         }
 
-        .level-complete-header {
+        /* Celebration Header */
+        .celebration-header {
           text-align: center;
-          margin-top: 80px;
-          margin-bottom: 48px;
+          padding-top: 0px;
+          margin-bottom: 60px;
+          position: relative;
+          overflow: visible;
+        }
+
+        /* Confetti */
+        .confetti-container {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          pointer-events: none;
+          overflow: visible;
+        }
+
+        .confetti {
+          position: absolute;
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          animation: confettiFloat 3s ease-out infinite;
+          z-index: -1;
+        }
+
+        .confetti-1 { left: 10%; top: 20%; background: #30D158; animation-delay: 0s; }
+        .confetti-2 { left: 20%; top: 60%; background: #FF9500; animation-delay: 0.4s; }
+        .confetti-3 { left: 35%; top: 10%; background: #1871BE; animation-delay: 0.8s; }
+        .confetti-4 { left: 50%; top: 50%; background: #FFD700; animation-delay: 1.2s; }
+        .confetti-5 { left: 65%; top: 15%; background: #30D158; animation-delay: 1.6s; }
+        .confetti-6 { left: 80%; top: 55%; background: #FF453A; animation-delay: 2.0s; }
+        .confetti-7 { left: 5%; top: 70%; background: #FFD700; animation-delay: 2.4s; }
+        .confetti-8 { left: 90%; top: 30%; background: #FF9500; animation-delay: 2.8s; }
+
+        @keyframes confettiFloat {
+          0% {
+            transform: translateY(0) rotate(0deg);
+            opacity: 1;
+          }
+          50% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(-50px) rotate(360deg);
+            opacity: 0;
+          }
+        }
+
+        /* Mascotte icon (sans cercle) */
+        .mascotte-icon {
+          width: 240px;
+          height: 200px;
+          object-fit: contain;
+          margin: 0px auto;
+          display: block;
+          animation: mascotteEntrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
           opacity: 0;
-          animation: slideDown 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+          transform: scale(0.3);
         }
 
-        @keyframes slideDown {
-          0% { opacity: 0; transform: translateY(-30px); }
-          100% { opacity: 1; transform: translateY(0); }
+        @keyframes mascotteEntrance {
+          0% {
+            opacity: 0;
+            transform: scale(0.3);
+          }
+          60% {
+            opacity: 1;
+            transform: scale(1.15);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1);
+          }
         }
 
-        .level-complete-title {
-          font-size: 48px;
+        /* Victory Title */
+        .victory-title {
+          font-size: 55px;
           font-weight: 900;
           font-style: italic;
           color: #FFFFFF;
           margin: 0;
-          line-height: 1;
+          
           transform: skewX(-5deg);
-          text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.6);
-          position: relative;
-        }
-
-        .level-complete-title::before {
-          content: '';
-          position: absolute;
-          bottom: -20px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 500px;
-          height: 4px;
-          background: linear-gradient(90deg, #30D158 0%, #088201 100%);
-          border-radius: 2px;
-          box-shadow: 0 2px 8px rgba(48, 209, 88, 0.4);
+          animation: titleSlide 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s forwards;
+          opacity: 0;
         }
 
         .title-hash {
-          color: #30D158;
-          font-weight: 900;
-          font-size: 48px;
-          text-shadow: 2px 2px 8px rgba(48, 209, 88, 0.6);
+          color: #30D158 !important;
+          text-shadow: 0 0 20px rgba(48, 209, 88, 0.6);
+          margin-right: -25px;
         }
 
-        /* Stats Grid */
-        .stats-grid {
+        .victory-subtitle {
+          font-size: 16px;
+          font-weight: 600;
+          color: #8E8E93;
+          text-transform: uppercase;
+          letter-spacing: 2px;
+          margin: 8px 0 20px;
+          animation: titleSlide 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+          opacity: 0;
+        }
+
+        @keyframes titleSlide {
+          from {
+            opacity: 0;
+            transform: translateY(20px) skewX(-5deg);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) skewX(-5deg);
+          }
+        }
+
+        /* Rings Row - Accuracy + Time côte à côte */
+        .rings-row {
+          display: flex;
+          gap: 24px;
+          justify-content: center;
+          align-items: flex-start;
           width: 100%;
+          margin-bottom: 32px;
+          animation: ringsEntrance 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards;
+          opacity: 0;
+        }
+
+        @keyframes ringsEntrance {
+          from {
+            opacity: 0;
+            transform: scale(0.8);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        .ring-item {
           display: flex;
           flex-direction: column;
-          gap: 12px;
-          margin-bottom: 32px;
+          align-items: center;
         }
 
-        .stats-row {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 12px;
+        .ring-container {
+          position: relative;
+          width: 120px;
+          height: 120px;
+          overflow: visible;
         }
 
-        .stat-card {
-          background: rgba(255, 255, 255, 0.08);
-          backdrop-filter: blur(20px);
-          border-radius: 20px;
-          padding: 28px 24px;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        .ring-svg {
+          width: 100%;
+          height: 100%;
+          transform: rotate(-90deg);
+          overflow: visible;
+        }
+
+        .ring-progress {
+          transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .accuracy-progress {
+          filter: drop-shadow(0 0 6px rgba(48, 209, 88, 0.6));
+        }
+
+        .time-progress {
+          filter: drop-shadow(0 0 6px rgba(24, 113, 190, 0.6));
+        }
+
+        .ring-center {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
           text-align: center;
-          opacity: 0;
-          animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-          transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        .stat-card:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-          background: rgba(255, 255, 255, 0.12);
-        }
-
-        .stats-row { animation-delay: 0.3s; }
-        .stat-card.time { animation-delay: 0.4s; }
-
-        @keyframes slideUp {
-          0% { opacity: 0; transform: translateY(30px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
-
-        .stat-label {
-          font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-          font-size: 13px;
-          font-weight: 600;
-          color: rgba(255, 255, 255, 0.6);
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-          margin-bottom: 8px;
-        }
-
-        .stat-value {
-          font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-          font-size: 48px;
-          font-weight: 700;
+        .ring-value {
+          font-size: 28px;
+          font-weight: 900;
+          color: #FFFFFF;
           line-height: 1;
+        }
+
+        .ring-value.time-value {
+          font-size: 22px;
           color: #FFFFFF;
         }
 
-        .stat-value.success {
-          color: #30D158;
-          text-shadow: 0 0 20px rgba(48, 209, 88, 0.8);
+        .ring-fraction {
+          font-size: 12px;
+          font-weight: 600;
+          color: #8E8E93;
+          margin-top: 4px;
         }
 
-        .stat-value.error {
-          color: #FF453A;
-          text-shadow: 0 0 20px rgba(255, 69, 58, 0.8);
-        }
-
-        .stat-value.time {
-          color: #1871BE;
-          font-size: 44px;
-          text-shadow: 0 0 20px rgba(24, 113, 190, 0.8);
-        }
-
-        /* Streak */
-        .streak-section {
-          width: 100%;
-          margin-bottom: 32px;
-          opacity: 0;
-          animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.8s forwards;
-        }
-
-        .streak-card {
-          background: linear-gradient(135deg, rgba(255, 149, 0, 0.15) 0%, rgba(255, 136, 0, 0.1) 100%);
-          border: 1px solid #FF9500;
-          border-radius: 16px;
-          padding: 20px;
-          text-align: center;
-        }
-
-        .streak-value {
-          font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-          font-size: 28px;
+        .ring-label {
+          font-size: 11px;
           font-weight: 700;
-          color: #FF9500;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
-          text-shadow: 0 0 20px rgba(255, 149, 0, 0.6);
+          color: #8E8E93;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          margin-top: 10px;
         }
 
-        .flame-icon {
-          font-size: 32px;
-          filter: drop-shadow(0 0 10px rgba(255, 149, 0, 0.8));
-        }
-
-        /* Slider */
+        /* Slider XP combiné */
         .slider-container {
           width: 100%;
+          animation: sliderEntrance 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.8s forwards;
           opacity: 0;
-          animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.9s forwards;
+        }
+
+        @keyframes sliderEntrance {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
 
         .xp-slider {
           position: relative;
           width: 100%;
-          height: 80px;
-          background: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%);
-          border-radius: 20px;
-          overflow: hidden;
-          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+          height: 72px;
+          background: linear-gradient(90deg, #FF9500 0%, #FF6B00 100%);
+          border-radius: 36px;
+          overflow: visible;
+          box-shadow:
+            0 4px 16px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
           cursor: grab;
           user-select: none;
+          border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .xp-slider:active {
@@ -447,42 +616,63 @@ const LevelComplete = () => {
           top: 0;
           left: 0;
           height: 100%;
-          background: linear-gradient(135deg, #30D158 0%, #088201 100%);
-          border-radius: 20px;
+          background: linear-gradient(135deg, #04d839ff 0%, #017e20ff 100%);
+          border-radius: 36px;
           transition: width 0.05s ease-out;
+          box-shadow: 0 0 20px rgba(28, 150, 3, 0.4);
         }
 
         .slider-thumb {
           position: absolute;
           top: 50%;
           transform: translateY(-50%);
-          width: 60px;
-          height: 60px;
-          background: #FFFFFF;
-          border-radius: 16px;
+          width: 56px;
+          height: 56px;
+          background: #000000ff;
+          border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+          box-shadow:
+            0 4px 12px rgba(255, 149, 0, 0.4),
+            0 0 0 4px rgba(255, 149, 0, 0.3);
           transition: left 0.05s ease-out;
           z-index: 2;
+          border: 2px solid rgba(255, 255, 255, 0.2);
         }
 
-        .slider-thumb-arrow {
-          color: #30D158;
-          font-size: 24px;
-          font-weight: 900;
+        .slider-thumb.xp-thumb {
+          animation: xpThumbPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes xpThumbPulse {
+          0%, 100% {
+            box-shadow:
+              0 4px 12px rgba(255, 149, 0, 0.4),
+              0 0 0 4px rgba(255, 149, 0, 0.3);
+          }
+          50% {
+            box-shadow:
+              0 4px 16px rgba(255, 149, 0, 0.6),
+              0 0 0 8px rgba(255, 149, 0, 0.2);
+          }
+        }
+
+        .slider-star {
+          font-size: 26px;
+          filter: drop-shadow(0 0 8px rgba(235, 141, 0, 0.6));
         }
 
         .xp-slider-text {
           position: absolute;
           top: 50%;
           right: 24px;
-          transform: translateY(-50%);
-          font-size: 24px;
+          transform: translateY(-50%) skewX(-10deg);
+          font-size: 85px;
           font-weight: 900;
-          color: rgba(255, 255, 255, 0.6);
-          text-transform: uppercase;
+          font-style: italic;
+          color: #ffffffff;
+          text-shadow: 0 0 10px rgba(255, 149, 0, 0.4);
           z-index: 1;
           pointer-events: none;
         }
@@ -539,14 +729,15 @@ const LevelComplete = () => {
           word-break: break-word;
         }
 
-        .terminal-prompt { color: #FFD700; }
-        .terminal-chevron { color: #30D158; }
-        .terminal-command { color: #FF9500; }
-        .terminal-action { color: #30D158; }
-        .terminal-flag { color: #1871BE; }
-        .terminal-message { color: #FFFFFF; }
-        .terminal-file { color: #FF9500; }
-        .terminal-success { color: #30D158; font-weight: 700; }
+        .terminal-line {
+          color: #30D158;
+          min-height: 1.6em;
+        }
+
+        .terminal-success {
+          color: #30D158;
+          font-weight: 700;
+        }
 
         .cursor {
           display: inline-block;
@@ -599,14 +790,30 @@ const LevelComplete = () => {
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          transition: all 0.2s ease;
+          transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           margin-top: 20px;
+          overflow: hidden;
         }
 
-        .tap-zone:active {
+        .tap-zone:active:not(.with-buttons) {
           transform: scale(0.95);
           background: rgba(48, 209, 88, 0.08);
           border-color: rgba(48, 209, 88, 0.5);
+        }
+
+        .tap-zone.with-buttons {
+          border-style: solid;
+          border-color: rgba(48, 209, 88, 0.5);
+          background: rgba(48, 209, 88, 0.05);
+          padding: 20px;
+        }
+
+        /* XP Content */
+        .xp-content {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          animation: fadeIn 0.3s ease;
         }
 
         .xp-display {
@@ -626,11 +833,128 @@ const LevelComplete = () => {
           letter-spacing: 2px;
         }
 
+        /* Choice Buttons */
+        .choice-buttons {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          animation: fadeInUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .choice-btn {
+          width: 100%;
+          padding: 16px 24px;
+          border: none;
+          border-radius: 12px;
+          font-family: "JetBrains Mono", "SF Mono", Monaco, monospace;
+          font-size: 16px;
+          font-weight: 700;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          transition: all 0.2s ease;
+        }
+
+        .choice-btn .btn-icon {
+          font-size: 20px;
+        }
+
+        .choice-btn.next-level {
+          background: linear-gradient(135deg, #30D158 0%, #088201 100%);
+          color: #FFFFFF;
+          box-shadow: 0 4px 16px rgba(48, 209, 88, 0.4);
+        }
+
+        .choice-btn.next-level:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(48, 209, 88, 0.5);
+        }
+
+        .choice-btn.next-level:active {
+          transform: scale(0.98);
+        }
+
+        .choice-btn.back-menu {
+          background: rgba(255, 255, 255, 0.1);
+          color: rgba(255, 255, 255, 0.8);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .choice-btn.back-menu:hover {
+          background: rgba(255, 255, 255, 0.15);
+          border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .choice-btn.back-menu:active {
+          transform: scale(0.98);
+        }
+
+        .footer {
+          margin-top: auto;
+          padding-top: 20px;
+          color: #8E8E93;
+          font-size: 22px;
+          font-weight: 400;
+          text-align: center;
+          font-family: "Jersey 25", cursive;
+          opacity: 0;
+          transform: translateY(20px);
+          animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s forwards;
+        }
+
         /* Responsive */
         @media (max-width: 375px) {
-          .level-complete-title { font-size: 32px; }
-          .title-hash { font-size: 32px; }
-          .stat-value { font-size: 42px; }
+          .mascotte-icon {
+            width: 100px;
+            height: 100px;
+            margin: 12px auto;
+          }
+          .victory-title {
+            font-size: 32px;
+          }
+          .rings-row {
+            gap: 16px;
+          }
+          .ring-container {
+            width: 100px;
+            height: 100px;
+          }
+          .ring-value {
+            font-size: 24px;
+          }
+          .ring-value.time-value {
+            font-size: 18px;
+          }
+          .ring-fraction {
+            font-size: 10px;
+          }
+          .xp-slider {
+            height: 64px;
+          }
+          .slider-thumb {
+            width: 48px;
+            height: 48px;
+          }
+          .slider-star {
+            font-size: 22px;
+          }
+          .xp-slider-text {
+            font-size: 16px;
+          }
           .terminal-block { font-size: 14px; padding: 16px; }
           .xp-display { font-size: 56px; }
         }
@@ -639,42 +963,99 @@ const LevelComplete = () => {
       {phase === 'stats' ? (
         /* ==================== STATS PHASE ==================== */
         <div className="stats-phase">
-          <div className="level-complete-header">
-            <h1 className="level-complete-title">
-              <span className="title-hash">//</span>
-              Level {levelNumber} Completed
+          {/* Celebration Header */}
+          <div className="celebration-header">
+            {/* Title en premier */}
+            <h1 className="victory-title">
+              <span className="title-hash">//</span> Level {levelNumber}
             </h1>
-          </div>
+            <p className="victory-subtitle">Completed</p>
 
-          <div className="stats-grid">
-            <div className="stats-row">
-              <div className="stat-card">
-                <div className="stat-label">Correct</div>
-                <div className="stat-value success">{stats.correctAnswers}</div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-label">Incorrect</div>
-                <div className="stat-value error">{stats.incorrectAnswers}</div>
-              </div>
-            </div>
+            {/* Mascotte sans cercle */}
+            <img src={MascotteHappy} alt="Mascotte" className="mascotte-icon" />
 
-            <div className="stat-card time">
-              <div className="stat-label">Time</div>
-              <div className="stat-value time">{formatTime(stats.timeElapsed || 0)}</div>
+            {/* Confetti particles */}
+            <div className="confetti-container">
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className={`confetti confetti-${i + 1}`} />
+              ))}
             </div>
           </div>
 
-          {stats.streak > 0 && (
-            <div className="streak-section">
-              <div className="streak-card">
-                <div className="streak-value">
-                  <span className="flame-icon">🔥</span>
-                  {stats.streak} streak
+          {/* Rings Row - Accuracy + Time côte à côte */}
+          <div className="rings-row">
+            {/* Accuracy Ring */}
+            <div className="ring-item accuracy">
+              <div className="ring-container">
+                <svg className="ring-svg" viewBox="0 0 120 120">
+                  <defs>
+                    <linearGradient id="accuracyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#30D158" />
+                      <stop offset="100%" stopColor="#088201" />
+                    </linearGradient>
+                  </defs>
+                  <circle
+                    className="ring-bg"
+                    cx="60" cy="60" r="52"
+                    fill="none"
+                    stroke="rgba(255,255,255,0.1)"
+                    strokeWidth="10"
+                  />
+                  <circle
+                    className="ring-progress accuracy-progress"
+                    cx="60" cy="60" r="52"
+                    fill="none"
+                    stroke="url(#accuracyGradient)"
+                    strokeWidth="10"
+                    strokeLinecap="round"
+                    strokeDasharray={circumference}
+                    strokeDashoffset={accuracyOffset}
+                  />
+                </svg>
+                <div className="ring-center">
+                  <div className="ring-value">{animatedPercentage}%</div>
                 </div>
               </div>
+              <div className="ring-label">Accuracy</div>
             </div>
-          )}
 
+            {/* Time Ring (horloge style) */}
+            <div className="ring-item time">
+              <div className="ring-container">
+                <svg className="ring-svg" viewBox="0 0 120 120">
+                  <defs>
+                    <linearGradient id="timeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#1871BE" />
+                      <stop offset="100%" stopColor="#0A4A7A" />
+                    </linearGradient>
+                  </defs>
+                  <circle
+                    className="ring-bg"
+                    cx="60" cy="60" r="52"
+                    fill="none"
+                    stroke="rgba(255,255,255,0.1)"
+                    strokeWidth="10"
+                  />
+                  <circle
+                    className="ring-progress time-progress"
+                    cx="60" cy="60" r="52"
+                    fill="none"
+                    stroke="url(#timeGradient)"
+                    strokeWidth="10"
+                    strokeLinecap="round"
+                    strokeDasharray={circumference}
+                    strokeDashoffset={timeOffset}
+                  />
+                </svg>
+                <div className="ring-center">
+                  <div className="ring-value time-value">{formatTime(seconds)}</div>
+                </div>
+              </div>
+              <div className="ring-label">Time</div>
+            </div>
+          </div>
+
+          {/* XP Slider combiné */}
           <div className="slider-container">
             <div
               ref={sliderRef}
@@ -689,12 +1070,12 @@ const LevelComplete = () => {
                 style={{ width: `${slideProgress}%` }}
               />
               <div
-                className="slider-thumb"
-                style={{ left: `calc(${slideProgress}% - ${slideProgress * 0.6}px + 10px)` }}
+                className="slider-thumb xp-thumb"
+                style={{ left: `calc(${slideProgress}% - ${slideProgress * 0.56}px + 8px)` }}
               >
-                <span className="slider-thumb-arrow">→</span>
+                <span className="slider-star">⭐</span>
               </div>
-              <div className="xp-slider-text">GET XP</div>
+              <div className="xp-slider-text">+{xpValue}XP</div>
             </div>
           </div>
         </div>
@@ -705,10 +1086,19 @@ const LevelComplete = () => {
             <h2 className="xp-title">// XP Earned</h2>
           </div>
 
-          <div className={`terminal-block ${tapCount === 3 ? 'success' : ''}`}>
+          <div className={`terminal-block ${isComplete ? 'success' : ''}`}>
             <div className="terminal-content">
-              {renderTerminalContent(currentLine)}
-              {showCursor && <span className="cursor"></span>}
+              {/* Lignes complétées */}
+              {completedLines.map((line, idx) => (
+                <div key={idx} className="terminal-line">{line}</div>
+              ))}
+              {/* Ligne en cours de frappe */}
+              {!isComplete && currentTyping && (
+                <div className="terminal-line">
+                  {currentTyping}
+                  <span className="cursor"></span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -721,89 +1111,36 @@ const LevelComplete = () => {
             </p>
           </div>
 
-          <div className="tap-zone">
-            <div className="xp-display">+{totalXP}</div>
-            <div className="xp-label">XP</div>
+
+          <div className={`tap-zone ${showChoiceButtons ? 'with-buttons' : ''}`}>
+            {!showChoiceButtons ? (
+              // Affichage XP
+              <div className="xp-content">
+                <div className="xp-display">+{xpValue}</div>
+                <div className="xp-label">XP</div>
+              </div>
+            ) : (
+              // Boutons de choix
+              <div className="choice-buttons">
+                <button className="choice-btn next-level" onClick={handleNextLevel}>
+                  <span className="btn-icon">→</span>
+                  <span className="btn-text">Niveau suivant</span>
+                </button>
+                <button className="choice-btn back-menu" onClick={handleBackToMenu}>
+                  <span className="btn-icon">⌂</span>
+                  <span className="btn-text">Menu</span>
+                </button>
+              </div>
+              
+            )}
           </div>
+          
 
           {showGlow && <FeedbackGlow type="success" />}
         </div>
       )}
     </div>
   );
-};
-
-// Fonction pour render le terminal avec syntax highlighting
-const renderTerminalContent = (content) => {
-  const lines = content.split('\n');
-  return lines.map((line, lineIndex) => (
-    <div key={lineIndex}>{highlightSyntax(line)}</div>
-  ));
-};
-
-// Fonction syntax highlighting
-const highlightSyntax = (line) => {
-  if (line.startsWith('$ ')) {
-    const rest = line.substring(2);
-    return (
-      <>
-        <span className="terminal-prompt">$ </span>
-        {highlightGitCommand(rest)}
-      </>
-    );
-  }
-
-  if (line.includes('[remote:')) {
-    return <span className="terminal-success">{line}</span>;
-  }
-
-  return <span>{line}</span>;
-};
-
-// Highlight commandes Git
-const highlightGitCommand = (text) => {
-  const parts = [];
-
-  // >git
-  if (text.startsWith('>git')) {
-    parts.push(<span key="chevron" className="terminal-chevron">&gt;</span>);
-    parts.push(<span key="git" className="terminal-command">git</span>);
-    text = text.substring(4);
-  }
-
-  // add Score
-  if (text.includes(' add ')) {
-    const idx = text.indexOf(' add ');
-    parts.push(<span key="add" className="terminal-action"> add</span>);
-    const afterAdd = text.substring(idx + 5);
-    if (afterAdd) {
-      parts.push(<span key="file" className="terminal-file"> {afterAdd.trim()}</span>);
-    }
-    return parts;
-  }
-
-  // commit -m "message"
-  if (text.includes(' commit')) {
-    parts.push(<span key="commit" className="terminal-action"> commit</span>);
-
-    if (text.includes(' -m')) {
-      parts.push(<span key="flag" className="terminal-flag"> -m</span>);
-
-      const messageMatch = text.match(/"([^"]+)"/);
-      if (messageMatch) {
-        parts.push(<span key="message" className="terminal-message"> "{messageMatch[1]}"</span>);
-      }
-    }
-    return parts;
-  }
-
-  // push
-  if (text.includes(' push')) {
-    parts.push(<span key="push" className="terminal-action"> push</span>);
-    return parts;
-  }
-
-  return parts.length > 0 ? parts : text;
 };
 
 export default LevelComplete;

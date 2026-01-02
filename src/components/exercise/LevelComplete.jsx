@@ -134,7 +134,7 @@ const LevelComplete = ({ stats, level = 1, onContinue }) => {
         }
 
         .title-hash {
-          color: #30D158;
+          color: #30D158 !important;
           font-weight: 900;
           font-size: 48px;
           text-shadow: 2px 2px 8px rgba(48, 209, 88, 0.6);
