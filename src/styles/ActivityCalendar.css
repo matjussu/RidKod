@@ -358,7 +358,7 @@
 /* Tooltip container */
 .day-tooltip {
   position: absolute;
-  background: linear-gradient(135deg, #2C2C2E 0%, #1A1919 100%);
+  background: linear-gradient(135deg, #2C2C2E 0%, #0F0F12 100%);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 12px;
   padding: 12px;
@@ -413,7 +413,7 @@
   height: 0;
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
-  border-top: 8px solid #1A1919;
+  border-top: 8px solid #0F0F12;
 }
 
 .tooltip-arrow::before {

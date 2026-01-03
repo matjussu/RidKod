@@ -71,7 +71,7 @@ const LevelComplete = ({ stats, level = 1, onContinue }) => {
 
         .level-complete-container {
           min-height: 100vh;
-          background: #1A1919;
+          background: #0F0F12;
           color: #FFFFFF;
           display: flex;
           flex-direction: column;

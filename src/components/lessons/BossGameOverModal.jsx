@@ -54,7 +54,7 @@ const BossGameOverModal = ({ errors, maxErrors, onRetry }) => {
     }
 
     .boss-gameover-content {
-      background: linear-gradient(135deg, #2C2C2E 0%, #1A1919 100%);
+      background: linear-gradient(135deg, #2C2C2E 0%, #0F0F12 100%);
       border-radius: 24px;
       padding: 40px 32px;
       max-width: 400px;

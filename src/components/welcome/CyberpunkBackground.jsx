@@ -21,7 +21,7 @@ const CyberpunkBackground = () => {
   const backgroundStyle = {
     position: 'absolute',
     inset: 0,
-    backgroundColor: '#1A1919', // Brand dark background
+    backgroundColor: '#0F0F12', // Brand dark background
     color: '#10B981', // Brand green
     fontFamily: 'JetBrains Mono, monospace',
     padding: '1.5rem',

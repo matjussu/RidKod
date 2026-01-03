@@ -7,7 +7,7 @@
 .signup-container {
   min-height: 100vh;
   min-height: -webkit-fill-available;
-  background: #1A1919;
+  background: #0F0F12;
   color: #FFFFFF;
   display: flex;
   flex-direction: column;

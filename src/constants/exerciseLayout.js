@@ -203,7 +203,7 @@ export const Z_INDEX = {
 // COLORS (HEX)
 // ============================================
 export const COLORS = {
-  BG_PRIMARY: '#1A1919',
+  BG_PRIMARY: '#0F0F12',
   BG_CODE: '#030303ff',
   BG_CARD: '#FFFFFF',
   BG_PROGRESS: '#3A3A3C',

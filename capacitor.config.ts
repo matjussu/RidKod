@@ -13,7 +13,7 @@ const config: CapacitorConfig = {
     // Edge-to-edge fullscreen (pas d'ajustement safe area automatique)
     contentInset: 'never',
     // Fond WebView = fond app (évite le gris au bounce scroll)
-    backgroundColor: '#1A1919',
+    backgroundColor: '#0F0F12',
     // Activer le scroll natif (CSS gère l'overscroll)
     scrollEnabled: true,
     // Debug

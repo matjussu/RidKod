@@ -4,7 +4,7 @@
   min-height: 100dvh; /* Dynamic viewport height - iOS PWA safe-area fix */
   margin: 0;
   padding: 0;
-  background: #1A1919;
+  background: #0F0F12;
   position: relative;
 }
 

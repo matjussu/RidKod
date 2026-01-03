@@ -110,7 +110,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#1A1919',
+    backgroundColor: '#0F0F12',
     padding: '20px',
     fontFamily: '"JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace'
   },

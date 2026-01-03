@@ -114,7 +114,7 @@ const XPCollect = ({ totalXP, onContinue }) => {
           right: 0;
           bottom: 0;
           min-height: 100vh;
-          background: #1A1919;
+          background: #0F0F12;
           color: #FFFFFF;
           display: flex;
           flex-direction: column;

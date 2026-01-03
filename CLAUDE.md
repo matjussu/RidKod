@@ -52,7 +52,7 @@ ReadCod est la première application mobile pour apprendre à **LIRE du code** (
 ### Couleurs (iOS-inspired)
 ```css
 /* Backgrounds */
---bg-primary: #1A1919         /* Background principal app */
+--bg-primary: #0F0F12         /* Background principal app */
 --bg-secondary: #2C2C2E       /* Options normales */
 --bg-tertiary: #484848        /* Options selected */
 --bg-code: #000000            /* Code block */

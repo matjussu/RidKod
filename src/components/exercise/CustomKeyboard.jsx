@@ -75,7 +75,7 @@ const CustomKeyboard = ({ type = 'numeric', onKeyPress, value = '', onSubmit }) 
         .custom-keyboard {
           width: 100%;
           padding: 16px;
-          background: #1A1919;
+          background: #0F0F12;
           border-radius: 12px;
           margin-bottom: 12px;
         }

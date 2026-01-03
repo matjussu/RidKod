@@ -77,7 +77,7 @@ const PathXPNode = ({ x, y, nodeId, xpAmount, isLocked, isCollected, onClick }) 
         .xp-node.unlocked .xp-node-circle {
             background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
             border: 3px solid #FFFFFF;
-            color: #1A1919;
+            color: #0F0F12;
             box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
             animation: xpPulse 2s ease-in-out infinite;
         }

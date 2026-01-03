@@ -217,7 +217,7 @@ export const AuthProvider = ({ children }) => {
           justifyContent: 'center',
           alignItems: 'center',
           height: '100vh',
-          backgroundColor: '#1A1919',
+          backgroundColor: '#0F0F12',
           color: 'white',
           fontFamily: 'JetBrains Mono, monospace'
         }}>

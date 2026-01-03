@@ -359,7 +359,7 @@ const styles = `
   }
 
   .lesson-code-block {
-    background: #1A1919;
+    background: #0F0F12;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
@@ -398,7 +398,7 @@ const styles = `
   }
 
   .lesson-decoder-bubble {
-    background: linear-gradient(135deg, #2C2C2E 0%, #1A1919 100%);
+    background: linear-gradient(135deg, #2C2C2E 0%, #0F0F12 100%);
     border-radius: 16px;
     padding: 20px;
     box-shadow:

@@ -13,8 +13,8 @@ class MyViewController: CAPBridgeViewController {
         webView?.scrollView.alwaysBounceHorizontal = false
 
         // Couleur de fond de la WebView (évite le gris)
-        webView?.scrollView.backgroundColor = UIColor(red: 0.102, green: 0.098, blue: 0.098, alpha: 1.0) // #1A1919
-        webView?.backgroundColor = UIColor(red: 0.102, green: 0.098, blue: 0.098, alpha: 1.0)
+        webView?.scrollView.backgroundColor = UIColor(red: 0.059, green: 0.059, blue: 0.071, alpha: 1.0) // #0F0F12
+        webView?.backgroundColor = UIColor(red: 0.059, green: 0.059, blue: 0.071, alpha: 1.0)
 
         // Désactiver l'overscroll indicator
         webView?.scrollView.showsVerticalScrollIndicator = false

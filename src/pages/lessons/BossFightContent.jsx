@@ -180,7 +180,7 @@ const BossFightContent = () => {
   if (!bossData) {
     return (
       <div style={{
-        background: 'linear-gradient(135deg, #1A1919 0%, #2C2C2E 100%)',
+        background: 'linear-gradient(135deg, #0F0F12 0%, #2C2C2E 100%)',
         minHeight: '100vh',
         display: 'flex',
         alignItems: 'center',
@@ -199,7 +199,7 @@ const BossFightContent = () => {
 
   return (
     <div style={{
-      background: 'linear-gradient(135deg, #1A1919 0%, #2C2C2E 100%)',
+      background: 'linear-gradient(135deg, #0F0F12 0%, #2C2C2E 100%)',
       minHeight: '100vh',
       display: 'flex',
       flexDirection: 'column',
