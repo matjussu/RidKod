@@ -29,21 +29,40 @@ export const AuthProvider = ({ children }) => {
 
   // Écouter les changements d'état d'authentification
   useEffect(() => {
+    console.log('[AuthContext] Starting auth listener...');
+
+    // Timeout de sécurité - si Firebase ne répond pas en 5s, continuer en mode invité
+    // Critique pour iOS Capacitor où Firebase peut échouer silencieusement
+    const timeout = setTimeout(() => {
+      if (loading) {
+        console.warn('[AuthContext] Firebase timeout (5s) - continuing as guest');
+        setLoading(false);
+      }
+    }, 5000);
+
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      console.log('[AuthContext] Auth state changed:', currentUser ? 'user logged in' : 'no user');
+      clearTimeout(timeout); // Annuler le timeout si Firebase répond
+
       if (currentUser) {
         // Charger le profil Firestore
-        const profileResult = await getUserProfile(currentUser.uid);
+        try {
+          const profileResult = await getUserProfile(currentUser.uid);
 
-        if (profileResult.success) {
-          // Merger les données Firebase Auth + Firestore
-          setUser({
-            ...currentUser,
-            username: profileResult.profile.username,
-            avatarColor: profileResult.profile.avatarColor
-          });
-        } else {
-          // Fallback: utiliser seulement les données Firebase Auth
-          setUser(currentUser);
+          if (profileResult.success) {
+            // Merger les données Firebase Auth + Firestore
+            setUser({
+              ...currentUser,
+              username: profileResult.profile.username,
+              avatarColor: profileResult.profile.avatarColor
+            });
+          } else {
+            // Fallback: utiliser seulement les données Firebase Auth
+            setUser(currentUser);
+          }
+        } catch (profileError) {
+          console.error('[AuthContext] Error loading profile:', profileError);
+          setUser(currentUser); // Fallback
         }
 
         // Sauvegarder dans localStorage pour persistance (sans données sensibles)
@@ -57,7 +76,10 @@ export const AuthProvider = ({ children }) => {
     });
 
     // Cleanup
-    return () => unsubscribe();
+    return () => {
+      clearTimeout(timeout);
+      unsubscribe();
+    };
   }, []);
 
   // Inscription
@@ -183,9 +205,46 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated: !!user
   };
 
+  // Écran de chargement pendant l'initialisation Firebase
+  // Critique pour iOS Capacitor - afficher quelque chose même pendant le loading
+  if (loading) {
+    console.log('[AuthContext] Rendering loading screen...');
+    return (
+      <AuthContext.Provider value={value}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+          backgroundColor: '#1A1919',
+          color: 'white',
+          fontFamily: 'JetBrains Mono, monospace'
+        }}>
+          <div style={{
+            width: '40px',
+            height: '40px',
+            border: '3px solid #333',
+            borderTopColor: '#30D158',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite'
+          }} />
+          <p style={{ marginTop: '16px', fontSize: '14px', opacity: 0.8 }}>
+            Chargement...
+          </p>
+          <style>{`
+            @keyframes spin {
+              to { transform: rotate(360deg); }
+            }
+          `}</style>
+        </div>
+      </AuthContext.Provider>
+    );
+  }
+
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 };
