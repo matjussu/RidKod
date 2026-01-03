@@ -34,7 +34,6 @@ const LevelComplete = () => {
   // Score ring state pour l'animation
   const [scoreAnimated, setScoreAnimated] = useState(false);
   const [animatedPercentage, setAnimatedPercentage] = useState(0);
-  const animationHasRun = useRef(false);
 
   // Calculs pour le score ring (accuracy)
   const total = stats ? stats.correctAnswers + stats.incorrectAnswers : 0;
@@ -53,10 +52,6 @@ const LevelComplete = () => {
       navigate('/home');
       return;
     }
-
-    // Empêcher l'animation de se relancer
-    if (animationHasRun.current) return;
-    animationHasRun.current = true;
 
     triggerSuccess();
 
@@ -457,6 +452,7 @@ const LevelComplete = () => {
 
         .title-hash {
           color: #30D158 !important;
+          -webkit-text-fill-color: #30D158 !important;
           text-shadow: 0 0 20px rgba(48, 209, 88, 0.6);
           margin-right: -25px;
         }
