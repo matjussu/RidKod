@@ -14,8 +14,8 @@ const config: CapacitorConfig = {
     contentInset: 'never',
     // Fond WebView = fond app (évite le gris au bounce scroll)
     backgroundColor: '#1A1919',
-    // Désactive le scroll/bounce natif WebView (scroll géré par CSS)
-    scrollEnabled: false,
+    // Activer le scroll natif (CSS gère l'overscroll)
+    scrollEnabled: true,
     // Debug
     webContentsDebuggingEnabled: true
   }

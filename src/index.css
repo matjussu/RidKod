@@ -33,14 +33,14 @@ html {
   overscroll-behavior: none;
 }
 
-/* iOS overscroll fix - fond étendu au-delà du viewport pour masquer le gris système */
+/* iOS overscroll fix - fond étendu très loin au-delà du viewport */
 html::before {
   content: '';
   position: fixed;
-  top: -100vh;
-  left: -100vw;
-  right: -100vw;
-  bottom: -100vh;
+  top: -9999px;
+  left: -9999px;
+  right: -9999px;
+  bottom: -9999px;
   background: #1A1919;
   z-index: -9999;
   pointer-events: none;
