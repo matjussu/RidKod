@@ -1,6 +1,7 @@
 import UIKit
 import Capacitor
 
+@objc(MyViewController)
 class MyViewController: CAPBridgeViewController {
 
     override func viewDidLoad() {
