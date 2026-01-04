@@ -9,6 +9,7 @@ import CustomKeyboard from '../../components/exercise/CustomKeyboard';
 import BossGameOverModal from '../../components/lessons/BossGameOverModal';
 import BossSuccessModal from '../../components/lessons/BossSuccessModal';
 import useHaptic from '../../hooks/useHaptic';
+import { sounds } from '../../utils/audioService';
 import { loadBoss } from '../../data/loaders/lessonLoader';
 
 const BossFightContent = () => {
@@ -101,8 +102,10 @@ const BossFightContent = () => {
 
     if (correct) {
       triggerSuccess();
+      sounds.success(); // Son réponse correcte
     } else {
       triggerError();
+      sounds.error(); // Son réponse incorrecte
       const newErrorCount = errors + 1;
       setErrors(newErrorCount);
 

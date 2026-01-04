@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import useHaptic from '../../hooks/useHaptic';
 import FeedbackGlow from '../common/FeedbackGlow';
-import { playTypingSound, playSuccessSound } from '../../utils/soundEffects';
+import { sounds } from '../../utils/audioService';
 
 const XPCollect = ({ totalXP, onContinue }) => {
   const { triggerLight, triggerSuccess } = useHaptic();
@@ -18,7 +18,7 @@ const XPCollect = ({ totalXP, onContinue }) => {
 
     const typeInterval = setInterval(() => {
       if (charIndex < word.length) {
-        playTypingSound(); // Son clavier
+        sounds.typing(); // Son clavier
         setCurrentLine(prev => prev + word[charIndex]);
         charIndex++;
       } else {
@@ -83,8 +83,8 @@ const XPCollect = ({ totalXP, onContinue }) => {
       // Vibration forte
       triggerSuccess();
 
-      // Son succès
-      playSuccessSound();
+      // Son coin (XP collecté)
+      sounds.coin();
 
       // Glow vert
       setShowGlow(true);

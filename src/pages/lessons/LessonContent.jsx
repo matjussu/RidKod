@@ -10,6 +10,7 @@ import CustomKeyboard from '../../components/exercise/CustomKeyboard';
 import ChapterCompleteModal from '../../components/lessons/ChapterCompleteModal';
 import ModuleCompleteModal from '../../components/lessons/ModuleCompleteModal';
 import useHaptic from '../../hooks/useHaptic';
+import { sounds } from '../../utils/audioService';
 import { loadLesson } from '../../data/loaders/lessonLoader';
 import '../../styles/Lessons.css';
 
@@ -222,6 +223,7 @@ const LessonContent = () => {
 
     if (correct) {
       triggerSuccess();
+      sounds.success(); // Son réponse correcte
 
       // Marquer l'exercice comme complété
       if (!completedExercises.includes(currentExercise.id)) {
@@ -245,6 +247,7 @@ const LessonContent = () => {
       }
     } else {
       triggerError();
+      sounds.error(); // Son réponse incorrecte
     }
   };
 
@@ -279,6 +282,7 @@ const LessonContent = () => {
     if (allExercisesCompleted) {
       // XP sera collecté via les nœuds XP entre les leçons (30 XP par nœud)
       triggerSuccess();
+      sounds.chime(); // Son leçon complétée
 
       // ✅ Enregistrer l'activité leçon pour le calendrier
       recordDailyActivity('lessons', 1);
@@ -311,6 +315,7 @@ const LessonContent = () => {
   const handleBossFight = () => {
     setShowModuleCompleteModal(false);
     triggerSuccess();
+    sounds.pop(); // Son navigation boss
     navigate(`/lessons/${language}/${moduleId}/boss`);
   };
 

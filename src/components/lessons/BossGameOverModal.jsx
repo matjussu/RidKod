@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import useHaptic from '../../hooks/useHaptic';
+import { sounds } from '../../utils/audioService';
 
 const BossGameOverModal = ({ errors, maxErrors, onRetry }) => {
   const { triggerError } = useHaptic();
 
   useEffect(() => {
     triggerError();
+    sounds.error(); // Son game over
   }, [triggerError]);
 
   const styles = `

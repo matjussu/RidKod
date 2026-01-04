@@ -2,11 +2,27 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
+import { initAudioSystem } from './utils/audioService'
 
 // Debug iOS Capacitor
 console.log('=== ReadKode iOS Debug ===');
 console.log('main.jsx loaded at:', new Date().toISOString());
 console.log('window.location:', window.location.href);
+
+// === Initialisation Audio au premier touch (requis iOS) ===
+const handleFirstInteraction = () => {
+  initAudioSystem();
+  // Retirer les listeners après première interaction
+  document.removeEventListener('touchstart', handleFirstInteraction);
+  document.removeEventListener('click', handleFirstInteraction);
+  document.removeEventListener('keydown', handleFirstInteraction);
+  console.log('Audio system initialized on first interaction');
+};
+
+// Écouter les premières interactions utilisateur
+document.addEventListener('touchstart', handleFirstInteraction, { once: true, passive: true });
+document.addEventListener('click', handleFirstInteraction, { once: true });
+document.addEventListener('keydown', handleFirstInteraction, { once: true });
 
 const rootElement = document.getElementById('root');
 console.log('Root element found:', !!rootElement);

@@ -10,6 +10,7 @@ import FeedbackGlow from "../components/common/FeedbackGlow";
 import ExitConfirmModal from "../components/common/ExitConfirmModal";
 import CustomKeyboard from "../components/exercise/CustomKeyboard";
 import useHaptic from "../hooks/useHaptic";
+import { sounds } from '../utils/audioService';
 import { isBlockComplete, EXERCISES_PER_LEVEL, getMaxLevelsForDifficulty } from '../constants/exerciseLayout';
 import { loadExercisesByDifficulty } from '../data/loaders/trainingLoader';
 import '../styles/Exercise.css';
@@ -159,11 +160,13 @@ const Exercise = () => {
     // Update state avec le reducer (atomique)
     validateAnswer(correct);
 
-    // Haptic feedback
+    // Haptic + audio feedback
     if (correct) {
       triggerSuccess();
+      sounds.success();
     } else {
       triggerError();
+      sounds.error();
     }
 
     // ✅ NOUVELLE LOGIQUE : Ne sauvegarder QUE localement (pas de Firestore)

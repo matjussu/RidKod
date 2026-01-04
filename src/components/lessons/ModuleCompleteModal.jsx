@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import useHaptic from '../../hooks/useHaptic';
+import { sounds } from '../../utils/audioService';
 
 const ModuleCompleteModal = ({
   moduleTitle,
@@ -13,6 +14,7 @@ const ModuleCompleteModal = ({
 
   useEffect(() => {
     triggerSuccess();
+    sounds.success(); // Son module complété
   }, [triggerSuccess]);
 
   const styles = `

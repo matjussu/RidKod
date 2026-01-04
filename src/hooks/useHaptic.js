@@ -1,37 +1,81 @@
+/**
+ * useHaptic.js
+ * Hook React pour haptic feedback natif iOS (Taptic Engine)
+ * Utilise @capacitor/haptics avec fallback web
+ */
+
+import { useCallback } from 'react';
+import { haptic } from '../utils/hapticService';
+
+/**
+ * Hook pour déclencher des vibrations haptiques
+ * Conserve l'API existante (triggerSuccess, triggerError, triggerLight, triggerMedium)
+ * + Ajoute de nouveaux patterns (triggerSelection, triggerHeavy, triggerWarning)
+ */
 const useHaptic = () => {
-  const triggerSuccess = () => {
-    if (navigator.vibrate) {
-      // Pattern : courte vibration agréable
-      navigator.vibrate([50]);
-    }
-  };
+  // === Patterns existants (compatibilité) ===
 
-  const triggerError = () => {
-    if (navigator.vibrate) {
-      // Pattern : double vibration (feedback négatif)
-      navigator.vibrate([100, 50, 100]);
-    }
-  };
+  /**
+   * Vibration succès - Réponse correcte
+   */
+  const triggerSuccess = useCallback(() => {
+    haptic.success();
+  }, []);
 
-  const triggerLight = () => {
-    if (navigator.vibrate) {
-      // Pattern : très courte vibration pour selection
-      navigator.vibrate([25]);
-    }
-  };
+  /**
+   * Vibration erreur - Réponse incorrecte
+   */
+  const triggerError = useCallback(() => {
+    haptic.error();
+  }, []);
 
-  const triggerMedium = () => {
-    if (navigator.vibrate) {
-      // Pattern : vibration moyenne pour feedback intermédiaire
-      navigator.vibrate([40]);
-    }
-  };
+  /**
+   * Vibration légère - Sélection, tap
+   */
+  const triggerLight = useCallback(() => {
+    haptic.light();
+  }, []);
+
+  /**
+   * Vibration moyenne - Action confirmée
+   */
+  const triggerMedium = useCallback(() => {
+    haptic.medium();
+  }, []);
+
+  // === Nouveaux patterns ===
+
+  /**
+   * Vibration forte - Fin de niveau, action importante
+   */
+  const triggerHeavy = useCallback(() => {
+    haptic.heavy();
+  }, []);
+
+  /**
+   * Vibration sélection - Changement d'option (ultra-léger)
+   */
+  const triggerSelection = useCallback(() => {
+    haptic.selection();
+  }, []);
+
+  /**
+   * Vibration warning - Attention requise
+   */
+  const triggerWarning = useCallback(() => {
+    haptic.warning();
+  }, []);
 
   return {
+    // Compatibilité existante
     triggerSuccess,
     triggerError,
     triggerLight,
-    triggerMedium
+    triggerMedium,
+    // Nouveaux patterns
+    triggerHeavy,
+    triggerSelection,
+    triggerWarning
   };
 };
 

@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import useHaptic from '../../hooks/useHaptic';
 import FeedbackGlow from '../../components/common/FeedbackGlow';
-import { playTypingSound } from '../../utils/soundEffects';
+import { sounds } from '../../utils/audioService';
 import { useProgress } from '../../context/ProgressContext';
 
 const BossXPCollect = () => {
@@ -28,7 +28,7 @@ const BossXPCollect = () => {
     const typeInterval = setInterval(() => {
       if (charIndex < word.length) {
         const char = word[charIndex];
-        playTypingSound();
+        sounds.typing();
         setCurrentLine(prev => prev + char);
         charIndex++;
       } else {
@@ -93,8 +93,9 @@ const BossXPCollect = () => {
       setCurrentLine(prev => prev + '\n[remote: ✓ +100 XP collected]');
       setShowCursor(false);
 
-      // Vibration forte
+      // Vibration forte + son coin
       triggerSuccess();
+      sounds.coin();
 
       // Glow vert
       setShowGlow(true);

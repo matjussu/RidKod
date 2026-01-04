@@ -1,11 +1,13 @@
 import React from 'react';
 import useHaptic from '../../hooks/useHaptic';
+import { sounds } from '../../utils/audioService';
 
 const CustomKeyboard = ({ type = 'numeric', onKeyPress, value = '', onSubmit }) => {
-  const { triggerLight } = useHaptic();
+  const { triggerSelection } = useHaptic();
 
   const handleKeyPress = (key) => {
-    triggerLight();
+    triggerSelection(); // Haptic ultra-léger pour clavier
+    sounds.tick(); // Son tick clavier
     onKeyPress(key);
   };
 

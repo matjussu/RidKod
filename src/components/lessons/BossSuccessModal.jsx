@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import useHaptic from '../../hooks/useHaptic';
+import { sounds } from '../../utils/audioService';
 
 const BossSuccessModal = ({ errors, maxErrors, xpReward, onCollectXP }) => {
   const { triggerSuccess } = useHaptic();
 
   useEffect(() => {
     triggerSuccess();
+    sounds.chime(); // Son victoire boss
   }, [triggerSuccess]);
 
   const styles = `

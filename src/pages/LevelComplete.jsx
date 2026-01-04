@@ -2,7 +2,7 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useHaptic from '../hooks/useHaptic';
 import FeedbackGlow from '../components/common/FeedbackGlow';
-import { playTypingSound, playSuccessSound } from '../utils/soundEffects';
+import { sounds } from '../utils/audioService';
 import MascotteHappy from '../assets/Mascotte Happy.svg';
 
 const LevelComplete = () => {
@@ -215,7 +215,7 @@ const LevelComplete = () => {
 
     const interval = setInterval(() => {
       if (index < command.length) {
-        playTypingSound();
+        sounds.typing();
         setCurrentTyping('$ ' + command.substring(0, index + 1));
         index++;
       } else {
@@ -251,7 +251,7 @@ const LevelComplete = () => {
           setCurrentTyping('');
           setIsComplete(true);
           triggerSuccess();
-          playSuccessSound();
+          sounds.chime(); // Son fin de niveau
           setShowGlow(true);
 
           // Afficher les boutons de choix après un court délai
