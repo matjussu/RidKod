@@ -73,6 +73,15 @@ body {
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: none;
   background: #0F0F12;
+
+  /* Cacher la scrollbar tout en gardant le scroll fonctionnel */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+/* Cacher scrollbar WebKit (Chrome, Safari, Edge Chromium) */
+#root::-webkit-scrollbar {
+  display: none;
 }
 
 
