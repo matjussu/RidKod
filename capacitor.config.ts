@@ -5,9 +5,9 @@ const config: CapacitorConfig = {
   appName: 'ReadKode',
   webDir: 'dist',
   server: {
-    // Utilisation du schéma ionic pour iOS (plus stable)
+    // Schéma capacitor pour iOS - requis pour Firebase Auth
     androidScheme: 'https',
-    iosScheme: 'ionic'
+    iosScheme: 'capacitor'
   },
   ios: {
     // Edge-to-edge fullscreen (pas d'ajustement safe area automatique)

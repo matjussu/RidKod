@@ -52,7 +52,7 @@
 			<string>com.readkode.app</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>ionic</string>
+				<string>capacitor</string>
 			</array>
 		</dict>
 	</array>
