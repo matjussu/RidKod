@@ -30,18 +30,23 @@ export const AuthProvider = ({ children }) => {
   // Écouter les changements d'état d'authentification
   useEffect(() => {
     console.log('[AuthContext] Starting auth listener...');
+    console.log('[AuthContext] auth object:', auth ? 'exists' : 'null');
+    console.log('[AuthContext] auth.currentUser:', auth?.currentUser ? 'exists' : 'null');
 
-    // Timeout de sécurité - si Firebase ne répond pas en 5s, continuer en mode invité
+    // Timeout de sécurité - si Firebase ne répond pas en 10s, continuer en mode invité
     // Critique pour iOS Capacitor où Firebase peut échouer silencieusement
     const timeout = setTimeout(() => {
       if (loading) {
-        console.warn('[AuthContext] Firebase timeout (5s) - continuing as guest');
+        console.warn('[AuthContext] Firebase timeout (10s) - continuing as guest');
+        console.warn('[AuthContext] This usually means Firebase cannot connect from this origin');
         setLoading(false);
       }
-    }, 5000);
+    }, 10000);
 
+    console.log('[AuthContext] Setting up onAuthStateChanged listener...');
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       console.log('[AuthContext] Auth state changed:', currentUser ? 'user logged in' : 'no user');
+      console.log('[AuthContext] Firebase responded successfully!');
       clearTimeout(timeout); // Annuler le timeout si Firebase répond
 
       if (currentUser) {
@@ -72,6 +77,11 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
       }
 
+      setLoading(false);
+    }, (error) => {
+      // Error callback - Firebase auth listener error
+      console.error('[AuthContext] onAuthStateChanged error:', error.code, error.message);
+      clearTimeout(timeout);
       setLoading(false);
     });
 

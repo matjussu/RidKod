@@ -5,9 +5,11 @@ const config: CapacitorConfig = {
   appName: 'ReadKode',
   webDir: 'dist',
   server: {
-    // Schéma capacitor pour iOS - requis pour Firebase Auth
+    // HTTPS pour Android et iOS - requis pour Firebase Auth
+    // https://localhost est autorisé par défaut dans Firebase
     androidScheme: 'https',
-    iosScheme: 'capacitor'
+    iosScheme: 'https',
+    hostname: 'localhost'
   },
   ios: {
     // Edge-to-edge fullscreen (pas d'ajustement safe area automatique)

@@ -86,9 +86,14 @@ const CelebrationScreen = ({
 
       {/* Main Content */}
       <div className="celebration-content">
+        {/* Logo */}
+        <div className="celebration-logo">
+          <img src={longLogo} alt="ReadKode Logo" />
+        </div>
+
         {/* Mascotte */}
         <div className="celebration-mascot">
-          <MascotHappy size={120} />
+          <MascotHappy size={100} />
         </div>
 
         <h1 className="celebration-title">
