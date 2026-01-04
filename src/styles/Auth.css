@@ -132,7 +132,7 @@
   font-weight: 900;
   font-style: italic;
   color: #FFFFFF;
-  margin: 0 0 12px 0;
+  margin: 0 0 25px 0;
   line-height: 1;
   transform: skewX(-5deg);
   letter-spacing: 0px;
@@ -147,7 +147,7 @@
   bottom: -16px;
   left: 50%;
   transform: translateX(-50%);
-  width: 280px;
+  width: 500px;
   height: 4px;
   background: linear-gradient(90deg, #FF9500 0%, #FFB84D 100%);
   border-radius: 2px;
@@ -160,7 +160,7 @@
   bottom: -16px;
   left: 50%;
   transform: translateX(-50%);
-  width: 280px;
+  width: 500px;
   height: 4px;
   background: linear-gradient(90deg, #30D158 0%, #5DE97A 100%);
   border-radius: 2px;
