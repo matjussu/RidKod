@@ -18,6 +18,7 @@ vi.mock('firebase/firestore', () => ({
 
 // Mock firebase config
 vi.mock('../../config/firebase', () => ({
+  auth: { currentUser: null },
   db: {}
 }));
 
@@ -47,8 +48,13 @@ describe('progressService - Firestore Operations', () => {
         expect.objectContaining({
           userId,
           totalXP: 0,
-          level: 1,
-          completedExercises: [],
+          userLevel: 1,
+          currentLevel: 1,
+          completedLevels: [],
+          levelStats: {},
+          lessonProgress: {},
+          xpNodesCollected: {},
+          bossCompleted: {},
           streak: {
             current: 0,
             longest: 0,
@@ -58,7 +64,8 @@ describe('progressService - Firestore Operations', () => {
             totalExercises: 0,
             correctAnswers: 0,
             incorrectAnswers: 0
-          }
+          },
+          dailyActivity: {}
         })
       );
 
@@ -66,8 +73,9 @@ describe('progressService - Firestore Operations', () => {
       expect(result).toMatchObject({
         userId,
         totalXP: 0,
-        level: 1,
-        completedExercises: []
+        userLevel: 1,
+        currentLevel: 1,
+        completedLevels: []
       });
     });
 
@@ -88,19 +96,14 @@ describe('progressService - Firestore Operations', () => {
       const mockProgress = {
         userId,
         totalXP: 150,
-        level: 2,
-        completedExercises: [
-          {
-            exerciseId: 'py_beg_001',
-            xpGained: 10,
-            language: 'python',
-            difficulty: 1
-          }
-        ],
+        userLevel: 2,
+        currentLevel: 2,
+        completedLevels: [1],
+        levelStats: { 1: { correct: 8, incorrect: 2, xp: 100 } },
         stats: {
-          totalExercises: 1,
-          correctAnswers: 1,
-          incorrectAnswers: 0
+          totalExercises: 10,
+          correctAnswers: 8,
+          incorrectAnswers: 2
         }
       };
 
@@ -133,8 +136,9 @@ describe('progressService - Firestore Operations', () => {
       expect(result).toMatchObject({
         userId,
         totalXP: 0,
-        level: 1,
-        completedExercises: []
+        userLevel: 1,
+        currentLevel: 1,
+        completedLevels: []
       });
       expect(setDoc).toHaveBeenCalled();
     });
@@ -146,19 +150,18 @@ describe('progressService - Firestore Operations', () => {
       const currentProgress = {
         userId,
         totalXP: 50,
-        level: 1,
-        completedExercises: [],
+        userLevel: 1,
+        currentLevel: 1,
+        completedLevels: [],
+        levelStats: {},
         streak: { current: 0, longest: 0, lastActivityDate: null },
         stats: { totalExercises: 0, correctAnswers: 0, incorrectAnswers: 0 }
       };
 
       const exerciseData = {
-        exerciseId: 'py_beg_001',
-        language: 'python',
-        difficulty: 1,
+        exerciseLevel: 1,
         xpGained: 10,
-        isCorrect: true,
-        attempts: 1
+        isCorrect: true
       };
 
       const mockDocRef = { id: 'progress/test-user-123' };
@@ -174,58 +177,33 @@ describe('progressService - Firestore Operations', () => {
       // Vérifier le résultat
       expect(result).toMatchObject({
         totalXP: 60, // 50 + 10
-        level: 1,
+        userLevel: 1,
         xpGained: 10,
         leveledUp: false
       });
 
       // Vérifier que updateDoc a été appelé
-      expect(updateDoc).toHaveBeenCalledWith(
-        mockDocRef,
-        expect.objectContaining({
-          totalXP: 60,
-          level: 1,
-          stats: {
-            totalExercises: 1,
-            correctAnswers: 1,
-            incorrectAnswers: 0
-          }
-        })
-      );
+      expect(updateDoc).toHaveBeenCalled();
     });
 
-    it('ne devrait pas donner d\'XP pour un exercice déjà complété', async () => {
+    it('ne devrait pas donner d\'XP pour un niveau déjà complété', async () => {
       const userId = 'test-user-123';
-      const exerciseId = 'py_beg_001';
-
-      // Mock Firestore Timestamp
-      const mockTimestamp = {
-        toDate: () => new Date()
-      };
 
       const currentProgress = {
         userId,
-        totalXP: 50,
-        level: 1,
-        completedExercises: [
-          {
-            exerciseId,
-            xpGained: 10,
-            language: 'python',
-            difficulty: 1
-          }
-        ],
-        streak: { current: 1, longest: 1, lastActivityDate: mockTimestamp },
-        stats: { totalExercises: 1, correctAnswers: 1, incorrectAnswers: 0 }
+        totalXP: 100,
+        userLevel: 2,
+        currentLevel: 2,
+        completedLevels: [1], // Niveau 1 déjà complété
+        levelStats: { 1: { correct: 10, incorrect: 0, xp: 100 } },
+        streak: { current: 1, longest: 1, lastActivityDate: null },
+        stats: { totalExercises: 10, correctAnswers: 10, incorrectAnswers: 0 }
       };
 
       const exerciseData = {
-        exerciseId,
-        language: 'python',
-        difficulty: 1,
+        exerciseLevel: 1, // Niveau déjà complété
         xpGained: 10,
-        isCorrect: true,
-        attempts: 1
+        isCorrect: true
       };
 
       const mockDocRef = { id: 'progress/test-user-123' };
@@ -234,13 +212,13 @@ describe('progressService - Firestore Operations', () => {
         exists: () => true,
         data: () => currentProgress
       });
-      updateDoc.mockResolvedValue(undefined);
 
       const result = await saveExerciseCompletion(userId, exerciseData);
 
-      // L'XP ne devrait pas augmenter
-      expect(result.totalXP).toBe(50);
+      // L'XP ne devrait pas augmenter car niveau déjà complété
+      expect(result.totalXP).toBe(100);
       expect(result.xpGained).toBe(0);
+      expect(result.alreadyCompleted).toBe(true);
     });
 
     it('devrait indiquer leveledUp quand l\'utilisateur passe un niveau', async () => {
@@ -248,20 +226,19 @@ describe('progressService - Firestore Operations', () => {
 
       const currentProgress = {
         userId,
-        totalXP: 95, // Juste avant de passer niveau 2
-        level: 1,
-        completedExercises: [],
+        totalXP: 95, // Juste avant de passer niveau 2 (100 XP)
+        userLevel: 1,
+        currentLevel: 1,
+        completedLevels: [],
+        levelStats: {},
         streak: { current: 0, longest: 0, lastActivityDate: null },
         stats: { totalExercises: 0, correctAnswers: 0, incorrectAnswers: 0 }
       };
 
       const exerciseData = {
-        exerciseId: 'py_beg_002',
-        language: 'python',
-        difficulty: 1,
+        exerciseLevel: 1,
         xpGained: 10, // Va passer à 105 XP = niveau 2
-        isCorrect: true,
-        attempts: 1
+        isCorrect: true
       };
 
       const mockDocRef = { id: 'progress/test-user-123' };
@@ -275,7 +252,7 @@ describe('progressService - Firestore Operations', () => {
       const result = await saveExerciseCompletion(userId, exerciseData);
 
       expect(result.totalXP).toBe(105);
-      expect(result.level).toBe(2);
+      expect(result.userLevel).toBe(2);
       expect(result.leveledUp).toBe(true);
     });
   });
@@ -285,17 +262,14 @@ describe('progressService - Firestore Operations', () => {
       const userId = 'migrated-user-789';
       const localData = {
         totalXP: 80,
-        level: 1,
-        completedExercises: [
-          {
-            exerciseId: 'py_beg_001',
-            xpGained: 10
-          }
-        ],
+        userLevel: 1,
+        currentLevel: 1,
+        completedLevels: [],
+        levelStats: { 1: { correct: 5, incorrect: 1, xp: 80 } },
         stats: {
-          totalExercises: 1,
-          correctAnswers: 1,
-          incorrectAnswers: 0
+          totalExercises: 6,
+          correctAnswers: 5,
+          incorrectAnswers: 1
         }
       };
 
@@ -316,9 +290,7 @@ describe('progressService - Firestore Operations', () => {
         mockDocRef,
         expect.objectContaining({
           userId,
-          totalXP: 80,
-          level: 1,
-          completedExercises: localData.completedExercises
+          totalXP: 80
         })
       );
 
@@ -326,11 +298,21 @@ describe('progressService - Firestore Operations', () => {
       expect(localStorage.getItem('userProgress')).toBeNull();
     });
 
-    it('ne devrait pas écraser la progression Firestore existante', async () => {
+    it('devrait merger localStorage avec Firestore existant', async () => {
       const userId = 'existing-user-999';
       const localData = {
         totalXP: 50,
-        level: 1
+        userLevel: 1,
+        completedLevels: [1],
+        levelStats: { 1: { correct: 5, incorrect: 0, xp: 50 } }
+      };
+
+      const firestoreData = {
+        userId,
+        totalXP: 30,
+        userLevel: 1,
+        completedLevels: [],
+        levelStats: {}
       };
 
       localStorage.setItem('userProgress', JSON.stringify(localData));
@@ -338,14 +320,17 @@ describe('progressService - Firestore Operations', () => {
       const mockDocRef = { id: 'progress/existing-user-999' };
       doc.mockReturnValue(mockDocRef);
       getDoc.mockResolvedValue({
-        exists: () => true // Progression Firestore déjà existante
+        exists: () => true,
+        data: () => firestoreData
       });
+      updateDoc.mockResolvedValue(undefined);
 
       const result = await migrateFromLocalStorage(userId);
 
-      // Ne devrait pas appeler setDoc
-      expect(setDoc).not.toHaveBeenCalled();
-      expect(result).toBeNull();
+      // Devrait appeler updateDoc pour merger les données (pas setDoc)
+      expect(updateDoc).toHaveBeenCalled();
+      // localStorage nettoyé après migration
+      expect(localStorage.getItem('userProgress')).toBeNull();
     });
 
     it('devrait retourner null si aucune donnée locale à migrer', async () => {

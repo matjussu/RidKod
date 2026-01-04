@@ -81,9 +81,8 @@ const Login = () => {
       {/* Header */}
       <div className="login-header">
         <h1 className="login-title">
-          <span className="login-title-bracket">{"<"}</span>
+          <span className="login-title-hash">//</span>
           Connexion
-          <span className="login-title-bracket">{"/>"}</span>
         </h1>
         <p className="login-subtitle">Ravis de te revoir !</p>
       </div>

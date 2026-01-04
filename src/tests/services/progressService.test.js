@@ -136,10 +136,16 @@ describe('progressService - LocalStorage', () => {
 
       expect(progress).toEqual({
         totalXP: 0,
-        level: 1,
-        completedExercises: [],
+        userLevel: 1,
+        currentLevel: 1,
+        completedLevels: [],
+        levelStats: {},
+        lessonProgress: {},
+        xpNodesCollected: {},
+        bossCompleted: {},
         streak: { current: 0, longest: 0 },
-        stats: { totalExercises: 0, correctAnswers: 0, incorrectAnswers: 0 }
+        stats: { totalExercises: 0, correctAnswers: 0, incorrectAnswers: 0 },
+        dailyActivity: {}
       });
     });
 
@@ -166,10 +172,16 @@ describe('progressService - LocalStorage', () => {
       const progress = getLocalProgress();
       expect(progress).toEqual({
         totalXP: 0,
-        level: 1,
-        completedExercises: [],
+        userLevel: 1,
+        currentLevel: 1,
+        completedLevels: [],
+        levelStats: {},
+        lessonProgress: {},
+        xpNodesCollected: {},
+        bossCompleted: {},
         streak: { current: 0, longest: 0 },
-        stats: { totalExercises: 0, correctAnswers: 0, incorrectAnswers: 0 }
+        stats: { totalExercises: 0, correctAnswers: 0, incorrectAnswers: 0 },
+        dailyActivity: {}
       });
     });
   });

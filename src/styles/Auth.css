@@ -20,6 +20,34 @@
   animation: fadeIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
+/* Grid Background */
+.login-container::before,
+.signup-container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 39px,
+      rgba(0, 236, 4, 0.03) 39px,
+      rgba(0, 236, 4, 0.03) 40px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 39px,
+      rgba(0, 236, 4, 0.03) 39px,
+      rgba(0, 236, 4, 0.03) 40px
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+
 /* Animations */
 @keyframes fadeIn {
   0% {
@@ -89,28 +117,71 @@
 .signup-header {
   text-align: center;
   margin-top: 60px;
-  margin-bottom: 40px;
+  margin-bottom: 48px;
   opacity: 0;
   animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+  position: relative;
+  z-index: 1;
 }
 
+/* Title avec // et barre horizontale */
 .login-title,
 .signup-title {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 28px;
-  font-weight: 800;
+  font-family: "JetBrains Mono", "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 42px;
+  font-weight: 900;
+  font-style: italic;
   color: #FFFFFF;
   margin: 0 0 12px 0;
+  line-height: 1;
+  transform: skewX(-5deg);
+  letter-spacing: 0px;
+  text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.6);
+  position: relative;
+  display: inline-block;
 }
 
-.login-title-bracket {
+.login-title::after {
+  content: '';
+  position: absolute;
+  bottom: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px;
+  height: 4px;
+  background: linear-gradient(90deg, #FF9500 0%, #FFB84D 100%);
+  border-radius: 2px;
+  box-shadow: 0 2px 12px rgba(255, 149, 0, 0.4);
+}
+
+.signup-title::after {
+  content: '';
+  position: absolute;
+  bottom: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px;
+  height: 4px;
+  background: linear-gradient(90deg, #30D158 0%, #5DE97A 100%);
+  border-radius: 2px;
+  box-shadow: 0 2px 12px rgba(48, 209, 88, 0.4);
+}
+
+/* Hash prefix // */
+.login-title-hash {
   color: #FF9500;
-  font-size: 30px;
+  font-weight: 900;
+  font-size: 42px;
+  text-shadow: 0 0 20px rgba(255, 149, 0, 0.5), 2px 2px 8px rgba(0, 0, 0, 0.6);
+  margin-right: 8px;
 }
 
-.signup-title-bracket {
+.signup-title-hash {
   color: #30D158;
-  font-size: 30px;
+  font-weight: 900;
+  font-size: 42px;
+  text-shadow: 0 0 20px rgba(48, 209, 88, 0.5), 2px 2px 8px rgba(0, 0, 0, 0.6);
+  margin-right: 8px;
 }
 
 .login-subtitle,
@@ -130,6 +201,8 @@
   margin-bottom: 24px;
   opacity: 0;
   animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+  position: relative;
+  z-index: 1;
 }
 
 /* Input Group */
@@ -305,6 +378,8 @@
   align-items: center;
   opacity: 0;
   animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s forwards;
+  position: relative;
+  z-index: 1;
 }
 
 .login-link,
@@ -356,17 +431,24 @@
   .login-header,
   .signup-header {
     margin-top: 50px;
-    margin-bottom: 32px;
+    margin-bottom: 40px;
   }
 
   .login-title,
   .signup-title {
-    font-size: 24px;
+    font-size: 32px;
   }
 
-  .login-title-bracket,
-  .signup-title-bracket {
-    font-size: 26px;
+  .login-title-hash,
+  .signup-title-hash {
+    font-size: 32px;
+  }
+
+  .login-title::after,
+  .signup-title::after {
+    width: 220px;
+    bottom: -12px;
+    height: 3px;
   }
 
   .login-subtitle,

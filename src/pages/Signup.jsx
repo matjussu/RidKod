@@ -97,9 +97,8 @@ const Signup = () => {
       {/* Header */}
       <div className="signup-header">
         <h1 className="signup-title">
-          <span className="signup-title-bracket">{"<"}</span>
+          <span className="signup-title-hash">//</span>
           Inscription
-          <span className="signup-title-bracket">{"/>"}</span>
         </h1>
         <p className="signup-subtitle">Crée ton compte en quelques secondes</p>
       </div>

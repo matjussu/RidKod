@@ -17,7 +17,8 @@ vi.mock('firebase/auth', () => ({
 }));
 
 vi.mock('../../config/firebase', () => ({
-  auth: { currentUser: null }
+  auth: { currentUser: null },
+  db: {}
 }));
 
 // Composant de test pour utiliser useAuth
@@ -374,7 +375,6 @@ describe('AuthContext', () => {
 
   describe('logout', () => {
     it('devrait se déconnecter avec succès', async () => {
-      localStorage.setItem('userEmail', 'test@example.com');
       firebaseAuth.signOut.mockResolvedValue();
 
       const TestLogoutComponent = () => {
@@ -412,7 +412,8 @@ describe('AuthContext', () => {
         expect(screen.getByTestId('result').textContent).toBe('success');
       });
 
-      expect(localStorage.getItem('userEmail')).toBeNull();
+      // Vérifier que signOut a été appelé
+      expect(firebaseAuth.signOut).toHaveBeenCalled();
     });
 
     it('devrait gérer les erreurs de déconnexion', async () => {
