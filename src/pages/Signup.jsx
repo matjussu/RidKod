@@ -60,7 +60,7 @@ const Signup = () => {
 
     if (result.success) {
       triggerSuccess();
-      navigate('/home');
+      navigate('/onboarding');
     } else {
       setErrorMessage(result.error);
       triggerError();

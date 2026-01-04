@@ -23,6 +23,7 @@ import LevelComplete from './pages/LevelComplete';
 // XPCollectTraining est maintenant intégré dans LevelComplete
 import AIHome from './pages/ai/AIHome';
 import AIContent from './pages/ai/AIContent';
+import Onboarding from './pages/Onboarding';
 import ChallengesHome from './pages/challenges/ChallengesHome';
 import Leaderboard from './pages/challenges/Leaderboard';
 import DailyChallenge from './pages/challenges/DailyChallenge';
@@ -56,6 +57,7 @@ const App = () => {
           {/* Routes d'authentification */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/onboarding" element={<Onboarding />} />
 
           {/* Routes de l'application */}
           <Route path="/home" element={<Home />} />

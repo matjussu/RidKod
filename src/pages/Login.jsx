@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import useHaptic from '../hooks/useHaptic';
+import { getUserProfile } from '../services/userService';
 import '../styles/Layout.css';
 import '../styles/Auth.css';
 
@@ -31,7 +32,19 @@ const Login = () => {
 
     if (result.success) {
       triggerSuccess();
-      navigate('/home');
+
+      // Vérifier si l'onboarding est complété
+      try {
+        const profileResult = await getUserProfile(result.user.uid);
+        if (profileResult.success && !profileResult.profile?.onboarding?.completed) {
+          navigate('/onboarding');
+        } else {
+          navigate('/home');
+        }
+      } catch {
+        // En cas d'erreur, aller à home par défaut
+        navigate('/home');
+      }
     } else {
       setErrorMessage(result.error);
       triggerError();

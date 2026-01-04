@@ -1,4 +1,4 @@
-import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../config/firebase';
 
 /**
@@ -31,7 +31,16 @@ export const createUserProfile = async (userId, profileData) => {
       avatarColor: profileData.avatarColor || AVATAR_COLORS[0].value,
       email: profileData.email,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
+      // Initialiser onboarding vide
+      onboarding: {
+        completed: false,
+        completedAt: null,
+        experienceLevel: null,
+        primaryGoal: null,
+        preferredLanguages: [],
+        dailyGoalMinutes: null
+      }
     };
 
     await setDoc(userRef, profile);
@@ -106,4 +115,52 @@ export const getAvatarColorById = (colorId) => {
 export const getAvatarColorByValue = (colorValue) => {
   const color = AVATAR_COLORS.find(c => c.value === colorValue);
   return color || AVATAR_COLORS[0];
+};
+
+/**
+ * Sauvegarder les données d'onboarding dans Firestore
+ * @param {string} userId - ID utilisateur Firebase Auth
+ * @param {object} data - { experienceLevel, primaryGoal, preferredLanguages, dailyGoalMinutes }
+ * @returns {Promise<object>} { success, error }
+ */
+export const saveOnboardingData = async (userId, data) => {
+  try {
+    const userRef = doc(db, 'users', userId);
+
+    await updateDoc(userRef, {
+      'onboarding.completed': true,
+      'onboarding.completedAt': serverTimestamp(),
+      'onboarding.experienceLevel': data.experienceLevel,
+      'onboarding.primaryGoal': data.primaryGoal,
+      'onboarding.preferredLanguages': data.preferredLanguages,
+      'onboarding.dailyGoalMinutes': data.dailyGoalMinutes,
+      updatedAt: new Date().toISOString()
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error saving onboarding data:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+/**
+ * Vérifier si l'onboarding est complété
+ * @param {string} userId - ID utilisateur Firebase Auth
+ * @returns {Promise<boolean>} true si onboarding complété
+ */
+export const isOnboardingCompleted = async (userId) => {
+  try {
+    const userRef = doc(db, 'users', userId);
+    const userSnap = await getDoc(userRef);
+
+    if (userSnap.exists()) {
+      return userSnap.data()?.onboarding?.completed === true;
+    }
+
+    return false;
+  } catch (error) {
+    console.error('Error checking onboarding status:', error);
+    return false;
+  }
 };
